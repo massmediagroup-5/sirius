@@ -1,0 +1,36 @@
+AppBundle\Entity\SiteParams:
+    type: entity
+    table: site_params
+    indexes:
+        param_name:
+            columns:
+                - param_name
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        paramName:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: param_name
+        paramValue:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: param_value
+    lifecycleCallbacks: {  }

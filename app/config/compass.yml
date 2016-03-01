@@ -1,0 +1,2 @@
+parameters:
+  assetic.filter.compass.bin: /home/zimm/.rvm/gems/ruby-2.1.5/bin/compass

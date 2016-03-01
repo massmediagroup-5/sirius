@@ -1,0 +1,9 @@
+AppBundle\Entity\UserRoles:
+    user_role1:
+        name:                 "Администратор"
+    user_role2:
+        name:                 "Модератор"
+    user_role3:
+        name:                 "Покупатель"
+    user_role4:
+        name:                 "Не зарегистрированный"

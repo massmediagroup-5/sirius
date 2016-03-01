@@ -1,0 +1,84 @@
+AppBundle\Entity\Cart:
+    type: entity
+    table: cart
+    indexes:
+        fk_call_back_users1_idx:
+            columns:
+                - users_id
+        fk_cart_orders1_idx:
+            columns:
+                - orders_id
+        fk_cart_sku_products1_idx:
+            columns:
+                - sku_products_id
+        count:
+            columns:
+                - quantity
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        status:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+        quantity:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                default: '1'
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    manyToOne:
+        users:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                users_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        orders:
+            targetEntity: Orders
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: cart
+            joinColumns:
+                orders_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        skuProducts:
+            targetEntity: SkuProducts
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sku_products_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

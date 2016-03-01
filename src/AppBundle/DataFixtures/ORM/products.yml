@@ -1,0 +1,10 @@
+AppBundle\Entity\Products:
+    productsItem{1..3150}:
+        status:               <numberBetween(0, 1)>
+        active:               <numberBetween(0, 1)>
+        published:            <numberBetween(0, 1)>
+        actionLabels:         @actionLabel*
+        createTime:           <dateTimeBetween('now', 'now')>
+        updateTime:           <dateTimeBetween('now', 'now')>
+        CharacteristicValues: <numberBetween(2, 9)>x @characteristic_value*
+        categories:           <numberBetween(24, 63)>x @category*

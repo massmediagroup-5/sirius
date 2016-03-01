@@ -1,0 +1,12 @@
+
+upload_file:
+    path:     /upload-file
+    defaults: { _controller: AppAdminBundle:Upload:uploadFile }
+    options:
+        expose: true
+
+img_sorting:
+    path:     /img-sorting
+    defaults: { _controller: AppAdminBundle:Upload:sortProductModelsImages}
+    options:
+        expose: true

@@ -1,0 +1,178 @@
+AppBundle\Entity\Orders:
+    type: entity
+    table: orders
+    indexes:
+        fk_call_back_users1_idx:
+            columns:
+                - users_id
+        type:
+            columns:
+                - type
+        fk_orders_carriers1_idx:
+            columns:
+                - carriers_id
+        fk_orders_cities1_idx:
+            columns:
+                - cities_id
+        fk_orders_stores1_idx:
+            columns:
+                - stores_id
+        total_price:
+            columns:
+                - total_price
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        status:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+        type:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        customDelivery:
+            type: text
+            nullable: true
+            length: 16777215
+            options:
+                fixed: false
+            column: custom_delivery
+        comment:
+            type: text
+            nullable: true
+            length: 16777215
+            options:
+                fixed: false
+        fio:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        phone:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+        pay:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        totalPrice:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 2
+            options:
+                default: '0.00'
+            column: total_price
+        clientSmsId:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: client_sms_id
+        clientSmsStatus:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: client_sms_status
+        managerSmsId:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: manager_sms_id
+        managerSmsStatus:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: manager_sms_status
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    oneToMany:
+        cart:
+            targetEntity: Cart
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: orders
+            inversedBy: null
+            joinColumns:
+                orders_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToOne:
+        users:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                users_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        carriers:
+            targetEntity: Carriers
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                carriers_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        cities:
+            targetEntity: Cities
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                cities_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        stores:
+            targetEntity: Stores
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stores_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

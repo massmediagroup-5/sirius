@@ -1,0 +1,6 @@
+AppBundle\Entity\ProductsBaseCategories:
+    productsBaseCategory{1..3150}:
+        productsForBaseCategories:  @productsItem<current()>
+        categories:                 @category*
+        createTime:                 <dateTimeBetween('now', 'now')>
+        updateTime:                 <dateTimeBetween('now', 'now')>

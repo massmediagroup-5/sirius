@@ -1,0 +1,30 @@
+// this one just agregates all the libs
+@import "compass/css3";
+@import "lib/mixins";
+@import "lib/animations";
+@import "lib/keyframes";
+
+// gradients for ie
+$experimental-support-for-svg: true;
+
+// global sprites
+$icons: sprite-map("icons/*.png", $spacing: 5px);
+$icons-retina: sprite-map("icons-retina/*.png", $spacing: 5px);
+
+//VARIABLES
+//$brown:#9A8549;
+//$layoutW:1230px;
+
+$regular: 'regular', sans-serif;
+$black: 'black', sans-serif;
+$medium: 'medium', sans-serif;
+$bold: 'bold', sans-serif;
+
+$blue: #229fff;
+$blue2: #1f91e8;
+$blue3: #229fff;
+$orange: #f09518;
+$orange2: #d88615;
+
+
+

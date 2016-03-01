@@ -1,0 +1,6 @@
+AppBundle\Entity\CharacteristicValues:
+    characteristic_value{1..249}:
+        name:                 <word()>
+        characteristics:      @characteristics*
+        createTime:           <dateTimeBetween('now', 'now')>
+        updateTime:           <dateTimeBetween('now', 'now')>

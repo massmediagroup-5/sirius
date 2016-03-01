@@ -1,0 +1,7 @@
+AppBundle\Entity\Users:
+    user{1..25}:
+        username:             <name($gender = null)>
+        email:                <email()>
+        password:             <password()>
+        createTime:           <dateTimeBetween('now', 'now')>
+        updateTime:           <dateTimeBetween('now', 'now')>

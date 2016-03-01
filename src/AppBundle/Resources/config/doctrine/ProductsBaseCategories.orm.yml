@@ -1,0 +1,61 @@
+AppBundle\Entity\ProductsBaseCategories:
+    type: entity
+    table: products_base_categories
+    repositoryClass: AppBundle\Entity\Repository\ProductsBaseCategoriesRepository
+    indexes:
+        fk_product_base_categories_products1_idx:
+            columns:
+                - products_id
+        fk_product_base_categories_categories1_idx:
+            columns:
+                - categories_id
+    uniqueConstraints:
+        products_id_UNIQUE:
+            columns:
+                - products_id
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    oneToOne:
+        productsForBaseCategories:
+            targetEntity: Products
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: productsBaseCategories
+            joinColumns:
+                products_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToOne:
+        categories:
+            targetEntity: Categories
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: productsBaseCategories
+            joinColumns:
+                categories_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

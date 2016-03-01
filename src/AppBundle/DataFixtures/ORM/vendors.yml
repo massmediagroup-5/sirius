@@ -1,0 +1,7 @@
+AppBundle\Entity\Vendors:
+    vendors{1..5}:
+        name:                 <name($gender = null)>
+        priority:             <numberBetween(1, 15)>
+        description:          <text($maxNbChars = 200)>
+        createTime:           <dateTimeBetween('now', 'now')>
+        updateTime:           <dateTimeBetween('now', 'now')>

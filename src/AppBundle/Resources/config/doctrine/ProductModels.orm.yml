@@ -1,0 +1,188 @@
+AppBundle\Entity\ProductModels:
+    type: entity
+    table: product_models
+    repositoryClass: AppBundle\Entity\Repository\ProductModelsRepository
+    indexes:
+        index:
+            columns:
+                - price
+        fk_product_models_products1_idx:
+            columns:
+                - products_id
+        fk_product_models_product_colors1_idx:
+            columns:
+                - product_colors_id
+        name:
+            columns:
+                - name
+        price:
+            columns:
+                - price
+        oldprice:
+            columns:
+                - oldprice
+        stock:
+            columns:
+                - in_stock
+        priority:
+            columns:
+                - priority
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+        alias_UNIQUE:
+            columns:
+                - alias
+    id:
+        id:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        description:
+            type: text
+            nullable: true
+            length: 16777215
+            options:
+                fixed: false
+        alias:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        price:
+            type: decimal
+            nullable: true
+            precision: 8
+            scale: 2
+            options:
+                default: '0.00'
+        oldprice:
+            type: decimal
+            nullable: true
+            precision: 8
+            scale: 2
+        seoTitle:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: seo_title
+        seoDescription:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: seo_description
+        seoKeywords:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: seo_keywords
+        priority:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+        status:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+        active:
+            type: boolean
+            nullable: true
+        inStock:
+            type: boolean
+            nullable: true
+            column: in_stock
+        published:
+            type: boolean
+            nullable: true
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    oneToMany:
+        productModelImages:
+            targetEntity: ProductModelImages
+            cascade: ["persist"]
+            fetch: EAGER
+            mappedBy: productModels
+            inversedBy: null
+            orphanRemoval: true
+            orderBy: {  }
+        skuProducts:
+            targetEntity: SkuProducts
+            cascade: ["all"]
+            fetch: EAGER
+            mappedBy: productModels
+            inversedBy: null
+            orphanRemoval: true
+    manyToOne:
+        productColors:
+            targetEntity: ProductColors
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                product_colors_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        productModelDecorationColors:
+            targetEntity: ProductModelDecorationColors
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                product_model_decoration_colors_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        productModelSizes:
+            targetEntity: ProductModelSizes
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                product_model_sizes_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        products:
+            targetEntity: Products
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: productModels
+            joinColumns:
+                products_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks:
+        prePersist: [ checkPrice, checkColor ]
+        preUpdate:  [ checkPrice, checkColor ]

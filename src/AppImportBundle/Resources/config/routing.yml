@@ -1,0 +1,6 @@
+import:
+    path:      /import
+    defaults:  { _controller: AppImportBundle:Import:importing }
+characteristicsImport:
+    path:      /characteristicsImport
+    defaults:  { _controller: AppImportBundle:Import:characteristicsImport}

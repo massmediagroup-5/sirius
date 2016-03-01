@@ -1,0 +1,18 @@
+AppBundle\Entity\ProductModelSizes:
+    type: entity
+    table: product_model_sizes
+    indexes:
+        size:
+            columns:
+                - size
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        size:
+            type: string
+            length: '8'
+    lifecycleCallbacks: {  }

@@ -1,0 +1,33 @@
+AppBundle\Entity\ProductModels:
+    productModels{1..3150}:
+        name:                   <sentence($nbWords = 3)>
+        description:            <sentence($nbWords = 2)> / <sentence($nbWords = 3)> / <sentence($nbWords = 2)> / <sentence($nbWords = 4)>
+        alias:                  <slug()>
+        price:                  <randomFloat($nbMaxDecimals = 2, $min = 0, $max = 1000)>
+        oldprice:               <randomFloat($nbMaxDecimals = 2, $min = 0, $max = 1000)>
+        seoTitle:               <sentence($nbWords = 2)>
+        seoDescription:         <sentence($nbWords = 5)>
+        seoKeywords:            <word()>, <word()>, <word()>
+        status:                 <numberBetween(0, 1)>
+        active:                 <numberBetween(0, 1)>
+        published:              <numberBetween(0, 1)>
+        createTime:             <dateTimeBetween('now', 'now')>
+        updateTime:             <dateTimeBetween('now', 'now')>
+        productColors:          @productColors*
+        products:               @productsItem<current()>
+    productModels{3151..19150}:
+        name:                   <sentence($nbWords = 3)>
+        description:            <sentence($nbWords = 2)> / <sentence($nbWords = 3)> / <sentence($nbWords = 2)> / <sentence($nbWords = 4)>
+        alias:                  <slug()>
+        price:                  <randomFloat($nbMaxDecimals = 2, $min = 0, $max = 1000)>
+        oldprice:               <randomFloat($nbMaxDecimals = 2, $min = 0, $max = 1000)>
+        seoTitle:               <sentence($nbWords = 2)>
+        seoDescription:         <sentence($nbWords = 5)>
+        seoKeywords:            <word()>, <word()>, <word()>
+        status:                 <numberBetween(0, 1)>
+        active:                 <numberBetween(0, 1)>
+        published:              <numberBetween(0, 1)>
+        createTime:             <dateTimeBetween('now', 'now')>
+        updateTime:             <dateTimeBetween('now', 'now')>
+        productColors:          @productColors*
+        products:               @productsItem*

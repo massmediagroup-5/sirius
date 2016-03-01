@@ -1,0 +1,11 @@
+AppBundle\Entity\ProductColors:
+    productColors1:
+        name:                 'none'
+        hex:                  'none'
+        createTime:           <dateTimeBetween('now', 'now')>
+        updateTime:           <dateTimeBetween('now', 'now')>
+    productColors{2..15}:
+        name:                 <colorName()>
+        hex:                  <hexcolor()>
+        createTime:           <dateTimeBetween('now', 'now')>
+        updateTime:           <dateTimeBetween('now', 'now')>

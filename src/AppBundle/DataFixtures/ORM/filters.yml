@@ -1,0 +1,6 @@
+AppBundle\Entity\Filters:
+    filter{1..25}:
+        id:     <current()>
+        name:   <numerify('Filter_###')>
+        createTime: <dateTimeBetween('now', 'now')>
+        updateTime: <dateTimeBetween('now', 'now')>

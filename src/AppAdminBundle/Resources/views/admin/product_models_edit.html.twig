@@ -1,0 +1,31 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends 'AppAdminBundle:admin:product_models_base_edit.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets 'bundles/appadmin/sass/admin.scss' filter='compass' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {#<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">#}
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script src="{{ asset('bundles/appadmin/js/lib/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/appadmin/js/jquery.filedrop.js') }}"></script>
+    <script src="{{ asset('bundles/appadmin/js/js.fileDropBlock.js') }}"></script>
+    <script src="{{ asset('bundles/appadmin/js/js.fileLoadByDefault.js') }}"></script>
+    <script src="{{ asset('bundles/appadmin/js/init.js') }}"></script>
+{% endblock %}

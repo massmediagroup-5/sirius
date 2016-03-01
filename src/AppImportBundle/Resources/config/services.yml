@@ -1,0 +1,7 @@
+services:
+    import:
+        class: AppImportBundle\Services\Import
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    importCharacteristics:
+        class: AppImportBundle\Services\ImportCharacteristics
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]

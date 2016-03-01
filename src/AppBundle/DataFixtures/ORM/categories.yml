@@ -1,0 +1,52 @@
+AppBundle\Entity\Categories:
+    category{1..20}:
+        name:                   <company()>
+        parrent:                "0"
+        alias:                  <slug()>
+        inMenu:                 1
+        active:                 <numberBetween(0, 1)>
+        CharacteristicValues:   <numberBetween(3, 15)>x @characteristic_value* 
+        seoTitle:               <sentence($nbWords = 2)>
+        seoDescription:         <sentence($nbWords = 5)>
+        seoKeywords:            <numberBetween(2, 6)>x <word()>
+        createTime:             <dateTimeBetween('now', 'now')>
+        updateTime:             <dateTimeBetween('now', 'now')>
+
+    category{21..200}:
+        name:                   <company()> <sentence()>
+        parrent:                <numberBetween(1, 20)>
+        alias:                  <slug()>
+        inMenu:                 1
+        active:                 <numberBetween(0, 1)>
+        CharacteristicValues:   <numberBetween(5, 15)>x @characteristic_value* 
+        seoTitle:               <sentence($nbWords = 2)>
+        seoDescription:         <sentence($nbWords = 5)>
+        seoKeywords:            <numberBetween(2, 6)>x <word()>
+        createTime:             <dateTimeBetween('now', 'now')>
+        updateTime:             <dateTimeBetween('now', 'now')>
+
+    category{201..500}:
+        name:                   <company()> <sentence()>
+        parrent:                <numberBetween(21, 200)>
+        alias:                  <slug()>
+        inMenu:                 1
+        active:                 <numberBetween(0, 1)>
+        CharacteristicValues:   <numberBetween(8, 15)>x @characteristic_value* 
+        seoTitle:               <sentence($nbWords = 2)>
+        seoDescription:         <sentence($nbWords = 5)>
+        seoKeywords:            <numberBetween(2, 6)>x <word()>
+        createTime:             <dateTimeBetween('now', 'now')>
+        updateTime:             <dateTimeBetween('now', 'now')>
+
+    seo_category{1..300}:
+        name:                   <company()> <sentence()>
+        parrent:                0
+        alias:                  <slug()>
+        inMenu:                 0
+        active:                 <numberBetween(0, 1)>
+        CharacteristicValues:   <numberBetween(5, 15)>x @characteristic_value* 
+        seoTitle:               <sentence($nbWords = 2)>
+        seoDescription:         <sentence($nbWords = 5)>
+        seoKeywords:            <numberBetween(2, 6)>x <word()>
+        createTime:             <dateTimeBetween('now', 'now')>
+        updateTime:             <dateTimeBetween('now', 'now')>

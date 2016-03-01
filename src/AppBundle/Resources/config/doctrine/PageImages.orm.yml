@@ -1,0 +1,63 @@
+AppBundle\Entity\PageImages:
+    type: entity
+    table: page_images
+    indexes:
+        fk_page_images_pages1_idx:
+            columns:
+                - pages_id
+        index:
+            columns:
+                - link
+                - thumbnail
+                - update_time
+                - create_time
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        link:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+                comment: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.png
+        thumbnail:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+                comment: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.png
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    manyToOne:
+        pages:
+            targetEntity: Pages
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                pages_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

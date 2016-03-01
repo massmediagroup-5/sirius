@@ -1,0 +1,76 @@
+AppBundle\Entity\MainSlider:
+    type: entity
+    table: main_slider
+    indexes:
+        index:
+            columns:
+                - update_time
+                - create_time
+        text:
+            columns:
+                - title
+                - alias
+        active:
+            columns:
+                - active
+        picture:
+            columns:
+                - picture
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+        alias_UNIQUE:
+            columns:
+                - alias
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        title:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        alias:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        description:
+            type: text
+            nullable: true
+            length: 16777215
+            options:
+                fixed: false
+        picture:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        active:
+            type: boolean
+            nullable: true
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+
+    lifecycleCallbacks:
+        prePersist:   [ lifecycleFileUpload ]
+        preUpdate:    [ lifecycleFileUpload ]

@@ -12,7 +12,7 @@
         ]
     },
     "require": {
-        "php": ">=5.3.9",
+        "php": ">=5.5",
         "symfony/symfony": "2.8.*",
 
         "doctrine/orm": "^2.4.8",
@@ -38,8 +38,10 @@
         "sonata-project/intl-bundle": "^2.2"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~3.2",
-        "symfony/phpunit-bridge": "~2.7"
+        "sensio/generator-bundle": "~2.3",
+        "symfony/phpunit-bridge": "~2.7",
+        "hautelook/alice-bundle": "dev-master#a810c303c2fbec1078020f7786ea27387b4bf6ab",
+        "doctrine/doctrine-fixtures-bundle": "^2.2"
     },
     "scripts": {
         "post-install-cmd": [
@@ -62,7 +64,7 @@
     "config": {
         "bin-dir": "bin",
         "platform": {
-            "php": "5.3.9"
+            "php": "5.5.9"
         }
     },
     "extra": {

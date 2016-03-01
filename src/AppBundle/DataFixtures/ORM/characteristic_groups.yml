@@ -1,0 +1,5 @@
+AppBundle\Entity\CharacteristicGroups:
+    characteristic_group{1..10}:
+        name:         <word()>
+        createTime: <dateTimeBetween('now', 'now')>
+        updateTime: <dateTimeBetween('now', 'now')>

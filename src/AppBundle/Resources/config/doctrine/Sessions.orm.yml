@@ -1,0 +1,32 @@
+AppBundle\Entity\Sessions:
+    type: entity
+    table: sessions
+    id:
+        sessId:
+            type: binary
+            nullable: false
+            id: true
+            column: sess_id
+            generator:
+                strategy: IDENTITY
+    fields:
+        sessData:
+            type: blob
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+            column: sess_data
+        sessTime:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            column: sess_time
+        sessLifetime:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: sess_lifetime
+    lifecycleCallbacks: {  }

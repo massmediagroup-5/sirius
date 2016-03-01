@@ -1,0 +1,134 @@
+AppBundle\Entity\Products:
+    type: entity
+    table: products
+    repositoryClass: AppBundle\Entity\Repository\ProductsRepository
+    indexes:
+        fk_products_action_labels1_idx:
+            columns:
+                - action_labels_id
+        status:
+            columns:
+                - status
+        name:
+            columns:
+                - import_name
+        active:
+            columns:
+                - active
+        published:
+            columns:
+                - published
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        importName:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+            column: import_name
+        status:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+        active:
+            type: boolean
+            nullable: true
+        published:
+            type: boolean
+            nullable: true
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    oneToOne:
+        productsBaseCategories:
+            targetEntity: ProductsBaseCategories
+            cascade: ["all"]
+            fetch: EAGER
+            mappedBy: productsForBaseCategories
+            inversedBy: null
+            orphanRemoval: true
+    oneToMany:
+        productModels:
+            targetEntity: ProductModels
+            cascade: ["all"]
+            fetch: LAZY
+            mappedBy: products
+            inversedBy: null
+            orphanRemoval: true
+        productImages:
+            targetEntity: ProductImages
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: products
+            inversedBy: null
+            orphanRemoval: false
+    manyToOne:
+        actionLabels:
+            targetEntity: ActionLabels
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                action_labels_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToMany:
+        categories:
+            targetEntity: Categories
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: products
+            joinTable:
+                name: products_has_categories
+                joinColumns:
+                    -
+                        name: products_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: categories_id
+                        referencedColumnName: id
+            orderBy: null
+        characteristicValues:
+            targetEntity: CharacteristicValues
+            cascade: ["persist"]
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: products
+            joinTable:
+                name: products_has_characteristic_values
+                joinColumns:
+                    -
+                        name: products_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: characteristic_values_id
+                        referencedColumnName: id
+            orderBy: null
+    lifecycleCallbacks:
+        prePersist: [ setFirstBaseCategory ]

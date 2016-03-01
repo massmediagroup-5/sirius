@@ -1,0 +1,156 @@
+AppBundle\Entity\Categories:
+    type: entity
+    table: categories
+    repositoryClass: AppBundle\Entity\Repository\CategoriesRepository
+    indexes:
+        text:
+            columns:
+                - name
+        in_menu:
+            columns:
+                - in_menu
+        active:
+            columns:
+                - active
+        fk_categories_filters1_idx:
+            columns:
+                - filters_id
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+        alias_UNIQUE:
+            columns:
+                - alias
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        alias:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        inMenu:
+            type: boolean
+            nullable: true
+            column: in_menu
+        active:
+            type: boolean
+            nullable: true
+        seoTitle:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: seo_title
+        seoDescription:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: seo_description
+        seoKeywords:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: seo_keywords
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    manyToOne:
+        filters:
+            targetEntity: Filters
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                filters_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        parrent:
+            targetEntity: Categories
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            orphanRemoval: false
+    oneToMany:
+        productsBaseCategories:
+            targetEntity: ProductsBaseCategories
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: categories
+            inversedBy: null
+            orphanRemoval: false
+    manyToMany:
+        characteristicValues:
+            targetEntity: CharacteristicValues
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: categories
+            joinTable:
+                name: categories_has_characteristic_values
+                joinColumns:
+                    -
+                        name: categories_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: characteristic_values_id
+                        referencedColumnName: id
+            orderBy: null
+        characteristics:
+            targetEntity: Characteristics
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: categories
+            joinTable:
+                name: categories_has_characteristics
+                joinColumns:
+                    -
+                        name: categories_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: characteristics_id
+                        referencedColumnName: id
+            orderBy: null
+        products:
+            targetEntity: Products
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: categories
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    lifecycleCallbacks:
+        prePersist: [ setAllFilters ]
+        preUpdate:  [ setAllFilters ]

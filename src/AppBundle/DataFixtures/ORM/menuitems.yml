@@ -1,0 +1,10 @@
+AppBundle\Entity\MenuItems:
+    menu_item1:
+        id: "1"
+        menu: @menu1
+        name:   "Контакты"
+        priority:  "5"
+        link:  "contacts"
+        linkType:  "local"
+        createTime: <dateTimeBetween('now', 'now')>
+        updateTime: <dateTimeBetween('now', 'now')>

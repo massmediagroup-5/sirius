@@ -1,0 +1,43 @@
+services:
+    options:
+        class: AppBundle\Services\Options
+        arguments: ["@doctrine.orm.entity_manager"]
+    entities:
+        class: AppBundle\Services\Entities
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    sort:
+        class: AppBundle\Services\Sort
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    users:
+        class: AppBundle\Services\Users
+        arguments: ["@doctrine.orm.entity_manager"]
+    cart:
+        class: AppBundle\Services\Cart
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@session"]
+    compare:
+        class: AppBundle\Services\Compare
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@session"]
+    search:
+        class: AppBundle\Services\Search
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    update_all:
+        class: AppBundle\Services\UpdateAll
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    checkRelationship:
+        class: AppBundle\Services\CheckRelationship
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    clearDb:
+        class: AppBundle\Services\ClearDb
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    cron_mailer:
+        class: AppBundle\Services\CronMailer
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    proc:
+        class: AppBundle\Services\Proc
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "%kernel.root_dir%"]
+    app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+        arguments: ["@service_container"]

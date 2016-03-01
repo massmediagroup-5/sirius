@@ -1,0 +1,88 @@
+AppBundle\Entity\CharacteristicValues:
+    type: entity
+    table: characteristic_values
+    repositoryClass: AppBundle\Entity\Repository\CharacteristicValuesRepository
+    indexes:
+        text:
+            columns:
+                - name
+        fk_characteristic_values_characteristics1_idx:
+            columns:
+                - characteristics_id
+        in_filter:
+            columns:
+                - In_filter
+        not_parse:
+            columns:
+                - not_parse
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        inFilter:
+            type: boolean
+            nullable: true
+            options:
+                default: false
+            column: In_filter
+        notParse:
+            type: boolean
+            nullable: true
+            options:
+                default: false
+            column: not_parse
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    manyToOne:
+        characteristics:
+            targetEntity: Characteristics
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: characteristicValues
+            joinColumns:
+                characteristics_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToMany:
+        categories:
+            targetEntity: Categories
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: characteristicValues
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+        products:
+            targetEntity: Products
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: characteristicValues
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    lifecycleCallbacks: {  }

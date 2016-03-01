@@ -1,0 +1,13 @@
+AppBundle\Entity\ActionLabels:
+
+    actionLabel1:
+        name:                 "none"
+        htmlClass:            ""
+
+    actionLabel2:
+        name:                 "Расспродажа"
+        htmlClass:            "flag_sell"
+
+    actionLabel3:
+        name:                 "Новинка"
+        htmlClass:            "flag_new"

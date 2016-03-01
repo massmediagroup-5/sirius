@@ -1,0 +1,5 @@
+AppBundle\Entity\Menu:
+    menu1:
+        name:   "footerCompanyMenu"
+        title:   "Компания"
+        description:  "Меню подвала (колонка)"

@@ -1,0 +1,7 @@
+AppBundle\Entity\Characteristics:
+    characteristics{1..20}:
+        name:                 <word()>
+        characteristicGroups: @characteristic_group*
+        inFilter:             <numberBetween(0,1)>
+        createTime:           <dateTimeBetween('now', 'now')>
+        updateTime:           <dateTimeBetween('now', 'now')>

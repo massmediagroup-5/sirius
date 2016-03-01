@@ -1,0 +1,9 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field %}
+    <div>
+{% for file in object.files %}
+    {{ file.status }}<br>
+{% endfor %}
+    </div>
+{% endblock %}

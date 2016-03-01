@@ -1,0 +1,83 @@
+AppBundle\Entity\MenuItems:
+    type: entity
+    table: menu_items
+    indexes:
+        fk_menu_items_menu1_idx:
+            columns:
+                - menu_id
+        link:
+            columns:
+                - link
+        name:
+            columns:
+                - name
+        priority:
+            columns:
+                - priority
+        active:
+            columns:
+                - active
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+        priority:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+        active:
+            type: boolean
+            nullable: true
+        link:
+            type: string
+            nullable: false
+            length: 190
+            options:
+                fixed: false
+        linkType:
+            type: string
+            nullable: true
+            length: 8
+            options:
+                fixed: false
+                default: local
+            column: link_type
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    manyToOne:
+        menu:
+            targetEntity: Menu
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                menu_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

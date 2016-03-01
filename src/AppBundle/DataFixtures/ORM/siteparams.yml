@@ -1,0 +1,25 @@
+AppBundle\Entity\SiteParams:
+    site_param1:
+        paramName:   "skype"
+        paramValue:  "my_tex"
+    site_param2:
+        paramName:   "email"
+        paramValue:  "sirius@ukr.net"
+    site_param3:
+        paramName:   "copyright"
+        paramValue:  "Copyright &copy; 2015, My TEX"
+    site_param4:
+        paramName:   "phone"
+        paramValue:  '["<strong>097<\/strong> 783 83 35","<strong>063<\/strong> 698 15 42","<strong>097<\/strong> 523 54 85"]'
+    site_param5:
+        paramName:   "contacts_phone"
+        paramValue:  '["+38 097 783 83 35","+38 063 698 15 42"]'
+    site_param6:
+        paramName:   "stock_adress"
+        paramValue:  "г. Хмельницкий, ул. Проскуровского Подполья, 195/1"
+    site_param7:
+        paramName:   "contacts_map_lat"
+        paramValue:  "49.4261423"
+    site_param8:
+        paramName:   "contacts_map_lng"
+        paramValue:  "26.9630859"
