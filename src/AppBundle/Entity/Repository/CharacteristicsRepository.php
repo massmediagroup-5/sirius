@@ -43,7 +43,6 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
      * We can define such keys:
      * - categories;
      * - products;
-     * - productsBaseCategories;
      * - productModels;
      * - productModelImages;
      * - productColors;
@@ -111,11 +110,9 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
         $products_obj
     )
     {
-        //$dql = "SELECT COUNT (products1.id) FROM AppBundle\Entity\Products products1 INNER JOIN products1.categories categories1 INNER JOIN products1.actionLabels actionLabels INNER JOIN products1.productModels productModels INNER JOIN productModels.productColors productColors INNER JOIN productModels.skuProducts skuProducts LEFT JOIN productModels.productModelImages productModelImages INNER JOIN products1.productsBaseCategories productsBaseCategories INNER JOIN productsBaseCategories.categories baseCategories WHERE categories1.alias = :alias AND categories1.active = :active AND products1.active = :active AND products1.published = :published AND productModels.active = :active AND productModels.published = :published AND productModels.price >= :price_from AND productModels.price <= :price_to ORDER BY productModels.priority ASC";
         $query_obj = $this->query_obj
             ->innerJoin('products.categories', 'categories')->addselect('categories')
-            ->innerJoin('products.productsBaseCategories', 'productsBaseCategory')->addselect('productsBaseCategory')
-            ->innerJoin('productsBaseCategory.categories', 'baseCategory')->addselect('baseCategory')
+            ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->innerJoin('categories.filters', 'filters')
             ->innerJoin('filters.characteristics', 'characteristics2', 'WITH', 'characteristics.id = characteristics2.id')
             //->addSelect('

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
 use \Twig_Extension;
@@ -53,6 +54,17 @@ class AppExtension extends \Twig_Extension
     }
 
     /**
+     * getFilters
+     *
+     * @return array
+     */
+    public function getFunctions() {
+        return array(
+            'widget'       => new \Twig_Function_Method($this, 'widget'),
+        );
+    }
+
+    /**
      * jsonDecode
      *
      * @param mixed $str
@@ -90,6 +102,30 @@ class AppExtension extends \Twig_Extension
         }
 
         return $category;
+    }
+
+    /**
+     * Render widget
+     *
+     * @return mixed
+     */
+    public function widget() {
+        $args = func_get_args();
+
+        $widgetNameAndMethod = Arr::get($args, 0);
+
+        if(!is_string($widgetNameAndMethod) || strpos($widgetNameAndMethod, '.') === false) {
+            throw new \InvalidArgumentException('First parameter must be string with widget name and method. Example "posts.last".');
+        } else {
+            list($widgetName, $widgetMethodName) = explode('.', $widgetNameAndMethod);
+        }
+
+        // Get parameters
+        $widgetParameters = array_slice($args, 1);
+
+        $widgetObject = $this->container->get($widgetName);
+
+        return call_user_func_array([$widgetObject, $widgetMethodName], $widgetParameters);
     }
 
 }

@@ -51,8 +51,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
             ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
-            ->innerJoin('products.productsBaseCategories', 'productsBaseCategories')->addselect('productsBaseCategories')
-            ->innerJoin('productsBaseCategories.categories', 'baseCategories')->addselect('baseCategories')
+            ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->orderBy('productModels.priority', 'ASC')
             ;
     }
@@ -278,8 +277,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('prod.actionLabels', 'act')->addselect('act')
             ->innerJoin('prod.productModels', 'prodMod')->addselect('prodMod')
             //->innerJoin('prod.characteristicValues', 'prodChVal')->addselect('prodChVal')
-            ->innerJoin('prod.productsBaseCategories', 'prodBsCat')->addselect('prodBsCat')
-            ->innerJoin('prodBsCat.categories', 'catb')->addselect('catb')
+            ->innerJoin('prod.baseCategory', 'catb')->addselect('catb')
             //->innerJoin('catb.characteristicValues', 'catbChVal')->addselect('catbChVal')
             //->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
             ->innerJoin('prodMod.productColors', 'prodCol')->addselect('prodCol')
@@ -365,8 +363,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productsCount.productModels', 'productModelsCount')
             ->innerJoin('productModelsCount.productColors', 'productColors')
             ->innerJoin('productModelsCount.skuProducts', 'skuProducts')
-            ->innerJoin('productsCount.productsBaseCategories', 'productsBaseCategories')
-            ->innerJoin('productsBaseCategories.categories', 'baseCategories')
+            ->innerJoin('products.baseCategories', 'baseCategories')
             ;
         return $this;
     }
@@ -433,7 +430,6 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * We can define such keys:
      * - categories;
      * - products;
-     * - productsBaseCategories;
      * - productModels;
      * - productModelImages;
      * - productColors;

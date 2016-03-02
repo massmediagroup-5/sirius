@@ -17,6 +17,7 @@ class MenuAdmin extends Admin
     {
         $datagridMapper
             ->add('name')
+            ->add('title')
             ->add('description')
         ;
     }
@@ -28,6 +29,7 @@ class MenuAdmin extends Admin
     {
         $listMapper
             ->add('name')
+            ->add('title')
             ->add('description')
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -45,6 +47,7 @@ class MenuAdmin extends Admin
     {
         $formMapper
             ->add('name', 'text', array('label' => 'Menu name'))
+            ->add('title', 'text', array('label' => 'Menu title'))
             ->add('description', 'text', array('label' => 'Menu Description'))
         ;
     }

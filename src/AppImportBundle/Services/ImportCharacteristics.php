@@ -481,19 +481,9 @@ class ImportCharacteristics
         }
         //
         // Find, is current category are baseCategory fore our product.
-        $productBaseCategory = $this->em
-            ->getRepository('AppBundle:Categories')
-            ->findBaseCategory($product->getId());
-        // If our product is in current category, we do nothing.
-        if (empty($productBaseCategory)) {
-            $productBaseCategory = new \AppBundle\Entity\ProductsBaseCategories;
-            $productBaseCategory
-                ->setCategories($category)
-                ->setProductsForBaseCategories($product);
-                ;
-            $this->em->persist($productBaseCategory);
-        }
-        //
+        $product->setBaseCategory($category);
+        $this->em->persist($product);
+
         return null;
     }
 

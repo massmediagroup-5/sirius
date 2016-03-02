@@ -61,14 +61,6 @@ AppBundle\Entity\Products:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
-    oneToOne:
-        productsBaseCategories:
-            targetEntity: ProductsBaseCategories
-            cascade: ["all"]
-            fetch: EAGER
-            mappedBy: productsForBaseCategories
-            inversedBy: null
-            orphanRemoval: true
     oneToMany:
         productModels:
             targetEntity: ProductModels
@@ -93,6 +85,16 @@ AppBundle\Entity\Products:
             inversedBy: null
             joinColumns:
                 action_labels_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        baseCategory:
+            targetEntity: Categories
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                base_category_id:
                     referencedColumnName: id
             orphanRemoval: false
     manyToMany:

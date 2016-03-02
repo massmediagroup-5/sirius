@@ -1,0 +1,10 @@
+services:
+    users:
+        class: AppBundle\Widgets\Users
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@session"]
+    sliders:
+        class: AppBundle\Widgets\Sliders
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    menus:
+        class: AppBundle\Widgets\Menus
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]

@@ -63,33 +63,6 @@ class CategoriesRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * findCategory
-     *
-     * @param mixed $prodId
-     * @param mixed $catId
-     *
-     * @return mixed
-     */
-    public function findBaseCategory($prodId, $catId = null)
-    {
-        $query_obj = $this->createQueryBuilder('categories')
-            ->select('categories')
-            ->innerJoin('categories.productsBaseCategories', 'productsBaseCategories')->addSelect('productsBaseCategories')
-            ->innerJoin('productsBaseCategories.productsForBaseCategories', 'products')->addSelect('products')
-            ;
-        if (!is_null($catId)) {
-            $query_obj
-                ->where('categories.id = :category')
-                ->setParameter('category', $catId);
-        }
-        $query_obj
-            ->andWhere('products.id = :product')
-            ->setParameter('product', $prodId)
-            ;
-        return $query_obj->getQuery()->getResult();
-    }
-
-    /**
      * getCharacteristics
      *
      * @param mixed $category

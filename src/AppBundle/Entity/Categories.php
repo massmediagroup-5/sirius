@@ -58,11 +58,6 @@ class Categories
     private $updateTime;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $productsBaseCategories;
-
-    /**
      * @var \AppBundle\Entity\Filters
      */
     private $filters;
@@ -97,7 +92,6 @@ class Categories
      */
     public function __construct()
     {
-        $this->productsBaseCategories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
@@ -331,40 +325,6 @@ class Categories
     }
 
     /**
-     * Add productsBaseCategory
-     *
-     * @param \AppBundle\Entity\ProductsBaseCategories $productsBaseCategory
-     *
-     * @return Categories
-     */
-    public function addProductsBaseCategory(\AppBundle\Entity\ProductsBaseCategories $productsBaseCategory)
-    {
-        $this->productsBaseCategories[] = $productsBaseCategory;
-
-        return $this;
-    }
-
-    /**
-     * Remove productsBaseCategory
-     *
-     * @param \AppBundle\Entity\ProductsBaseCategories $productsBaseCategory
-     */
-    public function removeProductsBaseCategory(\AppBundle\Entity\ProductsBaseCategories $productsBaseCategory)
-    {
-        $this->productsBaseCategories->removeElement($productsBaseCategory);
-    }
-
-    /**
-     * Get productsBaseCategories
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProductsBaseCategories()
-    {
-        return $this->productsBaseCategories;
-    }
-
-    /**
      * Set filters
      *
      * @param \AppBundle\Entity\Filters $filters
@@ -547,12 +507,12 @@ class Categories
     {
         return $this->basedProducts;
     }
+
     /**
-     * @ORM\PrePersist
+     *
      */
     public function setAllFilters()
     {
         // Add your code here
     }
 }
-

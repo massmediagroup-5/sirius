@@ -1,0 +1,132 @@
+.countdownHolder {
+
+	//background: url(../img/icons/counter-bg.png) no-repeat 0 4px;
+	//font-size: 18px;
+	//letter-spacing: -4px;
+	//line-height: 26px;
+	//text-align: center;
+	//width: 200px;
+	//position: absolute;
+	//top: -6px;
+	//left: 135px
+}
+
+.position {
+	display: inline-block;
+	height: 1.6em;
+	overflow: hidden;
+	position: relative;
+	width: 20px;
+}
+
+.position:after {
+	display: block;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 1px;
+	width: 25px;
+	height: 100%;
+	//background: url(../img/timer.png) -50px -62px no-repeat;
+}
+
+.digit {
+	position: absolute;
+	display: block;
+	width: .8em;
+	//background-color: #444;
+	border-radius: 0.2em;
+	color: #000;
+
+
+	text-align: center;
+	color: #000;
+	letter-spacing: -1px;
+	padding-top: 9px;
+	padding-left: 3px;
+}
+
+.digit.static {
+	//box-shadow: 0 1px 3px #999;
+	//background: #2e2e2e url(../img/bg/counter-bg.png)  no-repeat;
+}
+
+/**
+ * Вы можете использовать данные классы для скрытия
+ * частей счетчика, которые не нужны.
+ */
+
+.countDays {
+	/* display:none !important;*/
+
+	position: relative;
+	&:after {
+		content: "";
+		position: absolute;
+		bottom: -15px;
+		color: #000;
+		left: 0;
+	}
+}
+
+.countDiv0 {
+	/* display:none !important;*/
+}
+
+.countHours {
+}
+
+.countDiv1 {
+}
+
+.countMinutes {
+}
+
+.countDiv2 {
+}
+
+.countSeconds {
+}
+
+.countDiv {
+	display: none;
+	width: 16px;
+	height: 1.6em;
+	position: relative;
+}
+
+.countDiv:before,
+.countDiv:after {
+	position: absolute;
+	width: 5px;
+	height: 5px;
+	background-color: #444;
+	border-radius: 50%;
+	left: 50%;
+	margin-left: -3px;
+	top: 0.5em;
+	content: '';
+}
+
+.countDiv:after {
+	top: 0.9em;
+}
+
+.count_wrap {
+	position: relative;
+	margin: 0 4px;
+	background: url("../img/icons/count-time-bg.png");
+	width: 43px;
+	height: 26px;
+	top:-2px;
+}
+
+.lay {
+	position: absolute;
+	top: -15px;
+	left: -13px;
+	right: 0;
+	height: 36px;
+	border-radius: 3px;
+
+}

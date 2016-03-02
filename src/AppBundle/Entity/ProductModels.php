@@ -659,8 +659,9 @@ class ProductModels
     {
         return $this->products;
     }
+
     /**
-     * @ORM\PrePersist
+     *
      */
     public function checkPrice()
     {
@@ -668,7 +669,7 @@ class ProductModels
     }
 
     /**
-     * @ORM\PrePersist
+     *
      */
     public function checkColor()
     {

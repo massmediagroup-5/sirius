@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Sirius || Main</title>
+    {% block assets_top %}
+        {% stylesheets
+            '@AppBundle/Resources/public/css/*' filter='uglifycss' output='css/vendor.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        {% stylesheets
+            '@AppBundle/Resources/public/sass/screen.scss' filter='compass' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        {% javascripts '@AppBundle/Resources/public/js/html5shiv.js' filter='uglifyjs2' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock %}
+</head>
+<body>
+
+<div class="out">
+    {{ include('AppBundle:partials/header.html.twig') }}
+
+    {% block body %}{% endblock %}
+
+    <div class="push"></div>
+</div>
+
+<a href="#" class="to-top"></a>
+
+{{ include('AppBundle:partials/footer.html.twig') }}
+
+{% block bottom_assets %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ url('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+    {% javascripts
+        '@AppBundle/Resources/public/js/jquery-1.10.1.min.js'
+        '@AppBundle/Resources/public/js/verge.js'
+        '@AppBundle/Resources/public/js/jquery-ui-1.10.4.custom.js'
+        '@AppBundle/Resources/public/js/owl.carousel.min.js'
+        '@AppBundle/Resources/public/js/owl.carousel2.thumbs.js'
+        '@AppBundle/Resources/public/js/jquery.scrollTo.js'
+        '@AppBundle/Resources/public/js/jquery.maskedinput.js'
+        '@AppBundle/Resources/public/js/jquery.fancybox.js'
+        '@AppBundle/Resources/public/js/select2.js'
+        '@AppBundle/Resources/public/js/selectize.js'
+        '@AppBundle/Resources/public/js/jquery.validate.js'
+        '@AppBundle/Resources/public/js/slick.js'
+        '@AppBundle/Resources/public/js/start.js'
+        output='js/main.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}
+</body>
+</html>
