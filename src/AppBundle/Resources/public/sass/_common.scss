@@ -1,0 +1,214 @@
+@import "base";
+@import "compass";
+
+// SHORT HOWTO
+// =======Sprites
+// .whatever{
+// 	@include sized-sprite($icons, badge_hit);
+// 	@include retina{
+// 		@include sized-sprite($icons, badge_new);
+// 	}
+// }
+//@include transition-property(color);
+//@include transition-duration(0.3s);
+// =======animation example
+// @include keyframes(rotate) {
+//    from {
+//       @include rotate(0);
+//    }
+//    to {
+//       @include rotate(360);
+//    }
+// }
+// =======animation usage
+// body:hover{
+// 	@include animation(rotate 200s linear infinite);
+// }
+// =======gradient example
+// body{
+// @include background-image(linear-gradient(#232323, #5c5c5c));
+// @include filter-gradient(#F3ECE8,#FDFCFC);
+// }
+// =======making bw-images
+// img{@extend %gray;}
+// BTW these comments will not render into css
+// @include box-shadow(0 3px 3px 0 rgba(0, 0, 0, .2));
+
+* {
+	margin: 0;
+	padding: 0;
+	-webkit-text-size-adjust: none;
+}
+
+/* --------------- reset.css --------------- */
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, em, img, strong, sub, sup, b, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, table, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+a {
+	margin: 0;
+	padding: 0;
+	vertical-align: baseline;
+	background: transparent;
+	text-decoration: none;
+	color: #000;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+td, td img {
+	vertical-align: top;
+}
+
+input, select, button, textarea {
+	margin: 0;
+	font-size: 100%;
+	font-family: Arial, sans-serif;
+	color: #737373;
+}
+
+input[type="checkbox"] {
+	vertical-align: bottom;
+}
+
+input[type="radio"] {
+	vertical-align: text-bottom;
+}
+
+sub {
+	vertical-align: sub;
+	font-size: smaller;
+}
+
+sup {
+	vertical-align: super;
+	font-size: smaller;
+}
+
+/* --------------- /reset.css --------------- */
+
+.clearfix:before, .clearfix:after {
+	content: "\0020";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.clearfix {
+	zoom: 1;
+}
+
+html, body {
+	min-width:1140px; /* suppose you want minimun width of 1140px */
+	width: auto !important;  /* Firefox will set width as auto */
+	width:1140px;             /* As IE ignores !important it will set width as 1140px; */
+}
+body {
+	position: relative;
+	color: #000;
+	text-align: left;
+	font: 14px/16px 'regular', Arial, sans-serif;
+	background: #fff;
+
+
+}
+
+label, input[type="button"], input[type="submit"], button {
+	cursor: pointer;
+}
+
+
+.icon {
+	@include hide-text;
+	display: block;
+}
+
+
+/*STICKY FOOTER*/
+html, body {
+	@include respond-to(tablet-portrait) {
+		height: 100%;
+	}
+	@include respond-to(desc) {
+		height: 100%;
+	}
+}
+
+.out {
+
+	background-color: #fff;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -332px;
+
+	&.out_order {
+		margin: 0 auto -80px;
+
+		.push {
+			height: 80px;
+		}
+
+	}
+
+	.push {
+		height: 332px;
+		@include transition(padding, 250ms, ease);
+
+	}
+	.push_order {
+		height: 80px;
+	}
+
+
+}
+
+
+.mobile-show {
+	@include respond-to(tablet) {
+		display: block;
+	}
+	@include respond-to(desc) {
+		display: none!important;
+	}
+}
+
+.tablet-show {
+	@include respond-to(tablet) {
+		display: block;
+	}
+	@include respond-to(desc) {
+		display: none!important;
+	}
+}
+.tablet-hide {
+	@include respond-to(tablet) {
+		display: none;
+	}
+}
+
+.mobile-hide {
+//	@include respond-to(tablet) {
+//		display: none;
+//	}
+	@include respond-to(mobile) {
+		display: none;
+	}
+
+}
+
+.hide {
+	display: none;
+}

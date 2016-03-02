@@ -101,11 +101,11 @@ AppBundle\Entity\Categories:
             inversedBy: null
             orphanRemoval: false
     oneToMany:
-        productsBaseCategories:
-            targetEntity: ProductsBaseCategories
+        basedProducts:
+            targetEntity: Products
             cascade: {  }
             fetch: LAZY
-            mappedBy: categories
+            mappedBy: baseCategory
             inversedBy: null
             orphanRemoval: false
     manyToMany:

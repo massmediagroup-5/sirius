@@ -204,7 +204,7 @@ class Cart
 
         $name = $sku->getProductModels()->getName();
         $model_alias = $sku->getProductModels()->getAlias();
-        $category_alias = $sku->getProductModels()->getProducts()->getProductsBaseCategories()->getCategories()->getAlias();
+        $category_alias = $sku->getProductModels()->getProducts()->getBaseCategory()->getAlias();
         $price = $sku->getProductModels()->getPrice();
 
         $message = \Swift_Message::newInstance()
@@ -266,7 +266,7 @@ class Cart
 
         $name = $sku->getProductModels()->getName();
         $model_alias = $sku->getProductModels()->getAlias();
-        $category_alias = $sku->getProductModels()->getProducts()->getProductsBaseCategories()->getCategories()->getAlias();
+        $category_alias = $sku->getProductModels()->getProducts()->getBaseCategory()->getAlias();
         $price = $sku->getProductModels()->getPrice();
 
         $message = \Swift_Message::newInstance()

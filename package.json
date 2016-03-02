@@ -1,0 +1,16 @@
+{
+  "name": "Sirius",
+  "version": "0.0.0",
+  "description": "Sirius",
+  "private": true,
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "author": "Zimm",
+  "license": "MIT",
+  "devDependencies": {
+    "u": "^0.1.0",
+    "uglify-js": "^2.6.2",
+    "uglifycss": "0.0.20"
+  }
+}

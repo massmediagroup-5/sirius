@@ -20,7 +20,7 @@ class Products
     /**
      * @var integer
      */
-    private $status = '0';
+    private $status = 0;
 
     /**
      * @var boolean
@@ -43,11 +43,6 @@ class Products
     private $updateTime;
 
     /**
-     * @var \AppBundle\Entity\ProductsBaseCategories
-     */
-    private $productsBaseCategories;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $productModels;
@@ -61,6 +56,11 @@ class Products
      * @var \AppBundle\Entity\ActionLabels
      */
     private $actionLabels;
+
+    /**
+     * @var \AppBundle\Entity\Categories
+     */
+    private $baseCategory;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -238,30 +238,6 @@ class Products
     }
 
     /**
-     * Set productsBaseCategories
-     *
-     * @param \AppBundle\Entity\ProductsBaseCategories $productsBaseCategories
-     *
-     * @return Products
-     */
-    public function setProductsBaseCategories(\AppBundle\Entity\ProductsBaseCategories $productsBaseCategories = null)
-    {
-        $this->productsBaseCategories = $productsBaseCategories;
-
-        return $this;
-    }
-
-    /**
-     * Get productsBaseCategories
-     *
-     * @return \AppBundle\Entity\ProductsBaseCategories
-     */
-    public function getProductsBaseCategories()
-    {
-        return $this->productsBaseCategories;
-    }
-
-    /**
      * Add productModel
      *
      * @param \AppBundle\Entity\ProductModels $productModel
@@ -270,27 +246,7 @@ class Products
      */
     public function addProductModel(\AppBundle\Entity\ProductModels $productModel)
     {
-        $productModel->setProducts($this);
-
         $this->productModels[] = $productModel;
-
-        return $this;
-    }
-
-    /**
-     * setProductModels
-     *
-     * @param \AppBundle\Entity\ProductModels $productModel
-     *
-     * @return Products
-     */
-    public function setProductModels($productModels)
-    {
-        if (count($productModels) > 0) {
-            foreach ($productModels as $i) {
-                $this->addProductModel($i);
-            }
-        }
 
         return $this;
     }
@@ -374,6 +330,30 @@ class Products
     }
 
     /**
+     * Set baseCategory
+     *
+     * @param \AppBundle\Entity\Categories $baseCategory
+     *
+     * @return Products
+     */
+    public function setBaseCategory(\AppBundle\Entity\Categories $baseCategory = null)
+    {
+        $this->baseCategory = $baseCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get baseCategory
+     *
+     * @return \AppBundle\Entity\Categories
+     */
+    public function getBaseCategory()
+    {
+        return $this->baseCategory;
+    }
+
+    /**
      * Add category
      *
      * @param \AppBundle\Entity\Categories $category
@@ -442,20 +422,16 @@ class Products
     }
 
     /**
-     * setFirstBaseCategory
+     * PrePersist
      *
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $event
      */
     public function setFirstBaseCategory(\Doctrine\ORM\Event\LifecycleEventArgs $event)
     {
         $em = $event->getObjectManager();
-        if (empty($this->getProductsBaseCategories())) {
-            $category = $em->getRepository('AppBundle:Categories')->find(1);
-            if ($category) {
-                $baseCategory = new \AppBundle\Entity\ProductsBaseCategories;
-                $baseCategory->setCategories($category)
-                    ->setProductsForBaseCategories($this);
-                $this->setProductsBaseCategories($baseCategory);
+        if (empty($this->getBaseCategory())) {
+            if ($category = $em->getRepository('AppBundle:Categories')->find(1)) {
+                $this->setBaseCategory($category);
             }
         }
     }
