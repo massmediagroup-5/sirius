@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),
             new Sonata\TranslationBundle\SonataTranslationBundle(),
+            new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
             // -----
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new FOS\UserBundle\FOSUserBundle(),
@@ -34,6 +35,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new AppImportBundle\AppImportBundle(),
             new AppAdminBundle\AppAdminBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

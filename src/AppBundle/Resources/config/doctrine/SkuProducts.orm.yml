@@ -46,11 +46,10 @@ AppBundle\Entity\SkuProducts:
             options:
                 fixed: false
         status:
-            type: integer
-            nullable: true
+            type: boolean
             options:
                 unsigned: false
-                default: '0'
+                default: false
         active:
             type: boolean
             nullable: true
@@ -60,13 +59,20 @@ AppBundle\Entity\SkuProducts:
             precision: 8
             scale: 2
             options:
-                default: '0.00'
+                default: 0.00
+        wholesale_price:
+            type: decimal
+            nullable: true
+            precision: 8
+            scale: 2
+            options:
+                default: 0.00
         quantity:
             type: integer
             nullable: false
             options:
                 unsigned: false
-                default: '0'
+                default: 0
         createTime:
             type: datetime
             nullable: false

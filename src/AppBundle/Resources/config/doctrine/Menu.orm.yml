@@ -40,4 +40,12 @@ AppBundle\Entity\Menu:
             length: 16777215
             options:
                 fixed: false
+    oneToMany:
+        items:
+            targetEntity: MenuItems
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: menu
+            inversedBy: null
+            orphanRemoval: true
     lifecycleCallbacks: {  }

@@ -15,6 +15,12 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    # Social authentication
+    facebook_app_id: ~
+    facebook_app_secret: ~
+    vkontakte_app_id: ~
+    vkontakte_app_secret: ~
+
     compass_path: ~
 
     # A secret key that's used to generate certain security-related tokens

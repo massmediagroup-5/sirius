@@ -12,3 +12,6 @@ services:
         arguments:
             - 'mysql:host=%database_host%;dbname=%database_name%'
             - { db_username: '%database_user%', db_password: '%database_password%' }
+    sonata.user.admin.group:
+        abstract: true
+        public: false

@@ -10,7 +10,7 @@ services:
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
     users:
         class: AppBundle\Services\Users
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ['@fos_user.user_manager', { vkontakte: vkontakte_id }]
     cart:
         class: AppBundle\Services\Cart
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "@session"]

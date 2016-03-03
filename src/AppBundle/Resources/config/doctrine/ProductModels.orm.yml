@@ -21,6 +21,12 @@ AppBundle\Entity\ProductModels:
         oldprice:
             columns:
                 - oldprice
+        wholesale_price:
+            columns:
+                - price
+        wholesale_oldprice:
+            columns:
+                - oldprice
         stock:
             columns:
                 - in_stock
@@ -70,6 +76,16 @@ AppBundle\Entity\ProductModels:
             options:
                 default: '0.00'
         oldprice:
+            type: decimal
+            nullable: true
+            precision: 8
+            scale: 2
+        wholesale_price:
+            type: decimal
+            nullable: true
+            precision: 8
+            scale: 2
+        wholesale_oldprice:
             type: decimal
             nullable: true
             precision: 8
@@ -153,14 +169,14 @@ AppBundle\Entity\ProductModels:
                 product_colors_id:
                     referencedColumnName: id
             orphanRemoval: false
-        productModelDecorationColors:
-            targetEntity: ProductModelDecorationColors
+        decorationColor:
+            targetEntity: ProductColors
             cascade: {  }
             fetch: EAGER
             mappedBy: null
             inversedBy: null
             joinColumns:
-                product_model_decoration_colors_id:
+                product_model_decoration_color_id:
                     referencedColumnName: id
             orphanRemoval: false
         productModelSizes:

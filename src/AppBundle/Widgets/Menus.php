@@ -72,12 +72,13 @@ class Menus
     public function footerMenus()
     {
         $menus = $this->em->getRepository("AppBundle:Menu")->createQueryBuilder('m')
-            ->where('m.name LIKE "footerMenu%"')
+            ->where('m.name LIKE :name')
+            ->setParameter('name', 'footerMenu%')
             ->orderBy('m.name')
             ->getQuery()->getResult();
 
         return $this->templating->render("AppBundle:widgets/menus/footer.html.twig", array(
-                'menu' => $menus,
+                'menus' => $menus,
                 // todo get link using MenuItemsService, create widget {{ widget 'links.get', $item }}
             )
         );

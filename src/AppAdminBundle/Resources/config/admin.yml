@@ -4,12 +4,18 @@ services:
         arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Заказы"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.cart:
         class: AppAdminBundle\Admin\CartAdmin
         arguments: [~, AppBundle\Entity\Cart, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin
@@ -19,6 +25,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Категории"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
             #- [ setTemplate, [base_edit_form_macro, AppAdminBundle:admin:base_edit_form_macro.html.twig]]
 
     app.admin.filters:
@@ -26,6 +33,9 @@ services:
         arguments: [~, AppBundle\Entity\Filters, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Фильтры"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.products:
         class: AppAdminBundle\Admin\ProductsAdmin
@@ -34,6 +44,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Товары"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
     app.admin.product_models:
@@ -43,6 +54,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Модели"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
             - [ setTemplate, [form, AppAdminBundle:admin:form_admin_fields.html.twig]]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
@@ -51,33 +63,54 @@ services:
         arguments: [~, AppBundle\Entity\SkuProducts, AppAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Артикулы"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.product_model_images:
         class: AppAdminBundle\Admin\ProductModelImagesAdmin
         arguments: [~, AppBundle\Entity\ProductModelImages, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Изображения моделей"}
-        #calls:
-            #- [ setTemplate, [filter, AppAdminBundle:admin:filter_admin_fields.html.twig]]
-            #- [ setTemplate, [form, AppAdminBundle:admin:form_admin_fields.html.twig]]
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.characteristics:
         class: AppAdminBundle\Admin\CharacteristicsAdmin
         arguments: [~, AppBundle\Entity\Characteristics, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Характеристики"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.characteristic_values:
         class: AppAdminBundle\Admin\CharacteristicValuesAdmin
         arguments: [~, AppBundle\Entity\CharacteristicValues, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Значения характеристик"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.product_colors:
         class: AppAdminBundle\Admin\ProductColorsAdmin
         arguments: [~, AppBundle\Entity\ProductColors, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Цвета товаров"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
+
+    app.admin.product_model_sizes:
+        class: AppAdminBundle\Admin\ProductModelSizesAdmin
+        arguments: [~, AppBundle\Entity\ProductModelSizes, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Размеры товаров"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.vendors:
         class: AppAdminBundle\Admin\VendorsAdmin
@@ -86,12 +119,16 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Поставщики"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app_admin.admin.main_slider:
         class: AppAdminBundle\Admin\MainSliderAdmin
         arguments: [~, AppBundle\Entity\MainSlider, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Слайдер главной страницы"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.pages:
         class: AppAdminBundle\Admin\PageAdmin
@@ -100,6 +137,7 @@ services:
             - { name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Статические страницы" }
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.site_params:
         class: AppAdminBundle\Admin\SiteParamsAdmin
@@ -108,6 +146,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Параметры"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.call_back:
         class: AppAdminBundle\Admin\CallBackAdmin
@@ -116,6 +155,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Запросы на перезвон"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.menu:
         class: AppAdminBundle\Admin\MenuAdmin
@@ -124,6 +164,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Меню", label: "Меню"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
     app.admin.menu_items:
         class: AppAdminBundle\Admin\MenuItemsAdmin
@@ -132,3 +173,4 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Меню", label: "Элементы меню"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]

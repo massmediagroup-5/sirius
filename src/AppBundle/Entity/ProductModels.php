@@ -103,9 +103,9 @@ class ProductModels
     private $productColors;
 
     /**
-     * @var \AppBundle\Entity\ProductModelDecorationColors
+     * @var \AppBundle\Entity\ProductColors
      */
-    private $productModelDecorationColors;
+    private $decorationColor;
 
     /**
      * @var \AppBundle\Entity\ProductModelSizes
@@ -589,27 +589,27 @@ class ProductModels
     }
 
     /**
-     * Set productModelDecorationColors
+     * Set decorationColor
      *
-     * @param \AppBundle\Entity\ProductModelDecorationColors $productModelDecorationColors
+     * @param \AppBundle\Entity\ProductColors $decorationColors
      *
      * @return ProductModels
      */
-    public function setProductModelDecorationColors(\AppBundle\Entity\ProductModelDecorationColors $productModelDecorationColors = null)
+    public function setDecorationColor(ProductColors $decorationColors = null)
     {
-        $this->productModelDecorationColors = $productModelDecorationColors;
+        $this->decorationColor = $decorationColors;
 
         return $this;
     }
 
     /**
-     * Get productModelDecorationColors
+     * Get decorationColors
      *
-     * @return \AppBundle\Entity\ProductModelDecorationColors
+     * @return \AppBundle\Entity\ProductColors
      */
-    public function getProductModelDecorationColors()
+    public function getDecorationColor()
     {
-        return $this->productModelDecorationColors;
+        return $this->decorationColor;
     }
 
     /**
@@ -619,7 +619,7 @@ class ProductModels
      *
      * @return ProductModels
      */
-    public function setProductModelSizes(\AppBundle\Entity\ProductModelSizes $productModelSizes = null)
+    public function setProductModelSizes(ProductModelSizes $productModelSizes = null)
     {
         $this->productModelSizes = $productModelSizes;
 
@@ -674,5 +674,68 @@ class ProductModels
     public function checkColor()
     {
         // Add your code here
+    }
+    /**
+     * @var string
+     */
+    private $wholesale_price;
+
+    /**
+     * @var string
+     */
+    private $wholesale_oldprice;
+
+
+    /**
+     * Set wholesalePrice
+     *
+     * @param string $wholesalePrice
+     *
+     * @return ProductModels
+     */
+    public function setWholesalePrice($wholesalePrice)
+    {
+        $this->wholesale_price = $wholesalePrice;
+
+        return $this;
+    }
+
+    /**
+     * Get wholesalePrice
+     *
+     * @return string
+     */
+    public function getWholesalePrice()
+    {
+        return $this->wholesale_price;
+    }
+
+    /**
+     * Set wholesaleOldprice
+     *
+     * @param string $wholesaleOldprice
+     *
+     * @return ProductModels
+     */
+    public function setWholesaleOldprice($wholesaleOldprice)
+    {
+        $this->wholesale_oldprice = $wholesaleOldprice;
+
+        return $this;
+    }
+
+    /**
+     * Get wholesaleOldprice
+     *
+     * @return string
+     */
+    public function getWholesaleOldprice()
+    {
+        return $this->wholesale_oldprice;
+    }
+
+    public function __toString()
+    {
+        return $this->getName() ? : '';
     }
 }

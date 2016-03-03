@@ -2,7 +2,7 @@
 
 namespace AppBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
+use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,7 +23,12 @@ class Users extends BaseUser
     /**
      * @var string
      */
-    private $fio;
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $surname;
 
     /**
      * @var string
@@ -40,6 +45,24 @@ class Users extends BaseUser
      */
     private $updateTime;
 
+    /**
+     * @var string
+     */
+    protected $facebook_id;
+
+    /**
+     * @var string
+     */
+    protected $facebook_access_token;
+    /**
+     * @var string
+     */
+    protected $vkontakte_id;
+
+    /**
+     * @var string
+     */
+    protected $vkontakte_access_token;
 
     /**
      * Get id
@@ -74,31 +97,7 @@ class Users extends BaseUser
     {
         return $this->uid;
     }
-
-    /**
-     * Set fio
-     *
-     * @param string $fio
-     *
-     * @return Users
-     */
-    public function setFio($fio)
-    {
-        $this->fio = $fio;
-
-        return $this;
-    }
-
-    /**
-     * Get fio
-     *
-     * @return string
-     */
-    public function getFio()
-    {
-        return $this->fio;
-    }
-
+    
     /**
      * Set phone
      *
@@ -169,5 +168,149 @@ class Users extends BaseUser
     public function getUpdateTime()
     {
         return $this->updateTime;
+    }
+
+    /**
+     * Set facebookId
+     *
+     * @param string $facebookId
+     *
+     * @return Users
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebook_id = $facebookId;
+
+        return $this;
+    }
+
+    /**
+     * Get facebookId
+     *
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebook_id;
+    }
+
+    /**
+     * Set facebookAccessToken
+     *
+     * @param string $facebookAccessToken
+     *
+     * @return Users
+     */
+    public function setFacebookAccessToken($facebookAccessToken)
+    {
+        $this->facebook_access_token = $facebookAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get facebookAccessToken
+     *
+     * @return string
+     */
+    public function getFacebookAccessToken()
+    {
+        return $this->facebook_access_token;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Users
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set surname
+     *
+     * @param string $surname
+     *
+     * @return Users
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    /**
+     * Get surname
+     *
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+
+    /**
+     * Set vkontakteId
+     *
+     * @param string $vkontakteId
+     *
+     * @return Users
+     */
+    public function setVkontakteId($vkontakteId)
+    {
+        $this->vkontakte_id = $vkontakteId;
+
+        return $this;
+    }
+
+    /**
+     * Get vkontakteId
+     *
+     * @return string
+     */
+    public function getVkontakteId()
+    {
+        return $this->vkontakte_id;
+    }
+
+    /**
+     * Set vkontakteAccessToken
+     *
+     * @param string $vkontakteAccessToken
+     *
+     * @return Users
+     */
+    public function setVkontakteAccessToken($vkontakteAccessToken)
+    {
+        $this->vkontakte_access_token = $vkontakteAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get vkontakteAccessToken
+     *
+     * @return string
+     */
+    public function getVkontakteAccessToken()
+    {
+        return $this->vkontakte_access_token;
     }
 }

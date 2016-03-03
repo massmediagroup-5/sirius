@@ -22,6 +22,7 @@ class SkuProductsAdmin extends Admin
             ->add('status')
             ->add('active')
             ->add('price')
+            ->add('wholesale_price')
             ->add('quantity')
             ->add('createTime')
             ->add('updateTime')
@@ -38,9 +39,10 @@ class SkuProductsAdmin extends Admin
             ->add('productModels')
             ->add('sku')
             ->add('name')
-            ->add('status')
-            ->add('active')
+            ->add('status', null, ['editable' => true])
+            ->add('active', null, ['editable' => true])
             ->add('price')
+            ->add('wholesale_price')
             ->add('quantity')
             ->add('createTime')
             ->add('updateTime')
@@ -67,6 +69,9 @@ class SkuProductsAdmin extends Admin
             ->add('status')
             ->add('active')
             ->add('price')
+            ->add('oldprice')
+            ->add('wholesale_price')
+            ->add('wholesale_oldprice')
             ->add('quantity')
             //->add('createTime')
             //->add('updateTime')
@@ -85,6 +90,7 @@ class SkuProductsAdmin extends Admin
             ->add('status')
             ->add('active')
             ->add('price')
+            ->add('wholesale_price')
             ->add('quantity')
             ->add('createTime')
             ->add('updateTime')
@@ -100,5 +106,23 @@ class SkuProductsAdmin extends Admin
     {
         dump($param);
         exit(1);
+    }
+
+    public function getBatchActions()
+    {
+        // retrieve the default (currently only the delete action) actions
+        $actions = parent::getBatchActions();
+
+        $actions['activate'] = [
+            'label'            => $this->trans('list.action_activate', array(), 'AppAdminBundle'),
+            'ask_confirmation' => true // If true, a confirmation will be asked before performing the action
+        ];
+
+        $actions['deactivate'] = [
+            'label'            => $this->trans('list.action_deactivate', array(), 'AppAdminBundle'),
+            'ask_confirmation' => true
+        ];
+
+        return $actions;
     }
 }

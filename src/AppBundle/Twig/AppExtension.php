@@ -120,6 +120,9 @@ class AppExtension extends \Twig_Extension
             list($widgetName, $widgetMethodName) = explode('.', $widgetNameAndMethod);
         }
 
+        // Add prefix to widget name
+        $widgetName = "widgets.$widgetName";
+
         // Get parameters
         $widgetParameters = array_slice($args, 1);
 

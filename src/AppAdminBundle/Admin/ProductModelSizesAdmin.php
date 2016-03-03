@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class ProductColorsAdmin extends Admin
+class ProductModelSizesAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -17,10 +17,7 @@ class ProductColorsAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('name')
-            ->add('hex')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('size')
         ;
     }
 
@@ -31,10 +28,7 @@ class ProductColorsAdmin extends Admin
     {
         $listMapper
             ->add('id')
-            ->add('name')
-            ->add('hex')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('size')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -51,8 +45,7 @@ class ProductColorsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('hex')
+            ->add('size')
         ;
     }
 
@@ -63,10 +56,7 @@ class ProductColorsAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('name')
-            ->add('hex')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('size')
         ;
     }
 }
