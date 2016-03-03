@@ -7,8 +7,24 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 
-fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /reset
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
@@ -16,11 +32,44 @@ _liip_imagine:
 app_import:
     resource: "@AppImportBundle/Resources/config/routing.yml"
 
+# Admin
 app_admin:
     resource: "@AppAdminBundle/Resources/config/routing.yml"
 
+sonata_user:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    prefix: /admin
+
+admin_login:
+    pattern:  /admin/login
+    defaults: { _controller: FOSUserBundle:Security:login }
+
+admin_check:
+    pattern:  /admin/login_check
+    defaults: { _controller: FOSUserBundle:Security:check }
+
+admin_logout:
+    pattern:  /admin/logout
+    defaults: { _controller: FOSUserBundle:Security:logout }
+
+
 app_yml:
     resource: "@AppBundle/Resources/config/routing.yml"
+
+# Social authentication
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /login
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /login
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+facebook_login:
+    path: /login/check-facebook
+vkontakte_login:
+    path: /login/check-vkontakte
 
 app:
     resource: "@AppBundle/Controller/"

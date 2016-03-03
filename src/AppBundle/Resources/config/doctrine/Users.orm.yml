@@ -20,7 +20,29 @@ AppBundle\Entity\Users:
             nullable: true
             options:
                 unsigned: false
-        fio:
+        facebook_id:
+            type: string
+            nullable: true
+            length: 255
+        facebook_access_token:
+            type: string
+            nullable: true
+            length: 255
+        vkontakte_id:
+            type: string
+            nullable: true
+            length: 255
+        vkontakte_access_token:
+            type: string
+            nullable: true
+            length: 255
+        name:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+        surname:
             type: string
             nullable: true
             length: 45

@@ -1,0 +1,7 @@
+list:
+  label_surname: Фамилия
+  label_create_time: Создан
+breadcrumb:
+  link_users_list: Пользователи
+form:
+  label_surname: Фамилия

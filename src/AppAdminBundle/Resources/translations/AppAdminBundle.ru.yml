@@ -1,0 +1,31 @@
+breadcrumb:
+  link_dashboard: '<i class="fa fa-home"></i>'
+  link_orders_list: Заказы
+  link_products_list: Продукты
+form:
+  label_size: Размер
+list:
+  label_id: ID
+  label_status: Статус
+  label_sku: SKU
+  label_name: Имя
+  label_create_time: Создан
+  label_update_time: Обновлен
+  label__action: Действия
+  label_active: Активность
+  label_quantity: Количество
+  label_price: Цена
+  label_wholesale_price: Опт. цена
+  label_product_models: Модель
+  action_deactivate: Активировать
+  action_activate: Деактивировать
+filter:
+  label_id: ID
+  label_status: Статус
+  label_sku: SKU
+  label_name: Имя
+  label_create_time: Создан
+  label_update_time: Обновлен
+  label_active: Активность
+  label_quantity: Количество
+  label_price: Цена

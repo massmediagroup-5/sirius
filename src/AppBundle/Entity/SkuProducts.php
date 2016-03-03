@@ -25,7 +25,7 @@ class SkuProducts
     /**
      * @var integer
      */
-    private $status = '0';
+    private $status = false;
 
     /**
      * @var boolean
@@ -35,12 +35,17 @@ class SkuProducts
     /**
      * @var string
      */
-    private $price = '0.00';
+    private $price = 0.00;
+
+    /**
+     * @var string
+     */
+    private $wholesalePrice = 0.00;
 
     /**
      * @var integer
      */
-    private $quantity = '0';
+    private $quantity = 0;
 
     /**
      * @var \DateTime
@@ -311,5 +316,41 @@ class SkuProducts
     public function getVendors()
     {
         return $this->vendors;
+    }
+
+
+
+    public function __toString()
+    {
+        return $this->getName() ? : '';
+    }
+    /**
+     * @var string
+     */
+    private $wholesale_price = 0;
+
+
+    /**
+     * Set wholesalePrice
+     *
+     * @param string $wholesalePrice
+     *
+     * @return SkuProducts
+     */
+    public function setWholesalePrice($wholesalePrice)
+    {
+        $this->wholesale_price = $wholesalePrice;
+
+        return $this;
+    }
+
+    /**
+     * Get wholesalePrice
+     *
+     * @return string
+     */
+    public function getWholesalePrice()
+    {
+        return $this->wholesale_price;
     }
 }

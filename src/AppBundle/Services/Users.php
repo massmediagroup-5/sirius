@@ -3,46 +3,70 @@
 namespace AppBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseFOSUBProvider;
+use Symfony\Component\Security\Core\User\UserInterface;
+use AppBundle\Entity\Users as UserEntity;
 
 /**
  * Class: Users
  * @author A.Kravchuk
  */
-class Users
+class Users extends BaseFOSUBProvider
 {
-
     /**
-     * em
-     *
-     * @var mixed
+     * Todo test
+     * {@inheritDoc}
      */
-    private $em;
-
-
-    /**
-     * __construct
-     *
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
+    public function connect(UserInterface $user, UserResponseInterface $response)
     {
-        $this->em = $em;
+        // get property from provider configuration by provider name
+        // , it will return `facebook_id` in that case (see service definition below)
+        $property = $this->getProperty($response);
+        $username = $response->getUsername(); // get the unique user identifier
+
+        //we "disconnect" previously connected users
+        $existingUser = $this->userManager->findUserBy(array($property => $username));
+        if (null !== $existingUser) {
+            // set current user id and token to null for disconnect
+            // ...
+
+            $this->userManager->updateUser($existingUser);
+        }
+        //we connect current user, set current user id and token
+        // ...
+        $this->userManager->updateUser($user);
     }
 
     /**
-     * getCurrentUser
+     * Load user and store in database
      *
-     * @return mixed
-     *
-     * Return current User object
+     * {@inheritdoc}
      */
-    public function getCurrentUser()
+    public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
+        $user = $this->userManager->findUserBy([$this->getProperty($response) => $response->getUsername()]);
 
-        $user = $this->em->getRepository('AppBundle:Users')
-            ->findOneById(1);
+        $serviceName = $response->getResourceOwner()->getName();
 
+        // if null just create new user and set it properties
+        if (null === $user) {
+            $user = new UserEntity();
+            $user->setUsername($response->getUsername());
+            $user->setName($response->getFirstName());
+            $user->setSurname($response->getLastName());
+            $user->setEmail($response->getEmail());
+            $user->setPassword($response->getUsername()); // Set wrong not hashed password, user can change it
+            $user->setEnabled(true);
+        }
+
+        // else update access token of existing user
+        $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
+        $user->$setter($response->getAccessToken());//update access token
+        $setter = 'set' . ucfirst($serviceName) . 'Id';
+        $user->$setter($response->getUsername());//update user social id
+
+        $this->userManager->updateUser($user);
         return $user;
     }
-
 }

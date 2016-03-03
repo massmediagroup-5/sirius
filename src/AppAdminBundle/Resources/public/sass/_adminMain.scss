@@ -149,3 +149,9 @@ div[class="form-group"][id$="_productModelImages"] {
 .select2-container.select2-container-multi {
     width: 100%;
 }
+
+.box-body {
+    &.table-responsive {
+        overflow-x: auto;
+    }
+}
