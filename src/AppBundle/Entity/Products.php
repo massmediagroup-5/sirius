@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 /**
  * Products
  */
-class Products
+class Products implements CharacteristicableInterface
 {
     /**
      * @var integer
@@ -396,6 +396,11 @@ class Products
      */
     public function addCharacteristicValue(\AppBundle\Entity\CharacteristicValues $characteristicValue)
     {
+        foreach($this->characteristicValues as $characteristicValue){
+            if($characteristicValue->getId() == $characteristicValue->getId()) {
+                return $this;
+            }
+        }
         $this->characteristicValues[] = $characteristicValue;
 
         return $this;

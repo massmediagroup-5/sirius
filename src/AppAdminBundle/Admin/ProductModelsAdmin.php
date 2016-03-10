@@ -85,9 +85,10 @@ class ProductModelsAdmin extends Admin
                             'empty_value'   => 'Выберите цвет модели'
                         )
                     )
-                    ->add('productModelSizes', 'entity',
+                    ->add('sizes', 'entity',
                         array(
                             'class'         => 'AppBundle:ProductModelSizes',
+                            'multiple'      => true,
                             'property'      => 'size',
                             'label'         => 'Размер',
                             'empty_value'   => 'Выберите размер модели'
@@ -98,7 +99,8 @@ class ProductModelsAdmin extends Admin
                             'class'         => 'AppBundle:ProductColors',
                             'property'      => 'name',
                             'label'         => 'Цвет отделки',
-                            'empty_value'   => 'Выберите цвет отделки'
+                            'empty_value'   => 'Выберите цвет отделки',
+                            'required' => false
                         )
                     )
                     ->add('price', null, array('label' => 'Цена'))

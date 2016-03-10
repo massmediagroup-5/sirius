@@ -1,6 +1,7 @@
 AppBundle\Entity\ProductColors:
     type: entity
     table: product_colors
+    repositoryClass: AppBundle\Entity\Repository\ProductColorsRepository
     indexes:
         name:
             columns:

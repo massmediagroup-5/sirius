@@ -1,12 +1,13 @@
 <?php
 
 namespace AppBundle\Entity\Repository;
+use AppBundle\Entity\Characteristics;
 
 /**
  * CharacteristicsRepository
  *
  */
-class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
+class CharacteristicsRepository extends BaseRepository
 {
 
     /**
@@ -30,8 +31,7 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
         // Add a starting Joins.
         $this->query_obj
             ->innerJoin('characteristics.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
-            ->innerJoin('characteristicValues.products', 'products')->addselect('products')
-            ;
+            ->innerJoin('characteristicValues.products', 'products')->addselect('products');
     }
 
     /**
@@ -70,7 +70,7 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
     {
         // construct WHERE conditions
         foreach ($where as $whereKey => $whereValue) {
-            foreach($whereValue as $columnKey=> $columnValue) {
+            foreach ($whereValue as $columnKey => $columnValue) {
                 $this->query_obj
                     ->andWhere("{$table}.{$columnKey} = :{$columnKey}")
                     ->setParameter($columnKey, $columnValue);
@@ -117,29 +117,29 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('filters.characteristics', 'characteristics2', 'WITH', 'characteristics.id = characteristics2.id')
             //->addSelect('
 //(SELECT
-  //COUNT (products1.id)
+            //COUNT (products1.id)
 //FROM
-  //AppBundle\Entity\Products products1
+            //AppBundle\Entity\Products products1
 //INNER JOIN
-  //products1.categories categories1
+            //products1.categories categories1
 //INNER JOIN
-  //products1.actionLabels actionLabels
+            //products1.actionLabels actionLabels
 //INNER JOIN
-  //products1.productModels productModels
+            //products1.productModels productModels
 //INNER JOIN
-  //productModels.productColors productColors
+            //productModels.productColors productColors
 //INNER JOIN
-  //productModels.skuProducts skuProducts
+            //productModels.skuProducts skuProducts
 //LEFT JOIN
-  //productModels.productModelImages productModelImages
+            //productModels.productModelImages productModelImages
 //INNER JOIN
-  //products1.productsBaseCategories productsBaseCategories
+            //products1.productsBaseCategories productsBaseCategories
 //INNER JOIN
-  //productsBaseCategories.categories baseCategories
+            //productsBaseCategories.categories baseCategories
 //WHERE
-  //categories.alias = :alias AND categories.active = :active AND products1.active = :active AND products1.published = :published AND productModels.active = :active AND productModels.published = :published AND productModels.price >= :price_from AND productModels.price <= :price_to
+            //categories.alias = :alias AND categories.active = :active AND products1.active = :active AND products1.published = :published AND productModels.active = :active AND productModels.published = :published AND productModels.price >= :price_from AND productModels.price <= :price_to
 //ORDER BY
-  //productModels.priority ASC) as counte')
+            //productModels.priority ASC) as counte')
 //->setParameter('active', 1)
 //->setParameter('published', 1)
 //->setParameter('price_from', 1)
@@ -150,25 +150,24 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
                 (
                     SELECT COUNT(dctrn.id)
                     FROM \AppBundle\Entity\Products as dctrn
-                    WHERE dctrn.id IN (' . (string)$products_obj. ')
+                    WHERE dctrn.id IN (' . (string)$products_obj . ')
                     OR dctrn.id = characteristicValues.id
                 ) as counte
             ')
             //->addSelect('(SELECT COUNT (' . (string)$products_obj. ') as idd) as counte')
             //->addSelect([>$this->query_obj->expr()->count($products_obj)<] '('.$products_obj.') as counte')
-            ;
+        ;
         foreach ($products_obj->getParameters() as $parametr) {
             $query_obj->setParameter($parametr->getName(), $parametr->getValue());
         }
         dump($products_obj->getParameters());
         dump((string)$products_obj);
         // construct WHERE conditions
-        if(isset($inFilter))
-        {
+        if (isset($inFilter)) {
             $query_obj->where("characteristics.inFilter = :inFilter")
                 ->setParameter('inFilter', $inFilter);
         }
-        foreach($category as $categoryColumnKey=> $categoryColumnValue) {
+        foreach ($category as $categoryColumnKey => $categoryColumnValue) {
             $query_obj
                 ->andWhere("categories.{$categoryColumnKey} = :{$categoryColumnKey}")
                 ->setParameter($categoryColumnKey, $categoryColumnValue);
@@ -198,14 +197,12 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
         $this->query_obj
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->andWhere("skuProducts.sku = :skuProduct")->setParameter('skuProduct', $skuProduct)
-        ;
+            ->andWhere("skuProducts.sku = :skuProduct")->setParameter('skuProduct', $skuProduct);
         if (!is_null($vendor))
             $this->query_obj
                 ->innerJoin('skuProducts.vendors', 'vendors')->addselect('vendors')
                 ->andWhere("vendors.name = :vendor")
-                ->setParameter('vendor', $vendor)
-            ;
+                ->setParameter('vendor', $vendor);
         return $this;
     }
 
@@ -232,8 +229,7 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('characteristicValues.products', 'products')->addselect('products')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->where("skuProducts.sku = :skuProduct")->setParameter('skuProduct', $skuProduct)
-            ;
+            ->where("skuProducts.sku = :skuProduct")->setParameter('skuProduct', $skuProduct);
         return $query_obj->getQuery()->getResult();
     }
 
@@ -261,8 +257,7 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
             ->groupBy('characteristics.id')
             ->having("count(characteristics.id) = :counter")->setParameter('counter', count($category->getProducts()))
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
         return $query_obj;
     }
 
@@ -286,8 +281,7 @@ class CharacteristicsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('characteristics.categories', 'categories')->addSelect('categories')
             ->where("categories.id = :category")->setParameter('category', $category->getId())
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
         return $query_obj;
     }
 

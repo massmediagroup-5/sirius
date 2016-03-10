@@ -174,3 +174,7 @@ services:
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
             - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
+
+    app.admin.import:
+        class: AppAdminBundle\Admin\ImportAdmin
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@validator"]
