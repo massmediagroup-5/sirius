@@ -48,4 +48,5 @@ AppBundle\Entity\Menu:
             mappedBy: menu
             inversedBy: null
             orphanRemoval: true
+            orderBy: {parent: ASC, priority: ASC}
     lifecycleCallbacks: {  }

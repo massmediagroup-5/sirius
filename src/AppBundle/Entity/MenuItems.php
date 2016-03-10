@@ -52,6 +52,11 @@ class MenuItems
      */
     private $menu;
 
+    /**
+     * @var \AppBundle\Entity\MenuItems
+     */
+    private $parent;
+
 
     /**
      * Get id
@@ -254,4 +259,36 @@ class MenuItems
     {
         return $this->menu;
     }
+
+    /**
+     * Set parent
+     *
+     * @param \AppBundle\Entity\MenuItems $parent
+     *
+     * @return MenuItems
+     */
+    public function setParent(MenuItems $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \AppBundle\Entity\MenuItems
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+       return $this->getName();
+    }
+
 }
