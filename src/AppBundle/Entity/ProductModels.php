@@ -1,12 +1,15 @@
 <?php
 
 namespace AppBundle\Entity;
+use AppBundle\Traits\ProcessHasMany;
 
 /**
  * ProductModels
  */
 class ProductModels
 {
+    use ProcessHasMany;
+
     /**
      * @var integer
      */
@@ -108,9 +111,9 @@ class ProductModels
     private $decorationColor;
 
     /**
-     * @var \AppBundle\Entity\ProductModelSizes
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $productModelSizes;
+    private $sizes;
 
     /**
      * @var \AppBundle\Entity\Products
@@ -124,6 +127,7 @@ class ProductModels
     {
         $this->productModelImages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->skuProducts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -613,27 +617,27 @@ class ProductModels
     }
 
     /**
-     * Set productModelSizes
+     * Set sizes
      *
-     * @param \AppBundle\Entity\ProductModelSizes $productModelSizes
+     * @param array $sizes
      *
      * @return ProductModels
      */
-    public function setProductModelSizes(ProductModelSizes $productModelSizes = null)
+    public function setSizes($sizes)
     {
-        $this->productModelSizes = $productModelSizes;
+        $this->setHasMany('sizes', $sizes);
 
         return $this;
     }
 
     /**
-     * Get productModelSizes
+     * Get sizes
      *
      * @return \AppBundle\Entity\ProductModelSizes
      */
-    public function getProductModelSizes()
+    public function getSizes()
     {
-        return $this->productModelSizes;
+        return $this->sizes;
     }
 
     /**
@@ -736,6 +740,6 @@ class ProductModels
 
     public function __toString()
     {
-        return $this->getName() ? : '';
+        return $this->getName() ? $this->getName() . $this->getProductColors()->getName() : '';
     }
 }

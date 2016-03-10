@@ -236,56 +236,6 @@ class Import
     }
 
     /**
-     * putNotParsed
-     *
-     * @param mixed $productModels
-     */
-    public function putNotParsed($productModels)
-    {
-        $this->output->writeln('<info>Start putNotParsed</info>');
-        $progress = new ProgressBar($this->output, count($productModels));
-        $progress->setFormat('debug');
-        $progress->start();
-        foreach ($productModels as $modelId) {
-            $model = $this->em
-                ->getRepository('AppBundle:ProductModels')
-                ->findOneById($modelId);
-            $skuProducts = $model->getSkuProducts();
-            foreach ($skuProducts as $skuProduct) {
-                if ($this->vendor === $skuProduct->getVendors()->getName())
-                    $sku = $skuProduct->getSku();
-            }
-            $row = array(
-                'model'   => $model->getName(),
-                'artikyl' => $sku,
-            );
-            $data = $this->serviceContainer->get('importCharacteristics')
-                ->setTabelCharacteristics('specnames')
-                ->setTabelCharacteristicsGroups('specgroup')
-                ->setTabelCharacteristicValues('mytex.test')
-                ->setTabelModels('models')
-                ->setTabelNotParsed('not_parsed')
-                ->setCharacteristicValuesName('naimenovanie')
-                ->setImgUrl('foto')
-                ->setCategory('category')
-                ->setModelNameInChV('URL')
-                ->setModelNameInModel('model')
-                ->putBrandNameInChV('Proizvoditel')
-                ->setModelArticulInModel('artikyl')
-                ->setNotCharacteristics('speclist')
-                ->setNumerator('id')
-                ->setColumnColor('TSvet')
-                ->insertOrUpdateNotParsed($row, $addModels = true)
-                ;
-            $progress->advance();
-        }
-        $progress->finish();
-        $this->output->writeln("\n");
-
-        return null;
-    }
-
-    /**
      * updateOrInsertProduct
      *
      * @param mixed $rowValue

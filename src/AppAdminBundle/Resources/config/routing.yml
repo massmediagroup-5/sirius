@@ -10,3 +10,11 @@ img_sorting:
     defaults: { _controller: AppAdminBundle:Upload:sortProductModelsImages}
     options:
         expose: true
+
+admin_app_import_index:
+    pattern:  /admin/app/import
+    defaults: { _controller: AppAdminBundle:Import:index}
+
+admin_app_import_start:
+    pattern:  /admin/app/import/start
+    defaults: { _controller: AppAdminBundle:Import:start}

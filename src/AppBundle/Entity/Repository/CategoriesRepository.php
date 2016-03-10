@@ -6,7 +6,7 @@ namespace AppBundle\Entity\Repository;
  * CategoriesRepository
  *
  */
-class CategoriesRepository extends \Doctrine\ORM\EntityRepository
+class CategoriesRepository extends BaseRepository
 {
 
     /**

@@ -36,6 +36,7 @@ class AppKernel extends Kernel
             new AppImportBundle\AppImportBundle(),
             new AppAdminBundle\AppAdminBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

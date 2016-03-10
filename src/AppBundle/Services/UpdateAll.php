@@ -30,6 +30,7 @@ class UpdateAll
      * __construct
      *
      * @param EntityManager $em
+     * @param ContainerInterface $container
      */
     public function __construct(EntityManager $em, ContainerInterface $container)
     {
@@ -46,8 +47,8 @@ class UpdateAll
     {
         $models = $this->em
             ->getRepository('AppBundle:ProductModels')
-            ->findAll()
-            ;
+            ->findAll();
+
         foreach ($models as $model) {
             if ($model->getStatus() == 0)
                 continue;

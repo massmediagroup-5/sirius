@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity\Repository;
+use AppBundle\Entity\CharacteristicValues;
 
 /**
  * Class: CharacteristicValuesRepository
@@ -90,6 +91,29 @@ class CharacteristicValuesRepository extends \Doctrine\ORM\EntityRepository
             ;
 
         return $result;
+    }
+
+    /**
+     * @param $searchParameters
+     * @param array $createParameters
+     * @return CharacteristicValues|array
+     */
+    public function findOrCreate($searchParameters, $createParameters = [])
+    {
+        $entity = $this->findOneBy($searchParameters);
+
+        if(!$entity) {
+            $entity = new CharacteristicValues();
+            $createParameters = array_merge($searchParameters, $createParameters);
+            foreach($createParameters as $key => $value) {
+                $setter = 'set' . ucfirst($key);
+                $entity->$setter($value);
+            }
+            $this->_em->persist($entity);
+            $this->_em->flush();
+        }
+
+        return $entity;
     }
 
 }

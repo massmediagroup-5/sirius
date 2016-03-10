@@ -1,12 +1,15 @@
 <?php
 
 namespace AppBundle\Entity;
+use AppBundle\Traits\ProcessHasMany;
 
 /**
  * Categories
  */
-class Categories
+class Categories implements CharacteristicableInterface
 {
+    use ProcessHasMany;
+
     /**
      * @var integer
      */
@@ -381,7 +384,7 @@ class Categories
      */
     public function addCharacteristicValue(\AppBundle\Entity\CharacteristicValues $characteristicValue)
     {
-        $this->characteristicValues[] = $characteristicValue;
+        $this->setHasMany('characteristicValues', [$characteristicValue], false);
 
         return $this;
     }

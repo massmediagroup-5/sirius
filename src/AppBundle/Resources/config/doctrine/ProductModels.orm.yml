@@ -179,16 +179,6 @@ AppBundle\Entity\ProductModels:
                 product_model_decoration_color_id:
                     referencedColumnName: id
             orphanRemoval: false
-        productModelSizes:
-            targetEntity: ProductModelSizes
-            cascade: {  }
-            fetch: EAGER
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                product_model_sizes_id:
-                    referencedColumnName: id
-            orphanRemoval: false
         products:
             targetEntity: Products
             cascade: {  }
@@ -199,6 +189,25 @@ AppBundle\Entity\ProductModels:
                 products_id:
                     referencedColumnName: id
             orphanRemoval: false
+    manyToMany:
+        sizes:
+            targetEntity: ProductModelSizes
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: productModel
+            joinTable:
+                name: product_models_has_sizes
+                joinColumns:
+                    -
+                        name: product_model_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: size_id
+                        referencedColumnName: id
+            orderBy: null
+
     lifecycleCallbacks:
         prePersist: [ checkPrice, checkColor ]
         preUpdate:  [ checkPrice, checkColor ]
