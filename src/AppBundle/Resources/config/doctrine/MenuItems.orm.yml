@@ -80,4 +80,11 @@ AppBundle\Entity\MenuItems:
                 menu_id:
                     referencedColumnName: id
             orphanRemoval: false
+        parent:
+            targetEntity: MenuItems
+            cascade: ["persist"]
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            orphanRemoval: false
     lifecycleCallbacks: {  }

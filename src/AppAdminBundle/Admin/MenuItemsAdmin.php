@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -28,6 +29,7 @@ class MenuItemsAdmin extends Admin
             ->add('name')
             ->add('link')
             ->add('linkType')
+            ->add('parent.name')
         ;
     }
 
@@ -40,6 +42,7 @@ class MenuItemsAdmin extends Admin
             ->addIdentifier('name')
             ->add('priority', 'string', array('editable' => true))
             ->add('menu.description')
+            ->add('parent.name')
             ->add('link')
             ->add('linkType')
             ->add('_action', 'actions', array(
@@ -57,12 +60,20 @@ class MenuItemsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', 'text', array('label' => 'Menu item name'))
-            ->add('priority', 'text', array('label' => 'Menu priority'))
             ->add('menu','entity',array(
                 'class'=> 'AppBundle:Menu',
                 'property'=> 'description',
             ))
+            ->add('parent', 'entity', ['label' => 'Родитель', 'class' =>
+                'AppBundle:MenuItems',
+                'required' => false,
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('i')->where('i.menu = :menu')
+                        ->setParameter('menu', $this->getSubject()->getMenu() ? $this->getSubject()->getMenu()->getId() : null) ;
+                }
+            ])
+            ->add('name', 'text', array('label' => 'Menu item name'))
+            ->add('priority', 'text', array('label' => 'Menu priority'))
             ->add('link', 'text', array('label' => 'Url'))
             ->add('linkType', 'text', array('label' => 'Url type'))
         ;
