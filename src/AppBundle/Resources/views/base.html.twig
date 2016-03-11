@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<div class="out">
+<div class="out {% block out_class %}{% endblock %}">
     {{ include('AppBundle:partials/header.html.twig') }}
 
     {% block body %}{% endblock %}

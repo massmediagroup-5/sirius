@@ -362,7 +362,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productsCount.productModels', 'productModelsCount')
             ->innerJoin('productModelsCount.productColors', 'productColors')
             ->innerJoin('productModelsCount.skuProducts', 'skuProducts')
-            ->innerJoin('products.baseCategories', 'baseCategories')
+            ->innerJoin('productsCount.baseCategory', 'baseCategories')
             ;
         return $this;
     }

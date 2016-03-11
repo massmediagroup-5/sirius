@@ -178,3 +178,9 @@ services:
     app.admin.import:
         class: AppAdminBundle\Admin\ImportAdmin
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "@validator"]
+
+    app.admin.block.import:
+        class: AppAdminBundle\Block\ImportBlockService
+        arguments: [ "app.admin.block.import:", @templating ]
+        tags:
+            - { name: sonata.block }

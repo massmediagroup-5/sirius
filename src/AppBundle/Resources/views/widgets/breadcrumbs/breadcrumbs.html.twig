@@ -1,0 +1,16 @@
+<div class="breadcrumbs">
+    <div class="breadcrumbs__i">
+        <ul>
+            <li><a href="{{ url('homepage') }}">{% trans %}Main page{% endtrans %}</a></li>
+            {% for item in breadcrumbs %}
+                <li>
+                    {% if item.url is defined %}
+                        <a href="{{ item.url }}">{{ item.name }}</a>
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

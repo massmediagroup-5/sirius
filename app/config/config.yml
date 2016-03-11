@@ -195,6 +195,7 @@ sonata_block:
         # Your other blocks
         sonata.block.service.text:
         sonata.block.service.action:
+        app.admin.block.import:
 
 sonata_admin:
     title:      Admin
@@ -205,6 +206,7 @@ sonata_admin:
     dashboard:
         blocks:
             - { position: left, type: sonata.admin.block.admin_list }
+            - { position: left, type: app.admin.block.import}
 
 sonata_translation:
     locales: [ru]
