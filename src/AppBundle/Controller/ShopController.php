@@ -27,15 +27,15 @@ class ShopController extends Controller
     {
         $wishlist = $request->getSession()->get('wishlist');
         $data = $this->getDoctrine()->getRepository('AppBundle:ProductModels')->findBy(
-            array('active'=>1,'published'=>1,'id'=>$wishlist),
-            array('id'=>'ASC')
+            array('active' => 1, 'published' => 1, 'id' => $wishlist),
+            array('id' => 'ASC')
         );
         return $this->render('AppBundle:userpart:wishlist.html.twig', array(
-            'base_dir'          => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-            'data'              => $data,
-            'params'            => $this->get('options')->getParams(),
-            'cart'              => $this->get('cart')->getHeaderBasketInfo(),
-            'compare'           => $this->get('compare')->getHeaderCompareInfo(),
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+            'data' => $data,
+            'params' => $this->get('options')->getParams(),
+            'cart' => $this->get('cart')->getHeaderBasketInfo(),
+            'compare' => $this->get('compare')->getHeaderCompareInfo(),
             'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
         ));
     }
@@ -56,25 +56,25 @@ class ShopController extends Controller
         $sort = $request->get('sort') ? $request->get('sort') : 'az';
         try {
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category,null, $current_page, $sort);
+                ->getCollectionsByCategoriesAlias($category, null, $current_page, $sort);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
+
         if ($data) {
             $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
-            $this->buildBreadcrumb($category_list,$data['category']->getParrent()->getId());
-            return $this->render('AppBundle:userpart:category.html.twig', array(
+            // Add breadcrumbs
+            $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
+            $this->get('widgets.breadcrumbs')->push(['name' => $data['category']->getName()]);
+            return $this->render('AppBundle:shop:category.html.twig', array(
                 'data' => $data,
-                'breadcrumb'        => $this->breadcrumb,
-                'base_dir'          => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-                'params'            => $this->get('options')->getParams(),
-                'cart'              => $this->get('cart')->getHeaderBasketInfo(),
-                'compare'           => $this->get('compare')->getHeaderCompareInfo(),
-                'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
-                'maxPages'          => ceil($data['products']->count() / $this->items_on_page),
-                'thisPage'          => $current_page,
+                'breadcrumb' => $this->breadcrumb,
+                'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+                'params' => $this->get('options')->getParams(),
+                'maxPages' => ceil($data['products']->count() / $this->items_on_page),
+                'thisPage' => $current_page,
             ));
-        }else{
+        } else {
             throw $this->createNotFoundException();
         }
     }
@@ -95,8 +95,9 @@ class ShopController extends Controller
         $sort = $request->get('sort') ? $request->get('sort') : 'az';
         $filters = $request->query->all();
         $filters['page'] = 'page';
+
         // Redirect to category if empty filters.
-        if(empty($filters))
+        if (empty($filters))
             return $this->redirectToRoute('category', array('category' => $category), 301);
         try {
             $data = $this->get('entities')
@@ -105,37 +106,37 @@ class ShopController extends Controller
             $data = null;
         }
         if ($data) {
-            foreach($filters as $key => $value){
-                $filters[$key] = explode(',',$value);
+            foreach ($filters as $key => $value) {
+                $filters[$key] = explode(',', $value);
             }
             $link_array = array();
 
-            foreach($filters as $key => $values_array){
-                foreach($values_array as $value){
-                    if($key =='sort')continue;
-                    if(($key =='price_from')||($key =='price_to')){
-                        $link_array[$key] = $this->makeUncheckUrl($filters,$value);
-                    }else{
-                        $link_array[$value] = $this->makeUncheckUrl($filters,$value);
+            foreach ($filters as $key => $values_array) {
+                foreach ($values_array as $value) {
+                    if ($key == 'sort') continue;
+                    if (($key == 'price_from') || ($key == 'price_to')) {
+                        $link_array[$key] = $this->makeUncheckUrl($filters, $value);
+                    } else {
+                        $link_array[$value] = $this->makeUncheckUrl($filters, $value);
                     }
 
                 }
             }
             $data['link_array'] = $link_array;
             $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
-            $this->buildBreadcrumb($category_list,$data['category']->getParrent()->getId());
+            $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
             return $this->render('AppBundle:userpart:category.html.twig', array(
                 'data' => $data,
-                'breadcrumb'        => $this->breadcrumb,
-                'base_dir'          => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-                'params'            => $this->get('options')->getParams(),
-                'cart'              => $this->get('cart')->getHeaderBasketInfo(),
-                'compare'           => $this->get('compare')->getHeaderCompareInfo(),
+                'breadcrumb' => $this->breadcrumb,
+                'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+                'params' => $this->get('options')->getParams(),
+                'cart' => $this->get('cart')->getHeaderBasketInfo(),
+                'compare' => $this->get('compare')->getHeaderCompareInfo(),
                 'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
-                'maxPages'          => ceil($data['products']->count() / $this->items_on_page),
-                'thisPage'          => $current_page,
+                'maxPages' => ceil($data['products']->count() / $this->items_on_page),
+                'thisPage' => $current_page,
             ));
-        }else{
+        } else {
             throw $this->createNotFoundException();
         }
     }
@@ -161,20 +162,20 @@ class ShopController extends Controller
         if ($result) {
             $this->get('entities')->setRecentlyViewed($result['product']['productModels'][0]['id']);
             $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
-            $this->buildBreadcrumb($category_list,$result['product']['productsBaseCategories']['categories']['id']);
+            $this->buildBreadcrumb($category_list, $result['product']['productsBaseCategories']['categories']['id']);
             return $this->render('AppBundle:userpart:product.html.twig', array(
-                'product'               => $result['product'],
-                'current_model'         => $result['product']['productModels'][0],
-                'models'                => $result['models'],
-                'breadcrumb'            => $this->breadcrumb,
-                'base_dir'              => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-                'params'                => $this->get('options')->getParams(),
-                'cart'                  => $this->get('cart')->getHeaderBasketInfo(),
-                'compare'               => $this->get('compare')->getHeaderCompareInfo(),
-                'recently_reviewed'     => $this->get('entities')->getRecentlyViewed(),
-                'promotions'            => $this->get('entities')->getCurrentPromotionsForProduct(),
+                'product' => $result['product'],
+                'current_model' => $result['product']['productModels'][0],
+                'models' => $result['models'],
+                'breadcrumb' => $this->breadcrumb,
+                'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+                'params' => $this->get('options')->getParams(),
+                'cart' => $this->get('cart')->getHeaderBasketInfo(),
+                'compare' => $this->get('compare')->getHeaderCompareInfo(),
+                'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
+                'promotions' => $this->get('entities')->getCurrentPromotionsForProduct(),
             ));
-        }else{
+        } else {
             throw $this->createNotFoundException();
         }
     }
@@ -185,15 +186,18 @@ class ShopController extends Controller
      * @param mixed $category_list
      * @param mixed $current_cat_id
      */
-    private function buildBreadcrumb($category_list,$current_cat_id )
+    private function buildBreadcrumb($category_list, $current_cat_id)
     {
-        foreach($category_list as $cat){
-            if($current_cat_id == $cat['id']){
-                $this->breadcrumb[] = $cat;
-                if($cat['parrent']['id'] != 1){
-                    $this->buildBreadcrumb($category_list,$cat['parrent']['id']);
-                }else {
-                    krsort($this->breadcrumb);
+        foreach ($category_list as $cat) {
+            if ($current_cat_id == $cat['id']) {
+                $this->get('widgets.breadcrumbs')->push([
+                    'url' => $this->get('router')->generate('category', array(
+                        'category' => $cat['alias']
+                    )),
+                    'name' => $cat['name']
+                ]);
+                if ($cat['parrent']['id'] != 1) {
+                    $this->buildBreadcrumb($category_list, $cat['parrent']['id']);
                 }
             }
         }
@@ -210,15 +214,15 @@ class ShopController extends Controller
     private function makeUncheckUrl($filters, $value_id)
     {
         $link = '?';
-        foreach($filters as $ch_id => $values_array){
-            if($ch_id == 'page') continue;
-            if((count($values_array) <= 1)&&(in_array($value_id, $values_array)))continue;
-            $link .= $ch_id."=";
-            foreach($values_array as $value){
-                if($value == $value_id)continue;
-                $link .=$value.",";
+        foreach ($filters as $ch_id => $values_array) {
+            if ($ch_id == 'page') continue;
+            if ((count($values_array) <= 1) && (in_array($value_id, $values_array))) continue;
+            $link .= $ch_id . "=";
+            foreach ($values_array as $value) {
+                if ($value == $value_id) continue;
+                $link .= $value . ",";
             }
-            $link = substr($link, 0, -1)."&";
+            $link = substr($link, 0, -1) . "&";
         }
         $link = substr($link, 0, -1);
         return $link;

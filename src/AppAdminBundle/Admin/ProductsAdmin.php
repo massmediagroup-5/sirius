@@ -94,7 +94,7 @@ class ProductsAdmin extends Admin
                     'class' => 'col-md-12',
                 ))
             ->add('importName', null, array('label' => 'Название товара'))
-            ->add('active', null, array('label' => 'Активный'))
+            ->add('active', null, ['label' => 'Активный'])
             ->add('published', null, array('label' => 'Опубликован'))
             ->add('baseCategory', 'entity', array(
                 'class' => 'AppBundle:Categories',

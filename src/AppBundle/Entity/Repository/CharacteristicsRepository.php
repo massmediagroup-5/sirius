@@ -160,8 +160,7 @@ class CharacteristicsRepository extends BaseRepository
         foreach ($products_obj->getParameters() as $parametr) {
             $query_obj->setParameter($parametr->getName(), $parametr->getValue());
         }
-        dump($products_obj->getParameters());
-        dump((string)$products_obj);
+
         // construct WHERE conditions
         if (isset($inFilter)) {
             $query_obj->where("characteristics.inFilter = :inFilter")
@@ -175,7 +174,6 @@ class CharacteristicsRepository extends BaseRepository
         $query_obj->addOrderBy('characteristics.name', 'ASC')
             ->addOrderBy('characteristicValues.name', 'ASC');
 
-        dump($query_obj->getQuery());
         return $query_obj->getQuery()->getResult();
     }
 

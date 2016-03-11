@@ -33,7 +33,7 @@ class ProductModels
     /**
      * @var string
      */
-    private $price = '0.00';
+    private $price = 0.0;
 
     /**
      * @var string
@@ -63,7 +63,7 @@ class ProductModels
     /**
      * @var integer
      */
-    private $status = '0';
+    private $status = 0;
 
     /**
      * @var boolean
@@ -682,12 +682,12 @@ class ProductModels
     /**
      * @var string
      */
-    private $wholesale_price;
+    private $wholesalePrice = 0.0;
 
     /**
      * @var string
      */
-    private $wholesale_oldprice;
+    private $wholesaleOldprice = 0.0;
 
 
     /**
@@ -699,7 +699,7 @@ class ProductModels
      */
     public function setWholesalePrice($wholesalePrice)
     {
-        $this->wholesale_price = $wholesalePrice;
+        $this->wholesalePrice = $wholesalePrice;
 
         return $this;
     }
@@ -711,7 +711,7 @@ class ProductModels
      */
     public function getWholesalePrice()
     {
-        return $this->wholesale_price;
+        return $this->wholesalePrice;
     }
 
     /**
@@ -723,7 +723,7 @@ class ProductModels
      */
     public function setWholesaleOldprice($wholesaleOldprice)
     {
-        $this->wholesale_oldprice = $wholesaleOldprice;
+        $this->wholesaleOldprice = $wholesaleOldprice;
 
         return $this;
     }
@@ -735,11 +735,11 @@ class ProductModels
      */
     public function getWholesaleOldprice()
     {
-        return $this->wholesale_oldprice;
+        return $this->wholesaleOldprice;
     }
 
     public function __toString()
     {
-        return $this->getName() ? $this->getName() . $this->getProductColors()->getName() : '';
+        return $this->getName() ? "{$this->getName()} ({$this->getProductColors()->getName()})" : '';
     }
 }

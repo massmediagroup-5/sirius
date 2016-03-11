@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use AppBundle\Entity\Categories;
 use AppBundle\Entity\CharacteristicableInterface;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\Products;
@@ -109,6 +110,18 @@ class ImportAdmin
     protected $validationRules;
 
     /**
+     * @var \AppBundle\Entity\Categories
+     */
+    protected $baseCategory;
+
+    /**
+     * Publish all imported data
+     *
+     * @var bool
+     */
+    protected $publishFlag = true;
+
+    /**
      * @param EntityManager $em
      * @param ContainerInterface $container
      * @param RecursiveValidator $validator
@@ -118,6 +131,7 @@ class ImportAdmin
         $this->em = $em;
         $this->container = $container;
         $this->validator = $validator;
+        $this->slugify = new Slugify();
     }
 
     /**
@@ -146,6 +160,8 @@ class ImportAdmin
         $this->infoSheet = $this->phpExcelObj->getSheet(0);
 
         $this->listSheet = $this->phpExcelObj->getSheet(1);
+
+        $this->baseCategory = $this->em->getRepository('AppBundle:Categories')->findOneBy(['alias' => 'all']);
 
         foreach ($this->listSheet->getRowIterator(2) as $row) {
             $this->processProduct($row);
@@ -191,15 +207,16 @@ class ImportAdmin
             ->setProductColors($this->getColor($this->getCurrentRowData('color')))
             ->setDecorationColor($this->getColor($this->getCurrentRowData('decoration_color')))
             ->setSizes($this->getCurrentRowData('sizes'))
+            ->setPrice($this->getCurrentRowData('price'))
+            ->setWholesalePrice($this->getCurrentRowData('wholesale_price'))
             ->setName($this->getCurrentRowData('model'))
             ->setAlias($alias)
-            ->setStatus(0)
-            ->setActive(0)
+            ->setStatus($this->publishFlag)
+            ->setActive($this->publishFlag)
             ->setInStock($this->getCurrentRowData('count') > 0)
             ->setPublished(1);
 
         $this->em->persist($productModel);
-        $this->em->flush();
 
         // init new SkuProduct
         $skuProduct = new \AppBundle\Entity\SkuProducts;
@@ -207,7 +224,11 @@ class ImportAdmin
             ->setSku($this->getCurrentRowData('sku'))
             ->setName($this->getCurrentRowData('model'))
             ->setVendors($this->vendor)
+            ->setPrice($this->getCurrentRowData('price'))
+            ->setWholesalePrice($this->getCurrentRowData('wholesale_price'))
             ->setQuantity($this->getCurrentRowData('count'))
+            ->setStatus($this->publishFlag)
+            ->setActive($this->publishFlag)
             ->setProductModels($productModel);
 
         $this->em->persist($skuProduct);
@@ -239,16 +260,20 @@ class ImportAdmin
                     $this->em->getRepository('AppBundle:ActionLabels')
                         ->findOneByName('none')
                 )
-                ->setStatus(0)
-                ->setActive(0)
-                ->setPublished(1);
+                ->setStatus($this->publishFlag)
+                ->setActive($this->publishFlag)
+                ->setPublished($this->publishFlag);
             $this->em->persist($product);
-            $this->em->flush();
         }
 
         // Attach categories
         $categoryName = $this->getCurrentRowData('type');
-        $category = $this->em->getRepository('AppBundle:Categories')->findOrCreate(['name' => $categoryName]);
+
+        $category = $this->em->getRepository('AppBundle:Categories')->findOrCreate([
+            'name' => $categoryName,
+            'parrent' => $this->baseCategory,
+            'alias' => $this->slugify->slugify($categoryName)
+        ], ['active' => $this->publishFlag]);
 
         $product->setBaseCategory($category);
 
@@ -257,7 +282,6 @@ class ImportAdmin
             $this->attachCharacteristics($product, $characteristicCode, $this->getCurrentRowData($characteristicCode));
             $this->attachCharacteristics($category, $characteristicCode, $this->getCurrentRowData($characteristicCode));
         }
-        $this->em->flush();
 
         return $product;
     }
@@ -269,9 +293,10 @@ class ImportAdmin
      * @param $characteristicCode
      * @param $characteristicValue
      */
-    private function attachCharacteristics(CharacteristicableInterface $item, $characteristicCode, $characteristicValue) {
-        if(is_array($characteristicValue)) {
-            foreach($characteristicValue as $characteristicValueItem) {
+    private function attachCharacteristics(CharacteristicableInterface $item, $characteristicCode, $characteristicValue)
+    {
+        if (is_array($characteristicValue)) {
+            foreach ($characteristicValue as $characteristicValueItem) {
                 $this->attachCharacteristics($item, $characteristicCode, $characteristicValueItem);
             }
             return;
@@ -280,7 +305,12 @@ class ImportAdmin
         $characteristic = $this->em->getRepository('AppBundle:Characteristics')
             ->findOrCreate(['name' => $this->characteristicNameByCode($characteristicCode)]);
 
-        if($characteristicValue) {
+        // If given item is Category
+        if ($item instanceof Categories) {
+            $item->addCharacteristic($characteristic);
+        }
+
+        if ($characteristicValue) {
             $characteristicValue = $this->em->getRepository('AppBundle:CharacteristicValues')->findOrCreate(
                 ['characteristics' => $characteristic, 'name' => $characteristicValue],
                 ['inFilter' => 1]
@@ -342,9 +372,14 @@ class ImportAdmin
     {
         $data = isset($this->currentRowData[$key]) ? $this->currentRowData[$key] : '';
 
+        $data = trim($data);
+
+        // Remove repeated spaces
+        $data = preg_replace('/\s+/', ' ', $data);
+
         $prepareMethod = 'prepare' . Str::studly($key);
-        if(method_exists($this, $prepareMethod)) {
-            $data =  $this->$prepareMethod($data);
+        if (method_exists($this, $prepareMethod)) {
+            $data = $this->$prepareMethod($data);
         }
 
         return $data;
@@ -431,7 +466,7 @@ class ImportAdmin
         }, explode('/', $sizes));
 
         foreach ($sizes as $sizeStr) {
-            if($sizeStr) {
+            if ($sizeStr) {
                 $sizesArray[] = $this->em->getRepository('AppBundle:ProductModelSizes')
                     ->findOrCreate(['size' => $sizeStr]);
             }

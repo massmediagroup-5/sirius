@@ -151,7 +151,7 @@ class Entities
             ->getRepository('AppBundle:Products')
             ->startCount();
         // Set filsers in query
-        dump($filterValues);
+
         if(!empty($filterValues)) {
             $characteristicValues = array_values($filterValues);
             $result['products'] = $result['products']
@@ -172,7 +172,6 @@ class Entities
         $result['characteristics'] = $this->em
             ->getRepository('AppBundle:Characteristics')
             ->getAllCharacteristicsByCategory($category, $inFilter = true, $productsQueryForCharacteristicsCount->getCountQuery());
-        dump($result);
 
         return $result;
     }

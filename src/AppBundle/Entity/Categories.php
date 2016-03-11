@@ -418,7 +418,7 @@ class Categories implements CharacteristicableInterface
      */
     public function addCharacteristic(\AppBundle\Entity\Characteristics $characteristic)
     {
-        $this->characteristics[] = $characteristic;
+        $this->setHasMany('characteristics', [$characteristic], false);
 
         return $this;
     }
@@ -517,5 +517,13 @@ class Categories implements CharacteristicableInterface
     public function setAllFilters()
     {
         // Add your code here
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

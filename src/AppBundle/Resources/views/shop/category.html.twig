@@ -1,0 +1,519 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block body %}
+    <section class="content">
+        <div class="darkness"></div>
+        <div class="wrap">
+            <div class="content__i">
+
+                {{ widget('breadcrumbs.render')|raw }}
+
+                <h2 class="catalog-title">
+                    Спортивные костюмы <span>(103 Товара)</span>
+                </h2>
+
+                <div class="catalog">
+                    <div class="catalog__i">
+
+                        <div class="filter">
+                            <div class="filter__i">
+
+                                <div class="filtered">
+                                    <div class="filtered__i">
+                                        <h2>ВЫ ИЩЕТЕ <a href="#" class="clear">Очистить все</a></h2>
+
+
+                                        <div class="filtered-list">
+                                            <div class="filtered-list__i">
+
+                                                <ul>
+                                                    <li><a href="#" class="remove"></a><strong>Тип товара:</strong>
+                                                        Шорты
+                                                    </li>
+                                                    <li><a href="#" class="remove"></a><strong>Распродажа</strong></li>
+                                                    <li><a href="#" class="remove"></a><strong>Цвет:</strong> красный
+                                                        <span class="color" style="background: #dc2222"></span>
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="filters">
+                                    <div class="filters__i">
+                                        <div class="price-slider">
+                                            <p>Цена (грн)</p>
+
+                                            <div class="price-slider__i">
+                                                <div class="values clearfix">
+                                                    <span class="from">От</span>
+                                                    <input type="text" id="min"/>
+                                                    <span class="to">до</span>
+                                                    <input type="text" id="max"/>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="list">
+                                            <div class="item">
+                                                <div class="item-name">
+                                                    <a href="#">ТИП ТОВАРА <span></span></a>
+                                                </div>
+                                                <div class="item-drop">
+                                                    <div class="item-drop__i">
+                                                        <ul class="check-fltr">
+                                                            <li><label class="filter-check"><input type="checkbox"
+                                                                                                   class="checkbox"/>
+                                                                    <span class="f-check"></span>
+                                                                    Шорты
+                                                                    <span>(+6)</span></label></li>
+                                                            <li><label><input type="checkbox" class="checkbox"/>
+                                                                    <span class="f-check"></span>
+                                                                    Бриджи
+                                                                    <span>(+12)</span></label></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="item-name">
+                                                    <a href="#">КОЛЕКЦИЯ<span></span></a>
+                                                </div>
+                                                <div class="item-drop">
+                                                    <div class="item-drop__i">
+                                                        <ul class="check-fltr">
+
+                                                            <li><label class="filter-check"><input type="checkbox"
+                                                                                                   class="checkbox"/>
+                                                                    <span class="f-check"></span>
+                                                                    Шорты
+                                                                    <span>(+6)</span></label></li>
+                                                            <li><label><input type="checkbox" class="checkbox"/>
+                                                                    <span class="f-check"></span>
+                                                                    Бриджи
+                                                                    <span>(+12)</span></label></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="item-name">
+                                                    <a href="#">ЦВЕТ<span></span></a>
+                                                </div>
+                                                <div class="item-drop">
+                                                    <div class="item-drop__i">
+                                                        <div class="color-filter">
+                                                            <ul>
+                                                                <li><label class="color-check">
+                                                                        <input type="checkbox" class="checkbox" checked/>
+                                                                            <span
+                                                                                    style="background-color: #dc2222"></span></label>
+                                                                </li>
+                                                                <li><label class="color-check">
+                                                                        <input type="checkbox" class="checkbox"/>
+                                                                        <span style="border-color: #cdcdcd"></span></label>
+                                                                </li>
+                                                                <li><label class="color-check">
+                                                                        <input
+                                                                                type="checkbox" class="checkbox"/>
+                                                                            <span
+                                                                                    style="background-color: #101010"></span></label>
+                                                                </li>
+                                                                <li><label class="color-check">
+                                                                        <input
+                                                                                type="checkbox" class="checkbox"/>
+                                                                            <span
+                                                                                    style="background-color: #12ad45"></span></label>
+                                                                </li>
+                                                                <li><label class="color-check">
+                                                                        <input
+                                                                                type="checkbox" class="checkbox"/>
+                                                                            <span
+                                                                                    style="background-color: #2dace7"></span></label>
+                                                                </li>
+                                                                <li><label class="color-check">
+                                                                        <input
+                                                                                type="checkbox" class="checkbox"/>
+                                                                            <span
+                                                                                    style="background-color: #ff9de4"></span></label>
+                                                                </li>
+                                                                <li><label class="color-check">
+                                                                        <input
+                                                                                type="checkbox" class="checkbox"/>
+                                                                            <span
+                                                                                    style="background-color: #878787"></span></label>
+                                                                </li>
+                                                                <li><label class="color-check">
+                                                                        <input
+                                                                                type="checkbox" class="checkbox"/>
+                                                                            <span
+                                                                                    style="background-color: #efed3f"></span></label>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="single-item">
+                                                <label><input type="checkbox"/>РАСПРОДАЖА</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="main">
+
+                            <div class="sorting">
+                                <div class="sorting__i">
+                                    <div class="sort-select-wrap">
+                                        <label>Сортировка</label>
+
+                                        <div class="inp">
+                                            <select class="select">
+                                                <option value="1">От дешевых к дорогим</option>
+                                                <option value="2">От дорогих к дешевым</option>
+                                                <option value="3">По алфавиту, от А до Я</option>
+                                                <option value="4">По алфавиту, от Я до А</option>
+                                                <option value="5">Новинки</option>
+                                                <option value="6">Акции</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="pager">
+                                        <div class="pager__i">
+                                            <ul>
+                                                <li class="prev"><a href="#"><i></i></a></li>
+                                                <li class="active"><a href="#">1</a></li>
+                                                <li><a href="#">2</a></li>
+                                                <li><a href="#">3</a></li>
+                                                <li><a href="#">4</a></li>
+                                                <li><a href="#"><span>...</span></a></li>
+                                                <li><a href="#">9</a></li>
+                                                <li class="next"><a href="#"><i></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!--pager end-->
+
+                                </div>
+                            </div>
+                            <!--sorting end-->
+                            <div class="product-list">
+                                <div class="product-list__i">
+                                    {% for item in data.products %}
+                                        {% if item.chcount is defined %}
+                                            {% set item = item.0 %}
+                                        {% endif %}
+                                        {{ include('AppBundle:shop:product:list_item.html.twig', { 'item': item }) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <!--product-list end-->
+                            <div class="sorting">
+                                <div class="sorting__i">
+                                    <div class="sort-select-wrap">
+                                        <label>Сортировка</label>
+
+                                        <div class="inp">
+                                            <select class="select">
+                                                <option value="1">От дешевых к дорогим</option>
+                                                <option value="2">От дорогих к дешевым</option>
+                                                <option value="3">По алфавиту, от А до Я</option>
+                                                <option value="4">По алфавиту, от Я до А</option>
+                                                <option value="5">Новинки</option>
+                                                <option value="6">Акции</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="pager">
+                                        <div class="pager__i">
+                                            <ul>
+                                                <li class="prev"><a href="#"><i></i></a></li>
+                                                <li class="active"><a href="#">1</a></li>
+                                                <li><a href="#">2</a></li>
+                                                <li><a href="#">3</a></li>
+                                                <li><a href="#">4</a></li>
+                                                <li><a href="#"><span>...</span></a></li>
+                                                <li><a href="#">9</a></li>
+                                                <li class="next"><a href="#"><i></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!--pager end-->
+
+                                </div>
+                            </div>
+                            <!--sorting end-->
+
+                            <div class="promo-text">
+                                <div class="promo-text__i">
+                                    <p><strong>Женская верхняя одежда</strong><br/>
+                                        Верхняя женская одежда создана исключительно для защиты от капризов погоды.
+                                        Гардероб современной модницы непросто представить без теплых зимних моделей на
+                                        плотной подкладке и облегченных демисезонных вариантов. Верхняя одежда
+                                        выполняется из текстиля, кожи полиэстера, нейлона, хлопка, синтетического и
+                                        натурального меха, комбинации материалов.</p>
+
+                                    <p>Удобные классические, спортивные, ультрамодные модели верхней одежды создают
+                                        яркие повседневные образы в период осени и зимы. Базовые вещи, которые
+                                        необходимы:</p>
+
+                                    <ul>
+                                        <li>теплые зимние пуховые пальто и куртки;</li>
+                                        <li>удлиненные дубленки;</li>
+                                        <li>куртки, пальто, полупальто на стеганой или легкой подкладке;</li>
+                                        <li>короткие шубки, меховые жакеты с обычным или встроченным эластичным
+                                            поясом;
+                                        </li>
+                                        <li>парки (длинные куртки) с утепленным капюшоном.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="last-viewed">
+                    <h2>Вы уже просматривали</h2>
+
+                    <div class="last-viewed__i">
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-1.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-2.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-3.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-4.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-1.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-2.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-3.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-4.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-1.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-2.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-3.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-4.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                    </div>
+                </div>
+                <!--last-viewed end-->
+            </div>
+        </div>
+        </section>
+    <div class="push"></div>
+{% endblock %}

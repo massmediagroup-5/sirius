@@ -106,8 +106,6 @@ class SkuProductsAdmin extends Admin
      */
     public function preUpdate($param)
     {
-        dump($param);
-        exit(1);
     }
 
     public function getBatchActions()

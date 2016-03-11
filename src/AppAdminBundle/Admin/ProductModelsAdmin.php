@@ -48,9 +48,9 @@ class ProductModelsAdmin extends Admin
             //->add('seoDescription', null, array('label' => 'СЕО описание'))
             //->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
             ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('active', null, array('label' => 'Активная'))
-            ->add('inStock', null, array('label' => 'Наличие на складе'))
-            ->add('published', null, array('label' => 'Опубликовано'))
+            ->add('active', null, ['editable' => true, 'label' => 'Активная'])
+            ->add('inStock', null, ['editable' => true, 'label' => 'Наличие на складе'])
+            ->add('published', null, ['editable' => true, 'label' => 'Опубликовано'])
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
             ->add('_action', 'actions', array(
