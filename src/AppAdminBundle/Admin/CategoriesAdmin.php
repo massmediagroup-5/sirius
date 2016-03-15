@@ -103,6 +103,7 @@ class CategoriesAdmin extends Admin
                     )
                     ->add('inMenu', null, array('label' => 'В меню'))
                     ->add('active', null, array('label' => 'Актиная'))
+                    ->add('content', null, array('label' => 'Контент'))
                     ->add('seoTitle', null, array('label' => 'СЕО заглавие'))
                     ->add('seoDescription', null, array('label' => 'СЕО описание'))
                     ->add('seoKeywords', null, array('label' => 'СЕО кейворды'))

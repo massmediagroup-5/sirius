@@ -14,6 +14,9 @@ services:
     cart:
         class: AppBundle\Services\Cart
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "@session"]
+    wishlist:
+        class: AppBundle\Services\WishList
+        arguments: ["@service_container", "@session"]
     compare:
         class: AppBundle\Services\Compare
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "@session"]
@@ -35,6 +38,9 @@ services:
     proc:
         class: AppBundle\Services\Proc
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "%kernel.root_dir%"]
+    uploader:
+        class: AppBundle\Services\Upload
+        arguments: ["@service_container"]
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false

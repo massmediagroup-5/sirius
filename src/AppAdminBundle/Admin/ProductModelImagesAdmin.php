@@ -28,7 +28,6 @@ class ProductModelImagesAdmin extends Admin
         $datagridMapper
             ->add('id')
             ->add('link', null, array('label' => 'Ссылка на оригинал'))
-            ->add('thumbnail', null, array('label' => 'Превью'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
         ;
@@ -44,7 +43,6 @@ class ProductModelImagesAdmin extends Admin
         $listMapper
             ->add('id')
             ->add('link', null, array('label' => 'Ссылка на оригинал'))
-            ->add('thumbnail', null, array('label' => 'Превью'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
             ->add('_action', 'actions', array(
@@ -76,7 +74,6 @@ class ProductModelImagesAdmin extends Admin
             $images = $this->getSubject();
             $formMapper
                 ->add('link', null, array('label' => 'Ссылка на оригинал'))
-                ->add('thumbnail', null, array('label' => 'Превью'))
                 ;
         }
 
@@ -84,10 +81,8 @@ class ProductModelImagesAdmin extends Admin
         $fileFieldOptions = array(
             'required' => false,
         );
-        $context = $this->getConfigurationPool()->getContainer()->get('router')->getContext();
-        $base_url = $context->getScheme() . '://' . $context->getHost();
-        if ($images && ($webPath = $images->getThumbnail())) {
-            $fileFieldOptions['help'] = '<img src="' . $base_url . '/img/products/'.$webPath.'" class="admin-preview" />';
+        if ($images && ($webPath = $images->getLink())) {
+            $fileFieldOptions['help'] = '<img src="'.$webPath.'" class="admin-preview" />';
         }
     
         $formMapper
@@ -106,7 +101,6 @@ class ProductModelImagesAdmin extends Admin
         $showMapper
             ->add('id')
             ->add('link', null, array('label' => 'Ссылка на оригинал'))
-            ->add('thumbnail', null, array('label' => 'Превью'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
         ;

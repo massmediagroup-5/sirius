@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity\Repository;
+use AppBundle\Entity\Categories;
 
 /**
  * CategoriesRepository
@@ -78,6 +79,32 @@ class CategoriesRepository extends BaseRepository
             ->where('categories.id = :category')->setParameter('category', $category)
         ;
         return $queryObj->getQuery()->getResult();
+    }
+
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $builder
+     * @param $tableAlias
+     * @param $category
+     * @return mixed
+     */
+    public function addCategoryFilterCondition($builder, $category, $tableAlias = 'baseCategory')
+    {
+        if($category instanceof Categories) {
+            $category = $category->getId();
+            $field = 'id';
+        } else {
+            $field = 'alias';
+        }
+
+        // Suppose that we has  max 3 level nesting of categories
+        return $builder->leftJoin("$tableAlias.parrent", $tableAlias . '1')
+            ->leftJoin("{$tableAlias}1.parrent", $tableAlias . '2')
+            ->andWhere($builder->expr()->orX(
+                $builder->expr()->eq("{$tableAlias}.$field",  $builder->expr()->literal($category)),
+                $builder->expr()->eq("{$tableAlias}1.$field", $builder->expr()->literal($category)),
+                $builder->expr()->eq("{$tableAlias}2.$field", $builder->expr()->literal($category))
+            ));
+
     }
 
 }

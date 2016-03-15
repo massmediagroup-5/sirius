@@ -1,12 +1,15 @@
 <?php
 
 namespace AppBundle\Entity;
+use AppBundle\Traits\ProcessHasMany;
 
 /**
  * Products
  */
 class Products implements CharacteristicableInterface
 {
+    use ProcessHasMany;
+
     /**
      * @var integer
      */
@@ -65,11 +68,6 @@ class Products implements CharacteristicableInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $categories;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
     private $characteristicValues;
 
     /**
@@ -79,7 +77,6 @@ class Products implements CharacteristicableInterface
     {
         $this->productModels = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productImages = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -354,40 +351,6 @@ class Products implements CharacteristicableInterface
     }
 
     /**
-     * Add category
-     *
-     * @param \AppBundle\Entity\Categories $category
-     *
-     * @return Products
-     */
-    public function addCategory(\AppBundle\Entity\Categories $category)
-    {
-        $this->categories[] = $category;
-
-        return $this;
-    }
-
-    /**
-     * Remove category
-     *
-     * @param \AppBundle\Entity\Categories $category
-     */
-    public function removeCategory(\AppBundle\Entity\Categories $category)
-    {
-        $this->categories->removeElement($category);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    /**
      * Add characteristicValue
      *
      * @param \AppBundle\Entity\CharacteristicValues $characteristicValue
@@ -396,12 +359,7 @@ class Products implements CharacteristicableInterface
      */
     public function addCharacteristicValue(\AppBundle\Entity\CharacteristicValues $characteristicValue)
     {
-        foreach($this->characteristicValues as $characteristicValue){
-            if($characteristicValue->getId() == $characteristicValue->getId()) {
-                return $this;
-            }
-        }
-        $this->characteristicValues[] = $characteristicValue;
+        $this->setHasMany('characteristicValues', [$characteristicValue], false);
 
         return $this;
     }

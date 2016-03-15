@@ -32,6 +32,11 @@ AppBundle\Entity\Characteristics:
             length: 255
             options:
                 fixed: false
+        renderType:
+            type: string
+            nullable: true
+            columnDefinition: "enum('color')"
+            column: render_type
         inFilter:
             type: boolean
             nullable: true

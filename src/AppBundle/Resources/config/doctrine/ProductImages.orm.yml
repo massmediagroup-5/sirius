@@ -4,7 +4,6 @@ AppBundle\Entity\ProductImages:
     indexes:
         index3:
             columns:
-                - thumbnail
                 - link
         fk_product_images_products1_idx:
             columns:
@@ -24,13 +23,6 @@ AppBundle\Entity\ProductImages:
                 strategy: IDENTITY
     fields:
         link:
-            type: string
-            nullable: true
-            length: 150
-            options:
-                fixed: false
-                comment: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.png
-        thumbnail:
             type: string
             nullable: true
             length: 150

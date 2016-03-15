@@ -3814,6 +3814,10 @@ input[type="checkbox"] {
 	display: block;
 	z-index: 20;
 
+	.added { /* Hide text when added */
+		display: none;
+	}
+
 	&.active {
 		i {
 			opacity: 0;
@@ -3821,6 +3825,12 @@ input[type="checkbox"] {
 			&.hover {
 				opacity: 1;
 			}
+		}
+		.added {
+			display: inline;
+		}
+		.not_added {
+			display: none;
 		}
 	}
 

@@ -51,6 +51,12 @@ AppBundle\Entity\Categories:
         active:
             type: boolean
             nullable: true
+        content:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
         seoTitle:
             type: string
             nullable: true

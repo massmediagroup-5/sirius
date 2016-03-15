@@ -1,0 +1,25 @@
+<div class="sorting">
+    <div class="sorting__i">
+        <div class="sort-select-wrap">
+            <label>Сортировка</label>
+
+            <div class="inp">
+                <select class="select" id="sort">
+                    <option value="az">{% trans %}By Alphabetical, from A to Z{% endtrans %}</option>
+                    <option value="za">{% trans %}By Alphabetical, from Z to A{% endtrans %}</option>
+                    <option value="cheap">{% trans %}From cheap to expensive{% endtrans %}</option>
+                    <option value="expensive">{% trans %}From expensive to cheap{% endtrans %}</option>
+                    {#<option value="5">Новинки</option>#}
+                    {#<option value="6">Акции</option>#}
+                </select>
+            </div>
+        </div>
+
+        <div class="pager">
+            <div class="pager__i">
+                {{ knp_pagination_render(items) }}
+            </div>
+        </div>
+
+    </div>
+</div>

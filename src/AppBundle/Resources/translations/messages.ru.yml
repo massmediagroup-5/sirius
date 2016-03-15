@@ -31,3 +31,7 @@ Save: Сохранить
 Ordering in 1 click: Заказ в 1 клик|Заказать в 1 клик
 uah: грн
 The manager will call you and specify the details.: Менеджер перезвонит вам и уточнит детали.
+
+labels:
+  colors: цвет|цвета|цветов
+  products_count: '%count% товар|%count% товара|%count% товаров'

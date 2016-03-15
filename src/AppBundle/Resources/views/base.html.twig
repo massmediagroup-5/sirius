@@ -6,10 +6,6 @@
     <title>Sirius || Main</title>
     {% block assets_top %}
         {% stylesheets
-            '@AppBundle/Resources/public/css/*' filter='uglifycss' output='css/vendor.css' %}
-            <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
-        {% stylesheets
             '@AppBundle/Resources/public/sass/screen.scss' filter='compass' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}

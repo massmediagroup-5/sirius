@@ -56,7 +56,7 @@ class ShopController extends Controller
         $sort = $request->get('sort') ? $request->get('sort') : 'az';
         try {
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category, null, $current_page, $sort);
+                ->getCollectionsByCategoriesAlias($category, null, $this->items_on_page, $current_page);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
@@ -64,7 +64,9 @@ class ShopController extends Controller
         if ($data) {
             $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
             // Add breadcrumbs
-            $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
+            if($data['category']->getParrent()) {
+                $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
+            }
             $this->get('widgets.breadcrumbs')->push(['name' => $data['category']->getName()]);
             return $this->render('AppBundle:shop:category.html.twig', array(
                 'data' => $data,
@@ -101,7 +103,7 @@ class ShopController extends Controller
             return $this->redirectToRoute('category', array('category' => $category), 301);
         try {
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category, $filters, $current_page, $sort);
+                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
@@ -124,15 +126,16 @@ class ShopController extends Controller
             }
             $data['link_array'] = $link_array;
             $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
-            $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
-            return $this->render('AppBundle:userpart:category.html.twig', array(
+            // Add breadcrumbs
+            if($data['category']->getParrent()) {
+                $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
+            }
+            $this->get('widgets.breadcrumbs')->push(['name' => $data['category']->getName()]);
+            return $this->render('AppBundle:shop:category.html.twig', array(
                 'data' => $data,
                 'breadcrumb' => $this->breadcrumb,
                 'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
                 'params' => $this->get('options')->getParams(),
-                'cart' => $this->get('cart')->getHeaderBasketInfo(),
-                'compare' => $this->get('compare')->getHeaderCompareInfo(),
-                'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
                 'maxPages' => ceil($data['products']->count() / $this->items_on_page),
                 'thisPage' => $current_page,
             ));

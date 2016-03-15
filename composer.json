@@ -39,7 +39,8 @@
         "sonata-project/translation-bundle": "1.0.0",
         "sonata-project/intl-bundle": "^2.2",
         "sonata-project/user-bundle": "dev-master",
-        "hwi/oauth-bundle": "^0.4.0"
+        "hwi/oauth-bundle": "^0.4.0",
+        "knplabs/knp-paginator-bundle": "^2.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

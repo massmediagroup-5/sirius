@@ -72,8 +72,6 @@ class MainSliderAdmin extends Admin
 
     private function manageFileUpload($image)
     {
-        if ($image->getFile()) {
-            $image->setUpdateTime(new \DateTime());
-        }
+        $image->setUpdateTime(new \DateTime());
     }
 }

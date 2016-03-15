@@ -51,129 +51,72 @@ class Entities
             ->getAllActiveCategoriesForMenu();
         return $category_list;
     }
+
     /**
-     * getCollectionsByCategoriesAlias
-     *
      * Return array with two collections for Characteristics and Products
      *
-     * @param mixed $categoryAlias
-     * @param mixed $filters
-     * @param integer $currentPage
-     *
-     * @return array
+     * @param $categoryAlias
+     * @param null $filters
+     * @param int $perPage
+     * @param int $currentPage
+     * @return bool
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getCollectionsByCategoriesAlias($categoryAlias, $filters = null, $currentPage = 1, $sort = 'az')
+    public function getCollectionsByCategoriesAlias($categoryAlias, $filters = null, $perPage = 9, $currentPage = 1)
     {
-        $category = array(
-            'alias' => $categoryAlias,
-            'active' => 1,
-        );
 
-        $result['price_filter'] = $this->em
-            ->getRepository('AppBundle:ProductModels')
-            ->createQueryBuilder('productModels')
-            ->select('productModels ,MIN(productModels.price) AS min_price, MAX(productModels.price) AS max_price')
-            ->where('productModels.active = 1 AND productModels.published = 1')
-            ->andWhere('categories.alias = :alias')
-            ->innerJoin('productModels.products', 'products')->addselect('products')
-            ->innerJoin('products.categories', 'categories')->addselect('categories')
-            ->setParameter('alias',$categoryAlias)
-            ->getQuery()->getSingleResult();
-
-        $price_from = $filters['price_from'] ? $filters['price_from'] : $result['price_filter']['min_price'];
-        $price_to = $filters['price_to'] ? $filters['price_to'] : $result['price_filter']['max_price'];
-        
-        $productWhere = array(
-            'categories'  => $category,
-            'products'    => array(
-                'active'      => 1,
-                'published'   => 1,
-            ),
-            'productModels' => array(
-                'active'      => 1,
-                'published'   => 1,
-                'price_from'  => $price_from,
-                'price_to'    => $price_to
-            ),
-        );
-        $productWhereForCharacteristics = array(
-            'categoriesCount'  => $category,
-            'productsCount'    => array(
-                'active'      => 1,
-                'published'   => 1,
-            ),
-            'productModelsCount' => array(
-                'active'      => 1,
-                'published'   => 1,
-                'price_from'  => $price_from,
-                'price_to'    => $price_to
-            ),
-        );
-        $result['category'] = $this->em
+        $category = $this->em
             ->getRepository('AppBundle:Categories')
             ->getCategoryInfo($categoryAlias);
 
         // If we didn't find any active Category.
-        if(empty($result['category']))
+        if(empty($category))
             return false;
 
-        // Added joins and conditions for our Filters.
-        unset($filters['page'],$filters['sort'],$filters['price_from'],$filters['price_to']);
-        $filterValues = [];
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $filter = explode(',', $filter);
-                $filterValues = array_merge($filterValues, $filter);
+        $price_filter = $this->em->getRepository('AppBundle:ProductModels')
+            ->getPricesIntervalForFilters($category, $filters);
+
+        if(empty($filters['price_from']) || $filters['price_from'] < $price_filter['min_price']) {
+            $filters['price_from'] = $price_filter['min_price'];
+        }
+        if(empty($filters['price_to']) || $filters['price_to'] > $price_filter['max_price']) {
+            $filters['price_to'] = $price_filter['max_price'];
+        }
+
+        $characteristicsValuesIds = [];
+        foreach ((array)$filters as $key => $filter) {
+            // numeric keys - is characteristics_ids
+            if(is_numeric($key)) {
+                $characteristicsValuesIds = array_merge($characteristicsValuesIds, explode(',', $filter));
             }
         }
-        /*
-         * If we have active some filters, we must to create query like this:
-         *
-         *    SELECT 
-         *    	COUNT(DISTINCT characteristics_.id) AS chcount, 
-         *    	...select here...
-         *    FROM 
-         *    	products p1_ 
-         *    	...joins here...
-         *    WHERE 
-         *    	characteristics_.id IN (?) 
-         *    	...where here...
-         *    GROUP BY 
-         *    	p1_.id 
-         *    HAVING 
-         *    	chcount >= {count_of_active_filters} 
-         */
-        // Make Products
-        $result['products'] = $this->em
-            ->getRepository('AppBundle:Products');
-        // Make Characteristics
-        $productsQueryForCharacteristicsCount = $this->em
-            ->getRepository('AppBundle:Products')
-            ->startCount();
-        // Set filsers in query
 
-        if(!empty($filterValues)) {
-            $characteristicValues = array_values($filterValues);
-            $result['products'] = $result['products']
-                ->addCountCharacteristics(count($filters))
-                ->joinFilters($characteristicValues);
-            $productsQueryForCharacteristicsCount = $productsQueryForCharacteristicsCount
-                ->addCountCharacteristicsForCount(count($filters), $characteristicValues)
-                ->joinFiltersForCount($characteristicValues);
+        $products = $this->em->getRepository('AppBundle:Products')->getFilteredProductsToCategoryQuery($category, $characteristicsValuesIds, $filters);
+
+        $products = $this->container->get('knp_paginator')->paginate(
+            $products,
+            $currentPage,
+            $perPage,
+            ['wrap-queries' => true]
+        );
+
+        $characteristics = $this->em
+            ->getRepository('AppBundle:Characteristics')
+            ->getAllCharacteristicsByCategory($category, $inFilter = true);
+
+        $characteristicValues = [];
+        foreach ($characteristics as $characteristic) {
+            if ($characteristicValuesEntities = $characteristic->getCharacteristicValues()) {
+                foreach ($characteristicValuesEntities as $value) {
+                    $supposedFilterValues = $characteristicsValuesIds;
+                    $supposedFilterValues[] = $value->getId();
+                    $characteristicValues[$value->getId()] = count($this->em->getRepository('AppBundle:Products')->getFilteredProductsToCategoryQuery($category, $supposedFilterValues, $filters)->getResult());
+                }
+            }
         }
 
-        $result['products'] = $result['products']
-            ->addWhere($productWhere)
-            ->addSort($sort)
-            ->getAllProducts($productWhere, $currentPage);
-        $productsQueryForCharacteristicsCount = $productsQueryForCharacteristicsCount
-            ->addWhere($productWhereForCharacteristics, $forCount = true)
-            ;
-        $result['characteristics'] = $this->em
-            ->getRepository('AppBundle:Characteristics')
-            ->getAllCharacteristicsByCategory($category, $inFilter = true, $productsQueryForCharacteristicsCount->getCountQuery());
-
-        return $result;
+        return compact('category', 'characteristicValues', 'products', 'products', 'characteristics', 'price_filter');
     }
 
     /**
@@ -326,14 +269,43 @@ class Entities
             ->getRepository('AppBundle:Promotions')
             ->createQueryBuilder('promotions')
             ->where('promotions.active = 1 AND promotions.startTime <= :startTime AND promotions.endTime >= :endTime')
-            ->setParameter('startTime', $now)
-            ->setParameter('endTime', $now);
+            ->setParameter('startTime', $now->format('Y-m-d'))
+            ->setParameter('endTime', $now->format('Y-m-d'));
         try {
             return $promotion->getQuery()->getSingleResult();
         }
         catch(\Doctrine\ORM\NoResultException $e) {
             return null;
         }
+    }
+
+    /**
+     * getFilteredProducts
+     *
+     * @param mixed $productWhere
+     * @param mixed $filterValues
+     * @param mixed $currentPage
+     * @param mixed $filters
+     * @param mixed $sort
+     *
+     * @return mixed
+     */
+    private function getFilteredProducts($productWhere, $filterValues, $currentPage, $filters, $sort)
+    {
+        $result = $this->em
+            ->getRepository('AppBundle:Products')->start();
+        if(!empty($filterValues)) {
+            $characteristicValues = array_values($filterValues);
+            $result = $result
+                ->addCountCharacteristics($characteristicValues)
+                ->joinFilters($characteristicValues);
+        }
+        $result = $result
+            ->addWhere($productWhere)
+            ->addSort($sort)
+            ->getAllProducts($productWhere, $currentPage);
+
+        return $result;
     }
 
 }

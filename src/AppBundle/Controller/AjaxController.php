@@ -193,43 +193,6 @@ class AjaxController extends Controller
     }
 
     /**
-     * @Route("/ajax/add_to_wishlist", name="add_to_wishlist", options={"expose"=true})
-     */
-    public function addToWishlist(Request $request)
-    {
-        if($request->get('model_id')){
-            $wishlist = $request->getSession()->get('wishlist');
-            if(!$wishlist)$wishlist = array();
-            $wishlist[$request->get('model_id')] = $request->get('model_id');
-            $request->getSession()->set('wishlist',$wishlist);
-            $this->result['count'] = count($wishlist);
-            $this->result['status'] = 'OK';
-        }else{
-            $this->result['status'] = 'ERROR';
-        }
-        return new Response(json_encode($this->result));
-    }
-
-    /**
-     * @Route("/ajax/remove_from_wishlist", name="remove_from_wishlist", options={"expose"=true})
-     */
-    public function removeFromWishlist(Request $request)
-    {
-        if($request->get('model_id')){
-            $wishlist = $request->getSession()->get('wishlist');
-            if(isset($wishlist[$request->get('model_id')])){
-                unset($wishlist[$request->get('model_id')]);
-            }
-            $request->getSession()->set('wishlist',$wishlist);
-            $this->result['count'] = count($wishlist);
-            $this->result['status'] = 'OK';
-        }else{
-            $this->result['status'] = 'ERROR';
-        }
-        return new Response(json_encode($this->result));
-    }
-
-    /**
      * @Route("/ajax/add_to_compare", name="add_to_compare", options={"expose"=true})
      */
     public function addToCompare(Request $request)

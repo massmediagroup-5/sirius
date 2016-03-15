@@ -47,7 +47,7 @@ function fileDropBlock(block, type) {
             block
                 .parents('.sonata-ba-field')
                 .find('span[id$="_productModelImages"][id^="field_widget_"]')
-                .append('<img class="admin-preview" src="/img/products/'+response.filePath+'" />');
+                .append('<img class="admin-preview" src="'+response.filePath+'" />');
             block.removeClass('active-drag-block');
             $('button[type="submit"]').addClass('reload');
         }

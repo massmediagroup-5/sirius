@@ -71,10 +71,15 @@ facebook_login:
 vkontakte_login:
     path: /login/check-vkontakte
 
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    prefix: /js/routing
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
-    prefix: /js/routing
+# Because category route is "/{category}"
+app_category:
+    resource: "@AppBundle/Controller/ShopController.php"
+    type:     annotation

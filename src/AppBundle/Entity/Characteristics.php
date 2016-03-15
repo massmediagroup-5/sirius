@@ -33,6 +33,11 @@ class Characteristics
     private $updateTime;
 
     /**
+     * @var \DateTime
+     */
+    private $renderType;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $characteristicValues;
@@ -103,6 +108,30 @@ class Characteristics
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set renderType
+     *
+     * @param string $renderType
+     *
+     * @return Characteristics
+     */
+    public function setRenderType($renderType)
+    {
+        $this->renderType = $renderType;
+
+        return $this;
+    }
+
+    /**
+     * Get renderType
+     *
+     * @return string
+     */
+    public function getRenderType()
+    {
+        return $this->renderType;
     }
 
     /**
