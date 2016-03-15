@@ -9,9 +9,6 @@ AppBundle\Entity\ProductModelImages:
         fk_product_images_product_models1_idx:
             columns:
                 - product_models_id
-        thumbnail:
-            columns:
-                - thumbnail
         priority:
             columns:
                 - priority
@@ -34,13 +31,6 @@ AppBundle\Entity\ProductModelImages:
                 strategy: IDENTITY
     fields:
         link:
-            type: string
-            nullable: true
-            length: 150
-            options:
-                fixed: false
-                comment: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.png
-        thumbnail:
             type: string
             nullable: true
             length: 150

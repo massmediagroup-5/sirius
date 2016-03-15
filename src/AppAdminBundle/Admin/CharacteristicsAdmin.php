@@ -50,6 +50,7 @@ class CharacteristicsAdmin extends Admin
     {
         $formMapper
             ->add('name', null, array('label' => 'Название'))
+            ->add('renderType', null, array('label' => 'Тип отображения'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
         ;
     }

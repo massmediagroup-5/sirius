@@ -98,23 +98,7 @@ AppBundle\Entity\Products:
                     referencedColumnName: id
             orphanRemoval: false
     manyToMany:
-        categories:
-            targetEntity: Categories
-            cascade: {  }
-            fetch: EAGER
-            mappedBy: null
-            inversedBy: products
-            joinTable:
-                name: products_has_categories
-                joinColumns:
-                    -
-                        name: products_id
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    -
-                        name: categories_id
-                        referencedColumnName: id
-            orderBy: null
+
         characteristicValues:
             targetEntity: CharacteristicValues
             cascade: ["persist"]

@@ -61,6 +61,7 @@ class AppExtension extends \Twig_Extension
     public function getFunctions() {
         return array(
             'widget'       => new \Twig_Function_Method($this, 'widget'),
+            'param'       => new \Twig_Function_Method($this, 'param'),
         );
     }
 
@@ -129,6 +130,16 @@ class AppExtension extends \Twig_Extension
         $widgetObject = $this->container->get($widgetName);
 
         return call_user_func_array([$widgetObject, $widgetMethodName], $widgetParameters);
+    }
+
+    /**
+     * Get config parameter
+     *
+     * @param string $parameter
+     * @return mixed
+     */
+    public function param($parameter) {
+        return $this->container->getParameter($parameter);
     }
 
 }

@@ -115,6 +115,11 @@ class ImportAdmin
     protected $baseCategory;
 
     /**
+     * @var \AppBundle\Entity\Filters
+     */
+    protected $allFilter;
+
+    /**
      * Publish all imported data
      *
      * @var bool
@@ -162,6 +167,8 @@ class ImportAdmin
         $this->listSheet = $this->phpExcelObj->getSheet(1);
 
         $this->baseCategory = $this->em->getRepository('AppBundle:Categories')->findOneBy(['alias' => 'all']);
+
+        $this->allFilter = $this->em->getRepository('AppBundle:Filters')->findOneBy(['name' => 'all']);
 
         foreach ($this->listSheet->getRowIterator(2) as $row) {
             $this->processProduct($row);
@@ -272,6 +279,7 @@ class ImportAdmin
         $category = $this->em->getRepository('AppBundle:Categories')->findOrCreate([
             'name' => $categoryName,
             'parrent' => $this->baseCategory,
+            'filters' => $this->allFilter,
             'alias' => $this->slugify->slugify($categoryName)
         ], ['active' => $this->publishFlag]);
 

@@ -30,4 +30,29 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    /**
+     * Todo complete or remove
+     *
+     * @param $category
+     * @param $filters
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getPricesIntervalForFilters($category, $filters)
+    {
+        $builder = $this
+            ->createQueryBuilder('productModels')
+            ->select('productModels, MIN(productModels.price) AS min_price, MAX(productModels.price) AS max_price')
+            ->innerJoin('productModels.products', 'products')->addselect('products')
+
+            ->innerJoin('products.baseCategory', 'baseCategory')
+
+            ->where('productModels.active = 1 AND productModels.published = 1');
+
+        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
+
+        return $builder->getQuery()->getSingleResult();
+    }
+
 }

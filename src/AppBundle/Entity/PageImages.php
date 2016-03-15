@@ -18,11 +18,6 @@ class PageImages
     private $link;
 
     /**
-     * @var string
-     */
-    private $thumbnail;
-
-    /**
      * @var \DateTime
      */
     private $createTime;
@@ -70,30 +65,6 @@ class PageImages
     public function getLink()
     {
         return $this->link;
-    }
-
-    /**
-     * Set thumbnail
-     *
-     * @param string $thumbnail
-     *
-     * @return PageImages
-     */
-    public function setThumbnail($thumbnail)
-    {
-        $this->thumbnail = $thumbnail;
-
-        return $this;
-    }
-
-    /**
-     * Get thumbnail
-     *
-     * @return string
-     */
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
     }
 
     /**

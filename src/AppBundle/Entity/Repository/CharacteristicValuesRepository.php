@@ -8,7 +8,7 @@ use AppBundle\Entity\CharacteristicValues;
  *
  * @see \Doctrine\ORM\EntityRepository
  */
-class CharacteristicValuesRepository extends \Doctrine\ORM\EntityRepository
+class CharacteristicValuesRepository extends BaseRepository
 {
 
     /**
@@ -56,7 +56,7 @@ class CharacteristicValuesRepository extends \Doctrine\ORM\EntityRepository
             ->select('characteristicValues')
             ->innerJoin('characteristicValues.products', 'products')->addSelect('products')
             ->innerJoin('characteristicValues.characteristics', 'characteristics')->addSelect('characteristics')
-            ->innerJoin('products.categories', 'categories')->addSelect('categories')
+            ->innerJoin('characteristicValues.categories', 'categories')->addselect('categories')
             ->where("categories.id = :category")->setParameter('category', $category->getId())
             ->andWhere("characteristics.id IN (:characteristics)")->setParameter('characteristics', $characteristics)
             ->getQuery()
@@ -94,26 +94,61 @@ class CharacteristicValuesRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * @param $searchParameters
-     * @param array $createParameters
-     * @return CharacteristicValues|array
+     * getCharacteristicValuesForCategory
+     *
+     * @param \AppBundle\Entity\Categories|string $category
+     * @param array $characteristicValues
+     * @param array $filters
+     *
+     * @return array
      */
-    public function findOrCreate($searchParameters, $createParameters = [])
+    public function getAvailableCharacteristicValuesForCategoryProducts($category, $characteristicValues, $filters)
     {
-        $entity = $this->findOneBy($searchParameters);
+        $builder = $this->createQueryBuilder('characteristicValues')
+            ->select('characteristicValues')
+            ->innerJoin('characteristicValues.characteristics', 'characteristics')
+            ->where('characteristics.inFilter = 1')
+        ;
 
-        if(!$entity) {
-            $entity = new CharacteristicValues();
-            $createParameters = array_merge($searchParameters, $createParameters);
-            foreach($createParameters as $key => $value) {
-                $setter = 'set' . ucfirst($key);
-                $entity->$setter($value);
-            }
-            $this->_em->persist($entity);
-            $this->_em->flush();
-        }
+        // Append products query part.
+        // Filter only values which has products in given filters and category context.
+        // Group values by characteristicId - where (v.id = 1 or v.id = 2) and (v.id = 1 or v.id = 2)
+        $qb = $this->_em->createQueryBuilder();
+        $productsQueryBuilder = $this->_em->createQueryBuilder(); //$qb->expr()->in()
+        $productsQueryBuilder->from('AppBundle:Products', 'products')
+            ->innerJoin('products.characteristicValues', 'productCharacteristicValues')
+            ->innerJoin('products.productModels', 'productModels')
+            ->innerJoin('products.baseCategory', 'baseCategory')
+            ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
+            ->andWhere($qb->expr()->eq('products.baseCategory', $category->getId()))
 
-        return $entity;
+            ->innerJoin('productCharacteristicValues.characteristics', 'pCharacteristics')
+            ->andWhere($builder->expr()->in("productCharacteristicValues.id", $characteristicValues))
+
+            ->select('COUNT(DISTINCT products.id)')
+            ->having('COUNT(DISTINCT pCharacteristics.id) >=
+                (
+                    SELECT COUNT( DISTINCT incchar.id )
+                    FROM \AppBundle\Entity\Characteristics as incchar
+                    JOIN incchar.characteristicValues as inccharval
+                    WHERE
+                    ' . ($characteristicValues ? 'inccharval.id IN (' . implode(',', $characteristicValues) . ') OR ' : '') .
+                    'inccharval.id = characteristicValues.id
+                )
+            ')
+        ;
+
+        // Filter price
+        $productsQueryBuilder = $this->_em->getRepository('AppBundle:Products')->addPriceToQuery($productsQueryBuilder, $filters);
+
+        $builder->addSelect("({$productsQueryBuilder->getDQL()}) as products_count")
+//            ->having("products_count > 0")
+            ;
+
+        $result = $builder->getQuery()
+            ->getResult();
+
+        return $result;
     }
 
 }

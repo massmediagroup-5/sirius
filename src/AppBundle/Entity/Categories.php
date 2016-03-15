@@ -38,6 +38,11 @@ class Categories implements CharacteristicableInterface
     /**
      * @var string
      */
+    private $content;
+
+    /**
+     * @var string
+     */
     private $seoTitle;
 
     /**
@@ -205,6 +210,30 @@ class Categories implements CharacteristicableInterface
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     *
+     * @return Categories
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 
     /**

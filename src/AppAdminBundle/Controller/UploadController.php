@@ -5,8 +5,6 @@ namespace AppAdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class: UploadController
@@ -23,9 +21,9 @@ class UploadController extends Controller
      */
     public function uploadFileAction()
     {
- 
-        $filename = $_FILES['file']; # принимает наш файл
-        $uploadPath = $this->upload($filename); # запускаем функцию загрузки
+
+        $filename = $_FILES['file'];
+        $uploadPath = $this->get('uploader')->upload($this->container->getParameter('upload_img_directory'), $filename);
         $modelId = (int)$this->getRequest()->request->get('model');
 
         $em = $this->getDoctrine()->getManager();
@@ -34,15 +32,11 @@ class UploadController extends Controller
             ->findOneById($modelId);
         $productModelImage = new \AppBundle\Entity\ProductModelImages;
         $productModelImage
-            ->setThumbnail($uploadPath)
-            ->setProductModels($productModels)
-            ;
+            ->setLink($uploadPath)
+            ->setProductModels($productModels);
         $em->persist($productModelImage);
         $em->flush();
- 
-        /**
-          * Тут думаю ясно. Обычный ответ на запрос
-          */
+
         return null === $uploadPath
             ? new Response(json_encode(array(
                         'status' => 0,
@@ -78,80 +72,6 @@ class UploadController extends Controller
                 )
             )
         );
-    }
-    
- 
-    private function getFoldersForUploadFile($type)
-    {
-        $fileType = $this->returnExistFileType($type); #метод возвращающюй тип файлов которые можно грузить
- 
-        if ($fileType !== null) {
-            return array(
-                'root_dir' => $this->container->getParameter('upload_' . $fileType . '_root_directory'), # полный путь к папке с картинкой
-                'dir' => $this->container->getParameter('upload_' . $fileType . '_directory'), # отосительный путь к папке
-            );
-        } else {
-            return null;
-        }
-    }
- 
-    # метод возвращает ключ(тип) файла который будет закачиваться
-    private function returnExistFileType($type)
-    {
-        $typeArray = array(
-            'img' => array(
-                'image/png',
-                'image/jpg',
-                'image/jpeg',
-            )
-        );
- 
-        foreach ($typeArray as $key => $value) {
-            if (in_array($type, $value)) {
-                return $key;
-            }
-        }
- 
-        return null;
-    }
- 
-    # Тут собственно все и происходит. Загрузка, присвоение имени, перемещение в папку
-    private function upload($file)
-    {
-        $filePath = $this->getFoldersForUploadFile($file['type']);
- 
-        if (null === $this->getFileInfo($file['name']) || $filePath === null) {
- 
-            return null;
-        }
-        $pathInfo = $this->getFileInfo($file['name']);
-        $path = $this->fileUniqueName() . '.' . $pathInfo['extension'];
-        $this->uploadFileToFolder($file['tmp_name'], $path, $filePath['root_dir']);
- 
-        unset($file);
-        //return $filePath['dir'] . DIRECTORY_SEPARATOR . $path;
-        return $path;
-    }
- 
-    # возвращает всю информацию о загруженном фале (что бы это не было)
-    private function getFileInfo($file)
-    {
- 
-        return $file !== null ? (array)pathinfo($file) : null;
-    }
- 
-    # формирует уникальное имя
-    private function fileUniqueName()
-    {
- 
-        return sha1(uniqid(mt_rand(), true));
-    }
-    
-    # перемещает файл в необходимую папку
-    private function uploadFileToFolder($tmpFile, $newFileName, $rootFolder)
-    {
-        $e = new File($tmpFile);
-        $e->move($rootFolder, $newFileName);
     }
 
 }

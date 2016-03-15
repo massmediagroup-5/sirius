@@ -11,13 +11,6 @@ class ProductModelImages
 {
 
     /**
-     * file
-     *
-     * @var mixed
-     */
-    private $file;
-
-    /**
      * @var integer
      */
     private $id;
@@ -26,11 +19,6 @@ class ProductModelImages
      * @var string
      */
     private $link;
-
-    /**
-     * @var string
-     */
-    private $thumbnail;
 
     /**
      * @var integer
@@ -52,26 +40,10 @@ class ProductModelImages
      */
     private $productModels;
 
-
     /**
-     * Get file.
-     *
-     * @return UploadedFile
+     * @var
      */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * Sets file.
-     *
-     * @param UploadedFile $file
-     */
-    public function setFile(UploadedFile $file = null)
-    {
-        $this->file = $file;
-    }
+    private $file;
 
     /**
      * Get id
@@ -105,30 +77,6 @@ class ProductModelImages
     public function getLink()
     {
         return $this->link;
-    }
-
-    /**
-     * Set thumbnail
-     *
-     * @param string $thumbnail
-     *
-     * @return ProductModelImages
-     */
-    public function setThumbnail($thumbnail)
-    {
-        $this->thumbnail = $thumbnail;
-
-        return $this;
-    }
-
-    /**
-     * Get path
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**
@@ -226,129 +174,16 @@ class ProductModelImages
     {
         return $this->productModels;
     }
-    
-    /**
-     * lifecycleFileUpload
-     * Lifecycle callback to upload the file to the server
-     *
-     * @param mixed $obj
-     */
-    public function lifecycleFileUpload($obj)
-    {
-        $this->upload($obj);
+
+    public function setFile($file) {
+        $this->file = $file;
     }
 
-    /**
-     * Get thumbnail
-     *
-     * @return string
-     */
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
+    public function getFile() {
+        return $this->file;
     }
 
-    /**
-     * Set path
-     *
-     * @param string $path
-     *
-     * @return ProductModelImages
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * getAbsolutePath
-     *
-     */
-    public function getAbsolutePath()
-    {
-        return null === $this->path
-            ? null
-            : $this->getUploadRootDir().'/'.$this->path;
-    }
-
-    /**
-     * getWebPath
-     *
-     */
-    public function getWebPath()
-    {
-        return null === $this->path
-            ? null
-            : $this->getUploadDir().'/'.$this->path;
-    }
-
-    /**
-     * upload
-     * Manages the copying of the file to the relevant place
-     * on the server
-     *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $obj
-     */
-    private function upload(\Doctrine\ORM\Event\LifecycleEventArgs $obj)
-    {
-        // Get EntityManager
-        $em = $obj->getObjectManager();
-
-        // the file property can be empty if the field is not required
-        if (null === $this->getFile()) {
-            return;
-        }
-    
-        // Make new filename.
-        $extention = $this->getFile()->guessExtension();
-        $thumbnail = sha1(uniqid(mt_rand(), true)) . '.' . $extention;
-
-        // move takes the target directory and target filename as params
-        $this->getFile()->move(
-            realpath($this->getUploadRootDir()),
-            $thumbnail
-        );
-    
-        // find parrent ProductModel Id.
-        $productModels = $em->getunitOfWork()
-            ->getIdentityMap()['AppBundle\Entity\ProductModels'];
-        $productModelsId = array_shift($productModels)->getId();
-
-        // set ProdutcModels
-        $this->productModels = $em
-            ->getRepository('AppBundle:ProductModels')
-            ->find($productModelsId);
-        // set the thumbnail of the file
-        $this->thumbnail = $thumbnail;
-
-        // clean up the file property as you won't need it anymore
-        $this->setFile(null);
-    }
-
-    /**
-     * getUploadRootDir
-     * the absolute directory path where uploaded
-     * documents should be saved
-     *
-     * @return string
-     */
-    protected function getUploadRootDir()
-    {
-        return __DIR__.'/../../../web/'.$this->getUploadDir();
-    }
-
-    /**
-     * getUploadDir
-     * get rid of the __DIR__ so it doesn't screw up
-     * when displaying uploaded /img/products in the view.
-     *
-     * @return string
-     * /img/products
-     */
-    protected function getUploadDir()
-    {
-        return '/img/products/';
+    public function __toString() {
+        return $this->getLink() ?: '';
     }
 }

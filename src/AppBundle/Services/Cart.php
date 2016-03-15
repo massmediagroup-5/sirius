@@ -383,16 +383,13 @@ class Cart
     }
 
     /**
-     * getHeaderBasketInfo
+     * Return array with Cart information
      *
      * @return mixed
-     *
-     * Return array with Cart information
      */
-    public function getHeaderBasketInfo()
+    public function getInfo()
     {
         $cart = $this->session->get('cart_items');
-        $wishlist = $this->session->get('wishlist');
         $credit = $this->session->get('credit');
         $spy = $this->session->get('spy');
 
@@ -401,8 +398,6 @@ class Cart
             'cart_items_tpl'=> array(),
             'qty'=>0,
             'total_price'=>0,
-            'wishlist_qty'=>0,
-            'wishlist_ids'=>array(),
             'credit_ids'=>array(),
             'spy_ids'=>array(),
         );
@@ -412,33 +407,18 @@ class Cart
         if($spy){
             $result['spy_ids'] = $spy;
         }
-        if($wishlist){
-            $result['wishlist_qty'] = count($wishlist);
-            $result['wishlist_ids'] = $wishlist;
-        }
 
         if($cart){
             foreach($cart as $item){
                 $item['sku'] = $this->em->getRepository('AppBundle:SkuProducts')->findOneById($item['sku']);
-                $result['cart_items_tpl'][] = $this->templating->render(
-                    'AppBundle:userpart:cart_item_row.html.twig',
-                    array(
-                        'item' => $item
-                    )
-                );
                 $price = $item['sku']->getProductModels()->getPrice();
                 $qty = $item['quantity'];
                 $result['total_price'] += $price * $qty;
                 $result['qty'] +=$qty;
             }
         }
-        $result['cart_header_tpl'] = $this->templating->render(
-            'AppBundle:userpart:header_cart_block.html.twig',
-            array(
-                'cart' => $result
-            )
-        );
 
         return $result;
     }
+
 }

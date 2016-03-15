@@ -1,7 +1,6 @@
 <?php
 
 namespace AppBundle\Entity\Repository;
-use AppBundle\Entity\Characteristics;
 
 /**
  * CharacteristicsRepository
@@ -35,51 +34,6 @@ class CharacteristicsRepository extends BaseRepository
     }
 
     /**
-     * addWhere
-     *
-     * @param array $where
-     *
-     * $where - is array with table and columns structure.
-     * We can define such keys:
-     * - categories;
-     * - products;
-     * - productModels;
-     * - productModelImages;
-     * - productColors;
-     * - actionLabels.
-     *
-     * Example:
-     *  $where = array(
-     *    // category - is structure for `categories` table.
-     *    'categories' => array(
-     *       'id'         => 1,
-     *       'active'     => 1,
-     *       ...
-     *       'alias'      => 'some-alias'
-     *    ),
-     *    ...
-     *    'products' => array(
-     *        'active'    => 1,
-     *        'published' => 1,
-     *    )
-     *  );
-     *
-     * @return this
-     */
-    public function addWhere(array $where = array())
-    {
-        // construct WHERE conditions
-        foreach ($where as $whereKey => $whereValue) {
-            foreach ($whereValue as $columnKey => $columnValue) {
-                $this->query_obj
-                    ->andWhere("{$table}.{$columnKey} = :{$columnKey}")
-                    ->setParameter($columnKey, $columnValue);
-            }
-        }
-        return $this;
-    }
-
-    /**
      * getAllCharacteristicsByCategory
      *
      * Get all characteristics with characteristicValues,
@@ -104,74 +58,25 @@ class CharacteristicsRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function getAllCharacteristicsByCategory(
-        array   $category,
-        $inFilter = null,
-        $products_obj
-    )
+    public function getAllCharacteristicsByCategory($category, $inFilter = null)
     {
-        $query_obj = $this->query_obj
-            ->innerJoin('products.categories', 'categories')->addselect('categories')
+        $query_obj = $this->createQueryBuilder('characteristics1')->select('characteristics1')
+            ->innerJoin('characteristics1.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
+            ->innerJoin('characteristicValues.products', 'products')->addselect('products')
+            ->innerJoin('products.characteristicValues', 'productCharacteristicValues')->addselect('productCharacteristicValues')
+            ->innerJoin('productCharacteristicValues.categories', 'categories')->addselect('categories')
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->innerJoin('categories.filters', 'filters')
-            ->innerJoin('filters.characteristics', 'characteristics2', 'WITH', 'characteristics.id = characteristics2.id')
-            //->addSelect('
-//(SELECT
-            //COUNT (products1.id)
-//FROM
-            //AppBundle\Entity\Products products1
-//INNER JOIN
-            //products1.categories categories1
-//INNER JOIN
-            //products1.actionLabels actionLabels
-//INNER JOIN
-            //products1.productModels productModels
-//INNER JOIN
-            //productModels.productColors productColors
-//INNER JOIN
-            //productModels.skuProducts skuProducts
-//LEFT JOIN
-            //productModels.productModelImages productModelImages
-//INNER JOIN
-            //products1.productsBaseCategories productsBaseCategories
-//INNER JOIN
-            //productsBaseCategories.categories baseCategories
-//WHERE
-            //categories.alias = :alias AND categories.active = :active AND products1.active = :active AND products1.published = :published AND productModels.active = :active AND productModels.published = :published AND productModels.price >= :price_from AND productModels.price <= :price_to
-//ORDER BY
-            //productModels.priority ASC) as counte')
-//->setParameter('active', 1)
-//->setParameter('published', 1)
-//->setParameter('price_from', 1)
-//->setParameter('price_to', 10000)
-            //->addSelect('(' . (string)$dql. ') as counte')
-            //->addSelect($this->query_obj->expr()->count('DISTINCT characteristics.id') . ' as charcount')
-            ->addSelect('
-                (
-                    SELECT COUNT(dctrn.id)
-                    FROM \AppBundle\Entity\Products as dctrn
-                    WHERE dctrn.id IN (' . (string)$products_obj . ')
-                    OR dctrn.id = characteristicValues.id
-                ) as counte
-            ')
-            //->addSelect('(SELECT COUNT (' . (string)$products_obj. ') as idd) as counte')
-            //->addSelect([>$this->query_obj->expr()->count($products_obj)<] '('.$products_obj.') as counte')
-        ;
-        foreach ($products_obj->getParameters() as $parametr) {
-            $query_obj->setParameter($parametr->getName(), $parametr->getValue());
-        }
-
+            ->innerJoin('filters.characteristics', 'characteristics2', 'WITH', 'characteristics1.id = characteristics2.id');
         // construct WHERE conditions
         if (isset($inFilter)) {
-            $query_obj->where("characteristics.inFilter = :inFilter")
+            $query_obj->where("characteristics1.inFilter = :inFilter")
                 ->setParameter('inFilter', $inFilter);
         }
-        foreach ($category as $categoryColumnKey => $categoryColumnValue) {
-            $query_obj
-                ->andWhere("categories.{$categoryColumnKey} = :{$categoryColumnKey}")
-                ->setParameter($categoryColumnKey, $categoryColumnValue);
-        }
-        $query_obj->addOrderBy('characteristics.name', 'ASC')
+
+        $query_obj = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($query_obj, $category);
+
+        $query_obj->addOrderBy('characteristics1.name', 'ASC')
             ->addOrderBy('characteristicValues.name', 'ASC');
 
         return $query_obj->getQuery()->getResult();
@@ -250,7 +155,8 @@ class CharacteristicsRepository extends BaseRepository
             ->select('characteristics')
             ->innerJoin('characteristics.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.products', 'products')->addSelect('products')
-            ->innerJoin('products.categories', 'categories')->addSelect('categories')
+            ->innerJoin('products.characteristicValues', 'productCharacteristicValues')->addselect('productCharacteristicValues')
+            ->innerJoin('productCharacteristicValues.categories', 'categories')->addselect('categories')
             ->where("categories.id = :category")->setParameter('category', $category->getId())
             ->groupBy('characteristics.id')
             ->having("count(characteristics.id) = :counter")->setParameter('counter', count($category->getProducts()))

@@ -5,32 +5,33 @@
                 <p>25%</p>
             </div>
         </div>
-        <a href="#" class="add-wish">
-            <i class="icon icon-wish-grey"></i>
-            <i class="icon icon-wish-black hover"></i>
-                                                        <span class="tooltip">
-                                                            <span class="tooltip__i">
-                                                                Добавить в список желаний
-                                                            </span>
-                                                        </span>
-        </a>
+
+        {{ widget('products.wishButton', item.productModels.0)|raw }}
 
         <div class="img">
-            <img src="img/demo/product1.jpg" alt="#"/>
-
+            {% if item.productModels.0.productModelImages.0 is defined and item.productModels.0.productModelImages.0.link is not null %}
+                <img src="{{ item.productModels.0.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
+            {% else %}
+                <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
+            {% endif %}
         </div>
         <div class="item-info">
             <div class="item-info__i">
                 <div class="colors-info">
-                    <p>3 цвета</p>
+                    <p>{{ item.productModels.count }} {{ 'labels.colors'|transchoice(item.productModels.count) }}</p>
                 </div>
 
-                <div class="name"><p>Befree</p></div>
+                <div class="name"><p>{{ item.productModels.0.name }}</p></div>
                 <div class="type">
-                    <p>Пуховик</p>
+                    <p>{{ item.baseCategory.name }}</p>
                 </div>
                 <div class="price price_new">
-                    <p>960 грн. <strong>1160 грн.</strong></p>
+                    <p>
+                        {{ item.productModels.0.price|number_format(2, '.', ' ') }} грн.
+                        {% if item.productModels.0.oldprice is not empty %}
+                            <strong>{{ item.productModels.0.oldprice|number_format(2, '.', ' ') }} грн.</strong>
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         </div>
@@ -40,55 +41,76 @@
         <div class="hover__i">
             <div class="color-slider">
                 <div class="color-slider__i">
-                    <a href="#" data-big-img="img/demo/product1.jpg" class="active">
-                        <img src="img/demo/product1-small.jpg" alt="#"/>
-                    </a>
-                    <a href="#" data-big-img="img/demo/product1-2.jpg">
-                        <img src="img/demo/product1-2-small.jpg" alt="#"/>
-                    </a>
-                    <a href="#" data-big-img="img/demo/product-1-3.jpg">
-                        <img src="img/demo/product-1-3-small.jpg" alt="#"/>
-                    </a>
-
+                    {% for model  in item.productModels %}
+                        {% if model.productModelImages.0 is defined and model.productModelImages.0.link is not null%}
+                            <a href="#" data-big-img="{{ model.productModelImages.0.link|imagine_filter('medium') }}">
+                                <img src="{{ model.productModelImages.0.link|imagine_filter('mini') }}" alt="{{ item.productModels.0.name }}"/>
+                            </a>
+                        {% else %}
+                            <a href="#" data-big-img="{{ param('no_image')|imagine_filter('medium') }}">
+                                <img src="{{ param('no_image')|imagine_filter('mini') }}" alt="{{ item.productModels.0.name }}"/>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
             <div class="item-info">
                 <div class="item-info__i">
 
 
-                    <div class="name"><p>Befree</p></div>
+                    <div class="name"><p>{{ item.productModels.0.name }}</p></div>
                     <div class="type">
-                        <p>Пуховик</p>
+                        <p>{{ item.baseCategory.name }}</p>
                     </div>
                     <div class="price price_new">
-                        <p>960 грн. <strong>1160 грн.</strong></p>
+                        <p>
+                            {{ item.productModels.0.price|number_format(2, '.', ' ') }} грн.
+                            {% if item.productModels.0.oldprice is not empty %}
+                                <strong>{{ item.productModels.0.oldprice|number_format(2, '.', ' ') }} грн.</strong>
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="sizes active">
-                <div class="sizes__i">
-                    <select data-placeholder="Выберите размер" disabled>
-                        <option value=""></option>
-                        <option value="1" selected>s</option>
-                        <option value="2">m</option>
-                        <option value="3">l</option>
-                        <option value="4">xl</option>
-                        <option value="5">xxl</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="btn-row">
-                <div class="btn-row__i">
-                    <div class="incart">
-                        <div class="incart__i">
-                            <p>Товар добавлен</p>
+            {% if false %}
+                <div class="btn-row">
+                    <div class="btn-row__i">
+                        <div class="incart">
+                            <div class="incart__i">
+                                <p>Товар добавлен</p>
 
-                            <p><a href="#">в корзину</a></p>
+                                <p><a href="#">в корзину</a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% else %}
+
+                {% for model in item.productModels %}
+                    <div class="sizes" data-modelId="{{ model.id }}">
+                        <div class="sizes__i">
+                            <select data-placeholder="Выберите размер" disabled>
+                                <option value=""></option>
+                                {% for size  in model.sizes %}
+                                    <option value="{{ size.id }}" selected>{{ size.size }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="btn-row">
+                    <div class="btn-row__i">
+                        <a href="#" class="btn btn_blue btn_buy">
+                            <span>
+                                <i class="icon icon-cart"></i>
+								Купить
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

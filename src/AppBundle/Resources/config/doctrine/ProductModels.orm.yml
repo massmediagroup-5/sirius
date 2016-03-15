@@ -197,7 +197,7 @@ AppBundle\Entity\ProductModels:
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: productModel
+            inversedBy: productModels
             joinTable:
                 name: product_models_has_sizes
                 joinColumns:
