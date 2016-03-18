@@ -9,11 +9,13 @@
         {{ widget('products.wishButton', item.productModels.0)|raw }}
 
         <div class="img">
-            {% if item.productModels.0.productModelImages.0 is defined and item.productModels.0.productModelImages.0.link is not null %}
-                <img src="{{ item.productModels.0.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
-            {% else %}
-                <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
-            {% endif %}
+            <a href="{{ url('product', {'category': item.baseCategory.alias,'product': item.productModels.0.alias}) }}" title="{{ item.productModels.0.name }}">
+                {% if item.productModels.0.productModelImages.0 is defined and item.productModels.0.productModelImages.0.link is not null %}
+                    <img src="{{ item.productModels.0.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
+                {% else %}
+                    <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
+                {% endif %}
+            </a>
         </div>
         <div class="item-info">
             <div class="item-info__i">
