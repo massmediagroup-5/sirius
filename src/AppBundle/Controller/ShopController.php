@@ -145,45 +145,6 @@ class ShopController extends Controller
     }
 
     /**
-     * productAction
-     *
-     * @Route("/{category}/{product}", name="product", options={"expose"=true})
-     *
-     * @param mixed $product
-     * @param Request $request
-     *
-     * @return mixed
-     */
-    public function productAction($product, Request $request)
-    {
-        try {
-            $result = $this->get('entities')
-                ->getProductInfoByAlias($product);
-        } catch (\Doctrine\Orm\NoResultException $e) {
-            $result = null;
-        }
-        if ($result) {
-            $this->get('entities')->setRecentlyViewed($result['product']['productModels'][0]['id']);
-            $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
-            $this->buildBreadcrumb($category_list, $result['product']['productsBaseCategories']['categories']['id']);
-            return $this->render('AppBundle:userpart:product.html.twig', array(
-                'product' => $result['product'],
-                'current_model' => $result['product']['productModels'][0],
-                'models' => $result['models'],
-                'breadcrumb' => $this->breadcrumb,
-                'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
-                'params' => $this->get('options')->getParams(),
-                'cart' => $this->get('cart')->getHeaderBasketInfo(),
-                'compare' => $this->get('compare')->getHeaderCompareInfo(),
-                'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
-                'promotions' => $this->get('entities')->getCurrentPromotionsForProduct(),
-            ));
-        } else {
-            throw $this->createNotFoundException();
-        }
-    }
-
-    /**
      * buildBreadcrumb
      *
      * @param mixed $category_list

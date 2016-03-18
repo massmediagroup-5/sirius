@@ -291,11 +291,11 @@ liip_imagine:
         small:
             quality: 80
             filters:
-                thumbnail: { size: [190, 190], mode: inset}
+                thumbnail: { size: [56, 82], mode: inset}
         medium:
             quality: 80
             filters:
-                thumbnail: { size: [250, 260], mode: inset}
+                thumbnail: { size: [360, 503], mode: inset}
         large:
             quality: 80
             filters:
