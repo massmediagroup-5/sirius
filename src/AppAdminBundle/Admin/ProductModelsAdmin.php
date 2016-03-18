@@ -115,24 +115,23 @@ class ProductModelsAdmin extends Admin
                 ->end()
             ->end()
             ->tab('Изображения модели')
-                ->with('ProductModelImages',
-                        array(
-                            'class'       => 'col-md-12',
-                        )
-                    )
-                    ->add('productModelImages', 'sonata_type_collection',
-                        array(
-                            //'class'    => 'AppBundle:ProductModelImages',
-                            'label' => 'Изображения',
-                            'read_only' => true,
-                        ),
-                        array(
-                            'edit' => 'inline',
-                            //'inline' => 'table',
-                            //'sortable'  => 'priority'
-                        )
-                    )
-                ->end()
+            ->with('ProductModelImages',
+                array(
+                    'class'       => 'col-md-12',
+                )
+            )
+            ->add('productModelImages', 'sonata_type_collection',
+                array(
+                    //'class'    => 'AppBundle:ProductModelImages',
+                    'label' => 'Изображения',
+                ),
+                array(
+                    'edit' => 'inline',
+                    //'inline' => 'table',
+                    //'sortable'  => 'priority'
+                )
+            )
+            ->end()
             ->end()
             //->tab('Артикулы')
                 //->with('SkuProducts',

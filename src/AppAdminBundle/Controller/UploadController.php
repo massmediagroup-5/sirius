@@ -34,8 +34,8 @@ class UploadController extends Controller
         $productModelImage
             ->setLink($uploadPath)
             ->setProductModels($productModels);
-        $em->persist($productModelImage);
-        $em->flush();
+//        $em->persist($productModelImage);
+//        $em->flush();
 
         return null === $uploadPath
             ? new Response(json_encode(array(
