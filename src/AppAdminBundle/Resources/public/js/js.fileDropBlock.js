@@ -1,4 +1,4 @@
-function fileDropBlock(block, type) {
+function fileDropBlock(block, type, uploadedCallback) {
     var allowType = {
         'img': ['image/jpeg', 'image/png', 'image/gif']
     };
@@ -44,12 +44,9 @@ function fileDropBlock(block, type) {
         },
 
         uploadFinished: function (i, file, response) {
-            block
-                .parents('.sonata-ba-field')
-                .find('span[id$="_productModelImages"][id^="field_widget_"]')
-                .append('<img class="admin-preview" src="'+response.filePath+'" />');
             block.removeClass('active-drag-block');
             $('button[type="submit"]').addClass('reload');
+            uploadedCallback(response);
         }
     })
 }

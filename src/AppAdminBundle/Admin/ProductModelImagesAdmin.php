@@ -70,12 +70,18 @@ class ProductModelImagesAdmin extends Admin
             } else {
                 $images = null;
             }
+
+            $images = $this->getSubject();
+            ;
         } else { // this Admin is not embedded
             $images = $this->getSubject();
-            $formMapper
-                ->add('link', null, array('label' => 'Ссылка на оригинал'))
-                ;
         }
+        $formMapper
+            ->add('link', null, array('label' => 'Ссылка на оригинал'))
+            ->add('productModels', 'entity', [
+                'class' => 'AppBundle\Entity\ProductModels',
+                'label' => 'Модель'
+            ]);
 
         // You can then do things with the $images, like show a thumbnail in the help:
         $fileFieldOptions = array(
