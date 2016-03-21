@@ -113,6 +113,15 @@ AppBundle\Entity\ProductModels:
             options:
                 fixed: false
             column: seo_keywords
+        content:
+            type: text
+            nullable: true
+        characteristics:
+            type: text
+            nullable: true
+        features:
+            type: text
+            nullable: true
         priority:
             type: integer
             nullable: true

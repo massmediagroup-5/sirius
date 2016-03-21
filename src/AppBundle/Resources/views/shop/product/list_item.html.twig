@@ -9,6 +9,7 @@
         {{ widget('products.wishButton', item.productModels.0)|raw }}
 
         <div class="img">
+            <a href="{{ url_to(item.baseCategory, item.productModels.0) }}" title="{{ item.productModels.0.name }}">
             <a href="{{ url('product', {'category': item.baseCategory.alias,'product': item.productModels.0.alias}) }}" title="{{ item.productModels.0.name }}">
                 {% if item.productModels.0.productModelImages.0 is defined and item.productModels.0.productModelImages.0.link is not null %}
                     <img src="{{ item.productModels.0.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
@@ -29,10 +30,7 @@
                 </div>
                 <div class="price price_new">
                     <p>
-                        {{ item.productModels.0.price|number_format(2, '.', ' ') }} грн.
-                        {% if item.productModels.0.oldprice is not empty %}
-                            <strong>{{ item.productModels.0.oldprice|number_format(2, '.', ' ') }} грн.</strong>
-                        {% endif %}
+                        {{ widget('products.prices', item.productModels.0) }}
                     </p>
                 </div>
             </div>
@@ -91,13 +89,8 @@
 
                 {% for model in item.productModels %}
                     <div class="sizes" data-modelId="{{ model.id }}">
-                        <div class="sizes__i">
-                            <select data-placeholder="Выберите размер" disabled>
-                                <option value=""></option>
-                                {% for size  in model.sizes %}
-                                    <option value="{{ size.id }}" selected>{{ size.size }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="sizes__i js_sizes">
+
                         </div>
                     </div>
                 {% endfor %}

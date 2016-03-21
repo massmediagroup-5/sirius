@@ -2,6 +2,8 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Entity\Categories;
+use AppBundle\Entity\ProductModels;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
@@ -62,6 +64,7 @@ class AppExtension extends \Twig_Extension
         return array(
             'widget'       => new \Twig_Function_Method($this, 'widget'),
             'param'       => new \Twig_Function_Method($this, 'param'),
+            'url_to'       => new \Twig_Function_Method($this, 'urlTo'),
         );
     }
 
@@ -140,6 +143,35 @@ class AppExtension extends \Twig_Extension
      */
     public function param($parameter) {
         return $this->container->getParameter($parameter);
+    }
+
+    /**
+     * Generate link to given object
+     *
+     * @return mixed
+     */
+    public function urlTo() {
+        $args = func_get_args();
+        foreach ($args as $key => $arg) {
+            $key = "model" . ($key + 1);
+            $$key = $arg;
+        }
+        $router = $this->container->get('router');
+
+        if (isset($model1)) {
+            if ($model1 instanceof Categories) {
+                if (isset($model2)) {
+                    if ($model2 instanceof ProductModels) {
+                        return $router->generate('product', array(
+                            'category' => $model1->getAlias(),
+                            'product' => $model2->getAlias()
+                        ));
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
 }

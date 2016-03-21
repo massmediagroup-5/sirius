@@ -49,7 +49,6 @@ class Breadcrumbs
      */
     public function render()
     {
-        krsort($this->breadcrumbs);
         return $this->templating->render('AppBundle:widgets/breadcrumbs/breadcrumbs.html.twig', array(
                 'breadcrumbs' => $this->breadcrumbs
             )

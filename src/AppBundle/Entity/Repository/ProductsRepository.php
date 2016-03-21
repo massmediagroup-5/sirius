@@ -316,7 +316,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('alias', $productModelAlias)
             ->orderBy('prodSkuVnd.priority', 'ASC')
         ;
-        return $query_obj->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        return $query_obj->getQuery()->getSingleResult();
     }
 
     /**
