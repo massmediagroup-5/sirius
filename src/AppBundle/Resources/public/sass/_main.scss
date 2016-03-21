@@ -4132,6 +4132,15 @@ input[type="checkbox"] {
 		}
 	}
 
+	/* transparent standard button over designed image */
+	.fake-over-btn {
+		width: 100%;
+		opacity: 0;
+		margin-top: -46px;
+		display: block;
+		height: 46px;
+	}
+
 	.buy-row__i {
 		margin-left: -15px;
 		margin-right: -15px;

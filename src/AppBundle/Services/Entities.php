@@ -133,15 +133,12 @@ class Entities
         $result['product'] = $this->em
             ->getRepository('AppBundle:Products')
             ->getProductInfoByAlias($productModelAlias);
-        //$base_category = $result['product']['productsBaseCategories']['categories']['characteristicValues'];
-        $product = $result['product']['characteristicValues'];
-        //$result['characteristics'] = $this->getMainCharacteristicList($base_category, $product);
+
         $result['models'] = $this->em
             ->getRepository('AppBundle:ProductModels')
-            ->getModelsByProductId($result['product']['id'],$productModelAlias);
-        if(empty($result))
-            return false;
-        return $result;
+            ->getModelsByProductId($result['product']->getId());
+
+        return empty($result) ? false : $result;
     }
 
     /**

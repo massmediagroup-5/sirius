@@ -1,0 +1,4 @@
+{{ model.price|number_format(2, '.', ' ') }} грн.
+{% if model.oldprice is not empty %}
+    <strong>{{ model.oldprice|number_format(2, '.', ' ') }} грн.</strong>
+{% endif %}

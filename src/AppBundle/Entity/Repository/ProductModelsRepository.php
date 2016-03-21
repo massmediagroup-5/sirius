@@ -10,8 +10,6 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 {
 
     /**
-     * getModelsByProductId
-     *
      * Get product and category info by their aliases.
      *
      * @param mixed $prodId
@@ -19,15 +17,18 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return mixed
      */
-    public function getModelsByProductId($prodId, $productModelAlias)
+    public function getModelsByProductId($prodId, $productModelAlias = false)
     {
-        return $this
+        $builder = $this
             ->createQueryBuilder('prodMod')
-            ->where('prodMod.products = :prodId AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.alias != :alias')
-            ->setParameter('prodId', $prodId)
-            ->setParameter('alias', $productModelAlias)
-            ->getQuery()
-            ->getResult();
+            ->where('prodMod.products = :prodId AND prodMod.active = 1 AND prodMod.published = 1')
+            ->setParameter('prodId', $prodId);
+
+        if($productModelAlias) {
+            $builder->andWhere('prodMod.alias != :alias')->setParameter('alias', $productModelAlias);
+        }
+
+        return $builder->getQuery()->getResult();
     }
 
     /**

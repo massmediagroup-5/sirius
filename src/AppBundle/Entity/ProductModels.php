@@ -56,6 +56,21 @@ class ProductModels
     private $seoKeywords;
 
     /**
+     * @var string
+     */
+    private $content;
+
+    /**
+     * @var string
+     */
+    private $characteristics;
+
+    /**
+     * @var string
+     */
+    private $features;
+
+    /**
      * @var integer
      */
     private $priority;
@@ -330,6 +345,78 @@ class ProductModels
     public function getSeoKeywords()
     {
         return $this->seoKeywords;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     *
+     * @return ProductModels
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set characteristics
+     *
+     * @param string $characteristics
+     *
+     * @return ProductModels
+     */
+    public function setCharacteristics($characteristics)
+    {
+        $this->characteristics = $characteristics;
+
+        return $this;
+    }
+
+    /**
+     * Get characteristics
+     *
+     * @return string
+     */
+    public function getCharacteristics()
+    {
+        return $this->characteristics;
+    }
+
+    /**
+     * Set features
+     *
+     * @param string $features
+     *
+     * @return ProductModels
+     */
+    public function setFeatures($features)
+    {
+        $this->features = $features;
+
+        return $this;
+    }
+
+    /**
+     * Get features
+     *
+     * @return string
+     */
+    public function getFeatures()
+    {
+        return $this->features;
     }
 
     /**

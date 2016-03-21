@@ -17,47 +17,45 @@
 
                                 <div class="product-img">
                                     <div class="list">
-                                        {% for key, model in models %}
-                                            <div class="item {% if not key %} active {% endif %}">
-                                                <div class="main-img">
-                                                    <div class="flag flag_discount">
-                                                        <div class="flag__i">
-                                                            <p>25%</p>
-                                                        </div>
-
+                                        <div class="item active">
+                                            <div class="main-img">
+                                                <div class="flag flag_discount">
+                                                    <div class="flag__i">
+                                                        <p>25%</p>
                                                     </div>
-                                                    {{ widget('products.wishButton', model)|raw }}
 
-                                                    <div class="main-img__i big-img_slider">
-                                                        {% if model.productModelImages is empty %}
-                                                            <a href="#"><img src="{{ param('no_image') | imagine_filter('medium') }}" alt="#"/></a>
-                                                        {% else %}
-                                                            {% for image in model.productModelImages %}
-                                                                <a href="#"><img src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}" alt="#"/></a>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    </div>
                                                 </div>
+                                                {{ widget('products.wishButton', current_model)|raw }}
 
-                                                <div class="main-img-slider">
-                                                    <div class="main-img-slider__i">
-                                                        {% if model.productModelImages is empty %}
-                                                            <a href="#product-popup" class="popup_gallery"
-                                                               data-src="{{ param('no_image') | imagine_filter('medium') }}">
-                                                                <img src="{{ param('no_image') | imagine_filter('small') }}" alt="#"/>
-                                                            </a>
-                                                        {% else %}
-                                                            {% for image in model.productModelImages %}
-                                                                <a href="#product-popup" class="popup_gallery"
-                                                                   data-src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}">
-                                                                    <img src="{{ (image.link ? : param('no_image')) | imagine_filter('small') }}" alt="#"/>
-                                                                </a>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    </div>
+                                                <div class="main-img__i big-img_slider">
+                                                    {% if current_model.productModelImages is empty %}
+                                                        <a href="#"><img src="{{ param('no_image') | imagine_filter('medium') }}" alt="#"/></a>
+                                                    {% else %}
+                                                        {% for image in current_model.productModelImages %}
+                                                            <a href="#"><img src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}" alt="#"/></a>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
-                                        {% endfor %}
+
+                                            <div class="main-img-slider">
+                                                <div class="main-img-slider__i">
+                                                    {% if current_model.productModelImages is empty %}
+                                                        <a href="#product-popup" class="popup_gallery"
+                                                           data-src="{{ param('no_image') | imagine_filter('medium') }}">
+                                                            <img src="{{ param('no_image') | imagine_filter('small') }}" alt="#"/>
+                                                        </a>
+                                                    {% else %}
+                                                        {% for image in current_model.productModelImages %}
+                                                            <a href="#product-popup" class="popup_gallery"
+                                                               data-src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}">
+                                                                <img src="{{ (image.link ? : param('no_image')) | imagine_filter('small') }}" alt="#"/>
+                                                            </a>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -70,104 +68,78 @@
                                         <h2 class="name">Beefre</h2>
 
                                         <div class="price price_new">
-                                            <p>960 грн. <strong>1160 грн.</strong></p>
+                                            <p>{{ widget('products.prices', current_model) }}</p>
                                         </div>
 
                                         <div class="color-select">
                                             <div class="color-select__i">
-                                                <p class="color-select-inf">Цвет Желтый (Артикул: AJ0116)</p>
+                                                <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ current_model.skuProducts.0.sku }})</p>
 
                                                 <div class="list">
                                                     <ul>
-                                                        <li class="active">
-                                                            <a href="#"
-                                                               data-product-info="Цвет Желтый (Артикул: AJ0116)">
-                                                                <img src="img/demo/product1-small.jpg" alt="#"/>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#"
-                                                               data-product-info="Цвет Зеленый (Артикул: AJ0117)">
-                                                                <img src="img/demo/product1-2-small.jpg" alt="#"/>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#"
-                                                               data-product-info="Цвет Синий (Артикул: AJ0118)">
-                                                                <img src="img/demo/product-1-3-small.jpg" alt="#"/>
-                                                            </a>
-                                                        </li>
+                                                        {% for key, model in models %}
+                                                            <li class="{% if model.id == current_model.id %} active {% endif %}">
+                                                                <a href="{{ url_to(product.baseCategory, model) }}">
+                                                                    <img src="{{ (model.productModelImages is empty ? param('no_image') : model.productModelImages.0.link) | imagine_filter('mini') }}" alt="#"/>
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
                                         <!--color-select end-->
 
-                                        <div class="product-options">
-                                            <div class="product-options__i">
+                                        {{ form_start(form, {'attr': {'novalidate': true}}) }}
+                                            <div class="product-options">
+                                                <div class="product-options__i">
 
-                                                <ul>
-                                                    <li>
-                                                        <select class="select" data-placeholder="Выберите размер">
-                                                            <option value=""></option>
-                                                            <option value="1">S</option>
-                                                            <option value="2">M</option>
-                                                            <option value="3">L</option>
-                                                            <option value="4">XL</option>
-                                                            <option value="5">XXL</option>
-                                                            <option value="6">XXXL</option>
-                                                        </select>
-                                                    </li>
-                                                    <li>
-                                                        <select class="select" data-placeholder="К-во">
-                                                            <option value=""></option>
-                                                            <option value="1">1</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                            <option value="6">6</option>
-                                                            <option value="7">7</option>
-                                                            <option value="8">8</option>
-                                                            <option value="9">9</option>
-                                                            <option value="10">10</option>
-                                                        </select>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#size-table2" class="popup_js">Как снять размер?</a>
-                                                    </li>
-                                                </ul>
+                                                    <ul>
+                                                        <li>
+                                                            {{ form_widget(form.size, {'attr': {'data-placeholder': 'Выберите размер', 'class': 'select'}}) }}
+                                                        </li>
+                                                        <li>
+                                                            {{ form_widget(form.quantity, {'attr': {'data-placeholder': 'К-во', 'class': 'select'}}) }}
+                                                        </li>
+                                                        <li>
+                                                            <a href="#size-table2" class="popup_js">Как снять размер?</a>
+                                                        </li>
+                                                    </ul>
 
-                                            </div>
-                                        </div>
-                                        <!--product-options end-->
-
-                                        <div class="product-message">
-                                            <p>Этот размер скоро закончится</p>
-                                        </div>
-
-                                        <div class="buy-row">
-                                            <div class="buy-row__i">
-
-                                                <div class="col">
-                                                    <a href="#" class="btn btn_blue btn_buy"><span>КУПИТЬ</span></a>
                                                 </div>
+                                            </div>
 
-                                                <div class="col">
-                                                    <div class="product-share">
-                                                        <ul>
-                                                            <li class="fb"><a href="#"><i
-                                                                            class="icon icon-fb3"></i>1</a></li>
-                                                            <li class="gplus"><a href="#"><i
-                                                                            class="icon icon-gplus3"></i>0</a></li>
-                                                            <li class="vk"><a href="#"><i
-                                                                            class="icon icon-vk3"></i>0</a></li>
-                                                        </ul>
+                                            <div class="product-message">
+                                                {% if current_model.skuProducts.0.quantity < 10 %}
+                                                    <p>Этот размер скоро закончится</p>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="buy-row">
+                                                <div class="buy-row__i">
+
+                                                    <div class="col">
+                                                        <a href="#" class="btn btn_blue btn_buy"><span>КУПИТЬ</span></a>
+                                                        {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn'}, 'label': 'Купить'}) }}
                                                     </div>
-                                                </div>
 
+                                                    <div class="col">
+                                                        <div class="product-share">
+                                                            <ul>
+                                                                <li class="fb"><a href="#"><i
+                                                                                class="icon icon-fb3"></i>1</a></li>
+                                                                <li class="gplus"><a href="#"><i
+                                                                                class="icon icon-gplus3"></i>0</a></li>
+                                                                <li class="vk"><a href="#"><i
+                                                                                class="icon icon-vk3"></i>0</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                        </div>
+
+                                        {{ form_end(form) }}
 
                                         <div class="fast-buy">
                                             <div class="fast-buy__i">
@@ -175,18 +147,16 @@
 
                                                 <p>Менеджер перезвонит Вам и уточнит детали</p>
 
-                                                <form method="post">
+                                                {{ form_start(quickForm) }}
                                                     <div class="row">
                                                         <div class="col">
-                                                            <input type="text" class="phone-inp only-numbers"
-                                                                   placeholder="Введите Ваш номер"/>
+                                                            {{ form_widget(quickForm.phone, {'attr': {'placeholder': 'Введите Ваш номер', 'class': 'phone-inp only-numbers'}}) }}
                                                         </div>
                                                         <div class="col">
-                                                            <input type="submit" value="ЗАКАЗАТЬ"
-                                                                   class="btn btn_black_transparent"/>
+                                                            {{ form_widget(quickForm.submit, {'attr': {'class': 'btn btn_black_transparent'}, 'label': 'ЗАКАЗАТЬ'}) }}
                                                         </div>
                                                     </div>
-                                                </form>
+                                                {{ form_end(form) }}
                                             </div>
                                         </div>
 
@@ -526,240 +496,7 @@
                 </div>
                 <!--last-viewed end-->
 
-
-                <div class="last-viewed">
-                    <h2>Вы уже просматривали</h2>
-
-                    <div class="last-viewed__i">
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-1.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="flag flag_hit">
-                                        <div class="flag__i"><p>ХИТ ПРОДАЖ</p></div>
-                                    </div>
-                                    <div class="img">
-                                        <img src="img/demo/last-2.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="flag flag_new">
-                                        <div class="flag__i"><p>НОВИНКА</p></div>
-                                    </div>
-                                    <div class="img">
-                                        <img src="img/demo/last-3.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="flag flag_new">
-                                        <div class="flag__i"><p>НОВИНКА</p></div>
-                                    </div>
-                                    <div class="img">
-                                        <img src="img/demo/last-4.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-1.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-2.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-3.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-4.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-1.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-2.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-3.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                        <div class="item">
-                            <a href="#">
-                                <div class="item__i">
-                                    <div class="img">
-                                        <img src="img/demo/last-4.jpg" alt="#"/>
-                                    </div>
-                                    <div class="info">
-                                        <div class="info__i">
-                                            <p><strong>Befree</strong></p>
-
-                                            <p>250 грн.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--item end-->
-
-                    </div>
-                </div>
-                <!--last-viewed end-->
+                {{ widget('products.recentlyReviewed')|raw }}
 
             </div>
         </div>
@@ -770,21 +507,19 @@
 {% block popups %}
     <div class="product-popup" id="product-popup">
         <div class="product-popup__i">
-            {# todo dynamicaly add content to popup #}
             <div class="big-img">
-                <img src="img/demo/big-product.jpg" alt="#"/>
-                <img src="img/demo/big-product.jpg" alt="#"/>
-                <img src="img/demo/big-product.jpg" alt="#"/>
-                <img src="img/demo/big-product.jpg" alt="#"/>
-                <img src="img/demo/big-product.jpg" alt="#"/>
-                <img src="img/demo/big-product.jpg" alt="#"/>
-                <img src="img/demo/big-product.jpg" alt="#"/>
-                <img src="img/demo/big-product.jpg" alt="#"/>
+                {% if current_model.productModelImages is empty %}
+                    <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="#"/>
+                {% else %}
+                    {% for image in current_model.productModelImages %}
+                        <img src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}" alt="#"/>
+                    {% endfor %}
+                {% endif %}
             </div>
-
             <a href="#" class="thumb-prev"></a>
             <a href="#" class="thumb-next"></a>
-
         </div>
     </div>
+
+    {{ include('AppBundle:shop/partials/sizes_popup.html.twig') }}
 {% endblock %}

@@ -91,5 +91,19 @@ class Products
         );
     }
 
+    /**
+     * Render old and new prices
+     *
+     * @param $model
+     * @return mixed
+     */
+    public function prices($model)
+    {
+        return $this->templating->render('AppBundle:widgets/product/prices.html.twig', [
+                'model' => $model
+            ]
+        );
+    }
+
 
 }
