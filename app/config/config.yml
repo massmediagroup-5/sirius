@@ -72,7 +72,7 @@ assetic:
         compass: ~
         uglifyjs2:
             # the path to the uglifyjs executable
-            bin: "%kernel.root_dir%/../node_modules/.bin/uglifyjs"
+            bin: "%kernel.root_dir%/../node_modules/.bin/uglifyjs.cmd"
         uglifycss:
             bin: "%kernel.root_dir%/../node_modules/.bin/uglifycss"
         #closure:
