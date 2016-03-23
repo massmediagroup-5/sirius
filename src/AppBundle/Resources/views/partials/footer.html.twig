@@ -30,7 +30,30 @@
         <div class="wrap">
             <div class="main">
 
-                {{ widget('menus.footerMenus')|raw }}
+                <nav class="f-nav">
+                    <div class="f-nav__i clearfix">
+
+                        <div class="col">
+                            <h2>Каталог товаров</h2>
+                            {{ knp_menu_render('AppBundle:Builder:footercategoriesMenu') }}
+                        </div>
+
+                        <div class="col">
+                            <h2>Компания</h2>
+                            {{ knp_menu_render('AppBundle:Builder:sideleftMenu') }}
+                        </div>
+
+                        <div class="col">
+                            <h2>Выгодные предложения</h2>
+                            {{ knp_menu_render('AppBundle:Builder:footerleftMenu') }}
+                        </div>
+
+                        <div class="col">
+                            <h2>Информация покупателям</h2>
+                            {{ knp_menu_render('AppBundle:Builder:footerrightMenu') }}
+                        </div>
+                    </div>
+                </nav>
 
                 <div class="back-call">
                     <div class="back-call__i">

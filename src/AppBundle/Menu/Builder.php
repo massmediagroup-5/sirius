@@ -70,6 +70,28 @@ class Builder extends ContainerAware
         return $menu;
     }
 
+    public function footercategoriesMenu(FactoryInterface $factory, $options)
+    {
+        $menu = $factory->createItem('root');
+        try {
+            $category_list = $this->container->get('entities')
+                ->getAllActiveCategoriesForMenu();
+        } catch (\Doctrine\Orm\NoResultException $e) {
+            $category_list = null;
+        }
+        if($category_list){
+            foreach($category_list as $menu_item){
+                if($menu_item['parrent']['id'] == 1){
+                    $menu->addChild($menu_item['name'], array(
+                        'route' => 'category',
+                        'routeParameters' => array('category' => $menu_item['alias'] )
+                    ) );
+                }
+            }
+        }
+        return $menu;
+    }
+
     public function categoriesMenu(FactoryInterface $factory, $options)
     {
         $menu = $factory->createItem('root');
