@@ -75,7 +75,9 @@ class ProductModelsAdmin extends Admin
                         'class'       => 'col-md-12',
                     ))
                     ->add('name', null, array('label' => 'Название модели'))
-                    ->add('description', null, array('label' => 'Описание модели'))
+                    ->add('content', null, array('label' => 'О модели','attr' => array('class' => 'ckeditor')))
+                    ->add('characteristics', null, array('label' => 'Характеристики','attr' => array('class' => 'ckeditor')))
+                    ->add('features', null, array('label' => 'Особенности','attr' => array('class' => 'ckeditor')))
                     ->add('alias', null, array('label' => 'Ссылка'))
                     ->add('productColors', 'entity',
                         array(
