@@ -1,77 +1,28 @@
+{% if slides is not empty %}
 <section class="slider">
     <div class="slider__i">
-
-        <div class="item">
-            <img src="/img/demo/slide.jpg" alt="#"/>
-
-
-            <div class="item__i">
-                <div class="wrap">
-                    <div class="text">
-                        <div class="text__i">
-                            <h2>Энергия берет верх</h2>
-
-                            <p>Энергичная амортизация для бега без границ. Энергичная
-                                амортизация для бега без границ.</p>
-                        </div>
-                        <div class="btn-row">
-                            <a href="#" class="btn btn_black">Купить сейчас</a>
+        {% for slide in slides %}
+            <div class="item">
+                {% set picture = '/img/slider/'~slide.picture %}
+                <img src="{{ picture | imagine_filter('main_slider') }}" alt="{{ slide.title }}"/>
+                <div class="item__i">
+                    <div class="wrap">
+                        <div class="text">
+                            <div class="text__i">
+                                {{ slide.description|raw }}
+                            </div>
+                            <div class="btn-row">
+                                <a href="{{ slide.alias }}" class="btn btn_black">Купить сейчас</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="item">
-            <img src="/img/demo/slide.jpg" alt="#"/>
-
-
-            <div class="item__i">
-                <div class="wrap">
-                    <div class="text">
-                        <div class="text__i">
-                            <h2>Слайд 2</h2>
-
-                            <p>Энергичная амортизация для бега без границ. Энергичная
-                                амортизация для бега без границ.</p>
-                        </div>
-                        <div class="btn-row">
-                            <a href="#" class="btn btn_black">Купить сейчас</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <img src="/img/demo/slide.jpg" alt="#"/>
-
-
-            <div class="item__i">
-                <div class="wrap">
-                    <div class="text">
-                        <div class="text__i">
-                            <h2>Слайд 3</h2>
-
-
-                            <p>Энергичная амортизация для бега без границ. Энергичная
-                                амортизация для бега без границ.
-                                Энергичная
-                                амортизация для бега без границ.
-                                Энергичная
-                                амортизация для бега без границ.</p>
-                        </div>
-                        <div class="btn-row">
-                            <a href="#" class="btn btn_black">Купить сейчас</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
+        {% endfor %}
     </div>
     <div class="controls">
         <a href="#" class="prev"><i class='icon icon-slider-prev'></i><i class='icon icon-slider-prev-hover hover'></i></a>
         <a href="#" class="next"><i class='icon icon-slider-next'></i><i class='icon icon-slider-next-hover hover'></i></a>
     </div>
 </section>
+{% endif %}

@@ -19,7 +19,6 @@ class MainSliderAdmin extends Admin
         $listMapper
             ->addIdentifier('title', null, array('label' => 'Название'))
             ->addIdentifier('alias', null, array('label' => 'Ссылка'))
-            ->add('description', 'text', array('label' => 'Приоритет', 'editable' => true))
             ->add('active', null, array('label' => 'Активность(вкл/выкл)', 'editable' => true))
             ->add('createTime', null, array('label' => 'Время создания'))
             ->add('updateTime', null, array('label' => 'Время последнего обновления'))
@@ -40,7 +39,7 @@ class MainSliderAdmin extends Admin
         $image = $this->getSubject();
 
         // use $fileFieldOptions so we can add other options to the field
-        $fileFieldOptions = array('required' => false);
+        $fileFieldOptions = array('label'=>'Файл','required' => false);
         $webPath = $image->getWebPath();
         if ($image && ($webPath != '/img/slider/')) {
             // get the container so the full path to the image can be set
@@ -54,9 +53,9 @@ class MainSliderAdmin extends Admin
         $formMapper
             ->add('title',null,array('label'=>'Название'))
             ->add('alias',null,array('label'=>'Ссылка'))
-            ->add('description','text',array('label'=>'Приоритет'))
+            ->add('description',null,array('label'=>'Описание','attr' => array('class' => 'ckeditor')))
             ->add('file', 'file',$fileFieldOptions)
-            ->add('active')
+            ->add('active',null,array('label'=>'Активность(вкл/выкл)'))
         ;
     }
 
