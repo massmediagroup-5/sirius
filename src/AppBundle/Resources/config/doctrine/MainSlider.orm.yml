@@ -70,3 +70,7 @@ AppBundle\Entity\MainSlider:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
+
+    lifecycleCallbacks:
+        prePersist:   [ lifecycleFileUpload ]
+        preUpdate:    [ lifecycleFileUpload ]
