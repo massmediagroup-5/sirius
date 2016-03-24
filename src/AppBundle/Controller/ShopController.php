@@ -75,6 +75,7 @@ class ShopController extends Controller
                 'params' => $this->get('options')->getParams(),
                 'maxPages' => ceil($data['products']->count() / $this->items_on_page),
                 'thisPage' => $current_page,
+                'cart' => $this->get('cart'),
             ));
         } else {
             throw $this->createNotFoundException();

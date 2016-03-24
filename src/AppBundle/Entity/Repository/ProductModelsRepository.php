@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity\Repository;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * CategoriesRepository
  *
@@ -51,9 +53,20 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
             ->where('productModels.active = 1 AND productModels.published = 1');
 
+        $builder = $this->addEnabledOnSiteConditions($builder);
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
         return $builder->getQuery()->getSingleResult();
+    }
+
+    /**
+     * @param QueryBuilder $builder
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function addEnabledOnSiteConditions(QueryBuilder $builder, $alias = 'productModels')
+    {
+        return $builder->andWhere("$alias.active = 1 AND $alias.published = 1");
     }
 
 }

@@ -290,15 +290,12 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * getProductInfoByAlias
-     *
      * Get product and category info by their aliases.
      *
-     * @param mixed $productModelAlias
-     *
+     * @param mixed $modelAlias
      * @return mixed
      */
-    public function getProductInfoByAlias($productModelAlias)
+    public function getProductInfoByAlias($modelAlias)
     {
         $query_obj = $this->createQueryBuilder('prod')
             ->select('prod')
@@ -313,7 +310,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('prodSku.vendors', 'prodSkuVnd')->addselect('prodSkuVnd')
             ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
             ->where('prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
-            ->setParameter('alias', $productModelAlias)
+            ->setParameter('alias', $modelAlias)
             ->orderBy('prodSkuVnd.priority', 'ASC')
         ;
         return $query_obj->getQuery()->getSingleResult();

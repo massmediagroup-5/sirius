@@ -1,0 +1,61 @@
+<div class="item js_cart_item">
+    <table class="single-buy">
+
+        <tr>
+            <td>
+                <div class="prod-img">
+                    <a href="#">
+                        {{ widget('products.flags', item.skuProduct.productModels) }}
+                        {% if item.skuProduct.productModels.0.productModelImages.0 is defined %}
+                            <img src="{{ item.skuProduct.productModels.0.productModelImages.0.link | imagine_filter('in_cart') }}" />
+                        {% else %}
+                            <img src="{{ param('no_image') | imagine_filter('in_cart') }}"/>
+                        {% endif %}
+                    </a>
+                </div>
+            </td>
+            <td>
+                <p class="name">
+                    <a href="#">{{ item.skuProduct.productModels.name }}</a>
+                </p>
+
+                <p class="description">
+                    Цвет {{ item.skuProduct.productModels.productColors.name }} (Артикул: {{ item.skuProduct.sku }})
+                </p>
+
+                <div class="price price_new">
+                    <p>
+                        {{ item.skuProduct.productModels.price }} грн.
+                        {% if not item.skuProduct.productModels.oldPrice is empty %}
+                            <strong>{{ item.skuProduct.productModels.oldPrice }} грн.</strong>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="size-select">
+                    {{ widget('products.changeProductSize', item.skuProduct.productModels, sizeId)|raw }}
+                </div>
+            </td>
+            <td>
+                <p class="name">
+                    Количество
+                </p>
+
+                <div class="amount-select">
+                    {{ widget('products.changeProductSizeCount', item.skuProduct.productModels, sizeId, sizeCount)|raw }}
+                </div>
+            </td>
+            <td>
+                <div class="total-cell">
+                    <p class="name">Сумма</p>
+
+                    <p class="total-price">
+                        <span class="js_item_price" data-id="{{ item.skuProduct.id }}">{{ item.price }}</span> грн.
+                    </p>
+
+                    {{ widget('products.removeProductFromCart', item.skuProduct, sizeId)|raw }}
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

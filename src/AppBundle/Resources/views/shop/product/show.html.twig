@@ -9,7 +9,7 @@
 
                 {{ widget('breadcrumbs.render')|raw }}
 
-                <div class="product">
+                <div class="product js_item">
                     <div class="product__i">
 
                         <div class="main">
@@ -73,7 +73,7 @@
 
                                         <div class="color-select">
                                             <div class="color-select__i">
-                                                <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ current_model.skuProducts.0.sku }})</p>
+                                                <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ skuProduct.sku }})</p>
 
                                                 <div class="list">
                                                     <ul>
@@ -90,7 +90,7 @@
                                         </div>
                                         <!--color-select end-->
 
-                                        {{ form_start(form, {'attr': {'novalidate': true}}) }}
+                                        {{ form_start(form, {'attr': {'novalidate': true, 'class': 'js_model_form'}}) }}
                                             <div class="product-options">
                                                 <div class="product-options__i">
 
@@ -110,7 +110,7 @@
                                             </div>
 
                                             <div class="product-message">
-                                                {% if current_model.skuProducts.0.quantity < 10 %}
+                                                {% if skuProduct.quantity < 10 %}
                                                     <p>Этот размер скоро закончится</p>
                                                 {% endif %}
                                             </div>
@@ -119,8 +119,17 @@
                                                 <div class="buy-row__i">
 
                                                     <div class="col">
-                                                        <a href="#" class="btn btn_blue btn_buy"><span>КУПИТЬ</span></a>
-                                                        {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn'}, 'label': 'Купить'}) }}
+                                                        <div class="not-added-part">
+                                                            <a href="#" class="btn btn_blue btn_buy"><span>КУПИТЬ</span></a>
+                                                            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn'}, 'label': 'Купить'}) }}
+                                                        </div>
+
+                                                        <div class="incart added-part">
+                                                            <div class="incart__i">
+                                                                <p>Товар добавлен</p>
+                                                                <p><a href="#">в корзину</a></p>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div class="col">
@@ -522,4 +531,12 @@
     </div>
 
     {{ include('AppBundle:shop/partials/sizes_popup.html.twig') }}
+{% endblock %}
+
+{% block bottom_assets %}
+    {{ parent() }}
+
+    {% javascripts '@AppBundle/Resources/public/js/product.js' filter='uglifyjs2' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

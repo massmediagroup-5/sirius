@@ -292,6 +292,10 @@ liip_imagine:
             quality: 80
             filters:
                 thumbnail: { size: [56, 82], mode: outbound}
+        in_cart:
+            quality: 80
+            filters:
+                thumbnail: { size: [155, 176], mode: outbound}
         medium:
             quality: 80
             filters:

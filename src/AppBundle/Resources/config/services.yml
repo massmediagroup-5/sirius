@@ -41,6 +41,9 @@ services:
     uploader:
         class: AppBundle\Services\Upload
         arguments: ["@service_container"]
+    last_urls:
+        class: AppBundle\Services\LastUrls
+        arguments: ["@service_container", "@session"]
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false

@@ -61,4 +61,51 @@ class SkuProductsRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * getProductInfoByAlias
+     *
+     * Get product and category info by their aliases.
+     *
+     * @param mixed $modelAlias
+     *
+     * @return mixed
+     */
+    public function getByModelAlias($modelAlias)
+    {
+        $query_obj = $this->createQueryBuilder('skuProduct')
+            ->select('skuProduct')
+            ->innerJoin('skuProduct.productModels', 'prodMod')->addselect('prodMod')
+            ->innerJoin('prodMod.products', 'prod')->addselect('prod')
+            ->innerJoin('prod.actionLabels', 'act')->addselect('act')
+            ->innerJoin('prod.characteristicValues', 'prodChVal')->addselect('prodChVal')
+            ->innerJoin('prod.baseCategory', 'catb')->addselect('catb')
+            ->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
+            ->innerJoin('prodMod.productColors', 'prodCol')->addselect('prodCol')
+            ->innerJoin('skuProduct.vendors', 'skuProductVnd')->addselect('skuProductVnd')
+            ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
+            ->where('prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
+            ->setParameter('alias', $modelAlias)
+            ->orderBy('skuProductVnd.priority', 'ASC')
+        ;
+        return $query_obj->getQuery()->getSingleResult();
+    }
+
+    /**
+     * @param $ids
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findWithModels($ids)
+    {
+        $builder = $this->createQueryBuilder('skuProduct')
+            ->select('skuProduct')
+            ->innerJoin('skuProduct.productModels', 'productModels')->addselect('productModels')
+            ->where('skuProduct.id IN (:ids)')->setParameter('ids', $ids);
+
+        $builder = $this->_em->getRepository('AppBundle:ProductModels')->addEnabledOnSiteConditions($builder);
+
+        return $builder->getQuery()->getResult();
+    }
+
 }
