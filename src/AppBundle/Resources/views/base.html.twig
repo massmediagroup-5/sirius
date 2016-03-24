@@ -9,9 +9,6 @@
             '@AppBundle/Resources/public/sass/screen.scss' filter='compass' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
-        {% javascripts '@AppBundle/Resources/public/js/html5shiv.js' filter='uglifyjs2' %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
     {% endblock %}
 </head>
 <body>
@@ -35,6 +32,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
     {% javascripts
+        '@AppBundle/Resources/public/js/html5shiv.js'
         '@AppBundle/Resources/public/js/jquery-1.10.1.min.js'
         '@AppBundle/Resources/public/js/verge.js'
         '@AppBundle/Resources/public/js/jquery-ui-1.10.4.custom.js'

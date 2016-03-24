@@ -55,11 +55,12 @@ class Sliders
      */
     public function home()
     {
-        // Todo get slides
-
+        $slides = $this->em->getRepository('AppBundle:MainSlider')->findBy(
+            array('active'=>1)
+        );
 
         return $this->templating->render('AppBundle:widgets/sliders/home.html.twig', array(
-                'slides' => []
+                'slides' => $slides
             )
         );
     }

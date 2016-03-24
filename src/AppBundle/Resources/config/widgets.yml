@@ -5,9 +5,6 @@ services:
     widgets.sliders:
         class: AppBundle\Widgets\Sliders
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
-    widgets.menus:
-        class: AppBundle\Widgets\Menus
-        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
     widgets.breadcrumbs:
         class: AppBundle\Widgets\Breadcrumbs
         arguments: ["@service_container"]
