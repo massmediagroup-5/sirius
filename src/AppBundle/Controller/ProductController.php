@@ -2,11 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\Type\CreateOrder;
-use AppBundle\Form\Type\CreateOrderType;
+use AppBundle\Entity\Products;
+use AppBundle\Form\Type\AddInCartType;
 use AppBundle\Form\Type\QuickOrderType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -17,39 +19,41 @@ class ProductController extends Controller
      * productAction
      *
      * @Route("/{category}/{product}", name="product", options={"expose"=true})
-     *
+     * @ParamConverter("product", options={
+     *      "repository_method" = "getProductInfoByAlias",
+     *      "mapping": {"product": "modelAlias"},
+     *      "map_method_signature" = true
+     * })
      * @param mixed $product
      * @param Request $request
      * @return mixed
      */
-    public function productAction($product, Request $request)
+    public function productAction(Products $product, Request $request)
     {
-        try {
-            $result = $this->get('entities')->getProductInfoByAlias($product);
-        } catch (\Doctrine\Orm\NoResultException $e) {
-            throw $this->createNotFoundException();
-        }
-
-        $this->get('entities')->setRecentlyViewed($result['product']->getProductModels()[0]->getId());
+        $currentModel = $product->getProductModels()->first();
+        $skuProduct = $currentModel->getSkuProducts()->first();
+        $this->get('entities')->setRecentlyViewed($currentModel->getId());
 
         $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
-        if ($result['product']->getBaseCategory()) {
-            $this->buildBreadcrumb($category_list, $result['product']->getBaseCategory()->getId());
+        if ($product->getBaseCategory()) {
+            $this->buildBreadcrumb($category_list, $product->getBaseCategory()->getId());
         }
-        $this->get('widgets.breadcrumbs')->push(['name' => $result['product']->getProductModels()[0]->getName()]);
+        $this->get('widgets.breadcrumbs')->push(['name' => $currentModel->getName()]);
 
-        $form = $this->createForm(CreateOrderType::class, null, [
-            'model' => $result['product']->getProductModels()[0]
+        $form = $this->createForm(AddInCartType::class, null, [
+            'action' => $this->generateUrl('cart_add', ['id' => $skuProduct->getId()]),
+            'model' => $currentModel
         ])->createView();
 
-        // todo process forms
-
-        $quickForm = $this->createForm(QuickOrderType::class)->createView();
+        $quickForm = $this->createForm(QuickOrderType::class, null, [
+            'action' => $this->generateUrl('cart_quick_order', ['id' => $skuProduct->getId()]),
+        ])->createView();
 
         return $this->render('AppBundle:shop:product/show.html.twig', [
-            'product' => $result['product'],
-            'current_model' => $result['product']->getProductModels()[0],
-            'models' => $result['models'],
+            'product' => $product,
+            'skuProduct' => $skuProduct,
+            'current_model' => $currentModel,
+            'models' => $this->get('entities')->getModelsByProduct($product),
             'form' => $form,
             'quickForm' => $quickForm
         ]);
@@ -77,4 +81,5 @@ class ProductController extends Controller
             }
         }
     }
+
 }

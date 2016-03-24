@@ -1,4 +1,4 @@
-<div class="item">
+<div class="item js_item">
     <div class="item__i">
         <div class="flag flag_discount active">
             <div class="flag__i">
@@ -43,11 +43,11 @@
                 <div class="color-slider__i">
                     {% for model  in item.productModels %}
                         {% if model.productModelImages.0 is defined and model.productModelImages.0.link is not null%}
-                            <a href="#" data-big-img="{{ model.productModelImages.0.link|imagine_filter('medium') }}">
+                            <a href="#" class="js_change_model" data-model-id="{{ model.id }}" data-big-img="{{ model.productModelImages.0.link|imagine_filter('medium') }}">
                                 <img src="{{ model.productModelImages.0.link|imagine_filter('mini') }}" alt="{{ item.productModels.0.name }}"/>
                             </a>
                         {% else %}
-                            <a href="#" data-big-img="{{ param('no_image')|imagine_filter('medium') }}">
+                            <a href="#" class="js_change_model" data-model-id="{{ model.id }}" data-big-img="{{ param('no_image')|imagine_filter('medium') }}">
                                 <img src="{{ param('no_image')|imagine_filter('mini') }}" alt="{{ item.productModels.0.name }}"/>
                             </a>
                         {% endif %}
@@ -73,39 +73,23 @@
                 </div>
             </div>
 
-            {% if false %}
-                <div class="btn-row">
-                    <div class="btn-row__i">
-                        <div class="incart">
-                            <div class="incart__i">
-                                <p>Товар добавлен</p>
+            <div class="btn-row added-part">
+                <div class="btn-row__i">
+                    <div class="incart">
+                        <div class="incart__i">
+                            <p>Товар добавлен</p>
 
-                                <p><a href="#">в корзину</a></p>
-                            </div>
+                            <p><a href="#">в корзину</a></p>
                         </div>
                     </div>
                 </div>
-            {% else %}
+            </div>
 
+            <div class="not-added-part">
                 {% for model in item.productModels %}
-                    <div class="sizes" data-modelId="{{ model.id }}">
-                        <div class="sizes__i js_sizes">
-
-                        </div>
-                    </div>
+                    {{ widget('products.addInCart', model)|raw }}
                 {% endfor %}
-
-                <div class="btn-row">
-                    <div class="btn-row__i">
-                        <a href="#" class="btn btn_blue btn_buy">
-                            <span>
-                                <i class="icon icon-cart"></i>
-								Купить
-                            </span>
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
+            </div>
         </div>
     </div>
 </div>

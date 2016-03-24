@@ -3,9 +3,16 @@
 namespace AppBundle\Widgets;
 
 use AppBundle\Entity\ProductModels;
+use AppBundle\Form\Type\ChangeProductSizeQuantity;
+use AppBundle\Form\Type\ChangeProductSizeQuantityType;
+use AppBundle\Form\Type\ChangeProductSizeType;
+use AppBundle\Form\Type\RemoveProductSizeType;
+use AppBundle\Form\Type\RemoveType;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use AppBundle\Form\Type\AddInCartType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 
 /**
@@ -102,6 +109,111 @@ class Products
         return $this->templating->render('AppBundle:widgets/product/prices.html.twig', [
                 'model' => $model
             ]
+        );
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function flags($model)
+    {
+        // todo add actions and other flags
+
+        if ($model->getPreorderFlag()) {
+            $flag = 'soon';
+            $flagText = $this->container->get('translator')->trans('Pre order product flag');
+        } else {
+            $flag = $flagText = false;
+        }
+
+        return $this->templating->render('AppBundle:widgets/product/flags.html.twig', compact('model', 'flag', 'flagText'));
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function addInCart($model)
+    {
+        $skuProduct = $model->getSkuProducts()->first();
+
+        $form = $this->container->get('form.factory')->create(AddInCartType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_add', ['id' => $skuProduct->getId()]),
+            'model' => $model
+        ])->add('quantity', HiddenType::class, [
+            'data' => 1,
+        ])->createView();
+
+        return $this->templating->render('AppBundle:widgets/product/add_in_cart.html.twig', array(
+                'model' => $model,
+                'form' => $form,
+            )
+        );
+    }
+
+    /**
+     * @param $model
+     * @param $selectedSize
+     * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function changeProductSize($model, $selectedSize)
+    {
+        $skuProduct = $model->getSkuProducts()->first();
+
+        $form = $this->container->get('form.factory')->create(ChangeProductSizeType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_change_size', ['id' => $skuProduct->getId()]),
+            'model' => $model,
+            'selectedSize' => $this->em->getReference("AppBundle:ProductModelSizes", $selectedSize) ,
+        ])->createView();
+
+        return $this->templating->render('AppBundle:widgets/product/change_product_size.html.twig', array(
+                'model' => $model,
+                'form' => $form,
+            )
+        );
+    }
+
+    /**
+     * @param $model
+     * @param $selectedSize
+     * @param $count
+     * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function changeProductSizeCount($model, $selectedSize, $count)
+    {
+        $skuProduct = $model->getSkuProducts()->first();
+
+        $form = $this->container->get('form.factory')->create(ChangeProductSizeQuantityType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_change_size_count', ['id' => $skuProduct->getId()]),
+            'size' => $selectedSize,
+            'selected' => $count,
+        ])->createView();
+
+        return $this->templating->render('AppBundle:widgets/product/change_product_size_count.html.twig', array(
+                'skuProduct' => $skuProduct,
+                'form' => $form,
+            )
+        );
+    }
+
+    /**
+     * @param $skuProduct
+     * @param $size
+     * @return mixed
+     */
+    public function removeProductFromCart($skuProduct, $size)
+    {
+        $form = $this->container->get('form.factory')->create(RemoveProductSizeType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_remove', ['id' => $skuProduct->getId()]),
+            'size' => $size
+        ])->createView();
+
+        return $this->templating->render('AppBundle:widgets/product/remove_product_size.html.twig', array(
+                'form' => $form,
+            )
         );
     }
 

@@ -71,23 +71,23 @@ class Entities
             ->getCategoryInfo($categoryAlias);
 
         // If we didn't find any active Category.
-        if(empty($category))
+        if (empty($category))
             return false;
 
         $price_filter = $this->em->getRepository('AppBundle:ProductModels')
             ->getPricesIntervalForFilters($category, $filters);
 
-        if(empty($filters['price_from']) || $filters['price_from'] < $price_filter['min_price']) {
+        if (empty($filters['price_from']) || $filters['price_from'] < $price_filter['min_price']) {
             $filters['price_from'] = $price_filter['min_price'];
         }
-        if(empty($filters['price_to']) || $filters['price_to'] > $price_filter['max_price']) {
+        if (empty($filters['price_to']) || $filters['price_to'] > $price_filter['max_price']) {
             $filters['price_to'] = $price_filter['max_price'];
         }
 
         $characteristicsValuesIds = [];
         foreach ((array)$filters as $key => $filter) {
             // numeric keys - is characteristics_ids
-            if(is_numeric($key)) {
+            if (is_numeric($key)) {
                 $characteristicsValuesIds = array_merge($characteristicsValuesIds, explode(',', $filter));
             }
         }
@@ -120,25 +120,15 @@ class Entities
     }
 
     /**
-     * getProductInfoByAlias
-     *
-     * @param mixed $productModelAlias
-     *
-     * @return array
-     *
-     * Return array with Product information
+     * @param $modelId
+     * @return mixed
      */
-    public function getProductInfoByAlias($productModelAlias)
+    public function getModelsByProduct($modelId)
     {
-        $result['product'] = $this->em
-            ->getRepository('AppBundle:Products')
-            ->getProductInfoByAlias($productModelAlias);
-
-        $result['models'] = $this->em
+        return  $this->em
             ->getRepository('AppBundle:ProductModels')
-            ->getModelsByProductId($result['product']->getId());
+            ->getModelsByProductId($modelId);
 
-        return empty($result) ? false : $result;
     }
 
     /**
@@ -161,8 +151,8 @@ class Entities
         //$result['characteristics'] = $this->getMainCharacteristicList($base_category, $product);
         $result['models'] = $this->em
             ->getRepository('AppBundle:ProductModels')
-            ->getModelsByProductId($result['product']['id'],$productModelAlias);
-        if(empty($result))
+            ->getModelsByProductId($result['product']['id'], $productModelAlias);
+        if (empty($result))
             return false;
         return $result;
     }
@@ -177,11 +167,11 @@ class Entities
      */
     public function getMainCharacteristicList($base_category, $product)
     {
-        $base_category_id = array_column($base_category,'id');
-        $product_id = array_column($product,'id');
+        $base_category_id = array_column($base_category, 'id');
+        $product_id = array_column($product, 'id');
         $result = array();
-        foreach($product_id as $value){
-            if(in_array($value, $base_category_id))$result[]= $value;
+        foreach ($product_id as $value) {
+            if (in_array($value, $base_category_id)) $result[] = $value;
         }
         return array_values($result);
     }
@@ -196,8 +186,8 @@ class Entities
     public function setRecentlyViewed($productModelsId)
     {
         $recently_viewed = $this->container->get('session')->get('recently_viewed');
-        if(!$recently_viewed) $recently_viewed = array();
-        if(!isset($recently_viewed[$productModelsId])){
+        if (!$recently_viewed) $recently_viewed = array();
+        if (!isset($recently_viewed[$productModelsId])) {
             $recently_viewed[$productModelsId] = $productModelsId;
         }
         $this->container->get('session')->set('recently_viewed', $recently_viewed);
@@ -211,8 +201,8 @@ class Entities
     public function getRecentlyViewed()
     {
         $recently_viewed = $this->container->get('session')->get('recently_viewed');
-        if(isset($recently_viewed)){
-            foreach($recently_viewed as $key => $model){
+        if (isset($recently_viewed)) {
+            foreach ($recently_viewed as $key => $model) {
                 $recently_viewed[$key] = $this->em->getRepository('AppBundle:ProductModels')->find($model);
             }
         }
@@ -233,7 +223,7 @@ class Entities
     {
         $column = 'get' . ucfirst($column);
         $result = array();
-        array_walk($entities, function($value, $key) use (&$result, $column){
+        array_walk($entities, function ($value, $key) use (&$result, $column) {
             $result[] = $value->$column();
         });
         return $result;
@@ -270,8 +260,7 @@ class Entities
             ->setParameter('endTime', $now->format('Y-m-d'));
         try {
             return $promotion->getQuery()->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
         }
     }
@@ -291,7 +280,7 @@ class Entities
     {
         $result = $this->em
             ->getRepository('AppBundle:Products')->start();
-        if(!empty($filterValues)) {
+        if (!empty($filterValues)) {
             $characteristicValues = array_values($filterValues);
             $result = $result
                 ->addCountCharacteristics($characteristicValues)

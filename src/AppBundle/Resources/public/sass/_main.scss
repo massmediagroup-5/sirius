@@ -1023,7 +1023,7 @@ input[type="checkbox"] {
 		}
 	}
 
-	span {
+	span.btn-number {
 		display: block;
 		color: #fff;
 		@include border-radius(50%);
@@ -3165,10 +3165,6 @@ input[type="checkbox"] {
 	.sizes {
 		background: #eeeeee;
 		display: none;
-
-		&.active {
-			display: block;
-		}
 	}
 	.sizes__i {
 		padding: 5px 10px;
@@ -3233,6 +3229,18 @@ input[type="checkbox"] {
 	.add-wish {
 		right: 25px;
 	}
+
+	.item-buy-form {
+		&.active {
+			.sizes {
+				display: block;
+			}
+		}
+	}
+
+}
+.added-part {
+	display: none;
 }
 
 .color-slider {
@@ -4132,15 +4140,6 @@ input[type="checkbox"] {
 		}
 	}
 
-	/* transparent standard button over designed image */
-	.fake-over-btn {
-		width: 100%;
-		opacity: 0;
-		margin-top: -46px;
-		display: block;
-		height: 46px;
-	}
-
 	.buy-row__i {
 		margin-left: -15px;
 		margin-right: -15px;
@@ -4154,6 +4153,15 @@ input[type="checkbox"] {
 		}
 	}
 
+}
+
+/* transparent standard button over designed image */
+.fake-over-btn {
+	width: 100%;
+	opacity: 0;
+	margin-top: -46px;
+	display: block;
+	height: 46px;
 }
 
 .product-share {
@@ -5050,7 +5058,7 @@ input[type="checkbox"] {
 	.remove-info-btn {
 		@include sized-sprite($icons, remove);
 		display: block;
-
+		border: none;
 	}
 }
 
@@ -5130,8 +5138,7 @@ input[type="checkbox"] {
 		}
 	}
 
-	.product-img {
-		width: 155px;
+	.prod-img {
 		position: relative;
 	}
 
@@ -5350,6 +5357,7 @@ input[type="checkbox"] {
 		display: block;
 		text-align: center;
 		width: 100%;
+		box-sizing: border-box;
 	}
 
 	.row {
@@ -5363,7 +5371,7 @@ input[type="checkbox"] {
 			padding-bottom: 15px;
 		}
 
-		a {
+		.continue {
 			font-size: 16px;
 			line-height: 18px;
 			color: #3e93d4;

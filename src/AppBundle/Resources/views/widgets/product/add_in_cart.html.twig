@@ -1,0 +1,23 @@
+{{ form_start(form, {'attr': {'novalidate': true, 'class': 'item-buy-form js_model_form', 'data-model-id': model.id}}) }}
+    <div class="sizes">
+        <div class="sizes__i js_sizes">
+
+            {{ form_widget(form.size, {'attr': {'data-placeholder': 'Выберите размер'}}) }}
+
+            {{ form_widget(form.quantity) }}
+
+        </div>
+    </div>
+
+    <div class="btn-row">
+        <div class="btn-row__i">
+            <a href="#" class="btn btn_blue btn_buy">
+                <span>
+                    <i class="icon icon-cart"></i>
+                    Купить
+                </span>
+            </a>
+            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart'}, 'label': 'Купить'}) }}
+        </div>
+    </div>
+{{ form_end(form) }}

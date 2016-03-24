@@ -78,6 +78,11 @@ class ProductModels
     /**
      * @var integer
      */
+    private $preOrderFlag = 0;
+
+    /**
+     * @var integer
+     */
     private $status = 0;
 
     /**
@@ -465,6 +470,25 @@ class ProductModels
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @param integer $preOrderFlag
+     * @return ProductModels
+     */
+    public function setPreOrderFlag($preOrderFlag)
+    {
+        $this->preOrderFlag = $preOrderFlag;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getPreOrderFlag()
+    {
+        return $this->preOrderFlag;
     }
 
     /**

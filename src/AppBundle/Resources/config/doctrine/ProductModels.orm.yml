@@ -86,12 +86,10 @@ AppBundle\Entity\ProductModels:
             scale: 2
             options:
                 default: 0.00
-        wholesaleOldprice:
-            type: decimal
-            precision: 8
-            scale: 2
+        preOrderFlag:
+            type: boolean
             options:
-                default: 0.00
+                default: false
         seoTitle:
             type: string
             nullable: true
@@ -167,7 +165,7 @@ AppBundle\Entity\ProductModels:
             cascade: ["all"]
             fetch: EAGER
             mappedBy: productModels
-            inversedBy: null
+            inversedBy: productModels
             orphanRemoval: true
     manyToOne:
         productColors:

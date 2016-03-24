@@ -2,171 +2,187 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\SkuProducts;
+use AppBundle\Form\Type\AddInCartType;
+use AppBundle\Form\Type\ChangeProductSizeQuantityType;
+use AppBundle\Form\Type\ChangeProductSizeType;
+use AppBundle\Form\Type\QuickOrderType;
+use AppBundle\Form\Type\RemoveProductSizeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class CartController extends Controller
+class CartController extends BaseController
 {
 
     /**
-     * @Route("/order-form", name="order-form", options={"expose"=true})
+     * @Route("/cart/add/{id}", name="cart_add", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param SkuProducts $skuProduct
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
      */
-    public function orderFormAction(Request $request)
+    public function addInCartAction(SkuProducts $skuProduct, Request $request)
     {
-        if( (!empty($_POST['phone'])) && (!empty($_POST['fio'])) && (!empty($_POST['pay'])) )
-        {
-            $em = $this->getDoctrine()->getManager();
-            $user_id = $this->get('users')->getCurrentUser();
+        $form = $this->createForm(AddInCartType::class, null, ['model' => $skuProduct->getProductModels()]);
+        $form->handleRequest($request);
 
-            $delivery = $this->getDoctrine()->getRepository('AppBundle:Carriers')->findOneById($_POST['delivery']);
-            $order = new \AppBundle\Entity\Orders();
-            if($_POST['delivery'] == 1){
-                $delivery_email = 'Новая почта';
-                $prefix = 'np-';
-            }elseif($_POST['delivery'] == 2){
-                $delivery_email = 'Деливери';
-                $prefix = 'del-';
-            }
-            if($_POST['delivery'] != 3){
-                $cities = $this->getDoctrine()->getRepository('AppBundle:Cities')->findOneById($_POST[$prefix.'select']);
-                $stores = $this->getDoctrine()->getRepository('AppBundle:Stores')->findOneById($_POST[$prefix.'sklad']);
-                $delivery_email .= ', город - '.$cities->getName().', склад - '.$stores->getName();
-                $order->setCities($cities);
-                $order->setStores($stores);
-            }
-
-            if($_POST['delivery'] == 3){
-                $delivery = $_POST['custom_delivery'];
-                $order->setCustomDelivery($_POST['custom_delivery']);
-            }
-            $order->setUsers($user_id);
-            $order->setPhone($_POST['phone']);
-            $order->setCarriers($delivery);
-            $order->setType('Обычный заказ');
-            $order->setComment($_POST['comment']);
-            $order->setPay($_POST['pay']);
-            $order->setFio($_POST['fio']);
-            $em->persist($order);
-
-            $cart = $this->get('session')->get('cart_items');
-            $items = array();
-            $total_quantity = 0;
-            $total_price = 0;
-            foreach($cart as $key => $item){
-                $sku = $this->getDoctrine()->getRepository('AppBundle:SkuProducts')->findOneById($key);
-                $quantity = $item['quantity'];
-                $total_quantity += $quantity;
-                $items[$key]['name'] = $sku->getProductModels()->getName();
-                $items[$key]['model_alias'] = $sku->getProductModels()->getAlias();
-                $items[$key]['category_alias'] = $sku->getProductModels()->getProducts()->getProductsBaseCategories()->getCategories()->getAlias();
-                $items[$key]['quantity'] = $quantity;
-                $items[$key]['total_price'] = $quantity * $sku->getProductModels()->getPrice();
-                $total_price += $items[$key]['total_price'];
-                $cart = new \AppBundle\Entity\Cart();
-                $cart->setUsers($user_id);
-                $cart->setOrders($order);
-                $cart->setSkuProducts($sku);
-                $cart->setQuantity($quantity);
-                $em->persist($cart);
-            }
-            $order->setTotalPrice($total_price);
-            $em->persist($order);
-            $em->flush();
-
-            $body_insert = '<br />';
-            if($_POST['delivery'] == 3)$delivery_email = 'Свой способ доставки: '.$_POST['custom_delivery'].'<br /><br />';
-//            if(!empty($_POST['comment']))$body_insert .= 'Коментарий к заказу: '.$_POST['comment'].'<br /><br />';
-            foreach($items as $item){
-                $body_insert .= '<a href="http://mytex.com.ua/'.$item["category_alias"].'/'.$item["model_alias"].'">'.$item["name"].'</a>,'.
-                ' количество - '.$item['quantity'].', сумма - '.$item['total_price'].'<br />';
-            }
-
-            $email_body = '<h2>Заказ mytex '.$order->getId().' </h2><hr>'.
-                '<p>Номер телефона: '.preg_replace("/[^0-9]/", '', strip_tags($_POST['phone'])).' </p>'.
-                '<p>'.$body_insert.' </p>'.
-                '<p>Количество товаров: '.$total_quantity.' </p>'.
-                '<p>Сумма заказа: '.$total_price.'грн </p>'.
-                '<p>ФИО: '.$_POST['fio'].' </p>'.
-                '<p>Доставка: '.$delivery_email.' </p>'.
-                '<p>Способ оплаты: '.$_POST['pay'].' </p>';
-
-            // sms to client
-            $sms_client = $this->get('cart')->sendOrderSmsRequest('client', $_POST['phone'], $order->getId());
-            if($sms_client['error'] == false){
-                // если без ошибок то сохраняем идентификатор смс
-                $order->setClientSmsId($sms_client['sms_id']);
-            }else{
-                // если ошибка то сохраняем текст ошибки
-                $order->setClientSmsStatus($sms_client['error']);
-            }
-            // sms to manager
-            $sms2 = $this->get('cart')->sendOrderSmsRequest('manager', '+380977838335', $order->getId(), $email_body);
-            if($sms2['error'] == false){
-                // если без ошибок то сохраняем идентификатор смс
-                $order->setManagerSmsId($sms2['sms_id']);
-            }else{
-                // если ошибка то сохраняем текст ошибки
-                $order->setManagerSmsStatus($sms2['error']);
-            }
-
-            $em->persist($order);
-            $em->flush();
-            $this->addFlash(
-                'notice',
-                'success'
+        if($form->isValid()) {
+            $this->get('cart')->addItemToCard(
+                $skuProduct,
+                $form->get('size')->getNormData(),
+                $form->get('quantity')->getNormData()
             );
 
-            try {
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('Order from orders@mytex.com.ua')
-                    ->setFrom('orders@mytex.com.ua')
-                    ->addTo('mytex777@gmail.com','mytex777@gmail.com')
-                    ->addTo('test@massmedia.com.ua','test@massmedia.com.ua')
-                    ->addTo('alisayatsyuk@gmail.com','alisayatsyuk@gmail.com')
-                    ->addTo('mmyttexx@gmail.com','mmyttexx@gmail.com')
-                    ->setBody($email_body)
-                    ->setContentType("text/html")
-                ;
-                $this->get('mailer')->send($message);
-            } catch (Exception $e){
+            if ($form->get('submit')->isClicked()) {
+                return $this->redirect($request->headers->get('referer'));
             }
-
-            $this->get('session')->set('cart_items',array());
-            return $this->redirectToRoute('homepage', array(), 301);
-        }else{
-            return $this->redirectToRoute('order', array(), 301);
+            return new JsonResponse([
+                'totalCount' => $this->get('cart')->getTotalCount(),
+                'totalPrice' => $this->get('cart')->getTotalPrice()
+            ]);
         }
+
+        if ($form->get('submit')->isClicked()) {
+            return $this->redirect($request->headers->get('referer'));
+        }
+        return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
     }
 
     /**
-     * @Route("/order", name="order")
+     * @Route("/cart/change_size/{id}", name="cart_change_size", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param SkuProducts $skuProduct
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function changeSizeAction(SkuProducts $skuProduct, Request $request)
+    {
+        $form = $this->createForm(ChangeProductSizeType::class, null, ['model' => $skuProduct->getProductModels()]);
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            $this->get('cart')->changeItemSize(
+                $skuProduct,
+                $form->get('old_size')->getNormData(),
+                $form->get('size')->getNormData()->getId()
+            );
+
+            return new JsonResponse([
+                'totalCount' => $this->get('cart')->getTotalCount(),
+                'totalPrice' => $this->get('cart')->getTotalPrice()
+            ]);
+        }
+
+        return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
+    }
+
+    /**
+     * @Route("/cart/change_size_count/{id}", name="cart_change_size_count", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param SkuProducts $skuProduct
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function changeSizeCountAction(SkuProducts $skuProduct, Request $request)
+    {
+        $form = $this->createForm(ChangeProductSizeQuantityType::class, null, ['size' => $skuProduct->getProductModels()]);
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            $this->get('cart')->changeItemSizeCount(
+                $skuProduct,
+                $form->get('size')->getNormData(),
+                $form->get('quantity')->getNormData()
+            );
+            $cartInfo = $this->getGeneralCartInfo();
+            $cartInfo['currentPrice'] = $this->get('cart')->getItem($skuProduct)->getPrice();
+            return new JsonResponse($cartInfo);
+        }
+
+        return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
+    }
+
+    /**
+     * @Route("/cart/remove/{id}", name="cart_remove", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param SkuProducts $skuProduct
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function cartRemove(SkuProducts $skuProduct, Request $request)
+    {
+        $form = $this->createForm(RemoveProductSizeType::class, null, ['size' => $skuProduct->getProductModels()]);
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            $this->get('cart')->removeItemSize($skuProduct, $form->get('size')->getNormData());
+
+            return new JsonResponse($this->getGeneralCartInfo());
+        }
+
+        return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
+    }
+
+    /**
+     * @Route("/cart/show", name="cart_show", options={"expose"=true})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showCartAction(Request $request)
+    {
+        return $this->render('AppBundle:shop:cart/show.html.twig', [
+            'cart' => $this->get('cart'),
+            'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
+        ]);
+    }
+
+    /**
+     * @Route("/cart/order", name="cart_order", options={"expose"=true})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function orderAction(Request $request)
     {
-        $cart = $this->get('session')->get('cart_items');
-        if(empty($cart))
-            return $this->redirectToRoute('homepage', array(), 301);
-        $order = array();
-        foreach($cart as $key => $item){
-            $order[$key]['item'] = $this->getDoctrine()->getRepository('AppBundle:SkuProducts')->findOneById($key);
-            $order[$key]['quantity'] = $item['quantity'];
-            $price = $order[$key]['item']->getProductModels()->getPrice();
-            $order[$key]['total_price'] = $price * $item['quantity'];
-        }
-        $np = $this->getDoctrine()->getRepository('AppBundle:Cities')->findBy(array('carriers'=>1));
-        $del = $this->getDoctrine()->getRepository('AppBundle:Cities')->findBy(array('carriers'=>2));
-        $stores = $this->getDoctrine()->getRepository('AppBundle:Stores')->findAll();
-        return $this->render('AppBundle:userpart:order.html.twig', array(
-            'base_dir'          => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-            'params'            => $this->get('options')->getParams(),
-            'cart'              => $this->get('cart')->getHeaderBasketInfo(),
-            'compare'           => $this->get('compare')->getHeaderCompareInfo(),
-            'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
-            'order'             => $order,
-            'np_city'           => $np,
-            'del_city'          => $del,
-            'stores'            => $stores,
-        ));
+
+        return $this->render('AppBundle:shop:cart/order.html.twig', [
+            'cart' => $this->get('cart')
+        ]);
     }
+
+    /**
+     * @Route("/cart/quick_order/{id}", name="cart_quick_order", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param ProductModels $model
+     * @param Request $request
+     */
+    public function quickOrderAction(ProductModels $model, Request $request)
+    {
+        $form = $this->createForm(QuickOrderType::class);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getGeneralCartInfo() {
+        return [
+            // todo add discount, total oldPrice
+            'originalItemsPrice' => $this->get('cart')->getTotalOldPrice(),
+            'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
+            'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
+            'totalCount' => $this->get('cart')->getTotalCount(),
+            'totalPrice' => $this->get('cart')->getTotalPrice()
+        ];
+    }
+
 }
+

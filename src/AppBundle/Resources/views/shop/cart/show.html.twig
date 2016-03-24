@@ -1,0 +1,334 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_order {% endblock %}
+
+{% block body %}
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+
+                <h2 class="page-title">
+                    Ваша корзина <span>{{ cart.totalCount }} Товара(ов)</span>
+                </h2>
+
+                <div class="cart-info">
+                    <div class="cart-info__i">
+
+                        <div class="col floating-box-wr">
+
+                            {% if not cart.standardItems is empty %}
+                                <div class="main-cart-list">
+                                    <div class="title">
+                                        <h2>Основной заказ</h2>
+                                    </div>
+                                    <div class="main-cart-list__i">
+
+                                        {% for item in cart.standardItems%}
+                                            {% for sizeId, sizeCount in item.sizes%}
+                                                {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                        <div class="main-cart-list-total">
+                                            <p><strong>Итого: <span class="js_cart_standard_total_price">{{ cart.standardItemsPrice }}</span> грн.</strong></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if not cart.preOrderItems is empty %}
+                                <div class="preorder-cart-list">
+                                    <div class="title">
+                                        <h2>Предзаказ</h2>
+                                    </div>
+                                    <div class="preorder-cart-list__i">
+
+                                        {% for item in cart.preOrderItems%}
+                                            {% for sizeId, sizeCount in item.sizes%}
+                                                {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                        <div class="preorder-cart-list-total">
+                                            <p><strong>Итого: <span class="js_cart_pre_order_total_price">{{ cart.standardItemsPrice }}</span> грн.</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col floating-box-main">
+                            <div class="order-total floating-box">
+                                <div class="order-total__i">
+                                    <div class="top">
+                                        <div class="row">
+                                            <a href="#" type="submit" class="btn btn_blue">ОФОРМИТЬ ЗАКАЗ</a>
+                                        </div>
+                                        <div class="row">
+                                            <a href="{{ continueShopUrl }}" class="continue">Продолжить покупки</a>
+                                        </div>
+                                    </div>
+                                    <div class="bottom">
+                                        <h2>Заказ <span><span class="js_cart_total_count">{{ cart.totalCount }}</span> Товара(ов)</span></h2>
+                                        <table class="single-buy">
+                                            <tr>
+                                                <td>Итого</td>
+                                                <td><span class="js_cart_original_price">{{ cart.totalOldPrice }}</span> грн.</td>
+                                            </tr>
+                                            <tr class="discount">
+                                                <td>Скидка</td>
+                                                <td>0 грн.</td>
+                                            </tr>
+                                            <tr class="pay-row">
+                                                <td>Сумма к оплате</td>
+                                                <td><span class="js_cart_total_price">{{ cart.totalPrice }}</span> грн.</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="last-viewed">
+                    <h2>Рекомендуем также</h2>
+
+                    <div class="last-viewed__i">
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-1.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-2.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-3.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-4.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-1.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-2.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-3.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-4.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-1.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-2.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-3.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                        <div class="item">
+                            <a href="#">
+                                <div class="item__i">
+                                    <div class="img">
+                                        <img src="img/demo/last-4.jpg" alt="#"/>
+                                    </div>
+                                    <div class="info">
+                                        <div class="info__i">
+                                            <p><strong>Befree</strong></p>
+
+                                            <p>250 грн.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!--item end-->
+
+                    </div>
+                </div>
+                <!--last-viewed end-->
+            </div>
+        </div>
+    </section>
+    <div class="push"></div>
+{% endblock %}
+
+{% block bottom_assets %}
+    {{ parent() }}
+
+    {% javascripts '@AppBundle/Resources/public/js/order.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+

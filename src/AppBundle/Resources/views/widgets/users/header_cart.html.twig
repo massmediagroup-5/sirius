@@ -1,16 +1,16 @@
-<a href="#" class="cart-btn"><i class="icon icon-cart"></i><i class="icon icon-cart-hover hover"></i><span>24</span></a>
+<a href="#" class="cart-btn"><i class="icon icon-cart"></i><i class="icon icon-cart-hover hover"></i><span class="js_cart_total_count btn-number">{{ totalQuantity }}</span></a>
 
 <div class="cart-drop">
     <div class="cart-drop__i">
-        <p>В корзине 24 товара</p>
-        <p>  на cумму 380 грн.</p>
+        <p>В корзине <span class="js_cart_total_count">{{ totalQuantity }}</span> товара</p>
+        <p>  на cумму <span class="js_cart_total_price">{{ totalPrice }}</span> грн.</p>
 
         <div class="inp">
             <a href="#" class="btn btn_blue">Оформить заказ</a>
         </div>
 
         <div class="to-cart">
-            <a href="#" class="go-to-cart">В корзину</a>
+            <a href="{{ url('cart_show') }}" class="go-to-cart">В корзину</a>
         </div>
     </div>
 </div>
