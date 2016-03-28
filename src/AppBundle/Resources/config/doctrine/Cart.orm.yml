@@ -11,9 +11,6 @@ AppBundle\Entity\Cart:
         fk_cart_sku_products1_idx:
             columns:
                 - sku_products_id
-        count:
-            columns:
-                - quantity
     uniqueConstraints:
         id_UNIQUE:
             columns:
@@ -34,12 +31,6 @@ AppBundle\Entity\Cart:
             options:
                 unsigned: false
                 default: '0'
-        quantity:
-            type: integer
-            nullable: false
-            options:
-                unsigned: false
-                default: '1'
         createTime:
             type: datetime
             nullable: false
@@ -80,5 +71,13 @@ AppBundle\Entity\Cart:
             joinColumns:
                 sku_products_id:
                     referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        sizes:
+            targetEntity: CartProductSize
+            cascade: [ persist ]
+            fetch: LAZY
+            mappedBy: cart
+            inversedBy: null
             orphanRemoval: false
     lifecycleCallbacks: {  }

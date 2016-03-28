@@ -80,4 +80,11 @@ class Stores
     {
         return $this->cities;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->getName();
+    }
 }

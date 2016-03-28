@@ -52,7 +52,6 @@ admin_logout:
     pattern:  /admin/logout
     defaults: { _controller: FOSUserBundle:Security:logout }
 
-
 app_yml:
     resource: "@AppBundle/Resources/config/routing.yml"
 
@@ -66,10 +65,16 @@ hwi_oauth_redirect:
 hwi_oauth_login:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
     prefix:   /login
+hwi_oauth_connect_service:
+    pattern: /login/service/{service}
+    defaults: { _controller: AppBundle:Security:connectService}
 facebook_login:
     path: /login/check-facebook
 vkontakte_login:
     path: /login/check-vkontakte
+login_after:
+    pattern:  /after_login
+    defaults: { _controller: AppBundle:Security:after }
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\SkuProducts;
 use AppBundle\Form\Type\AddInCartType;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
 use AppBundle\Form\Type\ChangeProductSizeType;
+use AppBundle\Form\Type\CreateOrderType;
 use AppBundle\Form\Type\QuickOrderType;
 use AppBundle\Form\Type\RemoveProductSizeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -32,7 +32,7 @@ class CartController extends BaseController
         $form = $this->createForm(AddInCartType::class, null, ['model' => $skuProduct->getProductModels()]);
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $this->get('cart')->addItemToCard(
                 $skuProduct,
                 $form->get('size')->getNormData(),
@@ -67,7 +67,7 @@ class CartController extends BaseController
         $form = $this->createForm(ChangeProductSizeType::class, null, ['model' => $skuProduct->getProductModels()]);
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $this->get('cart')->changeItemSize(
                 $skuProduct,
                 $form->get('old_size')->getNormData(),
@@ -96,7 +96,7 @@ class CartController extends BaseController
         $form = $this->createForm(ChangeProductSizeQuantityType::class, null, ['size' => $skuProduct->getProductModels()]);
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $this->get('cart')->changeItemSizeCount(
                 $skuProduct,
                 $form->get('size')->getNormData(),
@@ -123,7 +123,7 @@ class CartController extends BaseController
         $form = $this->createForm(RemoveProductSizeType::class, null, ['size' => $skuProduct->getProductModels()]);
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $this->get('cart')->removeItemSize($skuProduct, $form->get('size')->getNormData());
 
             return new JsonResponse($this->getGeneralCartInfo());
@@ -150,30 +150,67 @@ class CartController extends BaseController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function orderAction(Request $request)
+    public function showOrderAction(Request $request)
     {
+        $orderForm = $this->createForm(CreateOrderType::class, null, [
+            'request' => $request->request,
+            'user' => $this->getUser()
+        ]);
+
+        $orderForm->handleRequest($request);
+        if($orderForm->isValid()) {
+            $order = $this->get('cart')->flushCart($this->getUser(), $orderForm->getData());
+
+            return $this->render('AppBundle:shop:cart/order_approve.html.twig', [
+                'order' => $order,
+                'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
+            ]);
+        }
+
+        $quickOrderForm = $this->createForm(QuickOrderType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_quick_order')
+        ]);
 
         return $this->render('AppBundle:shop:cart/order.html.twig', [
-            'cart' => $this->get('cart')
+            'cart' => $this->get('cart'),
+            'quickOrderForm' => $quickOrderForm->createView(),
+            'orderForm' => $orderForm->createView()
         ]);
     }
 
     /**
-     * @Route("/cart/quick_order/{id}", name="cart_quick_order", options={"expose"=true})
+     * @Route("/cart/quick_order", name="cart_quick_order", options={"expose"=true})
      * @Method("POST")
-     * @ParamConverter("model")
-     * @param ProductModels $model
      * @param Request $request
      */
-    public function quickOrderAction(ProductModels $model, Request $request)
+    public function quickOrderAction(Request $request)
     {
+        // todo here is only beginning, complete
+        $this->get('cart')->createQuickOrder();
+
         $form = $this->createForm(QuickOrderType::class);
+    }
+
+    /**
+     * @Route("/cart/quick_order/{id}", name="cart_quick_order_single_product", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param SkuProducts $skuProducts
+     * @param Request $request
+     */
+    public function quickOrderSingleProductAction(SkuProducts $skuProducts, Request $request)
+    {
+        // todo here is only beginning, complete
+        $this->get('cart')->clear();
+        $this->get('cart')->addInCart($skuProducts);
+        $this->get('cart')->createQuickOrder();
     }
 
     /**
      * @return array
      */
-    protected function getGeneralCartInfo() {
+    protected function getGeneralCartInfo()
+    {
         return [
             // todo add discount, total oldPrice
             'originalItemsPrice' => $this->get('cart')->getTotalOldPrice(),

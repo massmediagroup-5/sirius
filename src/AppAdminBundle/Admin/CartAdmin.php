@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use AppBundle\Entity\Orders;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -17,8 +18,7 @@ class CartAdmin extends Admin
     {
         $collection
             ->remove('create')
-            ->remove('delete')
-        ;
+            ->remove('delete');
 
     }
 
@@ -33,10 +33,8 @@ class CartAdmin extends Admin
             ->add('orders.phone', null, array('label' => 'Телефон'))
             ->add('orders.type', null, array('label' => 'Тип заказа'))
             ->add('status', null, array('label' => 'Статус заказа'))
-            ->add('quantity', null, array('label' => 'Количество'))
             ->add('createTime', null, array('label' => 'Дата создания(заказа)'))
-            ->add('updateTime', null, array('label' => 'Дата последнего редактирования(заказа)'))
-        ;
+            ->add('updateTime', null, array('label' => 'Дата последнего редактирования(заказа)'));
     }
 
     /**
@@ -48,17 +46,21 @@ class CartAdmin extends Admin
             ->add('id')
             ->addIdentifier('orders.fio', null, array('label' => 'Ф.И.О.'))
             ->addIdentifier('orders.phone', null, array('label' => 'Телефон'))
-            ->add('orders.type', null, array('label' => 'Тип заказа'))
+            ->add('orders.type', 'choice', [
+                'label' => 'Тип заказа',
+                'choices' => [
+                    (string)Orders::TYPE_NORMAL => 'Обычный',
+                    (string)Orders::TYPE_QUICK => 'Быстрый',
+                ]])
             ->add('skuProducts.productModels.name', null, array('label' => 'Имя модели'))
-            ->add('status', 'choice',  array(
+            ->add('status', 'choice', array(
                 'label' => 'Статус заказа',
-                'choices' => array(
+                'choices' => [
                     '0' => 'Ожидает обработки',
                     '1' => 'Принят',
                     '2' => 'Отклонен'
-                )
+                ]
             ))
-            ->add('quantity', null, array('label' => 'Количество'))
             ->add('createTime', null, array('label' => 'Дата создания(заказа)'))
             ->add('updateTime', null, array('label' => 'Дата последнего редактирования(заказа)'))
             ->add('_action', 'actions', array(
@@ -67,8 +69,7 @@ class CartAdmin extends Admin
                     'edit' => array(),
                     'delete' => array(),
                 )
-            ))
-        ;
+            ));
     }
 
     /**
@@ -77,18 +78,18 @@ class CartAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('orders.fio','text',array(
+            ->add('orders.fio', 'text', array(
                 'label' => 'Ф.И.О. покупателя',
                 'read_only' => true,
-                'disabled'  => true,
+                'disabled' => true,
             ))
             ->add('skuProducts.name', 'text'
-                ,array('label' => 'Название модели',
+                , array('label' => 'Название модели',
                     'read_only' => true,
-                    'disabled'  => true,
+                    'disabled' => true,
                 )
             )
-            ->add('status', 'choice',  array(
+            ->add('status', 'choice', array(
                 'label' => 'Статус заказа',
                 'choices' => array(
                     '0' => 'Ожидает обработки',
@@ -96,13 +97,14 @@ class CartAdmin extends Admin
                     '2' => 'Отклонен'
                 )
             ))
-            ->add('quantity', null, array(
-                    'label' => 'Количество',
-                    'read_only' => true,
-                    'disabled'  => true,
-                )
-            )
-        ;
+            ->add('sizes', 'sonata_type_collection', array(
+                'label' => 'Размер'
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'by_reference' => false,
+                'sortable' => 'id',
+            ));
     }
 
     /**
@@ -114,9 +116,7 @@ class CartAdmin extends Admin
             ->add('id')
             ->add('skuProducts.name', null, array('label' => 'Статус заказа'))
             ->add('status', null, array('label' => 'Название модели'))
-            ->add('quantity', null, array('label' => 'Количество'))
             ->add('createTime', null, array('label' => 'Дата создания(заказа)'))
-            ->add('updateTime', null, array('label' => 'Дата последнего редактирования(заказа)'))
-        ;
+            ->add('updateTime', null, array('label' => 'Дата последнего редактирования(заказа)'));
     }
 }

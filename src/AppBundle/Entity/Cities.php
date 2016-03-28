@@ -80,4 +80,11 @@ class Cities
     {
         return $this->carriers;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->getName();
+    }
 }

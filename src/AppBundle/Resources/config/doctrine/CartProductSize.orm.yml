@@ -1,0 +1,34 @@
+AppBundle\Entity\CartProductSize:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        quantity:
+            type: integer
+    manyToOne:
+        size:
+            targetEntity: ProductModelSizes
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                size_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        cart:
+            targetEntity: Cart
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                cart_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

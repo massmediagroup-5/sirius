@@ -1,0 +1,16 @@
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Заказ с Sirius</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>Новый заказ на Sirius</h1>
+    <p><b>ФИО:</b> {{ order.fio }}</p>
+    <p><b>Телефон:</b> {{ order.phone }}</p>
+    <p><b>Оплата:</b> {{ order.pay }}</p>
+    <p><b>Цена:</b> {{ order.totalPrice }}</p>
+</body>
+</html>

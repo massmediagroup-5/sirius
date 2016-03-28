@@ -126,7 +126,7 @@ AppBundle\Entity\Orders:
     oneToMany:
         cart:
             targetEntity: Cart
-            cascade: {  }
+            cascade: [ persist ]
             fetch: LAZY
             mappedBy: orders
             inversedBy: null
