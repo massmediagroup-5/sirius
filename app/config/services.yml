@@ -15,3 +15,15 @@ services:
     sonata.user.admin.group:
         abstract: true
         public: false
+
+    app_user.registration.form.type:
+        class: AppBundle\Form\Type\RegistrationType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: app_user_registration }
+
+    app_user.form.handler.registration:
+        class: AppBundle\Form\Handler\RegistrationFormHandler
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@fos_user.util.token_generator.default"]
+        scope: request
+        public: false

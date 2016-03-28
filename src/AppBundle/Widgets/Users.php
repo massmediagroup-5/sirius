@@ -65,4 +65,16 @@ class Users
         );
     }
 
+    /**
+     * Get header basket
+     *
+     * @return mixed
+     */
+    public function headerRegistration()
+    {
+        return $this->templating->render('AppBundle:widgets/users/header_registration.html.twig', array(
+            )
+        );
+    }
+
 }

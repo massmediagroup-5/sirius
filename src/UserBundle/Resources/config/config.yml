@@ -1,0 +1,11 @@
+fos_user:
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    registration:
+        form:
+            type: acme_user_registration
+            validation_groups: [AppRegistration]
+    profile:
+        form:
+            type: acme_user_profile
+            validation_groups: [AppProfile]
