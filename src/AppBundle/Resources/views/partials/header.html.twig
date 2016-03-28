@@ -25,9 +25,10 @@
             <nav class="user-nav">
                 <div class="user-nav__i">
                     <ul>
-                        <li><a href="#" class="search-btn"><i class="icon-search"></i><i
-                                        class="icon-search-hover hover"></i>
-
+                        <li>
+                            <a href="#" class="search-btn">
+                                <i class="icon-search"></i>
+                                <i class="icon-search-hover hover"></i>
                             </a>
 
                             <div class="search-drop">
@@ -122,97 +123,8 @@
                         <li>
                             {{ widget('products.wishCounter')|raw }}
                         </li>
-                        <li><a href="#" class="profile-btn"><i class="icon icon-profile"></i><i
-                                        class="icon icon-profile-hover hover"></i></a>
-
-                            <div class="profile-drop">
-                                <div class="profile-drop__i">
-
-                                    <div class="login">
-                                        <h2>Войти в личный кабинет</h2>
-
-                                        <div class="inner">
-                                            <div class="col">
-                                                <div class="col__i">
-                                                    <form method="post" class="login-form">
-                                                        <div class="inp">
-                                                            <input type="text" placeholder="E-mail адрес" name="email"/>
-                                                        </div>
-                                                        <div class="inp">
-                                                            <input type="text" placeholder="Пароль" name="passw"/>
-
-                                                        </div>
-
-                                                        <div class="inp inp_checkbox">
-                                                            <label><input type="checkbox"/><span></span>Запомнить</label>
-                                                        </div>
-
-                                                        <div class="inp">
-                                                            <input type="submit" class="btn btn_blue" value="Войти"/>
-                                                        </div>
-                                                        <div class="remember">
-                                                            <div class="remember__i">
-                                                                <table>
-                                                                    <tr>
-                                                                        <td><a href="#" class="pass-recovery-btn">Забыли пароль?</a></td>
-                                                                        <td><a href="#">Регистрация</a></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-
-                                                    <div class="or">или</div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="col__i">
-                                                    <h3>ВОЙТИ ЧЕРЕЗ:</h3>
-
-                                                    <div class="enter-list">
-                                                        <ul>
-                                                            <li><a href="#"><i class="icon icon-fb2"></i><i class="icon icon-fb2-hover hover"></i></a></li>
-                                                            <li><a href="{{ url("hwi_oauth_service_redirect", {service: "vkontakte"}) }}"><i class="icon icon-vk2"></i><i class="icon icon-vk2-hover hover"></i></a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="pass-recovery">
-                                        <h2>Смена пароля</h2>
-
-                                        <div class="inner">
-                                            <div class="col">
-                                                <div class="col__i">
-                                                    <form method="post" class="change-passw-form">
-                                                        <div class="inp">
-                                                            <input type="text" placeholder="E-mail адрес" name="email"/>
-                                                        </div>
-                                                        <div class="inp">
-                                                            <input type="submit" class="btn btn_blue" value="ПОДТВЕРДИТЬ"/>
-
-                                                        </div>
-                                                        <a href="#" class="close">Закрыть</a>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="col__i">
-                                                    <div class="info">
-                                                        <p>
-                                                            Укажите Ваш адрес электронной
-                                                            почты, и мы вышлем Ваш пароль в
-                                                            течение нескольких минут.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <li>
+                            {{ widget('users.headerRegistration')|raw }}
                         </li>
                         <li>
                             {{ widget('users.headerCart')|raw }}

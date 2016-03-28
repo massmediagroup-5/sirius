@@ -5,6 +5,7 @@ imports:
     - { resource: @AppBundle/Resources/config/services.yml }
     - { resource: @AppBundle/Resources/config/widgets.yml }
     - { resource: @AppAdminBundle/Resources/config/admin.yml }
+    - { resource: @UserBundle/Resources/config/config.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -232,6 +233,10 @@ fos_user:
     user_class: AppBundle\Entity\Users
     group:
         group_class: Sonata\UserBundle\Entity\BaseGroup
+    registration:
+        form:
+            type: app_user_registration
+            handler: app_user.form.handler.registration
 
 fos_elastica:
     clients:

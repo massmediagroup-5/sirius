@@ -1,0 +1,83 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block body %}
+
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs__i">
+                        <ul>
+                            <li><a href="#">На главную</a></li>
+                            <li>Регистрация</li>
+                        </ul>
+                    </div>
+                </div>
+                <!--breadcrumbs end-->
+
+                <h2 class="page-title">
+                    Регистрация
+                </h2>
+
+                <div class="user-form">
+
+                    {{ form_start(form, {'attr': {'class': 'user-form__i'}}) }}
+                        <div class="row">
+                            <div class="inp-name">
+                                <label>Номер мобильного<sup>*</sup></label>
+                            </div>
+                            <div class="inp {{ add_error(form, ['phone']) }}">
+                                {{ form_widget(form.phone, {'attr': {'class': 'phone-inp', 'placeholder': 'Введите Ваш номер', 'class': form.phone.vars.errors|length > 0 ? 'error' : ''}}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="inp-name">
+                                <label>Ваше имя и фамилия<sup>*</sup></label>
+                            </div>
+                            <div class="inp {{ add_error(form, ['name', 'surname']) }}">
+                                <div class="col">
+                                    {{ form_widget(form.name, {'attr': {'placeholder': 'Введите Имя', 'class': form.name.vars.errors|length > 0 ? 'error' : ''}}) }}
+                                </div>
+                                <div class="col">
+                                    {{ form_widget(form.surname, {'attr': {'placeholder': 'Введите Фамилию', 'class': form.surname.vars.errors|length > 0 ? 'error' : ''}}) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="inp-name">
+                                <label>Ваш E-mail<sup>*</sup></label>
+                            </div>
+                            <div class="inp {{ add_error(form, ['email']) }}">
+                                {{ form_widget(form.email, {'attr': {'placeholder': 'Введите E-mail адрес', 'class': form.email.vars.errors|length > 0 ? 'error' : ''}}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="inp-name">
+                                <label>Пароль<sup>*</sup></label>
+                            </div>
+                            <div class="inp">
+                                {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'Подтвердите пароль', 'class': form.plainPassword.first.vars.errors|length > 0 ? 'error' : ''}}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="inp-name">
+                                <label>Подтвердите пароль<sup>*</sup></label>
+                            </div>
+                            <div class="inp">
+                                {{ form_widget(form.plainPassword.second, {'attr': {'placeholder': 'Подтвердите пароль'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            {{ form_widget(form.submit, {'attr': {'class': 'btn btn_blue'}, 'label': 'Подтвердить'}) }}
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

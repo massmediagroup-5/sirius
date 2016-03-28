@@ -6,6 +6,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+/**
+ * Class QuickOrderType
+ * @package AppBundle\Form\Type
+ */
 class QuickOrderType extends AbstractType
 {
     /**
