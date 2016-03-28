@@ -1,0 +1,80 @@
+<div class="item-title">
+    <a href="#">
+        <span>Постояный покупатель</span>
+    </a>
+</div>
+<div class="item-drop">
+    <div class="item-drop__i">
+        <div class="regular-buyer">
+            <div class="col">
+                <form action="" method="post">
+
+                    <div class="inp">
+                        <input type="email" placeholder="E-mail адрес"
+                               name="email"/>
+                    </div>
+                    <div class="inp">
+                        <input type="password" placeholder="Пароль" name="passw"
+                               class="phone-inp" name="phone"/>
+                    </div>
+                    <div class="inp">
+                        <input type="submit" value="Войти" name="enter"
+                               class="btn btn_black_transparent"/>
+                    </div>
+                    <div class="inp">
+                        <a href="#" class="passw-recovery">Забыли пароль?</a>
+                    </div>
+
+                    <div class="or">или</div>
+
+
+                </form>
+            </div>
+            <div class="col">
+                <div class="social-login">
+                    <h3>ВОЙТИ ЧЕРЕЗ:</h3>
+
+                    <div class="enter-list">
+                        <ul>
+                            <li><a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook'}) }}"><i class="icon icon-fb2"></i><i
+                                            class="icon icon-fb2-hover hover"></i></a></li>
+                            <li><a href="{{ path('hwi_oauth_service_redirect', {'service': 'vkontakte'}) }}"><i class="icon icon-vk2"></i><i
+                                            class="icon icon-vk2-hover hover"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pass-recovery hide">
+            <h2>Смена пароля</h2>
+
+            <div class="inner">
+                <div class="col">
+                    <div class="col__i">
+                        <form method="post">
+                            <div class="inp">
+                                <input type="text" placeholder="E-mail адрес"/>
+                            </div>
+                            <div class="inp">
+                                <input type="submit" class="btn btn_blue" value="ПОДТВЕРДИТЬ"/>
+
+                            </div>
+                            <a href="#" class="back">Вернуться назад</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="col__i">
+                        <div class="info">
+                            <p>
+                                Укажите Ваш адрес электронной
+                                почты, и мы вышлем Ваш пароль в
+                                течение нескольких минут.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

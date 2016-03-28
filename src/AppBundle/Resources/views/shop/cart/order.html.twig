@@ -13,311 +13,28 @@
 
                 <div class="order-info">
                     <div class="col">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            {{ include('AppBundle:shop/cart/partials/registered_order.html.twig', { 'form': orderForm }) }}
+                        {% else %}
+                            <div class="accordion">
+                                <div class="accordion__i">
 
-                        <div class="accordion">
-                            <div class="accordion__i">
+                                    <div class="item opened">
+                                        {{ include('AppBundle:shop/cart/partials/quick_order.html.twig', { 'form': quickOrderForm }) }}
+                                    </div>
+                                    <!--item end-->
 
-                                <div class="item opened">
-                                    <div class="item-title">
-                                        <a href="#">
-                                            <span>Быстрый заказ</span>
-                                        </a>
+                                    <div class="item">
+                                        {{ include('AppBundle:shop/cart/partials/register_form.html.twig') }}
                                     </div>
-                                    <div class="item-drop">
-                                        <div class="item-drop__i">
-                                            <div class="fast">
-                                                <form action="" method="post">
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <input type="text" placeholder="Введите Ваш номер"
-                                                                   class="phone-inp" name="phone"/>
-                                                        </div>
-                                                        <div class="col">
-                                                            <div class="inp">
-                                                                <input type="submit" value="ЗАКАЗАТЬ"
-                                                                       class="btn btn_black_transparent"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col">
-                                                            <p>Менеджер перезвонит Вам и уточнит
-                                                                детали</p>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+
+                                    <div class="item">
+                                        {{ include('AppBundle:shop/cart/partials/new_user.html.twig') }}
                                     </div>
+
                                 </div>
-                                <!--item end-->
-
-                                <div class="item">
-                                    <div class="item-title">
-                                        <a href="#">
-                                            <span>Постояный покупатель</span>
-                                        </a>
-                                    </div>
-                                    <div class="item-drop">
-                                        <div class="item-drop__i">
-                                            <div class="regular-buyer">
-                                                <div class="col">
-                                                    <form action="" method="post">
-
-                                                        <div class="inp">
-                                                            <input type="email" placeholder="E-mail адрес"
-                                                                   name="email"/>
-                                                        </div>
-                                                        <div class="inp">
-                                                            <input type="password" placeholder="Пароль" name="passw"
-                                                                   class="phone-inp" name="phone"/>
-                                                        </div>
-                                                        <div class="inp">
-                                                            <input type="submit" value="Войти" name="enter"
-                                                                   class="btn btn_black_transparent"/>
-                                                        </div>
-                                                        <div class="inp">
-                                                            <a href="#" class="passw-recovery">Забыли пароль?</a>
-                                                        </div>
-
-                                                        <div class="or">или</div>
-
-
-                                                    </form>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="social-login">
-                                                        <h3>ВОЙТИ ЧЕРЕЗ:</h3>
-
-                                                        <div class="enter-list">
-                                                            <ul>
-                                                                <li><a href="#"><i class="icon icon-fb2"></i><i
-                                                                                class="icon icon-fb2-hover hover"></i></a></li>
-                                                                <li><a href="#"><i class="icon icon-vk2"></i><i
-                                                                                class="icon icon-vk2-hover hover"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="pass-recovery hide">
-                                                <h2>Смена пароля</h2>
-
-                                                <div class="inner">
-                                                    <div class="col">
-                                                        <div class="col__i">
-                                                            <form method="post">
-                                                                <div class="inp">
-                                                                    <input type="text" placeholder="E-mail адрес"/>
-                                                                </div>
-                                                                <div class="inp">
-                                                                    <input type="submit" class="btn btn_blue" value="ПОДТВЕРДИТЬ"/>
-
-                                                                </div>
-                                                                <a href="#" class="back">Вернуться назад</a>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="col__i">
-                                                            <div class="info">
-                                                                <p>
-                                                                    Укажите Ваш адрес электронной
-                                                                    почты, и мы вышлем Ваш пароль в
-                                                                    течение нескольких минут.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="item">
-                                    <div class="item-title">
-                                        <a href="#">
-                                            <span>Новый заказ</span>
-                                        </a>
-                                    </div>
-                                    <div class="item-drop">
-                                        <div class="item-drop__i">
-                                            <div class="new-buyer">
-                                                <form action="" method="post">
-
-                                                    <div class="row">
-                                                        <div class="inp-name">
-                                                            <label>Номер мобильного<sup>*</sup></label>
-                                                        </div>
-
-                                                        <div class="inp">
-                                                            <input type="text" placeholder="Введите Ваш номер"
-                                                                   name="phone" class="phone-inp" name="phone"/>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="inp-name">
-                                                            <label>Ваше имя и фамилия<sup>*</sup></label>
-                                                        </div>
-
-                                                        <div class="inp">
-                                                            <div class="inp-i">
-                                                                <div class="col">
-                                                                    <input type="text" placeholder="Введите Имя"
-                                                                           name="name"/>
-                                                                </div>
-
-                                                                <div class="col">
-                                                                    <input type="text" placeholder="Введите Фамилию"
-                                                                           name="s-name"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="inp-name">
-                                                            <label>Доставка<sup>*</sup></label>
-                                                        </div>
-                                                        <div class="inp">
-                                                            <div class="inp-i active">
-                                                                <div class="check-wrap">
-                                                                    <label><input type="radio"
-                                                                                  name="delivery" checked/>Новой
-                                                                        почтой <span><i></i></span> <strong>1-3 дня, от
-                                                                            35 грн.</strong></label>
-
-                                                                </div>
-                                                                <div class="inp-drop">
-                                                                    <div class="col">
-                                                                        <select class="select"
-                                                                                data-placeholder="Выберите город">
-                                                                            <option value=""></option>
-                                                                            <optgroup label="Одесская обл">
-                                                                                <option value="1">Одесса</option>
-                                                                                <option value="2">Одесса</option>
-                                                                                <option value="3">Одесса</option>
-                                                                            </optgroup>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col">
-                                                                        <select class="select"
-                                                                                data-placeholder="Выберите склад">
-                                                                            <option value=""></option>
-                                                                            <optgroup label="Одесская обл">
-                                                                                <option value="1">Одесса</option>
-                                                                                <option value="2">Одесса</option>
-                                                                                <option value="3">Одесса</option>
-                                                                            </optgroup>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="inp-i">
-                                                                <div class="check-wrap">
-                                                                    <label><input
-                                                                                type="radio"
-                                                                                name="delivery"/>Деливери<span><i></i></span><strong>3-7
-                                                                            дней, от 20 грн.</strong></label>
-
-                                                                </div>
-                                                                <div class="inp-drop">
-                                                                    <div class="col">
-                                                                        <select class="select"
-                                                                                data-placeholder="Выберите город">
-                                                                            <option value=""></option>
-                                                                            <optgroup label="Одесская обл">
-                                                                                <option value="1">Одесса</option>
-                                                                                <option value="2">Одесса</option>
-                                                                                <option value="3">Одесса</option>
-                                                                            </optgroup>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col">
-                                                                        <select class="select"
-                                                                                data-placeholder="Выберите склад">
-                                                                            <option value=""></option>
-                                                                            <optgroup label="Одесская обл">
-                                                                                <option value="1">Одесса</option>
-                                                                                <option value="2">Одесса</option>
-                                                                                <option value="3">Одесса</option>
-                                                                            </optgroup>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="inp-name">
-                                                            <label>Оплата<sup>*</sup></label>
-                                                        </div>
-
-                                                        <div class="inp">
-                                                            <div class="inp-i">
-                                                                <div class="check-wrap">
-                                                                    <label><input
-                                                                                type="radio" name="pay" checked/>На карту
-                                                                        банка<span><i></i></span></label>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="inp-i">
-                                                                <div class="check-wrap">
-                                                                    <label><input
-                                                                                type="radio" name="pay"/>Наложеным
-                                                                        платежом(Новая Почта)<span><i></i></span>
-
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="inp-name">
-                                                            <label>
-                                                                Ваш E-mail
-                                                                <span>
-                                                                    Если хотите получать информацию о состоянии заказа на почту
-                                                                </span>
-                                                            </label>
-                                                        </div>
-
-                                                        <div class="inp inp_comment">
-                                                            <div class="inp-i">
-                                                                <input type="email" placeholder="E-mail адрес"
-                                                                       name="email"/>
-                                                            </div>
-
-                                                            <div class="inp-i">
-                                                                <a href="#" class="add-comment">Комментарии к заказу</a>
-                                                            </div>
-                                                            <div class="inp-i inp-drop">
-                                                                <textarea name="comment-box"></textarea>
-                                                            </div>
-                                                            <div class="inp-i right">
-                                                                <input type="submit" value="ПОДТВЕРДИТЬ ЗАКАЗ"
-                                                                       class="btn btn_blue"/>
-                                                            </div>
-                                                            <div class="inp-i right">
-                                                                <p>Подтверждая заказ, я принимаю условия</p>
-
-                                                                <p><a href="#terms" class="popup_js">пользовательского
-                                                                        соглашения</a></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
-                        </div>
+                        {% endif %}
 
                     </div>
                     <div class="col">
@@ -326,23 +43,30 @@
                                 <div class="top">
                                     <p>Итого</p>
                                 </div>
-                                {% for item in cart.itemsObjects %}
-                                    <div class="mid">
-                                        <h2>{{ item.item.productModels.name }} <span>{{ item.quantity }} Товара(ов)</span></h2>
-                                        <table>
-                                            <tr>
-                                                <td>Итого</td>
-                                                <td>{{ item.price }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                {% endfor %}
+                                <div class="mid">
+                                    <h2>Заказ <span>{{ cart.standardCount }} Товара(ов)</span></h2>
+                                    <table>
+                                        <tr>
+                                            <td>Итого</td>
+                                            <td>{{ cart.standardPrice }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="mid">
+                                    <h2>Предзаказ <span>{{ cart.preOrderCount }} Товара(ов)</span></h2>
+                                    <table>
+                                        <tr>
+                                            <td>Итого</td>
+                                            <td>{{ cart.preOrderPrice }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
                                 <div class="bottom">
                                     <h2>Всего</h2>
                                     <table>
                                         <tr>
                                             <td>Итого</td>
-                                            <td>{{ cart.totalPrice }} грн.</td>
+                                            <td>{{ cart.totalOldPrice }} грн.</td>
                                         </tr>
                                         <tr class="discount">
                                             <td>Скидка</td>
@@ -367,4 +91,34 @@
         </div>
     </section>
     <div class="push"></div>
+{% endblock %}
+
+{% block bottom_assets %}
+    {{ parent() }}
+
+    {% javascripts '@AppBundle/Resources/public/js/order_create.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block popups %}
+    {{ parent() }}
+
+    <div class="text-popup text-popup_2" id="terms">
+        <div class="text-popup__i">
+            <h2>Пользовательское соглашение</h2>
+
+            <p>Настоящим я выражаю свое согласие и разрешаю осуществлять обработку своих персональных данных (имя,
+                мобильный телефон, адрес электронной почты), включая сбор, систематизацию, накопление, хранение,
+                уточнение, использование, уничтожение персональных данных), в целях связанных с возможностью
+                предоставления информации о товарах и услугах, которые могут представлять интерес, а также с целью сбора
+                и обработки статистической информации и проведения маркетинговых исследований. Я подтверждаю, что мне
+                известна цель использования моих персональных данных и настоящим выражаю свое согласие на
+                использование.</p>
+
+            <div class="btn-row">
+                <a href="#" class="btn btn_blue close-popup">OK</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

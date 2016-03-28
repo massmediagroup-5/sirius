@@ -17,7 +17,7 @@
                     Купить
                 </span>
             </a>
-            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart'}, 'label': 'Купить'}) }}
+            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart'}, 'label': model.preOrderFlag ? 'Предзаказ' : 'Купить'}) }}
         </div>
     </div>
 {{ form_end(form) }}

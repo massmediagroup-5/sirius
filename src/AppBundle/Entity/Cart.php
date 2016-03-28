@@ -15,12 +15,7 @@ class Cart
     /**
      * @var integer
      */
-    private $status = '0';
-
-    /**
-     * @var integer
-     */
-    private $quantity = '1';
+    private $status = 0;
 
     /**
      * @var \DateTime
@@ -47,6 +42,18 @@ class Cart
      */
     private $skuProducts;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $sizes;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -80,30 +87,6 @@ class Cart
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Set quantity
-     *
-     * @param integer $quantity
-     *
-     * @return Cart
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return integer
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
     }
 
     /**
@@ -225,4 +208,39 @@ class Cart
     {
         return $this->skuProducts;
     }
+
+    /**
+     * @param \AppBundle\Entity\CartProductSize $size
+     * @return ProductModels
+     */
+    public function addSize(\AppBundle\Entity\CartProductSize $size)
+    {
+        $this->sizes[] = $size;
+
+        return $this;
+    }
+
+    /**
+     * @param \AppBundle\Entity\CartProductSize $site
+     */
+    public function removeSize(\AppBundle\Entity\CartProductSize $site)
+    {
+        $this->sizes->removeElement($site);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSizes()
+    {
+        return $this->sizes;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->getSkuProducts()->getName();
+    }
+
 }

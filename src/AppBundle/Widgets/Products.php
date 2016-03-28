@@ -93,6 +93,19 @@ class Products
     public function recentlyReviewed()
     {
         return $this->templating->render('AppBundle:widgets/product/recently_reviewed.html.twig', [
+                'recentModels' => $this->container->get('entities')->getRecentlyViewed()
+            ]
+        );
+    }
+
+    /**
+     * Render recently reviewed
+     *
+     * @return mixed
+     */
+    public function recommended()
+    {
+        return $this->templating->render('AppBundle:widgets/product/recommended.html.twig', [
                 // todo select render recently reviewed from database
             ]
         );

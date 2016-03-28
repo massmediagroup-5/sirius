@@ -65,6 +65,7 @@ class AppExtension extends \Twig_Extension
             'widget'       => new \Twig_Function_Method($this, 'widget'),
             'param'       => new \Twig_Function_Method($this, 'param'),
             'url_to'       => new \Twig_Function_Method($this, 'urlTo'),
+            'add_error'       => new \Twig_Function_Method($this, 'addError'),
         );
     }
 
@@ -172,6 +173,22 @@ class AppExtension extends \Twig_Extension
         }
 
         return false;
+    }
+
+    /**
+     * @param FormView $form
+     * @param $fields
+     * @param string $class
+     * @return bool
+     */
+    public function addError(FormView $form, $fields, $class = 'inp_error') {
+        $fields = (array)$fields;
+        foreach($fields as $field) {
+            if($form->children[$field]->vars['errors']->count()) {
+                return $class;
+            }
+        }
+        return '';
     }
 
 }

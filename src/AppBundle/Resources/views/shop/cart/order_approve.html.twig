@@ -1,0 +1,28 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_order {% endblock %}
+
+{% block body %}
+    <section class="content">
+        <div class="darkness"></div>
+        <div class="wrap">
+            <div class="content__i">
+
+                <div class="order-approve">
+                    <div class="order-approve__i">
+                        <h2>Подтверждение заказа</h2>
+
+
+                        <p>Заказ №02029392 принят. Спасибо за покупку, в ближайшее время с Вами свяжется наш менеджер.</p>
+                        <p><a href="{{ continueShopUrl }}" class="continue">Продолжить покупки</a></p>
+                    </div>
+                </div>
+
+                {{ widget('products.recommended')|raw }}
+
+            </div>
+        </div>
+    </section>
+
+    <div class="push"></div>
+{% endblock %}

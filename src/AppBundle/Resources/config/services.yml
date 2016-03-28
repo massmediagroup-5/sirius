@@ -44,9 +44,21 @@ services:
     last_urls:
         class: AppBundle\Services\LastUrls
         arguments: ["@service_container", "@session"]
+    request_listener:
+        class: AppBundle\Event\RequestListener
+        arguments: ["@service_container"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
         tags:
             - { name: twig.extension }
         arguments: ["@service_container"]
+    contract_bundle.listener.contract:
+        class: AppBundle\Event\OrderListener
+        arguments:
+            templating: "@twig"
+            mailer: "@mailer"
+        tags:
+            - { name: kernel.event_listener, event: order.created, method: onOrderCreated }

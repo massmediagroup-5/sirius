@@ -1,0 +1,26 @@
+<div class="item-title">
+    <a href="#">
+        <span>Быстрый заказ</span>
+    </a>
+</div>
+<div class="item-drop">
+    <div class="item-drop__i">
+        <div class="fast">
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col">
+                    {{ form_widget(form.phone, {'attr': {'class': 'phone-inp', 'placeholder': 'Введите Ваш номер'}}) }}
+                </div>
+                <div class="col">
+                    <div class="inp">
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn_black_transparent'}, 'label': 'Заказать'}) }}
+                    </div>
+                </div>
+                <div class="col">
+                    <p>Менеджер перезвонит Вам и уточнит детали</p>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

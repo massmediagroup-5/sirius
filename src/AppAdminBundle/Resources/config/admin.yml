@@ -17,6 +17,15 @@ services:
             - [ setTranslationDomain, [AppAdminBundle]]
             - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
 
+    app.admin.cart_product_size:
+        class: AppAdminBundle\Admin\CartProductSizeAdmin
+        arguments: [~, AppBundle\Entity\CartProductSize, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
+
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin
         #arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:CategoriesAdmin]

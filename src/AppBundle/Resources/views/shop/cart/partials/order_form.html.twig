@@ -1,0 +1,121 @@
+
+{{ form_start(form, {'attr': {'class': 'new-buyer-form', 'novalidate': true}}) }}
+    <div class="row">
+        <div class="inp-name">
+            <label>Номер мобильного<sup>*</sup></label>
+        </div>
+
+        <div class="inp {{ add_error(form, 'phone') }}">
+            {{ form_widget(form.phone, {'attr': {'class': 'phone-inp', 'placeholder': 'Введите Ваш номер'}}) }}
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="inp-name">
+            <label>Ваше имя и фамилия<sup>*</sup></label>
+        </div>
+
+        <div class="inp {{ add_error(form, ['name', 'surname']) }}">
+            <div class="inp-i">
+                <div class="col">
+                    {{ form_widget(form.name, {'attr': {'placeholder': 'Введите Имя'}}) }}
+                </div>
+
+                <div class="col">
+                    {{ form_widget(form.surname, {'attr': {'placeholder': 'Введите Фамилию'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="inp-name">
+            <label>Доставка<sup>*</sup></label>
+        </div>
+        <div class="inp {{ add_error(form, ['np_delivery_city', 'np_delivery_store', 'del_delivery_city', 'del_delivery_store']) }}">
+            <div class="inp-i active">
+                <div class="check-wrap">
+                    <label>
+                        {{ form_widget(form.delivery_type.children[0], {'attr': {'class': 'js_delivery_radio'}}) }}
+                        Новой почтой <span><i></i></span> <strong>1-3 дня, от 35 грн.</strong></label>
+                </div>
+                <div class="inp-drop">
+                    <div class="col">
+                        {{ form_widget(form.np_delivery_city, {'attr': {'data-placeholder': 'Выберите город', 'class': 'select'}}) }}
+                    </div>
+                    <div class="col">
+                        {{ form_widget(form.np_delivery_store, {'attr': {'data-placeholder': 'Выберите склад', 'class': 'select'}}) }}
+                    </div>
+                </div>
+            </div>
+            <div class="inp-i">
+                <div class="check-wrap">
+                    <label>
+                        {{ form_widget(form.delivery_type.children[1], {'attr': {'class': 'js_delivery_radio'}}) }}
+                        Деливери<span><i></i></span><strong>3-7 дней, от 20 грн.</strong></label>
+                </div>
+                <div class="inp-drop">
+                    <div class="col">
+                        {{ form_widget(form.del_delivery_city, {'attr': {'data-placeholder': 'Выберите город', 'class': 'select'}}) }}
+                    </div>
+                    <div class="col">
+                        {{ form_widget(form.del_delivery_store, {'attr': {'data-placeholder': 'Выберите склад', 'class': 'select'}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="inp-name">
+            <label>Оплата<sup>*</sup></label>
+        </div>
+
+        <div class="inp {{ add_error(form, 'pay') }}">
+            <div class="inp-i">
+                <div class="check-wrap">
+                    <label>{{ form_widget(form.pay.children[0]) }}
+                        На карту банка<span><i></i></span></label>
+                </div>
+            </div>
+            <div class="inp-i">
+                <div class="check-wrap">
+                    <label>{{ form_widget(form.pay.children[1]) }}
+                        Наложеным платежом(Новая Почта)<span><i></i></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="inp-name">
+            <label>
+                Ваш E-mail
+                <span>
+                    Если хотите получать информацию о состоянии заказа на почту
+                </span>
+            </label>
+        </div>
+
+        <div class="inp inp_comment">
+            <div class="inp-i">
+                {{ form_widget(form.email, {'attr': {'placeholder': 'E-mail адрес'}}) }}
+            </div>
+
+            <div class="inp-i">
+                <a href="#" class="add-comment">Комментарии к заказу</a>
+            </div>
+            <div class="inp-i inp-drop">
+                {{ form_widget(form.comment) }}
+            </div>
+            <div class="inp-i right">
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn_blue'}, 'label': 'ПОДТВЕРДИТЬ ЗАКАЗ'}) }}
+            </div>
+            <div class="inp-i right">
+                <p>Подтверждая заказ, я принимаю условия</p>
+
+                <p><a href="#terms" class="popup_js">пользовательского
+                        соглашения</a></p>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

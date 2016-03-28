@@ -6229,7 +6229,7 @@ input[type="checkbox"] {
 		font-size: 0;
 
 		&.inp_error {
-			input {
+			input, label span {
 				border-color: #f24841;
 
 			}

@@ -1,0 +1,5 @@
+<p class="hello">Здравствуйте, {{ app.user.name }}, пожалуйста проверьте Ваши данные для оформления заказа</p>
+
+<div class="new-buyer">
+    {{ include('AppBundle:shop/cart/partials/order_form.html.twig', { 'form': form }) }}
+</div>

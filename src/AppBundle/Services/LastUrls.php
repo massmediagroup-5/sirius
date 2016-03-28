@@ -36,12 +36,32 @@ class LastUrls
         $this->container = $container;
     }
 
+    /**
+     * @param $url
+     */
     public function setLastCatalogUrl($url) {
         $this->session->set('last_catalog_url', $url);
     }
 
+    /**
+     * @return string
+     */
     public function getLastCatalogUrl() {
         return $this->session->get('last_catalog_url', '/');
+    }
+
+    /**
+     * @param $url
+     */
+    public function setLastRequestedUrl($url) {
+        $this->session->set('last_requested_url', $url);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastRequestedUrl() {
+        return $this->session->get('last_requested_url', '/');
     }
 
 }

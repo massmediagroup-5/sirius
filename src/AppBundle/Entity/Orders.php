@@ -7,6 +7,15 @@ namespace AppBundle\Entity;
  */
 class Orders
 {
+
+    const PAY_TYPE_BANK_CARD = 0;
+
+    const PAY_TYPE_COD = 1;
+
+    const TYPE_NORMAL = 0;
+
+    const TYPE_QUICK = 1;
+
     /**
      * @var integer
      */
@@ -589,5 +598,12 @@ class Orders
     public function getStores()
     {
         return $this->stores;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return (string)$this->getId();
     }
 }
