@@ -324,4 +324,8 @@ class MainSlider
     {
         $this->upload();
     }
+
+    public function __toString() {
+        return $this->getTitle();
+    }
 }

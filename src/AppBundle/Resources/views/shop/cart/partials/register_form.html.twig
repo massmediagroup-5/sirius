@@ -7,27 +7,22 @@
     <div class="item-drop__i">
         <div class="regular-buyer">
             <div class="col">
-                <form action="" method="post">
-
+                <form action="{{ path("fos_user_security_check") }}" method="post" class="login-form"
+                      data-redirect="{{ path('cart_order') }}">
                     <div class="inp">
-                        <input type="email" placeholder="E-mail адрес"
-                               name="email"/>
+                        <input type="email" required="required" placeholder="E-mail адрес" name="_username"/>
                     </div>
                     <div class="inp">
-                        <input type="password" placeholder="Пароль" name="passw"
-                               class="phone-inp" name="phone"/>
+                        <input type="password" placeholder="Пароль" name="_password" />
                     </div>
                     <div class="inp">
-                        <input type="submit" value="Войти" name="enter"
-                               class="btn btn_black_transparent"/>
+                        <input type="submit" value="Войти" class="btn btn_black_transparent"/>
                     </div>
                     <div class="inp">
                         <a href="#" class="passw-recovery">Забыли пароль?</a>
                     </div>
-
                     <div class="or">или</div>
-
-
+                    <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
                 </form>
             </div>
             <div class="col">

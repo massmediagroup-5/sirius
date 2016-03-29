@@ -56,6 +56,7 @@ twig:
     #exception_controller:  AppBundle:Exception:index
     globals:
         options: @options
+        fos_csrf_provider: "@form.csrf_provider"
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'

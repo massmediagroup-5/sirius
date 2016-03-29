@@ -27,3 +27,9 @@ services:
         arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@fos_user.util.token_generator.default"]
         scope: request
         public: false
+
+    app_user.form.handler.authentication:
+        class:  AppBundle\Form\Handler\AuthenticationHandler
+        arguments:  [@service_container, @router]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
