@@ -88,3 +88,6 @@ app:
 app_category:
     resource: "@AppBundle/Controller/ShopController.php"
     type:     annotation
+app_product:
+    resource: "@AppBundle/Controller/ProductController.php"
+    type:     annotation
