@@ -159,6 +159,7 @@ class CartController extends BaseController
 
         $orderForm->handleRequest($request);
         if($orderForm->isValid()) {
+            // todo when no user - create new
             $order = $this->get('cart')->flushCart($this->getUser(), $orderForm->getData());
 
             return $this->render('AppBundle:shop:cart/order_approve.html.twig', [

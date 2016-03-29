@@ -30,6 +30,8 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+                success_handler: app_user.form.handler.authentication
+                failure_handler: app_user.form.handler.authentication
             logout:
                 path:   /logout
                 target: /

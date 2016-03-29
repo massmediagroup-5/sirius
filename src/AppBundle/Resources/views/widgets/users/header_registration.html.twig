@@ -1,4 +1,4 @@
-<a href="{{ path('user_profile') }}" class="profile-btn {% if not app.user %} js_logged_out {% endif %}">
+<a href="{{ app.user ? path('user_profile') : '#' }}" class="profile-btn {% if not app.user %} js_logged_out {% endif %}">
     <i class="icon icon-profile"></i>
     <i class="icon icon-profile-hover hover"></i>
 </a>
@@ -12,12 +12,12 @@
             <div class="inner">
                 <div class="col">
                     <div class="col__i">
-                        <form method="post" class="login-form">
+                        <form action="{{ path("fos_user_security_check") }}" method="post" class="login-form">
                             <div class="inp">
-                                <input type="text" placeholder="E-mail адрес" name="email"/>
+                                <input type="email" placeholder="E-mail адрес" name="_username" required="required"/>
                             </div>
                             <div class="inp">
-                                <input type="text" placeholder="Пароль" name="passw"/>
+                                <input type="text" placeholder="Пароль" name="_password" required="required" />
 
                             </div>
 
@@ -38,6 +38,7 @@
                                     </table>
                                 </div>
                             </div>
+                            <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
                         </form>
 
                         <div class="or">или</div>
