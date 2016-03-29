@@ -1,0 +1,51 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block body %}
+
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+
+                {{ widget('breadcrumbs.render')|raw }}
+
+                <h2 class="page-title">Личный кабинет</h2>
+
+                <div class="catalog">
+                    <div class="catalog__i">
+
+                        <div class="aside">
+                            <div class="aside__i">
+
+                                <div class="lk-nav">
+                                    <div class="lk-nav__i">
+                                        <ul>
+                                            <li class="active"><a href="#">Мои данные</a></li>
+                                            <li><a href="#">Список желаний</a></li>
+                                            <li><a href="#">Мои заказы</a></li>
+                                            <li><a href="#">Программа лояльности</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="main">
+
+                            <div class="main__i">
+                                {% block cabinet_content%} {% endblock %}
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

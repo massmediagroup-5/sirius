@@ -1,0 +1,68 @@
+{% extends 'AppBundle:user/cabinet.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block cabinet_content %}
+
+    <div class="user-form">
+        <form action="" class="user-form__i" method="post">
+
+            <div class="rw">
+                <div class="inp-name">
+                    <label>Номер мобильного<sup>*</sup></label>
+                </div>
+                <div class="inp">
+                    <input type="text" class="phone-inp" name="phone" placeholder="Введите Ваш номер" value="+38059 658 56 98"/>
+                </div>
+            </div>
+            <div class="rw">
+                <div class="inp-name">
+                    <label>Ваше имя и фамилия<sup>*</sup></label>
+                </div>
+                <div class="inp">
+                    <div class="col">
+                        <input type="text" placeholder="Введите Имя" value="Петр"/>
+                    </div>
+                    <div class="col">
+                        <input type="text" placeholder="Введите Фамилию" value="Иванов"/>
+                    </div>
+                </div>
+            </div>
+            <div class="rw">
+                <div class="inp-name">
+                    <label>Ваш E-mail<sup>*</sup></label>
+                </div>
+                <div class="inp">
+                    <input type="text" placeholder="Введите E-mail адрес" value="dfhsehf@dsfhsdh.com"/>
+                </div>
+            </div>
+            <div class="rw mb20">
+                <a href="#" class="change-passw-btn">Изменить пароль</a>
+            </div>
+            <div class="passw-change">
+                <div class="rw">
+                    <div class="inp-name">
+                        <label>Пароль<sup>*</sup></label>
+                    </div>
+                    <div class="inp">
+                        <input type="text" class="error" placeholder="Введите пароль"/>
+                    </div>
+                </div>
+                <div class="rw">
+                    <div class="inp-name">
+                        <label>Подтвердите пароль<sup>*</sup></label>
+                    </div>
+                    <div class="inp">
+                        <input type="text" placeholder="Подтвердите пароль"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rw">
+                <button type="submit" class="btn btn_blue">ПОДТВЕРДИТЬ</button>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}

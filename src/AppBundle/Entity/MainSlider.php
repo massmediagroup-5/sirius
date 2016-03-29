@@ -282,7 +282,7 @@ class MainSlider
         $this->setFile(null);
     }
 
-    # формирует уникальное имя
+    # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
     private function fileUniqueName()
     {
         return sha1(uniqid(mt_rand(), true));
