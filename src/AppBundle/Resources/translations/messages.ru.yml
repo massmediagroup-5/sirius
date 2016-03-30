@@ -32,7 +32,7 @@ Ordering in 1 click: Заказ в 1 клик|Заказать в 1 клик
 uah: грн
 The manager will call you and specify the details.: Менеджер перезвонит вам и уточнит детали.
 Pre order product flag: Скоро в продаже
-
+Pre-order: Предзаказ
 labels:
   colors: цвет|цвета|цветов
   products_count: '%count% товар|%count% товара|%count% товаров'
