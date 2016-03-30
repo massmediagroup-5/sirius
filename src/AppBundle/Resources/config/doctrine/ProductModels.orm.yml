@@ -215,7 +215,8 @@ AppBundle\Entity\ProductModels:
                     -
                         name: size_id
                         referencedColumnName: id
-            orderBy: null
+            orderBy:
+                size: ASC
 
     lifecycleCallbacks:
         prePersist: [ checkPrice, checkColor ]

@@ -3833,6 +3833,12 @@ input[type="checkbox"] {
 				opacity: 1;
 			}
 		}
+		.add-wish-added {
+			display: block;
+		}
+		.add-wish-not-added {
+			display: none;
+		}
 	}
 
 	&:hover {
@@ -3862,6 +3868,10 @@ input[type="checkbox"] {
 			opacity: 0;
 		}
 	}
+}
+
+.add-wish-added {
+	display: none;
 }
 
 .tooltip {

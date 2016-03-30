@@ -49,8 +49,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategories')
             ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
-            ->orderBy('productModels.priority', 'ASC')
-            ;
+            ->orderBy('productModels.priority', 'ASC');
     }
 
     /**
@@ -72,8 +71,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
             ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
             ->innerJoin('products.baseCategory', 'baseCategories')->addselect('baseCategories')
-            ->orderBy('productModels.priority', 'ASC')
-            ;
+            ->orderBy('productModels.priority', 'ASC');
         return $this;
     }
 
@@ -88,9 +86,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      *     $paginator->count() # Count of ALL posts (ie: `20` posts)
      *     $paginator->getIterator() # ArrayIterator
      *
-     * @param Doctrine\ORM\Query $dql   DQL Query Object
-     * @param integer            $page  Current page (defaults to 1)
-     * @param integer            $limit The total number per page (defaults to 5)
+     * @param Doctrine\ORM\Query $dql DQL Query Object
+     * @param integer $page Current page (defaults to 1)
+     * @param integer $limit The total number per page (defaults to 5)
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
@@ -99,7 +97,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $paginator = new Paginator($dql);
 
         $paginator->getQuery()
-            ->setFirstResult($limit * ($page - 1)) // Offset
+            ->setFirstResult($limit * ($page - 1))// Offset
             ->setMaxResults($limit); // Limit
 
         return $paginator;
@@ -154,16 +152,16 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                     $table = $whereKey;
                     break;
             }
-            foreach($whereValue as $columnKey=> $columnValue) {
-                if($columnKey=='price_from'){
+            foreach ($whereValue as $columnKey => $columnValue) {
+                if ($columnKey == 'price_from') {
                     $this->query_obj
                         ->andWhere("{$table}.price >= :{$columnKey}")
                         ->setParameter($columnKey, $columnValue);
-                }elseif($columnKey=='price_to'){
+                } elseif ($columnKey == 'price_to') {
                     $this->query_obj
                         ->andWhere("{$table}.price <= :{$columnKey}")
                         ->setParameter($columnKey, $columnValue);
-                }else{
+                } else {
                     $this->query_obj
                         ->andWhere("{$table}.{$columnKey} = :{$columnKey}")
                         ->setParameter($columnKey, $columnValue);
@@ -188,34 +186,32 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.characteristics', 'characteristics')->addSelect('characteristics')
             ->andWhere("characteristicValues.id IN (:characteristicValues)")
-            ->setParameter('characteristicValues', $characteristicValues)
-            ;
+            ->setParameter('characteristicValues', $characteristicValues);
         return $this;
     }
 
     /**
-     * Add sorting
-     *
      * @param $query
      * @param $sort
-     * @return $this
+     * @param string $alias
+     * @return mixed
      */
-    public function addSort($query, $sort)
+    public function addSort($query, $sort, $alias = 'productModels')
     {
-        $query->orderBy('productModels.inStock', 'DESC');
+        $query->orderBy("$alias.inStock", 'DESC');
         switch ($sort) {
             case false:
             case 'az':
-                $query->addOrderBy('productModels.name', 'ASC');
+                $query->addOrderBy("$alias.name", 'ASC');
                 break;
             case 'za':
-                $query->addOrderBy('productModels.name', 'DESC');
+                $query->addOrderBy("$alias.name", 'DESC');
                 break;
             case 'cheap':
-                $query->addOrderBy('productModels.price', 'ASC');
+                $query->addOrderBy("$alias.price", 'ASC');
                 break;
             case 'expensive':
-                $query->addOrderBy('productModels.price', 'DESC');
+                $query->addOrderBy("$alias.price", 'DESC');
                 break;
             case 'novelty':
                 //$query->orderBy('prodSkuVnd.priority', 'ASC');
@@ -254,8 +250,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                     WHERE inccharval.id IN (' . implode(',', $chValue) . ')
                     OR inccharval.id = characteristicValues.id
                 )
-            ')
-            ;
+            ');
         return $this;
     }
 
@@ -311,8 +306,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
             ->where('prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
             ->setParameter('alias', $modelAlias)
-            ->orderBy('prodSkuVnd.priority', 'ASC')
-        ;
+            ->orderBy('prodSkuVnd.priority', 'ASC');
         return $query_obj->getQuery()->getSingleResult();
     }
 
@@ -337,8 +331,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
             ->where('prodChName.inFilter = 1 AND prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.id = :id')
             ->setParameter('id', $productModelId)
-            ->orderBy('prodChVal.characteristics', 'ASC')
-        ;
+            ->orderBy('prodChVal.characteristics', 'ASC');
         return $query_obj->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 
@@ -367,8 +360,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
             ->where('prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
             ->setParameter('alias', $productModelAlias)
-            ->orderBy('prodSkuVnd.priority', 'ASC')
-        ;
+            ->orderBy('prodSkuVnd.priority', 'ASC');
         return $query_obj->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 
@@ -391,8 +383,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->select('products')
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
             ->innerJoin('characteristicValues.categories', 'categories')->addselect('categories')
-            ->where("categories.id = :category")->setParameter('category', $category->getId())
-            ;
+            ->where("categories.id = :category")->setParameter('category', $category->getId());
         $this->counter = 1;
         return $this;
     }
@@ -407,9 +398,8 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     public function addWhereIn($array)
     {
         $this->query_obj
-            ->andWhere('characteristicValues.id IN (:values'.$this->counter.')')
-            ->setParameter('values'.$this->counter, $array)
-            ;
+            ->andWhere('characteristicValues.id IN (:values' . $this->counter . ')')
+            ->setParameter('values' . $this->counter, $array);
         ++$this->counter;
         return $this;
     }
@@ -436,36 +426,18 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             // todo fix this hell, doctrine lazy load is slower then over 100 queries
 //            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
-
-            ->innerJoin('characteristicValues.characteristics', 'characteristics')
-        ;
+            ->innerJoin('characteristicValues.characteristics', 'characteristics');
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
-
-        if($characteristicValues) {
-            $builder->andWhere($builder->expr()->in("characteristicValues.id", $characteristicValues))
-            ->groupBy('products.id')
-                ->having('COUNT(DISTINCT characteristics.id) >=
-                (
-                    SELECT COUNT( DISTINCT incchar.id )
-                    FROM \AppBundle\Entity\Characteristics as incchar
-                    JOIN incchar.characteristicValues as inccharval
-                    WHERE inccharval.id IN (' . implode(',', $characteristicValues) . ')
-                    OR inccharval.id = characteristicValues.id
-                )
-            ');
-        }
-
+        $builder = $this->addCharacteristicsCondition($builder, $characteristicValues);
 
         $builder = $this->addPriceToQuery($builder, $filters);
 
-        $this->addSort($builder, Arr::get($filters, 'sort'));
+        $builder = $this->addSort($builder, Arr::get($filters, 'sort'));
 
         return $builder->getQuery();
     }
-
-
 
     /**
      * @param $category
@@ -480,6 +452,31 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @param $builder
+     * @param $characteristicValues
+     * @param string $productsAlias
+     * @param string $characteristicValuesAlias
+     * @param string $characteristicsAlias
+     * @return mixed
+     */
+    public function addCharacteristicsCondition($builder, $characteristicValues, $productsAlias = 'products', $characteristicValuesAlias = 'characteristicValues', $characteristicsAlias = 'characteristics')
+    {
+        if ($characteristicValues) {
+            $builder->andWhere($builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues))
+                ->groupBy("$productsAlias.id")
+                ->having('COUNT(DISTINCT characteristics.id) >=
+                (
+                    SELECT COUNT( DISTINCT incchar.id )
+                    FROM \AppBundle\Entity\Characteristics as incchar
+                    JOIN incchar.characteristicValues as inccharval
+                    WHERE inccharval.id IN (' . implode(',', $characteristicValues) . ')
+                    OR inccharval.id = characteristicValues.id
+                )
+            ');
+        }
+        return $builder;
+    }
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $builder
@@ -487,9 +484,10 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param string $alias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function addPriceToQuery($builder, $filters, $alias = 'productModels') {
+    public function addPriceToQuery($builder, $filters, $alias = 'productModels')
+    {
         return $builder->andWhere($builder->expr()->gte("$alias.price", $filters['price_from']))
-                ->andWhere($builder->expr()->lte("$alias.price", $filters['price_to']));
+            ->andWhere($builder->expr()->lte("$alias.price", $filters['price_to']));
     }
 
     /**

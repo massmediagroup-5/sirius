@@ -35,7 +35,7 @@ AppBundle\Entity\Characteristics:
         renderType:
             type: string
             nullable: true
-            columnDefinition: "enum('color')"
+            columnDefinition: "enum('color','material')"
             column: render_type
         inFilter:
             type: boolean

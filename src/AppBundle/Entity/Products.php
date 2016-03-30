@@ -399,6 +399,30 @@ class Products implements CharacteristicableInterface
         }
     }
 
+    /**
+     * @param $type
+     * @return CharacteristicValues|bool
+     */
+    public function getCharacteristicByType($type)
+    {
+        return $this->characteristicValues->filter(function (CharacteristicValues $characteristicValue) use($type) {
+            return $characteristicValue->getCharacteristics()->getRenderType() == $type;
+        })->first();
+    }
+
+    /**
+     * @param $type
+     * @return string
+     */
+    public function getCharacteristicValueByType($type)
+    {
+        $characteristicValue = $this->getCharacteristicByType($type);
+        return $characteristicValue ? $characteristicValue->getName() : '';
+    }
+
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getImportName() ? : '';
