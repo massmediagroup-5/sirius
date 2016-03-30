@@ -1,14 +1,13 @@
 <footer class="footer">
     <div class="footer__top">
         <div class="wrap">
-
             <div class="contacts">
                 <div class="contacts__i">
                     <ul>
-                        <li><i class="icon icon-mobile"></i>+38 065 325 65 32</li>
-                        <li>+38 056 356 35 36</li>
-                        <li>+38 099 000 39 88</li>
-                        <li class="email"><i class="icon icon-email"></i><a href="mailto:sirius@mail.com">sirius@mail.com</a></li>
+                        <li><i class="icon icon-mobile"></i>{{ options.params.phone1 }}</li>
+                        <li>{{ options.params.phone2 }}</li>
+                        <li>{{ options.params.phone3 }}</li>
+                        <li class="email"><i class="icon icon-email"></i><a href="mailto:{{ options.params.email }}">{{ options.params.email }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -74,7 +73,7 @@
 
             </div>
 
-            <p class="copy">&copy; 2015, Sirius - женская спортивная одежда</p>
+            <p class="copy">&copy; 2016, Sirius - женская спортивная одежда</p>
         </div>
     </div>
 </footer>

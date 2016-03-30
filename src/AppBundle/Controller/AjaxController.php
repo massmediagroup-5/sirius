@@ -19,7 +19,7 @@ class AjaxController extends Controller
      * @Route("/ajax/callback", name="callback", options={"expose"=true})
      * @Method("POST")
      * @param Request $request
-     * @return JsonResponse|RedirectResponse
+     * @return JsonResponse
      */
     public function callbackAction(Request $request)
     {
