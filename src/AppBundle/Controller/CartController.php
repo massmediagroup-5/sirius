@@ -55,6 +55,36 @@ class CartController extends BaseController
     }
 
     /**
+     * @Route("/cart/add_wholesale", name="cart_add_wholesale", options={"expose"=true})
+     * @Method("POST")
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function addInCartWholesaleAction(Request $request)
+    {
+        $products = $request->request->get('products', []);
+
+        foreach ($products as $productId => $sizes) {
+            foreach ($sizes as $sizeId => $quantity) {
+                $this->get('cart')->addItemToCard(
+                    $this->getDoctrine()->getManager()->getReference('AppBundle:SkuProducts', $productId),
+                    $sizeId,
+                    $quantity
+                );
+            }
+        }
+
+        return new JsonResponse([
+            'totalCount' => $this->get('cart')->getTotalCount(),
+            'totalOriginalPrice' => $this->get('cart')->getTotalOldPrice(),
+            'totalPrice' => $this->get('cart')->getTotalPrice(),
+            'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
+            'packagesCount' => $this->get('cart')->getPackagesCount(),
+            'cartItems' => $this->get('cart')->toArrayWithExtraInfo(),
+        ]);
+    }
+
+    /**
      * @Route("/cart/change_size/{id}", name="cart_change_size", options={"expose"=true})
      * @Method("POST")
      * @ParamConverter("model")
@@ -158,7 +188,7 @@ class CartController extends BaseController
         ]);
 
         $orderForm->handleRequest($request);
-        if($orderForm->isValid()) {
+        if ($orderForm->isValid()) {
             // todo when no user - create new
             $order = $this->get('cart')->flushCart($this->getUser(), $orderForm->getData());
 

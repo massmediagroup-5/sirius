@@ -139,4 +139,53 @@ class CartItem
         return $this->skuProduct;
     }
 
+    /**
+     * @return int
+     */
+    public function getPackagesQuantity()
+    {
+        $availableSizesIds = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
+            return $size->getId();
+        })->toArray();
+        $currentSizesIds = array_keys($this->sizesCounts);
+
+        // If array equals in cart all available model sizes.
+        if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
+            // Packages count - is minimal amount of concrete size.
+            // When we have only one size "52-54" - we can`n have more then one package.
+            $packagesCount = min($this->sizesCounts);
+            return $packagesCount;
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSingleItemsQuantity()
+    {
+        $availableSizesIds = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
+            return $size->getId();
+        })->toArray();
+        $currentSizesIds = array_keys($this->sizesCounts);
+
+        // If array equals in cart all available model sizes.
+        if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
+            // Packages count - is minimal amount of concrete size.
+            // When we have only one size "52-54" - we can`n have more then one package.
+            $packagesCount = min($this->sizesCounts);
+
+            // All product sizes after $packagesCount - is single items
+            $singleSizeCount = 0;
+            foreach ($this->sizesCounts as $count) {
+                $singleSizeCount += $count - $packagesCount;
+            }
+
+            return $singleSizeCount;
+        }
+
+        return $this->getQuantity();
+    }
+
 }

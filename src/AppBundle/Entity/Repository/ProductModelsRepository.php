@@ -92,7 +92,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             // todo fix this hell, doctrine lazy load is slower then over 100 queries
 //            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics');
+            ->innerJoin('characteristicValues.characteristics', 'characteristics')
+        ;
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
@@ -101,7 +102,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:Products')->addPriceToQuery($builder, $filters);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
-
+//        dd(        $builder->getDQL());
         return $builder->getQuery();
     }
 

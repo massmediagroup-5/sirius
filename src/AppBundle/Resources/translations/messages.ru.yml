@@ -36,6 +36,8 @@ Pre order product flag: Скоро в продаже
 labels:
   colors: цвет|цвета|цветов
   products_count: '%count% товар|%count% товара|%count% товаров'
+  cart_products_packages: 'упаковка|упаковки|упаковок'
+  cart_products: 'товар|товара|товаров'
 
 messages:
   order success: Добавлено в корзину

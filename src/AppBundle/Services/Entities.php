@@ -109,7 +109,7 @@ class Entities
                 foreach ($characteristicValuesEntities as $value) {
                     $supposedFilterValues = $characteristicsValuesIds;
                     $supposedFilterValues[] = $value->getId();
-                    $characteristicValues[$value->getId()] = count($this->em->getRepository('AppBundle:Products')->getFilteredProductsToCategoryQuery($category, $supposedFilterValues, $filters)->getResult());
+                    $characteristicValues[$value->getId()] = count($this->em->getRepository("AppBundle:$entity")->getFilteredProductsToCategoryQuery($category, $supposedFilterValues, $filters)->getResult());
                 }
             }
         }

@@ -3868,10 +3868,10 @@ input[type="checkbox"] {
 			opacity: 0;
 		}
 	}
-}
 
-.add-wish-added {
-	display: none;
+	.add-wish-added {
+		display: none;
+	}
 }
 
 .tooltip {
@@ -7453,6 +7453,7 @@ input[type="checkbox"] {
 	padding-bottom: 20px;
 	table {
 		width: 100%;
+		min-height: 55px;
 
 		td {
 			background: #eeeeee;
@@ -7572,6 +7573,7 @@ input[type="checkbox"] {
 			line-height: 16px;
 			font-family: $lato;
 			font-weight: 400;
+			position: relative;
 
 			&:first-child {
 				padding-left: 30px;
@@ -7672,6 +7674,19 @@ input[type="checkbox"] {
 			p {
 				font-family: $lato;
 			}
+		}
+
+		.items-in-cart {
+			width: 100%;
+			position: absolute;
+			bottom: 3px;
+			font-size: 12px;
+			text-align: center;
+			line-height: 1;
+			color: white;
+		}
+		.items-in-cart-count {
+			display: block;
 		}
 	}
 

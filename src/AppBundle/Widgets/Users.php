@@ -58,8 +58,7 @@ class Users
         $cartService = $this->container->get('cart');
 
         return $this->templating->render('AppBundle:widgets/users/header_cart.html.twig', array(
-                'totalQuantity' => $cartService->getTotalCount(),
-                'totalPrice' => $cartService->getTotalPrice(),
+                'cart' => $cartService,
                 'items'
             )
         );

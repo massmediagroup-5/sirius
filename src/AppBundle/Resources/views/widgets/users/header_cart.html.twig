@@ -1,21 +1,101 @@
-<a href="#" class="cart-btn">
-    <i class="icon icon-cart"></i>
-    <i class="icon icon-cart-hover hover"></i>
-    <span class="js_cart_total_count btn-number">{{ totalQuantity }}</span>
-</a>
+{% if is_granted('ROLE_WHOLESALER') %}
+    <div class="opt-cart-drop">
+        <div class="opt-cart-drop__i">
+            <div class="col">
+                <table>
+                    <tr>
+                        <td>Итого</td>
+                        <td><span class="js_cart_total_original_price">{{ cart.totalPrice }}</span> грн.</td>
+                    </tr>
+                    <tr class="discount">
+                        <td>Ваша скидка</td>
+                        <td>0%</td>
+                    </tr>
+                    <tr class="total">
+                        <td>Сумма к оплате</td>
+                        <td><span class="js_cart_total_price">{{ cart.totalPrice }}</span> грн.</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col">
+                <p><strong>В корзине:</strong></p>
 
-<div class="cart-drop">
-    <div class="cart-drop__i">
-        <p>В корзине <span class="js_cart_total_count">{{ totalQuantity }}</span> товара</p>
+                <p>
+                    <span class="js_cart_packages_count">{{ cart.packagesCount }}</span>
+                    {{ 'labels.cart_products_packages'|transchoice(cart.packagesCount) }}
+                </p>
 
-        <p> на cумму <span class="js_cart_total_price">{{ totalPrice }}</span> грн.</p>
+                <p>+</p>
 
-        <div class="inp">
-            <a href="{{ path('cart_order') }}" class="btn btn_blue">Оформить заказ</a>
+                <p>
+                    <span class="js_cart_single_items_count">{{ cart.singleItemsCount }}</span>
+                    {{ 'labels.cart_products'|transchoice(cart.singleItemsCount) }}
+                </p>
+            </div>
+            <div class="col">
+                <p><a href="{{ path('cart_order') }}" class="btn btn_blue">Оформить заказ</a></p>
+
+                <p><a href="{{ url('cart_show') }}">В корзину</a></p>
+            </div>
         </div>
 
-        <div class="to-cart">
-            <a href="{{ url('cart_show') }}" class="go-to-cart">В корзину</a>
+        <div class="opt-cart-drop-hover">
+            <div class="opt-cart-drop-hover__i">
+
+                <h2>В корзине</h2>
+
+                <div class="list">
+                    <div class="list__i">
+
+                        {% for item in cart.items %}
+                            <div class="item">
+                                <a href=>
+                                    <div class="item__i">
+                                        <div class="img">
+                                            {% if item.skuProduct.productModels.productModelImages.0 is defined %}
+                                                <img src="{{ item.skuProduct.productModels.productModelImages.0.link | imagine_filter('in_wholesale_cart') }}"/>
+                                            {% else %}
+                                                <img src="{{ param('no_image') | imagine_filter('in_wholesale_cart') }}"/>
+                                            {% endif %}
+                                        </div>
+                                        <div class="text">
+                                            <p>{{ item.skuProduct.productModels.name }} (Арт. {{ item.skuProduct.sku }}
+                                                )</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <p class="more">
+                    <a href="{{ url('cart_show') }}">Посмотреть все товары добавленные в корзину</a>
+                </p>
+
+            </div>
         </div>
     </div>
-</div>
+{% else %}
+    <a href="#" class="cart-btn">
+        <i class="icon icon-cart"></i>
+        <i class="icon icon-cart-hover hover"></i>
+        <span class="js_cart_total_count btn-number">{{ cart.totalQuantity }}</span>
+    </a>
+    <div class="cart-drop">
+        <div class="cart-drop__i">
+            <p>В корзине <span class="js_cart_total_count">{{ cart.totalCount }}</span> товара</p>
+
+            <p> на cумму <span class="js_cart_total_price">{{ cart.totalPrice }}</span> грн.</p>
+
+            <div class="inp">
+                <a href="{{ path('cart_order') }}" class="btn btn_blue">Оформить заказ</a>
+            </div>
+
+            <div class="to-cart">
+                <a href="{{ url('cart_show') }}" class="go-to-cart">В корзину</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
