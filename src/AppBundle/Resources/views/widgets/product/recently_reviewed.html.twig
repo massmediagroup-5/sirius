@@ -1,223 +1,28 @@
+{% if recentModels is not empty %}
 <div class="last-viewed">
     <h2>Вы уже просматривали</h2>
-
     <div class="last-viewed__i">
-
+        {% for item in recentModels %}
         <div class="item">
-            <a href="#">
+            <a href="{{ url('product', {'category': item.products.baseCategory.alias,'product': item.alias}) }}">
                 <div class="item__i">
                     <div class="img">
-                        <img src="/img/demo/last-1.jpg" alt="#"/>
+                        {% if item.productModels.0.productModelImages.0 is defined and item.productModels.0.productModelImages.0.link is not null %}
+                            <img src="{{ item.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.name }}"/>
+                        {% else %}
+                            <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.name }}"/>
+                        {% endif %}
                     </div>
                     <div class="info">
                         <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
+                            <p><strong>{{ item.name }}</strong></p>
+                            <p> {{ item.price|number_format(2, '.', ' ') }} грн.</p>
                         </div>
                     </div>
                 </div>
             </a>
         </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-2.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-3.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-4.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-1.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-2.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-3.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-4.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-1.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-2.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-3.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
-        <div class="item">
-            <a href="#">
-                <div class="item__i">
-                    <div class="img">
-                        <img src="/img/demo/last-4.jpg" alt="#"/>
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>Befree</strong></p>
-
-                            <p>250 грн.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--item end-->
-
+        {% endfor %}
     </div>
 </div>
+{% endif %}
