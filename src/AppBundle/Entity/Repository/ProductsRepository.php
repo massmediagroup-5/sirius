@@ -223,6 +223,8 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 break;
         }
 
+        $query->orderBy("$alias.id", 'DESC');
+
         return $query;
     }
 

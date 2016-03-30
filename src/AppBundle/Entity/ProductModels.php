@@ -744,7 +744,7 @@ class ProductModels
     /**
      * Get sizes
      *
-     * @return \AppBundle\Entity\ProductModelSizes
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSizes()
     {

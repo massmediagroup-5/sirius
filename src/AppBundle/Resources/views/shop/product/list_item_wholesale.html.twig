@@ -1,4 +1,4 @@
-<div class="item">
+<div class="item js_wholesale_item" data-id="{{ item.skuProducts.0.id }}">
     <div class="item__i">
         {{ widget('products.flags', item) }}
 
@@ -7,7 +7,7 @@
                 <td>
                     <span>
                         <a href="#" class="open-btn"></a>
-                        6548
+                        {{ item.skuProducts.0.sku }}
                     </span>
                 </td>
                 <td>
@@ -31,13 +31,23 @@
                 <td>
                     <div class="amount-control">
                         <a href="#" class="minus"></a>
-                        <input type="text" value="0"/>
+                        <input type="text" class="js_pack_amounts_changer" value="0"/>
                         <a href="#" class="plus"></a>
                     </div>
                 </td>
-                <td>1960 грн.</td>
-                <td>
-                    <a href="#" class="btn btn_blue add-to-cart"></a>
+                <td><span class="js_item_price" data-price="{{ item.price }}">{{ item.price }}</span> грн.</td>
+                <td class="buttons-holder">
+                    <a href="#" class="btn btn_blue add-to-cart js_add_pack_to_cart"></a>
+
+                    <div class="items-in-cart">
+                        Добавлено
+                        <span class="items-in-cart-count">
+                            <span class="js_cart_item_packages_count" data-id="{{ item.skuProducts.0.id }}">
+                                {{ cart.itemPackagesQuantity(item.skuProducts.0) }}
+                            </span>
+                            {{ 'labels.cart_products_packages'|transchoice(cart.itemPackagesQuantity(item.skuProducts.0)) }}
+                        </span>
+                    </div>
                 </td>
             </tr>
         </table>
@@ -63,102 +73,52 @@
                             <div class="text">
                                 <h2>О модели</h2>
 
-                                <p>Стильное и удобное платье для тебя. Мягкая
-                                    ткань
-                                    приятна на ощупь, а вставки из шифона делают
-                                    силуэт
-                                    по-девичьи изящным.</p>
+                                {{ item.content }}
 
                                 <h2>Характеристики</h2>
 
-                                <ul>
-                                    <li>Длина по спинке: 76 см (размер 36)</li>
-                                    <li>Логотип sirius на внутреннем шве</li>
-                                    <li>Шифоновые вставки на плечах; рифленые
-                                        манжеты и нижний край
-                                    </li>
-                                    <li>Свободный крой</li>
-                                    <li>Основа (трикотаж): 80% вискоза / 20%
-                                        полиэстер; вставки: 100% полиэстер
-                                    </li>
-                                </ul>
+                                {{ item.characteristics }}
 
                                 <h2>Особенности</h2>
 
-                                <ul>
-                                    <li>Регулируемый капюшон с
-                                        завязками-шнурками и воротом внахлест
-                                    </li>
-                                    <li>Рукава-реглан для свободы движения</li>
-                                </ul>
+                                {{ item.features }}
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="col__i">
                             {% for size in item.sizes %}
-                                <p>{{ size.size }}/1</p>
+                                <table class="js_wholesale_item_size" data-id="{{ size.id }}">
+                                    <tr>
+                                        <td>{{ size.size }}</td>
+                                        <td>
+                                            <div class="amount-control">
+                                                <a href="#" class="minus"></a>
+                                                <input type="text" class="js_size_amount_changer" value="0"/>
+                                                <a href="#" class="plus"></a>
+                                            </div>
+                                        </td>
+                                        <td><span class="js_item_size_price"
+                                                  data-price="{{ item.price }}">{{ item.price }}</span> грн.
+                                        </td>
+                                        <td>
+                                            <a href="#" class="btn btn_blue js_add_size_to_cart"></a>
+
+                                            <div class="items-in-cart">
+                                                Добавлено
+                                                <span class="items-in-cart-count">
+                                                    <span class="js_cart_item_size_count"
+                                                          data-id="{{ item.skuProducts.0.id }}"
+                                                          data-size_id="{{ size.id }}">
+                                                        {{ cart.getItemSizeQuantity(item.skuProducts.0, size.id) }}
+                                                    </span>
+                                                    {{ 'labels.cart_products'|transchoice(cart.getItemSizeQuantity(item.skuProducts.0, size.id)) }}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             {% endfor %}
-                            <table>
-                                <tr>
-                                    <td>50-52</td>
-                                    <td>
-                                        <div class="amount-control">
-                                            <a href="#" class="minus"></a>
-                                            <input type="text" value="0"/>
-                                            <a href="#" class="plus"></a>
-                                        </div>
-                                    </td>
-                                    <td>560 грн.</td>
-                                    <td><a href="#" class="btn btn_blue"></a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table>
-                                <tr>
-                                    <td>54-56</td>
-                                    <td>
-                                        <div class="amount-control">
-                                            <a href="#" class="minus"></a>
-                                            <input type="text" value="0"/>
-                                            <a href="#" class="plus"></a>
-                                        </div>
-                                    </td>
-                                    <td>560 грн.</td>
-                                    <td><a href="#" class="btn btn_blue"></a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table>
-                                <tr>
-                                    <td>56-58</td>
-                                    <td>
-                                        <div class="amount-control">
-                                            <a href="#" class="minus"></a>
-                                            <input type="text" value="0"/>
-                                            <a href="#" class="plus"></a>
-                                        </div>
-                                    </td>
-                                    <td>560 грн.</td>
-                                    <td><a href="#" class="btn btn_blue"></a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table>
-                                <tr>
-                                    <td>60-62</td>
-                                    <td>
-                                        <div class="amount-control">
-                                            <a href="#" class="minus"></a>
-                                            <input type="text" value="0"/>
-                                            <a href="#" class="plus"></a>
-                                        </div>
-                                    </td>
-                                    <td>560 грн.</td>
-                                    <td><a href="#" class="btn btn_blue"></a>
-                                    </td>
-                                </tr>
-                            </table>
                         </div>
 
                     </div>

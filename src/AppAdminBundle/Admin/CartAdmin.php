@@ -51,7 +51,8 @@ class CartAdmin extends Admin
                 'choices' => [
                     (string)Orders::TYPE_NORMAL => 'Обычный',
                     (string)Orders::TYPE_QUICK => 'Быстрый',
-                ]])
+                ]
+            ])
             ->add('skuProducts.productModels.name', null, array('label' => 'Имя модели'))
             ->add('status', 'choice', array(
                 'label' => 'Статус заказа',

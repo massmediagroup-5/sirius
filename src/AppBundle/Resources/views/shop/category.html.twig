@@ -223,7 +223,17 @@
         var currentCategoryAlias = "{{ data.category.alias }}";
     </script>
 
-    {% javascripts '@AppBundle/Resources/public/js/catalog.js' %}
+    {% javascripts '@AppBundle/Resources/public/js/filters.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    {% if is_granted('ROLE_WHOLESALER') %}
+        {% javascripts '@AppBundle/Resources/public/js/catalog_wholesale.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% else %}
+        {% javascripts '@AppBundle/Resources/public/js/catalog.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endif %}
 {% endblock %}

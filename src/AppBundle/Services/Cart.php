@@ -110,7 +110,7 @@ class Cart
     public function removeItemSize($skuProduct, $size)
     {
         $this->items[$skuProduct->getId()]->removeSize($size);
-        if(!$this->items[$skuProduct->getId()]->getQuantity()) {
+        if (!$this->items[$skuProduct->getId()]->getQuantity()) {
             $this->removeItem($skuProduct);
         }
         $this->saveInSession();
@@ -169,6 +169,34 @@ class Cart
     public function getItem(SkuProducts $productSku)
     {
         return isset($this->items[$productSku->getId()]) ? $this->items[$productSku->getId()] : false;
+    }
+
+    /**
+     * @param SkuProducts $productSku
+     * @return int
+     */
+    public function getItemQuantity(SkuProducts $productSku)
+    {
+        return isset($this->items[$productSku->getId()]) ? $this->items[$productSku->getId()]->getQuantity() : 0;
+    }
+
+    /**
+     * @param SkuProducts $productSku
+     * @return int
+     */
+    public function getItemPackagesQuantity(SkuProducts $productSku)
+    {
+        return isset($this->items[$productSku->getId()]) ? $this->items[$productSku->getId()]->getPackagesQuantity() : 0;
+    }
+
+    /**
+     * @param SkuProducts $productSku
+     * @return int
+     */
+    public function getItemSizeQuantity(SkuProducts $productSku, $sizeId)
+    {
+        $item = Arr::get($this->items, $productSku->getId());
+        return $item ? $item->getSize($sizeId) : 0;
     }
 
     /**
@@ -282,18 +310,62 @@ class Cart
     }
 
     /**
+     * @return int
+     */
+    public function getPackagesCount()
+    {
+        return array_sum(array_map(function (CartItem $item) {
+            return $item->getPackagesQuantity();
+        }, $this->items));
+    }
+
+    /**
+     * @return int
+     */
+    public function getSingleItemsCount()
+    {
+        return array_sum(array_map(function (CartItem $item) {
+            return $item->getSingleItemsQuantity();
+        }, $this->items));
+    }
+
+    /**
      * @return void
      */
     public function saveInSession()
     {
-        $sessionArray = [];
+        $this->session->set('cart_items', $this->toArray());
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $array = [];
         foreach ($this->items as $item) {
-            $sessionArray[$item->getSkuProduct()->getId()] = [
+            $array[$item->getSkuProduct()->getId()] = [
                 'id' => $item->getSkuProduct()->getId(),
                 'sizes' => $item->getSizes()
             ];
         }
-        $this->session->set('cart_items', $sessionArray);
+        return $array;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArrayWithExtraInfo()
+    {
+        $array = [];
+        foreach ($this->items as $item) {
+            $array[$item->getSkuProduct()->getId()] = [
+                'id' => $item->getSkuProduct()->getId(),
+                'sizes' => $item->getSizes(),
+                'packagesAmount' => $item->getPackagesQuantity()
+            ];
+        }
+        return $array;
     }
 
     /**
