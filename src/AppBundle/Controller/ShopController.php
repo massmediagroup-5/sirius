@@ -55,8 +55,9 @@ class ShopController extends Controller
         $current_page = $request->get('page') ? $request->get('page') : 1;
         $sort = $request->get('sort') ? $request->get('sort') : 'az';
         try {
+            $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category, null, $this->items_on_page, $current_page);
+                ->getCollectionsByCategoriesAlias($category, null, $this->items_on_page, $current_page, $entityName);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
@@ -72,7 +73,6 @@ class ShopController extends Controller
             return $this->render('AppBundle:shop:category.html.twig', array(
                 'data' => $data,
                 'breadcrumb' => $this->breadcrumb,
-                'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
                 'params' => $this->get('options')->getParams(),
                 'maxPages' => ceil($data['products']->count() / $this->items_on_page),
                 'thisPage' => $current_page,

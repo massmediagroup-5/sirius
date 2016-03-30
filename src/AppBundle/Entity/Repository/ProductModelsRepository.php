@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Illuminate\Support\Arr;
 
 /**
  * CategoriesRepository
@@ -67,6 +68,41 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     public function addEnabledOnSiteConditions(QueryBuilder $builder, $alias = 'productModels')
     {
         return $builder->andWhere("$alias.active = 1 AND $alias.published = 1");
+    }
+
+    /**
+     * @param $category
+     * @param $characteristicValues
+     * @param $filters
+     * @return array
+     */
+    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters)
+    {
+        $builder = $this->createQueryBuilder('productModels')
+            ->select('productModels');
+        // Add a starting Joins.
+        $builder
+            ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
+            ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
+            ->innerJoin('characteristicValues.categories', 'categories')
+            ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
+            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
+            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
+            // todo fix this hell, doctrine lazy load is slower then over 100 queries
+//            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
+            ->innerJoin('characteristicValues.characteristics', 'characteristics');
+
+        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addPriceToQuery($builder, $filters);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
+
+        return $builder->getQuery();
     }
 
 }

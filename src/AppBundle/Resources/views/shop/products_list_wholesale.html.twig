@@ -1,0 +1,46 @@
+<div class="main__i">
+    {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': data.products }) }}
+
+    <div class="opt-main-control">
+        <table>
+            <tbody><tr>
+                <td>Артикул</td>
+                <td>Фото</td>
+                <td>Модель</td>
+                <td>Цвет</td>
+                <td>Материал/
+                    состав
+                </td>
+                <td>Размер/
+                    шт в уп.
+                </td>
+                <td>
+                    Количество
+
+                    <div class="amount-control">
+                        <a href="#" class="minus"></a>
+                        <input type="text" value="0">
+                        <a href="#" class="plus"></a>
+                    </div>
+                </td>
+                <td>Цена</td>
+                <td>
+                    <a href="#" class="btn btn_blue add-all">Добавить все</a>
+                </td>
+            </tr>
+            </tbody></table>
+    </div>
+
+    <div class="opt-list">
+        <div class="opt-list__i">
+            {% for item in data.products %}
+                {% if item.chcount is defined %}
+                    {% set item = item.0 %}
+                {% endif %}
+                {{ include('AppBundle:shop:product/list_item_wholesale.html.twig', { 'item': item }) }}
+            {% endfor %}
+        </div>
+    </div>
+
+    {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': data.products }) }}
+</div>

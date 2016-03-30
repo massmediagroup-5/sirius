@@ -53,17 +53,14 @@ class Entities
     }
 
     /**
-     * Return array with two collections for Characteristics and Products
-     *
      * @param $categoryAlias
      * @param null $filters
      * @param int $perPage
      * @param int $currentPage
-     * @return bool
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @param string $entity
+     * @return array|bool
      */
-    public function getCollectionsByCategoriesAlias($categoryAlias, $filters = null, $perPage = 9, $currentPage = 1)
+    public function getCollectionsByCategoriesAlias($categoryAlias, $filters = null, $perPage = 9, $currentPage = 1, $entity = 'Products')
     {
 
         $category = $this->em
@@ -92,7 +89,8 @@ class Entities
             }
         }
 
-        $products = $this->em->getRepository('AppBundle:Products')->getFilteredProductsToCategoryQuery($category, $characteristicsValuesIds, $filters);
+        $products = $this->em->getRepository("AppBundle:$entity")
+            ->getFilteredProductsToCategoryQuery($category, $characteristicsValuesIds, $filters);
 
         $products = $this->container->get('knp_paginator')->paginate(
             $products,
