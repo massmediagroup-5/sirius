@@ -536,7 +536,7 @@
 {% block bottom_assets %}
     {{ parent() }}
 
-    {% javascripts '@AppBundle/Resources/public/js/product.js' filter='uglifyjs2' %}
+    {% javascripts '@AppBundle/Resources/public/js/product.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
