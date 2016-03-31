@@ -4,7 +4,7 @@
             <label>Сортировка</label>
 
             <div class="inp">
-                <select class="select" id="sort">
+                <select class="select sorting_dropdown" data-sort="{{ app.request.get('sort') ? app.request.get('sort') : 'az' }}">
                     <option value="az">{% trans %}By Alphabetical, from A to Z{% endtrans %}</option>
                     <option value="za">{% trans %}By Alphabetical, from Z to A{% endtrans %}</option>
                     <option value="cheap">{% trans %}From cheap to expensive{% endtrans %}</option>

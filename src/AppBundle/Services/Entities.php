@@ -114,7 +114,7 @@ class Entities
             }
         }
 
-        return compact('category', 'characteristicValues', 'products', 'products', 'characteristics', 'price_filter');
+        return compact('category', 'characteristicValues', 'products', 'characteristics', 'price_filter');
     }
 
     /**
