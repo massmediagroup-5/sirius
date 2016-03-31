@@ -4,9 +4,11 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class AjaxController extends Controller
@@ -15,14 +17,16 @@ class AjaxController extends Controller
 
     /**
      * @Route("/ajax/callback", name="callback", options={"expose"=true})
+     * @Method("POST")
+     * @param Request $request
+     * @return JsonResponse
      */
     public function callbackAction(Request $request)
     {
         if($request->get('phone')){
-            $user_id = $this->get('users')->getCurrentUser();
             $phone = new \AppBundle\Entity\CallBack();
             $phone->setPhone($request->get('phone'));
-            $phone->setUsers($user_id);
+//            $phone->setUsers($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($phone);
@@ -41,11 +45,12 @@ class AjaxController extends Controller
             $this->container->get('mailer')->send($message);
 
             $this->result['status'] = 'OK';
+            return new JsonResponse($this->result);
         }else{
             $this->result['message'] = 'Type phone number';
             $this->result['status'] = 'ERROR';
+            return new JsonResponse($this->result, 422);
         }
-        return new Response(json_encode($this->result));
     }
 
     /**
