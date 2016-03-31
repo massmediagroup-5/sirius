@@ -102,7 +102,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:Products')->addPriceToQuery($builder, $filters);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
-//        dd(        $builder->getDQL());
+
         return $builder->getQuery();
     }
 
