@@ -221,6 +221,11 @@
     {{ parent() }}
     <script>
         var currentCategoryAlias = "{{ data.category.alias }}";
+        {% if app.request.get('_route') == 'category' %}
+            var current_route = 'category';
+        {% else %}
+            var current_route = 'filter';
+        {% endif %}
     </script>
 
     {% javascripts '@AppBundle/Resources/public/js/filters.js' %}
