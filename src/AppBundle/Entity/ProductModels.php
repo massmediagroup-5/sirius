@@ -257,6 +257,16 @@ class ProductModels
     }
 
     /**
+     * Get price
+     *
+     * @return string
+     */
+    public function getPackagePrice()
+    {
+        return $this->price * $this->sizes->count();
+    }
+
+    /**
      * Set oldprice
      *
      * @param string $oldprice
