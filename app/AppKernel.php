@@ -36,6 +36,7 @@ class AppKernel extends Kernel
             new UserBundle\UserBundle(),
             new AppImportBundle\AppImportBundle(),
             new AppAdminBundle\AppAdminBundle(),
+            new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),

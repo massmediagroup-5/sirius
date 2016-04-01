@@ -1,0 +1,220 @@
+{% extends 'AppBundle:base.html.twig' %}
+{% block out_class %}out_sub{% endblock %}
+{% block body %}
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs__i">
+                        <ul>
+                            <li><a href="{{ url('homepage') }}">На главную</a></li>
+                            <li>Контакты</li>
+                        </ul>
+                    </div>
+                </div>
+                <h2 class="page-title">
+                    Контакты
+                </h2>
+                <div class="main-contacts">
+                    <div class="main-contacts__i">
+                        <div class="col">
+                            <div class="text">
+                                <div class="text__i">
+                                    <h2>Отдел розничных продаж</h2>
+                                    <div class="phones">
+                                        <p>+38 096 000 39 88 (КС)</p>
+
+                                        <p>+38 093 000 39 88 (Life)</p>
+
+                                        <p>+38 099 000 39 88 (МТС)</p>
+                                    </div>
+                                    <div class="emails">
+                                        <p><a href="mailto:manager@sirius-sport.com">manager@sirius-sport.com</a></p>
+                                    </div>
+                                    <div class="skypes">
+                                        <p><a href="#">sirius-sport </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="text">
+                                <div class="text__i">
+                                    <h2>Отдел оптовых продаж</h2>
+                                    <div class="phones">
+                                        <p>+38 067 9000 544 (КС)</p>
+                                    </div>
+                                    <div class="emails">
+                                        <p><a href="mailto:opt@sirius-sport.com">opt@sirius-sport.com</a></p>
+                                    </div>
+                                    <div class="skypes">
+                                        <p><a href="#">sirius-sport </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="text">
+                                <div class="text__i">
+                                    <div class="qr">
+                                        <h2>Все Контакты в QR-виде</h2>
+                                        <img src="/img/demo/qr.jpg" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="static-content-wrap">
+        <section class="content">
+            <div class="wrap">
+                <div class="content__i">
+                    <div class="chief-contact">
+                        <div class="chief-contact__i">
+                            <h2>Есть жалобы или пожелания?</h2>
+                            <h2>Напишите прямо директору</h2>
+                            <p><a href="mailto:director@sirius-sport.com">director@sirius-sport.com</a></p>
+                            <p><strong>Или воспользуйтесь формой</strong></p>
+                            {{ form_start(form, {'attr': {'class': 'chief-form'}}) }}
+                            <div class="inp">
+                                {{ form_widget(form.name, {'attr': {'placeholder': 'Введите ваше имя'}}) }}
+                            </div>
+                            <div class="inp">
+                                {{ form_widget(form.email, {'attr': {'placeholder': 'Введите ваш E-mail'}}) }}
+                            </div>
+                            <div class="inp">
+                                {{ form_widget(form.message, {'attr': {'placeholder': 'Введите Ваше сообщение'}}) }}
+                            </div>
+                            <div class="captcha-wrap">
+                                {{ form_widget(form.recaptcha) }}
+                            </div>
+                            <div class="btn-row">
+                                {{ form_widget(form.submit, {'label': 'отправить', 'attr': {'class': 'btn btn_blue'}}) }}
+                            </div>
+                            {{ form_end(form) }}
+                            {#<form action="" method="post" class="chief-form">#}
+                                {#<div class="inp">#}
+                                    {#<input type="text" placeholder="Введите ваше имя" name="name"/>#}
+                                {#</div>#}
+                                {#<div class="inp">#}
+                                    {#<input type="email" placeholder="Введите ваш E-mail" name="email"/>#}
+                                {#</div>#}
+                                {#<div class="inp">#}
+                                    {#<textarea name="message" placeholder="Введите Ваше сообщение"></textarea>#}
+                                {#</div>#}
+                                {#<div class="captcha-wrap">#}
+                                    {#<img src="/img/demo/captcha.jpg" alt=""/>#}
+                                {#</div>#}
+                                {#<div class="btn-row">#}
+                                    {#<input type="submit" value="отправить"  onclick="$.fancybox.open({href: '#manager-contact', type: 'inline'});return false;" class="btn btn_blue"/>#}
+                                {#</div>#}
+                            {#</form>#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="wrap">
+                <div class="content__i">
+                    <div class="work-time">
+                        <div class="work-time__i">
+                            <h2>График работы</h2>
+                            <div class="list">
+                                <div class="list__i">
+                                    <div class="item">
+                                        <div class="item__i">
+                                            <div class="text">
+                                                <p><strong>Прием заказов</strong></p>
+                                            </div>
+                                            <div class="img">
+                                                <img src="/img/demo/time1.jpg" alt=""/>
+                                            </div>
+                                            <div class="text">
+                                                <p>Круглосуточно на сайте, 7/24</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--item end-->
+                                    <div class="item">
+                                        <div class="item__i">
+                                            <div class="text">
+                                                <p><strong>Клиентская поддержка по телефону, в
+                                                        том числе и по заказам</strong></p>
+                                            </div>
+                                            <div class="img">
+                                                <img src="/img/demo/time2.jpg" alt=""/>
+                                            </div>
+                                            <div class="text">
+                                                <p>Ежедневно с 8:00 до 17:00, кроме воскресенья</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--item end-->
+                                    <div class="item">
+                                        <div class="item__i">
+                                            <div class="text">
+                                                <p><strong>Отправка заказов</strong></p>
+                                            </div>
+                                            <div class="img">
+                                                <img src="/img/demo/time3.jpg" alt=""/>
+                                            </div>
+                                            <div class="text">
+                                                <p>Ежедневно с 8:00 до 17:00, кроме субботы и
+                                                    воскресенья</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--item end-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="wrap">
+                <div class="content__i">
+                    <div class="socials">
+                        <div class="socials__i">
+                            <h2>Узнавайте о всех новинках и акциях первыми</h2>
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="icon icon-fb"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="icon icon-vk"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="icon icon-gplus"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="wrap">
+                <div class="content__i">
+                    <div class="address">
+                        <div class="address__i">
+                            <h2>Адрес фабрики</h2>
+                            <p><strong>Хмельницкая область, Ярмоленецкий район, пгт. Ярмолинцы, ул. Хмельницкая
+                                    6/1</strong></p>
+                            <p>Приехав на фабрику Sirius, Вы можете лично увидеть совершенный процесс производства
+                                качественной женской спортивной одежды TM Sirius, попробовать товар на ощупь и убедиться
+                                в правильности своего выбора!</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <div class="map" id="map"></div>
+    </div>
+{% endblock %}

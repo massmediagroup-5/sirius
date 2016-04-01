@@ -49,6 +49,14 @@ framework:
     fragments:       ~
     http_method_override: true
 
+# Recaptcha Configuration
+ewz_recaptcha:
+#    enabled: true
+#    ajax: true
+    public_key:  6LcBThwTAAAAAONvtJ8-xxl78jy6hWFiKOiUSPjC
+    private_key: 6LcBThwTAAAAAONvtJ8-xxl78jy6hWFiKOiUSPjC
+    locale_key:  %kernel.default_locale%
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
