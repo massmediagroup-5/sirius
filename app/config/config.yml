@@ -311,6 +311,10 @@ liip_imagine:
             quality: 80
             filters:
                 thumbnail: { size: [90, 87], mode: outbound}
+        on_wholesale_cart_page:
+            quality: 80
+            filters:
+                thumbnail: { size: [68, 87], mode: outbound}
         in_cart:
             quality: 80
             filters:

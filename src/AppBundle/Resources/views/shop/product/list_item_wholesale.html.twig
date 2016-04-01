@@ -12,8 +12,12 @@
                 </td>
                 <td>
                     <span class="img-wrap">
-                        <a href="#product-popup" class="img popup_gallery">
-                            <img src="img/demo/opt-product.jpg" alt=""/>
+                        <a href="#product-popup-{{ item.id }}" class="img popup_gallery">
+                            {% if item.productModelImages.0 is defined %}
+                                <img src="{{ item.productModelImages.0.link | imagine_filter('on_wholesale_cart_page') }}" />
+                            {% else %}
+                                <img src="{{ param('no_image') | imagine_filter('on_wholesale_cart_page') }}"/>
+                            {% endif %}
                         </a>
                         {{ widget('products.wishButton', item)|raw }}
                     </span>
@@ -35,7 +39,9 @@
                         <a href="#" class="plus"></a>
                     </div>
                 </td>
-                <td><span class="js_item_price" data-price="{{ item.price }}">{{ item.price }}</span> грн.</td>
+                <td>
+                    <span class="js_item_price" data-price="{{ item.packagePrice|format_price }}">{{ item.packagePrice|format_price }}</span> грн.
+                </td>
                 <td class="buttons-holder">
                     <a href="#" class="btn btn_blue add-to-cart js_add_pack_to_cart"></a>
 

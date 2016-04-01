@@ -35,7 +35,6 @@
                                 </div>
                             </div>
                         {% endif %}
-
                     </div>
                     <div class="col">
                         <div class="order-total">
@@ -44,7 +43,19 @@
                                     <p>Итого</p>
                                 </div>
                                 <div class="mid">
-                                    <h2>Заказ <span>{{ cart.standardCount }} Товара(ов)</span></h2>
+                                    <h2>
+                                        Основной заказ
+                                        {% if not is_granted('ROLE_WHOLESALER') %}
+                                            <span>{{ cart.standardCount }} Товара(ов)</span>
+                                        {% endif %}
+                                    </h2>
+                                    {% if is_granted('ROLE_WHOLESALER') %}
+                                        <h3><strong>{{ cart.standardPackagesCount }}</strong>
+                                            {{ 'labels.cart_products_packages'|transchoice(cart.standardPackagesCount) }}
+                                            + <strong>{{ cart.standardSingleItemsCount }}</strong>
+                                            {{ 'labels.cart_products'|transchoice(cart.standardSingleItemsCount) }}
+                                        </h3>
+                                    {% endif %}
                                     <table>
                                         <tr>
                                             <td>Итого</td>
@@ -53,7 +64,19 @@
                                     </table>
                                 </div>
                                 <div class="mid">
-                                    <h2>Предзаказ <span>{{ cart.preOrderCount }} Товара(ов)</span></h2>
+                                    <h2>
+                                        Предзаказ
+                                        {% if not is_granted('ROLE_WHOLESALER') %}
+                                            <span>{{ cart.preOrderCount }} Товара(ов)</span>
+                                        {% endif %}
+                                    </h2>
+                                    {% if is_granted('ROLE_WHOLESALER') %}
+                                        <h3><strong>{{ cart.preOrderPackagesCount }}</strong>
+                                            {{ 'labels.cart_products_packages'|transchoice(cart.preOrderPackagesCount) }}
+                                            + <strong>{{ cart.preOrderSingleItemsCount }}</strong>
+                                            {{ 'labels.cart_products'|transchoice(cart.preOrderSingleItemsCount) }}
+                                        </h3>
+                                    {% endif %}
                                     <table>
                                         <tr>
                                             <td>Итого</td>
