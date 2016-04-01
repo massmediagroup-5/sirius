@@ -29,13 +29,9 @@ class PageController extends Controller
         $page = $this->getDoctrine()->getRepository('AppBundle:Pages')->findOneByAlias($alias);
         if ($page) {
             $options = $this->get('options');
-            return $this->render('AppBundle:userpart:page.html.twig', array(
+            return $this->render('AppBundle:page.html.twig', array(
                 'base_dir'          => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-                'page'              => $page,
-                'params'            => $options->getParams(),
-                'cart'              => $this->get('cart')->getHeaderBasketInfo(),
-                'compare'           => $this->get('compare')->getHeaderCompareInfo(),
-                'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
+                'page'              => $page
             ));
         }else{
             throw $this->createNotFoundException();

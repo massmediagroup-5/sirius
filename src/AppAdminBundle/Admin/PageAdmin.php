@@ -19,7 +19,7 @@ class PageAdmin extends Admin
             ->add('seo_title', 'text', array('label' => 'SEO Title'))
             ->add('seo_description', 'text', array('label' => 'SEO Description'))
             ->add('seo_keywords', 'text', array('label' => 'SEO Keywords'))
-            ->add('content') //if no type is specified, SonataAdminBundle tries to guess it
+            ->add('content', 'textarea', array('label' => 'Контент','attr' => array('class' => 'ckeditor'))) //if no type is specified, SonataAdminBundle tries to guess it
         ;
     }
 

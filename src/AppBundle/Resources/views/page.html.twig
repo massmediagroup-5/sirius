@@ -1,0 +1,22 @@
+{% extends 'AppBundle:base.html.twig' %}
+{% block out_class %}out_sub{% endblock %}
+{% block body %}
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs__i">
+                        <ul>
+                            <li><a href="{{ url('homepage') }}">На главную</a></li>
+                            <li>{{ page.title }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <h2 class="page-title">
+                    {{ page.title }}
+                </h2>
+            </div>
+        </div>
+    </section>
+    {{ page.content|raw }}
+{% endblock %}
