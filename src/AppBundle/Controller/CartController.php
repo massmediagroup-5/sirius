@@ -81,6 +81,8 @@ class CartController extends BaseController
             'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
             'packagesCount' => $this->get('cart')->getPackagesCount(),
             'cartItems' => $this->get('cart')->toArrayWithExtraInfo(),
+            'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
+            'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
         ]);
     }
 
@@ -170,7 +172,6 @@ class CartController extends BaseController
     public function showCartAction(Request $request)
     {
         return $this->render('AppBundle:shop:cart/show.html.twig', [
-            'cart' => $this->get('cart'),
             'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
         ]);
     }
@@ -203,7 +204,6 @@ class CartController extends BaseController
         ]);
 
         return $this->render('AppBundle:shop:cart/order.html.twig', [
-            'cart' => $this->get('cart'),
             'quickOrderForm' => $quickOrderForm->createView(),
             'orderForm' => $orderForm->createView()
         ]);

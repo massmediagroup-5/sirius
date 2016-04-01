@@ -10,7 +10,9 @@
             {% for i in 4..0 %}
                 <li class="{% if pageCount - i == current %} active {% endif %}"><a href="{{ path(route, query|merge({(pageParameterName): pageCount - i})) }}">{{pageCount - i}}</a></li>
             {% endfor %}
-            <li class="next"><a href="{{ path(route, query|merge({(pageParameterName): next})) }}"><i></i></a></li>
+            {% if next is defined %}
+                <li class="next"><a href="{{ path(route, query|merge({(pageParameterName): next})) }}"><i></i></a></li>
+            {% endif %}
         {% elseif pageCount > 8 and current < 5 %}
             {% if previous is defined %}
                 <li class="prev"><a href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><i></i></a></li>

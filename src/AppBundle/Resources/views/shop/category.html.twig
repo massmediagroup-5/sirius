@@ -228,12 +228,23 @@
     {% endjavascripts %}
 
     {% if is_granted('ROLE_WHOLESALER') %}
-        {% javascripts '@AppBundle/Resources/public/js/catalog_wholesale.js' %}
+        {% javascripts
+            '@AppBundle/Resources/public/js/wholesale.js'
+            '@AppBundle/Resources/public/js/catalog_wholesale.js'
+        %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% else %}
         {% javascripts '@AppBundle/Resources/public/js/catalog.js' %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
+    {% endif %}
+{% endblock %}
+
+{% block popups %}
+    {{ parent() }}
+
+    {% if is_granted('ROLE_WHOLESALER') %}
+        {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': data.products }) }}
     {% endif %}
 {% endblock %}
