@@ -3,6 +3,7 @@
 namespace AppBundle\Model;
 
 use AppBundle\Entity\SkuProducts;
+use Illuminate\Support\Arr;
 
 class CartItem
 {
@@ -35,6 +36,9 @@ class CartItem
             $this->sizesCounts[$sizeId] = $quantity;
         } else {
             $this->sizesCounts[$sizeId] += $quantity;
+        }
+        if($this->sizesCounts[$sizeId] <= 0) {
+            $this->removeSize($sizeId);
         }
 
         return $this;
@@ -163,29 +167,71 @@ class CartItem
     /**
      * @return int
      */
+    public function getPackagesPrice()
+    {
+        $sizesInPackageCount = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
+            return $size->getId();
+        })->count();
+
+        return $this->getPackagesQuantity() * $sizesInPackageCount * $this->skuProduct->getProductModels()->getPrice();
+    }
+
+    /**
+     * @return int
+     */
     public function getSingleItemsQuantity()
+    {
+        return array_sum($this->getSingleItems());
+    }
+
+    /**
+     * @return array[int]
+     */
+    public function getSingleItems()
     {
         $availableSizesIds = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
             return $size->getId();
         })->toArray();
         $currentSizesIds = array_keys($this->sizesCounts);
 
+        $singleSizes = [];
         // If array equals in cart all available model sizes.
         if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
             // Packages count - is minimal amount of concrete size.
             // When we have only one size "52-54" - we can`n have more then one package.
             $packagesCount = min($this->sizesCounts);
-
             // All product sizes after $packagesCount - is single items
-            $singleSizeCount = 0;
-            foreach ($this->sizesCounts as $count) {
-                $singleSizeCount += $count - $packagesCount;
+            foreach ($this->sizesCounts as $sizeId => $count) {
+                $singleSizeCount = $count - $packagesCount;
+                if($singleSizeCount) {
+                    $singleSizes[$sizeId] = $singleSizeCount;
+                }
             }
-
-            return $singleSizeCount;
+        } else {
+            return $this->sizesCounts;
         }
 
-        return $this->getQuantity();
+        return $singleSizes;
+    }
+
+    /**
+     * @param $sizeId
+     * @return int
+     */
+    public function getSingleSizeQuantity($sizeId)
+    {
+        $singleItems = $this->getSingleItems();
+
+        return Arr::get($singleItems, $sizeId, 0);
+    }
+
+    /**
+     * @param $sizeId
+     * @return int
+     */
+    public function getSingleSizePrice($sizeId)
+    {
+        return $this->getSingleSizeQuantity($sizeId) * $this->skuProduct->getProductModels()->getPrice();
     }
 
 }

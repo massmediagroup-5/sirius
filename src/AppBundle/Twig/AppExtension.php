@@ -52,6 +52,7 @@ class AppExtension extends \Twig_Extension
         return array(
             'json_decode'   => new \Twig_Filter_Method($this, 'jsonDecode'),
             'regroup'       => new \Twig_Filter_Method($this, 'regroup'),
+            'format_price'       => new \Twig_Filter_Method($this, 'formatPrice'),
         );
     }
 
@@ -78,6 +79,14 @@ class AppExtension extends \Twig_Extension
      */
     public function jsonDecode($str) {
         return json_decode($str);
+    }
+
+    /**
+     * @param $number
+     * @return string
+     */
+    public function formatPrice($number) {
+        return number_format($number, 2, '.', '');
     }
 
     /**

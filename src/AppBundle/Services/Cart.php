@@ -163,6 +163,16 @@ class Cart
     }
 
     /**
+     * @return CartItem[]
+     */
+    public function getModels()
+    {
+        return array_map(function (CartItem $item) {
+            return $item->getSkuProduct()->getProductModels();
+        }, $this->items);
+    }
+
+    /**
      * @param SkuProducts $productSku
      * @return CartItem[]
      */
@@ -330,6 +340,46 @@ class Cart
     }
 
     /**
+     * @return int
+     */
+    public function getStandardPackagesCount()
+    {
+        return array_sum(array_map(function (CartItem $item) {
+            return $item->getPackagesQuantity();
+        }, $this->getStandardItems()));
+    }
+
+    /**
+     * @return int
+     */
+    public function getStandardSingleItemsCount()
+    {
+        return array_sum(array_map(function (CartItem $item) {
+            return $item->getSingleItemsQuantity();
+        }, $this->getStandardItems()));
+    }
+
+    /**
+     * @return int
+     */
+    public function getPreOrderPackagesCount()
+    {
+        return array_sum(array_map(function (CartItem $item) {
+            return $item->getPackagesQuantity();
+        }, $this->getPreOrderItems()));
+    }
+
+    /**
+     * @return int
+     */
+    public function getPreOrderSingleItemsCount()
+    {
+        return array_sum(array_map(function (CartItem $item) {
+            return $item->getSingleItemsQuantity();
+        }, $this->getPreOrderItems()));
+    }
+
+    /**
      * @return void
      */
     public function saveInSession()
@@ -344,10 +394,14 @@ class Cart
     {
         $array = [];
         foreach ($this->items as $item) {
-            $array[$item->getSkuProduct()->getId()] = [
-                'id' => $item->getSkuProduct()->getId(),
-                'sizes' => $item->getSizes()
-            ];
+            if($item->getQuantity() > 0) {
+                $array[$item->getSkuProduct()->getId()] = [
+                    'id' => $item->getSkuProduct()->getId(),
+                    'sizes' => $item->getSizes()
+                ];
+            } else {
+                unset($this->items[$item->getSkuProduct()->getId()]);
+            }
         }
         return $array;
     }
