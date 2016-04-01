@@ -26,7 +26,13 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('AppBundle:home.html.twig');
+        $promo = $this->getDoctrine()->getRepository('AppBundle:MainBanners')->findBy(
+            array('active'=>1),
+            array('priority'=>'ASC')
+        );
+        return $this->render('AppBundle:home.html.twig', array(
+            'promo'=>$promo
+        ));
     }
 
     /**

@@ -193,3 +193,9 @@ services:
         arguments: [ "app.admin.block.import:", @templating ]
         tags:
             - { name: sonata.block }
+
+    app_admin.admin.main_banners:
+        class: AppAdminBundle\Admin\MainBannersAdmin
+        arguments: [~, AppBundle\Entity\MainBanners, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Банеры главной страницы"}
