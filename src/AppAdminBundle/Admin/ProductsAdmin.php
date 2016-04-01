@@ -102,18 +102,18 @@ class ProductsAdmin extends Admin
             ))
             ->end()
             ->end()
-//            ->tab('Модели')
-//            ->with('Модели',
-//                array(
-//                    'class' => 'col-md-12',
-//                ))
-//            ->add('productModels', 'sonata_type_collection',
-//                array('label' => 'Модель'), array(
-//                    'edit' => 'inline',
-//                )
-//            )
-//            ->end()
-//            ->end()
+            ->tab('Модели')
+            ->with('Модели',
+                array(
+                    'class' => 'col-md-12',
+                ))
+            ->add('productModels', 'sonata_type_collection',
+                array('label' => 'Модель'), array(
+                    'edit' => 'inline',
+                )
+            )
+            ->end()
+            ->end()
             ->tab('Характеристики')
             ->with('СharacteristicValues',
                 array(
