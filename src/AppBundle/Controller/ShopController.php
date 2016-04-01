@@ -53,11 +53,12 @@ class ShopController extends Controller
     public function categoryAction($category, Request $request)
     {
         $current_page = $request->get('page') ? $request->get('page') : 1;
-        $sort = $request->get('sort') ? $request->get('sort') : 'az';
+        $filters = $request->query->all();
+        $filters['page'] = 'page';
         try {
             $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category, null, $this->items_on_page, $current_page, $entityName);
+                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page, $entityName);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
@@ -96,7 +97,7 @@ class ShopController extends Controller
     public function filterAction($category, Request $request)
     {
         $current_page = $request->get('page') ? $request->get('page') : 1;
-        $sort = $request->get('sort') ? $request->get('sort') : 'az';
+
         $filters = $request->query->all();
         $filters['page'] = 'page';
 
