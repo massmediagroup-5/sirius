@@ -19,6 +19,11 @@ class ProductModelImagesAdmin extends Admin
 {
 
     /**
+     * @var string
+     */
+    protected $parentAssociationMapping = 'productModels';
+
+    /**
      * configureDatagridFilters
      *
      * @param DatagridMapper $datagridMapper
@@ -29,8 +34,7 @@ class ProductModelImagesAdmin extends Admin
             ->add('id')
             ->add('link', null, array('label' => 'Ссылка на оригинал'))
             ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
-        ;
+            ->add('updateTime', null, array('label' => 'Дата последнего изменения'));
     }
 
     /**
@@ -51,8 +55,7 @@ class ProductModelImagesAdmin extends Admin
                     'edit' => array(),
                     'delete' => array(),
                 )
-            ))
-        ;
+            ));
     }
 
     /**
@@ -62,7 +65,7 @@ class ProductModelImagesAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        if($this->hasParentFieldDescription()) { // this Admin is embedded
+        if ($this->hasParentFieldDescription()) { // this Admin is embedded
             $getter = 'get' . $this->getParentFieldDescription()->getFieldName();
             $parent = $this->getParentFieldDescription()->getAdmin()->getSubject();
             if ($parent) {
@@ -72,29 +75,28 @@ class ProductModelImagesAdmin extends Admin
             }
 
             $images = $this->getSubject();
-            ;
         } else { // this Admin is not embedded
             $images = $this->getSubject();
-        }
-        $formMapper
-            ->add('link', null, array('label' => 'Ссылка на оригинал'))
-            ->add('productModels', 'entity', [
+
+            $formMapper->add('productModels', 'entity', [
                 'class' => 'AppBundle\Entity\ProductModels',
                 'label' => 'Модель'
             ]);
+        }
+        $formMapper
+            ->add('link', null, array('label' => 'Ссылка на оригинал'));
 
         // You can then do things with the $images, like show a thumbnail in the help:
         $fileFieldOptions = array(
             'required' => false,
         );
         if ($images && ($webPath = $images->getLink())) {
-            $fileFieldOptions['help'] = '<img src="'.$webPath.'" class="admin-preview" />';
+            $fileFieldOptions['help'] = '<img src="' . $webPath . '" class="admin-preview" />';
         }
-    
+
         $formMapper
             ->add('file', 'file', $fileFieldOptions)
-            ->add('priority', null, array('label' => 'Приоритет'))
-        ;
+            ->add('priority', null, array('label' => 'Приоритет'));
     }
 
     /**
@@ -108,8 +110,7 @@ class ProductModelImagesAdmin extends Admin
             ->add('id')
             ->add('link', null, array('label' => 'Ссылка на оригинал'))
             ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
-        ;
+            ->add('updateTime', null, array('label' => 'Дата последнего изменения'));
     }
 
     /**
@@ -120,27 +121,27 @@ class ProductModelImagesAdmin extends Admin
     public function getBatchActions()
     {
         $actions = parent::getBatchActions();
-    
+
         if (
-          $this->hasRoute('edit') && $this->isGranted('EDIT') &&
-          $this->hasRoute('delete') && $this->isGranted('DELETE')
+            $this->hasRoute('edit') && $this->isGranted('EDIT') &&
+            $this->hasRoute('delete') && $this->isGranted('DELETE')
         ) {
             $actions['merge'] = array(
                 'label' => 'action_merge',
                 'translation_domain' => 'SonataAdminBundle',
                 'ask_confirmation' => true,
             );
-    
+
         }
-    
+
         return $actions;
     }
 
     public function preBatchAction($actionName, ProxyQueryInterface $query, array & $idx, $allElements)
     {
-    $logger = $this->get('logger');
-    $logger->info('logger3434');
-    $logger->error('logger367');
+        $logger = $this->get('logger');
+        $logger->info('logger3434');
+        $logger->error('logger367');
         // altering the query or the idx array
         $foo = $query->getParameter('foo')->getValue();
         // Doing something with the foo object
