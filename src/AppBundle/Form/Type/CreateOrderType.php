@@ -76,22 +76,6 @@ class CreateOrderType extends AbstractType
                 },
                 'placeholder' => ''
             ])
-            ->add('del_delivery_city', 'entity', [
-                'class' => 'AppBundle:Cities',
-                'required' => true,
-                'constraints' => $delivery != 'np' ? [new NotBlank] : [],
-                'placeholder' => ''
-            ])
-            ->add('del_delivery_store', 'entity', [
-                'class' => 'AppBundle:Stores',
-                'required' => true,
-                'constraints' => $delivery != 'np' ? [new NotBlank] : [],
-                'query_builder' => function (EntityRepository $er) use($city) {
-                    return $er->createQueryBuilder('s')->orderBy('s.name', 'ASC')->where('s.cities = :city')
-                        ->setParameter('city', $city);
-                },
-                'placeholder' => ''
-            ])
             ->add('delivery_type', ChoiceType::class, [
                 'choices' => [
                     'np' => 'np',

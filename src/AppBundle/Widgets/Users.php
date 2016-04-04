@@ -55,13 +55,13 @@ class Users
      */
     public function headerCart()
     {
-        $cartService = $this->container->get('cart');
+        $request = $this->container->get('request');
+        $route = $request->get('_route');
+        $notRenderFlag = in_array($route, ['homepage']) || $request->isMethod('POST') && in_array($route, ['cart_order']);
 
-        return $this->templating->render('AppBundle:widgets/users/header_cart.html.twig', array(
-                'cart' => $cartService,
-                'items'
-            )
-        );
+        return $this->templating->render('AppBundle:widgets/users/header_cart.html.twig', [
+            'notRenderFlag' => $notRenderFlag
+        ]);
     }
 
     /**
@@ -71,9 +71,7 @@ class Users
      */
     public function headerRegistration()
     {
-        return $this->templating->render('AppBundle:widgets/users/header_registration.html.twig', array(
-            )
-        );
+        return $this->templating->render('AppBundle:widgets/users/header_registration.html.twig');
     }
 
 }
