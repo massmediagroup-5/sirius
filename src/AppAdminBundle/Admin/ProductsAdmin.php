@@ -182,6 +182,7 @@ class ProductsAdmin extends Admin
                     ->setQuantity(1);
                 $productModel->addSkuProduct($newSkuProduct);
             }
+            $productModel->setProducts($product);
         }
     }
 

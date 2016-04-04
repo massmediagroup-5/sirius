@@ -5,6 +5,14 @@ breadcrumb:
 form:
   label_size: Размер
   label_base_category: Базовая категория
+  label_product_models : Модель продукта
+  label_sku: Артикул
+  label_name: Имя
+  label_status: Статус
+  label_active: Активность
+  label_price: Цена
+  label_wholesale_price: Оптовая цена
+  label_quantity: Количество
 list:
   label_id: ID
   label_status: Статус

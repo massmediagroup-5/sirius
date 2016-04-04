@@ -71,8 +71,15 @@ class ProductModelsAdmin extends Admin
             ->with('ProductModels',
                 array(
                     'class' => 'col-md-12',
-                ))
-            ->add('name', null, array('label' => 'Название модели'))
+                ));
+        if (!$this->hasParentFieldDescription()) {
+            $formMapper->add('products', 'entity', [
+                'class' => 'AppBundle\Entity\Products',
+                'label' => 'Продукт'
+            ]);
+        }
+
+        $formMapper->add('name', null, array('label' => 'Название модели'))
             ->add('content', null, array('label' => 'О модели', 'attr' => array('class' => 'ckeditor')))
             ->add('characteristics', null, array('label' => 'Характеристики', 'attr' => array('class' => 'ckeditor')))
             ->add('features', null, array('label' => 'Особенности', 'attr' => array('class' => 'ckeditor')))
@@ -115,23 +122,14 @@ class ProductModelsAdmin extends Admin
             ->end()
             ->end();
 
-        if (!$this->hasParentFieldDescription()) { // this Admin is embedded
+        if (!$this->hasParentFieldDescription()) {
             $formMapper->tab('Изображения модели')
-                ->with('ProductModelImages',
-                    array(
+                ->with('ProductModelImages', [
                         'class' => 'col-md-12',
-                    )
+                    ]
                 )
                 ->add('productModelImages', 'sonata_type_collection',
-                    array(
-                        //'class'    => 'AppBundle:ProductModelImages',
-                        'label' => 'Изображения',
-                    ),
-                    array(
-                        'edit' => 'inline',
-                        //'inline' => 'table',
-                        //'sortable'  => 'priority'
-                    )
+                    ['label' => 'Изображения'], ['edit' => 'inline']
                 )
                 ->end()
                 ->end();
