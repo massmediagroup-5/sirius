@@ -4,6 +4,7 @@ breadcrumb:
   link_products_list: Продукты
 form:
   label_size: Размер
+  label_base_category: Базовая категория
 list:
   label_id: ID
   label_status: Статус
