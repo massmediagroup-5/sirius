@@ -2086,7 +2086,7 @@ input[type="checkbox"] {
 		ul {
 			li {
 				float: left;
-				padding-left: 40px;
+				padding-left: 30px;
 				position: relative;
 				color: #fff;
 				font-size: 22px;
@@ -2095,6 +2095,9 @@ input[type="checkbox"] {
 				list-style: none;
 				@include respond-to(tablet) {
 					font-size: 15px;
+				}
+				&:first-child {
+					padding-left: 35px;
 				}
 
 				&.email {

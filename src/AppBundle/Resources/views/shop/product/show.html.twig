@@ -68,7 +68,7 @@
                                         <h2 class="name">{{ current_model.name }}</h2>
 
                                         <div class="price price_new">
-                                            <p>{{ widget('products.prices', current_model) }}</p>
+                                            <p>{{ widget('products.prices', current_model)|raw }}</p>
                                         </div>
 
                                         <div class="color-select">
@@ -242,30 +242,15 @@
                         <div class="row">
                             <div class="col-md-4 col-lg-4">
                                 <h2>О модели</h2>
-
-                                <p> Стильное и удобное платье для тебя. Мягкая ткань приятна на ощупь, а вставки из
-                                    шифона делают силуэт по-девичьи изящным.
-                                </p>
+                                {{ current_model.content|raw }}
                             </div>
                             <div class="col-md-4 col-lg-4">
                                 <h2>Характеристики</h2>
-                                <ul>
-                                    <li>Длина по спинке: 76 см (размер 36)</li>
-                                    <li>Регулируемый капюшон с завязками-шнурками и воротом внахлест</li>
-                                    <li>Логотип sirius на внутреннем шве</li>
-                                    <li>Рукава-реглан для свободы движения; шифоновые вставки на плечах; рифленые
-                                        манжеты и нижний край
-                                    </li>
-                                    <li>Свободный крой</li>
-                                    <li>Основа (трикотаж): 80% вискоза / 20% полиэстер; вставки: 100% полиэстер</li>
-                                </ul>
+                                {{ current_model.characteristics|raw }}
                             </div>
                             <div class="col-md-4 col-lg-4">
                                 <h2>Особенности</h2>
-                                <ul>
-                                    <li>Регулируемый капюшон с завязками-шнурками и воротом внахлест</li>
-                                    <li>Рукава-реглан для свободы движения</li>
-                                </ul>
+                                {{ current_model.features|raw }}
                             </div>
                         </div>
                     </div>
