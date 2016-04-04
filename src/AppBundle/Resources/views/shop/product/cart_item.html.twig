@@ -6,8 +6,8 @@
                 <div class="prod-img">
                     <a href="#">
                         {{ widget('products.flags', item.skuProduct.productModels) }}
-                        {% if item.skuProduct.productModels.0.productModelImages.0 is defined %}
-                            <img src="{{ item.skuProduct.productModels.0.productModelImages.0.link | imagine_filter('in_cart') }}" />
+                        {% if item.skuProduct.productModels.productModelImages.0 is defined %}
+                            <img src="{{ item.skuProduct.productModels.productModelImages.0.link | imagine_filter('in_cart') }}" />
                         {% else %}
                             <img src="{{ param('no_image') | imagine_filter('in_cart') }}"/>
                         {% endif %}
