@@ -42,48 +42,53 @@
                                 <div class="top">
                                     <p>Итого</p>
                                 </div>
-                                <div class="mid">
-                                    <h2>
-                                        Основной заказ
-                                        {% if not is_granted('ROLE_WHOLESALER') %}
-                                            <span>{{ cart.standardCount }} Товара(ов)</span>
+                                {% if not cart.standardItems is empty %}
+                                    <div class="mid">
+                                        <h2>
+                                            Основной заказ
+                                            {% if not is_granted('ROLE_WHOLESALER') %}
+                                                <span>{{ cart.standardCount }} Товара(ов)</span>
+                                            {% endif %}
+                                        </h2>
+                                        {% if is_granted('ROLE_WHOLESALER') %}
+                                            <h3><strong>{{ cart.standardPackagesCount }}</strong>
+                                                {{ 'labels.cart_products_packages'|transchoice(cart.standardPackagesCount) }}
+                                                + <strong>{{ cart.standardSingleItemsCount }}</strong>
+                                                {{ 'labels.cart_products'|transchoice(cart.standardSingleItemsCount) }}
+                                            </h3>
                                         {% endif %}
-                                    </h2>
-                                    {% if is_granted('ROLE_WHOLESALER') %}
-                                        <h3><strong>{{ cart.standardPackagesCount }}</strong>
-                                            {{ 'labels.cart_products_packages'|transchoice(cart.standardPackagesCount) }}
-                                            + <strong>{{ cart.standardSingleItemsCount }}</strong>
-                                            {{ 'labels.cart_products'|transchoice(cart.standardSingleItemsCount) }}
-                                        </h3>
-                                    {% endif %}
-                                    <table>
-                                        <tr>
-                                            <td>Итого</td>
-                                            <td>{{ cart.standardPrice }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="mid">
-                                    <h2>
-                                        Предзаказ
-                                        {% if not is_granted('ROLE_WHOLESALER') %}
-                                            <span>{{ cart.preOrderCount }} Товара(ов)</span>
+                                        <table>
+                                            <tr>
+                                                <td>Итого</td>
+                                                <td>{{ cart.standardPrice }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if not cart.preOrderItems is empty %}
+                                    <div class="mid">
+                                        <h2>
+                                            Предзаказ
+                                            {% if not is_granted('ROLE_WHOLESALER') %}
+                                                <span>{{ cart.preOrderCount }} Товара(ов)</span>
+                                            {% endif %}
+                                        </h2>
+                                        {% if is_granted('ROLE_WHOLESALER') %}
+                                            <h3><strong>{{ cart.preOrderPackagesCount }}</strong>
+                                                {{ 'labels.cart_products_packages'|transchoice(cart.preOrderPackagesCount) }}
+                                                + <strong>{{ cart.preOrderSingleItemsCount }}</strong>
+                                                {{ 'labels.cart_products'|transchoice(cart.preOrderSingleItemsCount) }}
+                                            </h3>
                                         {% endif %}
-                                    </h2>
-                                    {% if is_granted('ROLE_WHOLESALER') %}
-                                        <h3><strong>{{ cart.preOrderPackagesCount }}</strong>
-                                            {{ 'labels.cart_products_packages'|transchoice(cart.preOrderPackagesCount) }}
-                                            + <strong>{{ cart.preOrderSingleItemsCount }}</strong>
-                                            {{ 'labels.cart_products'|transchoice(cart.preOrderSingleItemsCount) }}
-                                        </h3>
-                                    {% endif %}
-                                    <table>
-                                        <tr>
-                                            <td>Итого</td>
-                                            <td>{{ cart.preOrderPrice }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                        <table>
+                                            <tr>
+                                                <td>Итого</td>
+                                                <td>{{ cart.preOrderPrice }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                {% endif %}
                                 <div class="bottom">
                                     <h2>Всего</h2>
                                     <table>
@@ -102,7 +107,7 @@
                                     </table>
 
                                     <div class="row pb15">
-                                        <a href="#" class="edit">Редактировать заказ</a>
+                                        <a href="{{ path('cart_show') }}" class="edit">Редактировать заказ</a>
                                     </div>
                                 </div>
 
