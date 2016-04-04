@@ -3032,6 +3032,19 @@ input[type="checkbox"] {
 		margin-bottom: 30px;
 		background: #fff;
 
+		&.active {
+			z-index: 100;
+			@include box-shadow(0px 1px 10px 0px rgba(50, 50, 50, 0.75));
+
+			> .hover {
+				opacity: 1;
+				visibility: visible;
+				z-index: 99;
+				@include box-shadow(0px 1px 10px 0px rgba(50, 50, 50, 0.75))
+
+			}
+		}
+
 		&:hover {
 			z-index: 100;
 			@include box-shadow(0px 1px 10px 0px rgba(50, 50, 50, 0.75));
@@ -3168,6 +3181,10 @@ input[type="checkbox"] {
 	.sizes {
 		background: #eeeeee;
 		display: none;
+
+		&.active {
+			display: block;
+		}
 	}
 	.sizes__i {
 		padding: 5px 10px;
@@ -4026,7 +4043,8 @@ input[type="checkbox"] {
 			li {
 				float: left;
 				list-style: none;
-				margin-left: 19px;
+				margin-right: 19px;
+				margin-bottom: 19px;
 				&:first-child {
 					margin-left: 0;
 				}
@@ -8802,5 +8820,124 @@ input[type="checkbox"] {
 
 	.icon-attention {
 		margin-top: -10px;
+	}
+}
+
+.amount-select {
+	position: relative;
+
+	.inp {
+		position: relative;
+		&:after {
+			content: "";
+			position: absolute;
+			right: 5px;
+			top: 50%;
+			@include translate(0, -50%);
+			@include sized-sprite($icons, select-arr);
+		}
+
+		&.dropActive {
+			.amount-select-drop {
+				opacity: 1;
+				visibility: visible;
+			}
+		}
+
+	}
+	input {
+		border: 1px solid #cdcdcd;
+		padding: 8px 25px 8px 10px;
+		box-sizing: border-box;
+		width: 100%;
+
+
+	}
+
+	.amount-select-drop {
+		position: absolute;
+		left: 0;
+		right: 0;
+		opacity: 0;
+		height: 100px;
+		visibility: hidden;
+		background: #fff;
+		top: 100%;
+		@include box-shadow(0 3px 9px 0 rgba(50, 50, 50, 0.54));
+
+		li {
+			padding-right: 30px;
+			list-style: none;
+
+			a {
+				border-bottom: 1px solid #f1f3f2;
+				padding: 5px 0 5px 10px;
+				font-size: 12px;
+				line-height: 14px;
+				font-family: "LatoWeb", sans-serif;
+				font-weight: 400;
+				color: #050505;
+				display: block;
+
+				&:hover {
+					color: $blue;
+				}
+			}
+		}
+	}
+
+
+}
+
+.user-login-drop {
+	width: 262px;
+	position: absolute;
+	top: 100%;
+	left: -150px;
+	background: #fff;
+	display: none;
+	@include box-shadow(0 1px 13px 0 rgba(0, 0, 0, 0.75));
+	&.active {
+		display: block;
+	}
+}
+
+.user-login-drop__i {
+	padding: 30px 20px;
+
+	.hello {
+		font-size: 18px;
+		line-height: 22px;
+		color: #000;
+		font-family: $latoBold;
+		font-weight: 400;
+		padding-bottom: 25px;
+	}
+
+	ul {
+		li {
+			list-style: none;
+			padding-bottom: 25px;
+			width: auto;
+			height: auto;
+			float: none;
+			padding-left: 0;
+
+			&:last-child {
+				padding-bottom: 0;
+				padding-left: 0;
+			}
+			a {
+				width: auto;
+				height: auto;
+				font-size: 16px;
+				line-height: 18px;
+				font-weight: 400;
+				font-family: $lato;
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
 	}
 }

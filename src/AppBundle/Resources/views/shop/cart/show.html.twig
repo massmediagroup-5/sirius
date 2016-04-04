@@ -27,7 +27,10 @@
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% else %}
-        {% javascripts '@AppBundle/Resources/public/js/order.js' %}
+        {% javascripts
+            '@AppBundle/Resources/public/js/jquery.mCustomScrollbar.js'
+            '@AppBundle/Resources/public/js/order.js'
+        %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% endif %}
