@@ -180,7 +180,8 @@ class ProductModelsAdmin extends Admin
 
     public function preUpdate($param)
     {
-        //dump($param);
-        //exit(1);
+        foreach($param->getProductModelImages() as $image) {
+            $image->setProductModels($param);
+        }
     }
 }

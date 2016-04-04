@@ -47,7 +47,7 @@
                                                         </a>
                                                     {% else %}
                                                         {% for image in current_model.productModelImages %}
-                                                            <a href="#product-popup" class="popup_gallery"
+                                                            <a href="#product-popup-{{ current_model.id }}" class="popup_gallery"
                                                                data-src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}">
                                                                 <img src="{{ (image.link ? : param('no_image')) | imagine_filter('small') }}" alt="#"/>
                                                             </a>
@@ -282,21 +282,7 @@
 {% endblock %}
 
 {% block popups %}
-    <div class="product-popup" id="product-popup">
-        <div class="product-popup__i">
-            <div class="big-img">
-                {% if current_model.productModelImages is empty %}
-                    <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="#"/>
-                {% else %}
-                    {% for image in current_model.productModelImages %}
-                        <img src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}" alt="#"/>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <a href="#" class="thumb-prev"></a>
-            <a href="#" class="thumb-next"></a>
-        </div>
-    </div>
+    {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': [current_model] }) }}
 
     {{ include('AppBundle:shop/partials/sizes_popup.html.twig') }}
 {% endblock %}
