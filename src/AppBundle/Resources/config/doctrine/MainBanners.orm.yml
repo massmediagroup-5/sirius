@@ -48,15 +48,11 @@ AppBundle\Entity\MainBanners:
             nullable: true
         createTime:
             type: datetime
-            nullable: false
-            options:
-                default: CURRENT_TIMESTAMP
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             column: create_time
         updateTime:
             type: datetime
-            nullable: false
-            options:
-                default: CURRENT_TIMESTAMP
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
     lifecycleCallbacks:
         prePersist:   [ lifecycleFileUpload ]

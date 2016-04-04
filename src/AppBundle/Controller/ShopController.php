@@ -105,8 +105,9 @@ class ShopController extends Controller
         if (empty($filters))
             return $this->redirectToRoute('category', array('category' => $category), 301);
         try {
+            $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page);
+                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page, $entityName);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
