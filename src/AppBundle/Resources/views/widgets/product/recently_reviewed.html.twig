@@ -1,28 +1,28 @@
 {% if recentModels is not empty %}
-<div class="last-viewed">
-    <h2>Вы уже просматривали</h2>
-    <div class="last-viewed__i">
-        {% for item in recentModels %}
-        <div class="item">
-            <a href="{{ url('product', {'category': item.products.baseCategory.alias,'product': item.alias}) }}">
-                <div class="item__i">
-                    <div class="img">
-                        {% if item.productModels.0.productModelImages.0 is defined and item.productModels.0.productModelImages.0.link is not null %}
-                            <img src="{{ item.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.name }}"/>
-                        {% else %}
-                            <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.name }}"/>
-                        {% endif %}
-                    </div>
-                    <div class="info">
-                        <div class="info__i">
-                            <p><strong>{{ item.name }}</strong></p>
-                            <p> {{ item.price|number_format(2, '.', ' ') }} грн.</p>
+    <div class="last-viewed">
+        <h2>Вы уже просматривали</h2>
+        <div class="last-viewed__i">
+            {% for item in recentModels %}
+            <div class="item">
+                <a href="{{ url('product', {'category': item.products.baseCategory.alias,'product': item.alias}) }}">
+                    <div class="item__i">
+                        <div class="img">
+                            {% if item.productModelImages.0 is defined and item.productModelImages.0.link is not null %}
+                                <img src="{{ item.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.name }}"/>
+                            {% else %}
+                                <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.name }}"/>
+                            {% endif %}
+                        </div>
+                        <div class="info">
+                            <div class="info__i">
+                                <p><strong>{{ item.name }}</strong></p>
+                                <p> {{ item.price|number_format(2, '.', ' ') }} грн.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 {% endif %}

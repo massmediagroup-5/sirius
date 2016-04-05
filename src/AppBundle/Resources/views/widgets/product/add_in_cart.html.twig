@@ -14,10 +14,10 @@
             <a href="#" class="btn btn_blue btn_buy">
                 <span>
                     <i class="icon icon-cart"></i>
-                    Купить
+                    {{ (model.preOrderFlag ? 'Pre-order' : 'Buy')|trans }}
                 </span>
             </a>
-            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart'}, 'label': model.preOrderFlag ? 'Pre-order' : 'Buy'}) }}
+            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart btn_buy'}, 'label': model.preOrderFlag ? 'Pre-order' : 'Buy'}) }}
         </div>
     </div>
 {{ form_end(form) }}

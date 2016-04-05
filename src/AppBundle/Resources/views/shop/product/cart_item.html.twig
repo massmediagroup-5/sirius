@@ -5,7 +5,7 @@
             <td>
                 <div class="prod-img">
                     <a href="#">
-                        {{ widget('products.flags', item.skuProduct.productModels) }}
+                        {{ widget('products.flags', item.skuProduct.productModels)|raw }}
                         {% if item.skuProduct.productModels.productModelImages.0 is defined %}
                             <img src="{{ item.skuProduct.productModels.productModelImages.0.link | imagine_filter('in_cart') }}" />
                         {% else %}

@@ -28,8 +28,6 @@ class CreateOrderType extends AbstractType
         if($delivery) {
             if($delivery == 'np') {
                 $city = $request->get('create_order')['np_delivery_city'];
-            } else {
-                $city = $request->get('create_order')['del_delivery_city'];
             }
         }
         $user = Arr::get($options, 'user');
@@ -79,7 +77,6 @@ class CreateOrderType extends AbstractType
             ->add('delivery_type', ChoiceType::class, [
                 'choices' => [
                     'np' => 'np',
-                    'del' => 'del',
                 ],
                 'required' => true,
                 'data' => 'np',

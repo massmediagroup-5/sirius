@@ -1552,6 +1552,17 @@ input[type="checkbox"] {
 			@include translate(0, 0);
 		}
 	}
+	.opt-cart-empty-part {
+		display: none;
+	}
+	&.is-empty {
+		.opt-cart-empty-part {
+			display: block;
+		}
+		.opt-cart-full-part {
+			display: none;
+		}
+	}
 }
 
 .opt-cart-drop__i {
@@ -1642,7 +1653,6 @@ input[type="checkbox"] {
 			}
 		}
 	}
-
 }
 
 .empty-cart {
@@ -3575,6 +3585,11 @@ input[type="checkbox"] {
 				.select2-arrow {
 					@include sized-sprite($icons, select-arr-up);
 				}
+			}
+		}
+		&.error {
+			.select2-choice {
+				border-color: #f24841;
 			}
 		}
 		.select2-choice {

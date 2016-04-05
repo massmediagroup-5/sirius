@@ -9,115 +9,119 @@
 <div class="cart-info cart-info_opt">
     <div class="cart-info__i">
 
-        <div class="col floating-box-wr">
+        {% if cart.items is empty %}
+            {{ include('AppBundle:shop/cart/partials/empty.html.twig') }}
+        {% else %}
 
-            {% if not cart.standardItems is empty %}
+            <div class="col floating-box-wr">
 
-                <div class="main-cart-list">
-                    <div class="title">
-                        <h2>Основной заказ</h2>
-                    </div>
-                    <div class="main-cart-list__i">
+                {% if not cart.standardItems is empty %}
 
-                        <div class="opt-main-control">
-                            <table>
-                                <tr>
-                                    <td>Артикул</td>
-                                    <td>Фото</td>
-                                    <td>Модель</td>
-                                    <td>Цвет</td>
-                                    <td>Материал/
-                                        состав
-                                    </td>
-                                    <td>Размер/
-                                        шт в уп.
-                                    </td>
-                                    <td>
-                                        Количество
-
-                                    </td>
-                                    <td>Цена</td>
-                                    <td>
-                                        Удалить
-                                    </td>
-                                </tr>
-                            </table>
+                    <div class="main-cart-list">
+                        <div class="title">
+                            <h2>Основной заказ</h2>
                         </div>
+                        <div class="main-cart-list__i">
 
-                        <div class="opt-list">
-                            <div class="opt-list__i">
-                                {% for item in cart.standardItems %}
-                                    {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig') }}
-                                {% endfor %}
+                            <div class="opt-main-control">
+                                <table>
+                                    <tr>
+                                        <td>Артикул</td>
+                                        <td>Фото</td>
+                                        <td>Модель</td>
+                                        <td>Цвет</td>
+                                        <td>Материал/
+                                            состав
+                                        </td>
+                                        <td>Размер/
+                                            шт в уп.
+                                        </td>
+                                        <td>
+                                            Количество
+
+                                        </td>
+                                        <td>Цена</td>
+                                        <td>
+                                            Удалить
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="opt-list">
+                                <div class="opt-list__i">
+                                    {% for item in cart.standardItems %}
+                                        {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig') }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="main-cart-list-total">
+                                <p><strong>Итого: <span><span
+                                                    class="js_cart_standard_total_price">{{ cart.standardItemsPrice }}</span> грн.</span></strong>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                {% if not cart.preOrderItems is empty %}
+
+                    <div class="preorder-cart-list">
+                        <div class="title">
+                            <h2>Предзаказ</h2>
+                        </div>
+                        <div class="preorder-cart-list__i">
+
+                            <div class="opt-main-control">
+                                <table>
+                                    <tr>
+                                        <td>Артикул</td>
+                                        <td>Фото</td>
+                                        <td>Модель</td>
+                                        <td>Цвет</td>
+                                        <td>Материал/
+                                            состав
+                                        </td>
+                                        <td>Размер/
+                                            шт в уп.
+                                        </td>
+                                        <td>
+                                            Количество
+
+                                        </td>
+                                        <td>Цена</td>
+                                        <td>
+                                            Удалить
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="opt-list">
+                                <div class="opt-list__i">
+                                    {% for item in cart.preOrderItems %}
+                                        {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig') }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="preorder-cart-list-total">
+                                <p>
+                                    <strong>Итого: <span><span class="js_cart_pre_order_total_price">{{ cart.standardItemsPrice }}</span> грн.</span></strong>
+                                </p>
                             </div>
                         </div>
-
-                        <div class="main-cart-list-total">
-                            <p><strong>Итого: <span><span
-                                                class="js_cart_standard_total_price">{{ cart.standardItemsPrice }}</span> грн.</span></strong>
-                            </p>
-                        </div>
-
                     </div>
-                </div>
 
-            {% endif %}
+                {% endif %}
 
-            {% if not cart.preOrderItems is empty %}
+            </div>
 
-                <div class="preorder-cart-list">
-                    <div class="title">
-                        <h2>Предзаказ</h2>
-                    </div>
-                    <div class="preorder-cart-list__i">
-
-                        <div class="opt-main-control">
-                            <table>
-                                <tr>
-                                    <td>Артикул</td>
-                                    <td>Фото</td>
-                                    <td>Модель</td>
-                                    <td>Цвет</td>
-                                    <td>Материал/
-                                        состав
-                                    </td>
-                                    <td>Размер/
-                                        шт в уп.
-                                    </td>
-                                    <td>
-                                        Количество
-
-                                    </td>
-                                    <td>Цена</td>
-                                    <td>
-                                        Удалить
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-
-                        <div class="opt-list">
-                            <div class="opt-list__i">
-                                {% for item in cart.preOrderItems %}
-                                    {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig') }}
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <div class="preorder-cart-list-total">
-                            <p>
-                                <strong>Итого: <span><span class="js_cart_pre_order_total_price">{{ cart.standardItemsPrice }}</span> грн.</span></strong>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-            {% endif %}
-
-        </div>
-
-        <div class="col floating-box-main">
+            <div class="col floating-box-main">
             <div class="order-total floating-box">
                 <div class="order-total__i">
                     <div class="top">
@@ -154,5 +158,6 @@
             </div>
         </div>
 
+        {% endif %}
     </div>
 </div>

@@ -57,7 +57,7 @@ class Users
     {
         $request = $this->container->get('request');
         $route = $request->get('_route');
-        $notRenderFlag = in_array($route, ['homepage']) || $request->isMethod('POST') && in_array($route, ['cart_order']);
+        $notRenderFlag = in_array($route, ['homepage', 'cart_show']) || $request->isMethod('POST') && in_array($route, ['cart_order']);
 
         return $this->templating->render('AppBundle:widgets/users/header_cart.html.twig', [
             'notRenderFlag' => $notRenderFlag
