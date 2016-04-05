@@ -120,8 +120,12 @@
 
                                                     <div class="col">
                                                         <div class="not-added-part">
-                                                            <a href="#" class="btn btn_blue btn_buy"><span>КУПИТЬ</span></a>
-                                                            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn'}, 'label': 'Купить'}) }}
+                                                            <a href="#" class="btn btn_blue btn_buy">
+                                                                <span>
+                                                                    {{ (current_model.preOrderFlag ? 'Pre-order' : 'Buy')|trans }}
+                                                                </span>
+                                                            </a>
+                                                            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn'}, 'label': current_model.preOrderFlag ? 'Pre-order' : 'Buy'}) }}
                                                         </div>
 
                                                         <div class="incart added-part">

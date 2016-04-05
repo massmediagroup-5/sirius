@@ -1,7 +1,7 @@
 {% if is_granted('ROLE_WHOLESALER') %}
     {% if not notRenderFlag %}
-        <div class="opt-cart-drop">
-            <div class="opt-cart-drop__i">
+        <div class="opt-cart-drop js_cart {% if cart.items is empty %} is-empty {% endif %}">
+            <div class="opt-cart-drop__i opt-cart-full-part">
                 <div class="col">
                     <table>
                         <tr>
@@ -40,44 +40,52 @@
                 </div>
             </div>
 
-            <div class="opt-cart-drop-hover">
-                <div class="opt-cart-drop-hover__i">
-
-                    <h2>В корзине</h2>
-
-                    <div class="list">
-                        <div class="list__i">
-
-                            {% for item in cart.items %}
-                                <div class="item">
-                                    <a href=>
-                                        <div class="item__i">
-                                            <div class="img">
-                                                {% if item.skuProduct.productModels.productModelImages.0 is defined %}
-                                                    <img src="{{ item.skuProduct.productModels.productModelImages.0.link | imagine_filter('in_wholesale_cart') }}"/>
-                                                {% else %}
-                                                    <img src="{{ param('no_image') | imagine_filter('in_wholesale_cart') }}"/>
-                                                {% endif %}
-                                            </div>
-                                            <div class="text">
-                                                <p>
-                                                    {{ item.skuProduct.productModels.name }} (Арт. {{ item.skuProduct.sku }})
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            {% endfor %}
-
-                        </div>
-                    </div>
-
-                    <p class="more">
-                        <a href="{{ url('cart_show') }}">Посмотреть все товары добавленные в корзину</a>
-                    </p>
-
+            <div class="opt-cart-drop__i opt-cart-empty-part">
+                <div class="empty-cart">
+                    <div class="empty-cart__i"><strong>В Вашей корзине пока нету товаров</strong></div>
                 </div>
             </div>
+
+            {% if not cart.items is empty %}
+                <div class="opt-cart-drop-hover">
+                    <div class="opt-cart-drop-hover__i">
+
+                        <h2>В корзине</h2>
+
+                        <div class="list">
+                            <div class="list__i">
+
+                                {% for item in cart.items %}
+                                    <div class="item">
+                                        <a href=>
+                                            <div class="item__i">
+                                                <div class="img">
+                                                    {% if item.skuProduct.productModels.productModelImages.0 is defined %}
+                                                        <img src="{{ item.skuProduct.productModels.productModelImages.0.link | imagine_filter('in_wholesale_cart') }}"/>
+                                                    {% else %}
+                                                        <img src="{{ param('no_image') | imagine_filter('in_wholesale_cart') }}"/>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="text">
+                                                    <p>
+                                                        {{ item.skuProduct.productModels.name }} (Арт. {{ item.skuProduct.sku }})
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <p class="more">
+                            <a href="{{ url('cart_show') }}">Посмотреть все товары добавленные в корзину</a>
+                        </p>
+
+                    </div>
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 {% else %}

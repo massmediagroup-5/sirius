@@ -74,16 +74,7 @@ class CartController extends BaseController
             }
         }
 
-        return new JsonResponse([
-            'totalCount' => $this->get('cart')->getTotalCount(),
-            'totalOriginalPrice' => $this->get('cart')->getTotalOldPrice(),
-            'totalPrice' => $this->get('cart')->getTotalPrice(),
-            'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
-            'packagesCount' => $this->get('cart')->getPackagesCount(),
-            'cartItems' => $this->get('cart')->toArrayWithExtraInfo(),
-            'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
-            'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
-        ]);
+        return new JsonResponse($this->getGeneralCartInfoWholesale());
     }
 
     /**
@@ -156,12 +147,35 @@ class CartController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $this->get('cart')->removeItemSize($skuProduct, $form->get('size')->getNormData());
+            if($form->has('size')) {
+                $this->get('cart')->removeItemSize($skuProduct, $form->get('size')->getNormData());
+            } else {
+                $this->get('cart')->removeItem($skuProduct);
+            }
 
             return new JsonResponse($this->getGeneralCartInfo());
         }
 
         return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
+    }
+
+    /**
+     * @Route("/cart/remove_item/{id}", name="cart_remove_item", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param SkuProducts $skuProduct
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function cartRemoveItem(SkuProducts $skuProduct, Request $request)
+    {
+        $this->get('cart')->removeItem($skuProduct);
+
+        if ($this->isGranted('ROLE_WHOLESALER')) {
+            return new JsonResponse($this->getGeneralCartInfoWholesale());
+        }
+
+        return new JsonResponse($this->getGeneralCartInfo());
     }
 
     /**
@@ -249,6 +263,23 @@ class CartController extends BaseController
             'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
             'totalCount' => $this->get('cart')->getTotalCount(),
             'totalPrice' => $this->get('cart')->getTotalPrice()
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getGeneralCartInfoWholesale()
+    {
+        return [
+            'totalCount' => $this->get('cart')->getTotalCount(),
+            'totalOriginalPrice' => $this->get('cart')->getTotalOldPrice(),
+            'totalPrice' => $this->get('cart')->getTotalPrice(),
+            'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
+            'packagesCount' => $this->get('cart')->getPackagesCount(),
+            'cartItems' => $this->get('cart')->toArrayWithExtraInfo(),
+            'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
+            'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
         ];
     }
 

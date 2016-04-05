@@ -8,6 +8,10 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+/**
+ * Class ProductModelsAdmin
+ * @package AppAdminBundle\Admin
+ */
 class ProductModelsAdmin extends Admin
 {
     /**
@@ -119,6 +123,7 @@ class ProductModelsAdmin extends Admin
             ->add('active', null, array('label' => 'Активная'))
             ->add('inStock', null, array('label' => 'Наличие на складе'))
             ->add('published', null, array('label' => 'Опубликовано'))
+            ->add('preOrderFlag', null, array('label' => 'Предзаказ'))
             ->end()
             ->end();
 
