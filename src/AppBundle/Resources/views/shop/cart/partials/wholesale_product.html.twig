@@ -3,7 +3,7 @@
 {% if item.packagesQuantity or currentSize is defined %}
     <div class="item js_cart_item" data-package="{{ currentSize is defined ? '1' : '0' }}" data-id="{{ item.skuProduct.id }}">
         <div class="item__i">
-            {{ widget('products.flags', item.skuProduct.productModels) }}
+            {{ widget('products.flags', item.skuProduct.productModels)|raw }}
 
             <table>
                 <tr>

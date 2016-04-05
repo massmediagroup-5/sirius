@@ -4797,6 +4797,12 @@ input[type="checkbox"] {
 				padding-right: 1%;
 			}
 		}
+
+		&.inp_error {
+			input {
+				border-color: #f24841;
+			}
+		}
 	}
 
 	input {
@@ -4842,6 +4848,9 @@ input[type="checkbox"] {
 
 .passw-change {
 	display: none;
+	&.active {
+		display: block;
+	}
 }
 
 .mb20 {

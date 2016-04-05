@@ -69,4 +69,13 @@ class Users extends BaseFOSUBProvider
         $this->userManager->updateUser($user);
         return $user;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateProfile($user)
+    {
+        $this->userManager->updateUser($user);
+        return $user;
+    }
 }

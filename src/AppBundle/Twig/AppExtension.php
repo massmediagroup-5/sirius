@@ -48,11 +48,12 @@ class AppExtension extends \Twig_Extension
      *
      * @return array
      */
-    public function getFilters() {
+    public function getFilters()
+    {
         return array(
-            'json_decode'   => new \Twig_Filter_Method($this, 'jsonDecode'),
-            'regroup'       => new \Twig_Filter_Method($this, 'regroup'),
-            'format_price'       => new \Twig_Filter_Method($this, 'formatPrice'),
+            'json_decode' => new \Twig_Filter_Method($this, 'jsonDecode'),
+            'regroup' => new \Twig_Filter_Method($this, 'regroup'),
+            'format_price' => new \Twig_Filter_Method($this, 'formatPrice'),
         );
     }
 
@@ -61,12 +62,14 @@ class AppExtension extends \Twig_Extension
      *
      * @return array
      */
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return array(
-            'widget'       => new \Twig_Function_Method($this, 'widget'),
-            'param'       => new \Twig_Function_Method($this, 'param'),
-            'url_to'       => new \Twig_Function_Method($this, 'urlTo'),
-            'add_error'       => new \Twig_Function_Method($this, 'addError'),
+            'widget' => new \Twig_Function_Method($this, 'widget'),
+            'param' => new \Twig_Function_Method($this, 'param'),
+            'url_to' => new \Twig_Function_Method($this, 'urlTo'),
+            'add_error' => new \Twig_Function_Method($this, 'addError'),
+            'has_error' => new \Twig_Function_Method($this, 'hasError'),
         );
     }
 
@@ -77,7 +80,8 @@ class AppExtension extends \Twig_Extension
      *
      * @return mixed
      */
-    public function jsonDecode($str) {
+    public function jsonDecode($str)
+    {
         return json_decode($str);
     }
 
@@ -85,7 +89,8 @@ class AppExtension extends \Twig_Extension
      * @param $number
      * @return string
      */
-    public function formatPrice($number) {
+    public function formatPrice($number)
+    {
         return number_format($number, 2, '.', '');
     }
 
@@ -123,12 +128,13 @@ class AppExtension extends \Twig_Extension
      *
      * @return mixed
      */
-    public function widget() {
+    public function widget()
+    {
         $args = func_get_args();
 
         $widgetNameAndMethod = Arr::get($args, 0);
 
-        if(!is_string($widgetNameAndMethod) || strpos($widgetNameAndMethod, '.') === false) {
+        if (!is_string($widgetNameAndMethod) || strpos($widgetNameAndMethod, '.') === false) {
             throw new \InvalidArgumentException('First parameter must be string with widget name and method. Example "posts.last".');
         } else {
             list($widgetName, $widgetMethodName) = explode('.', $widgetNameAndMethod);
@@ -151,7 +157,8 @@ class AppExtension extends \Twig_Extension
      * @param string $parameter
      * @return mixed
      */
-    public function param($parameter) {
+    public function param($parameter)
+    {
         return $this->container->getParameter($parameter);
     }
 
@@ -160,7 +167,8 @@ class AppExtension extends \Twig_Extension
      *
      * @return mixed
      */
-    public function urlTo() {
+    public function urlTo()
+    {
         $args = func_get_args();
         foreach ($args as $key => $arg) {
             $key = "model" . ($key + 1);
@@ -190,14 +198,30 @@ class AppExtension extends \Twig_Extension
      * @param string $class
      * @return bool
      */
-    public function addError(FormView $form, $fields, $class = 'inp_error') {
+    public function addError(FormView $form, $fields, $class = 'inp_error')
+    {
+        return $this->hasError($form, $fields) ? $class : '';
+    }
+
+    /**
+     * @param FormView $form
+     * @param $fields
+     * @return bool
+     */
+    public function hasError(FormView $form, $fields)
+    {
         $fields = (array)$fields;
-        foreach($fields as $field) {
-            if($form->children[$field]->vars['errors']->count()) {
-                return $class;
+        foreach ($fields as $field) {
+            $nestedFields = explode('.', $field);
+            $formField = $form;
+            foreach ($nestedFields as $nestedField) {
+                $formField = $formField->children[$nestedField];
+            }
+            if ($formField->vars['errors']->count()) {
+                return true;
             }
         }
-        return '';
+        return false;
     }
 
 }
