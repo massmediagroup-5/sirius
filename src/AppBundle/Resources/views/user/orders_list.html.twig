@@ -1,0 +1,133 @@
+{% extends 'AppBundle:user/cabinet.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block cabinet_content %}
+
+    <div class="my-orders">
+        <div class="my-orders__i">
+            {% for order in orders %}
+                <div class="item">
+                <div class="item__i">
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="#" class="order-num">№ {{ order.id }}</a>
+                            </td>
+                            <td>
+                                {{ order.createTime|format_datetime }}
+                            </td>
+                            <td>
+                                {{ order.quantity }} {{ 'labels.cart_products'|transchoice(order.quantity) }} на  сумму {{ order.totalPrice }} грн.
+                            </td>
+                            <td>
+                                <span>Статус заказа:</span> {{ humanizer.orderStatus(order) }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="item-drop">
+                    <div class="item-drop__i">
+                        <div class="col">
+                            <div class="col__i">
+                                <div class="drop-table">
+                                    {% for cartItem in order.cart %}
+                                        <div class="order-item">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <div class="prod-img">
+                                                            {% if cartItem.skuProduct.productModels.productModelImages.0 is defined %}
+                                                                <img src="{{ cartItem.skuProduct.productModels.productModelImages.0.link | imagine_filter('on_wholesale_cart_page') }}" />
+                                                            {% else %}
+                                                                <img src="{{ param('no_image') | imagine_filter('on_wholesale_cart_page') }}"/>
+                                                            {% endif %}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="name"><a href="#">{{ cartItem.skuProducts.productModels.name }}</a></p>
+                                                        <p class="description">Цвет {{ cartItem.skuProducts.productModels.productColors.name }}</p>
+                                                        <p class="description">(Артикул: {{ cartItem.skuProducts.sku }})</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="title">Количество</p>
+                                                        <p class="val">{{ cartItem.quantity }}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="title">Сумма</p>
+                                                        <div class="price price_new">
+                                                            <p>{{ cartItem.totalPrice }} грн. <strong>{{ cartItem.originalTotalPrice }} грн.</strong></p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="total-item-wrap">
+                                    <div class="total-item">
+                                        <table>
+                                            <tr>
+                                                <td>Итого</td>
+                                                <td>{{ order.totalPrice }} грн.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Скидка</td>
+                                                <td>{{ order.discountedPrice }} грн.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Сумма к оплате</td>
+                                                <td>{{ order.discountedPrice }} грн.</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+
+                            <div class="col__i">
+                                <div class="info">
+                                    <div class="item">
+                                        <p>Оплата:</p>
+                                        <p><strong>{{ humanizer.orderPayType(order) }}</strong></p>
+                                    </div>
+
+                                    <div class="item">
+                                        <p>Доставка</p>
+                                        <p><strong>{{ order.carriers.name }}</strong></p>
+                                    </div>
+
+                                    <div class="item">
+                                        <p>Имя и фамилия</p>
+                                        <p><strong>{{ order.fio }}</strong></p>
+                                    </div>
+
+                                    <div class="item">
+                                        <p>Номер мобильного</p>
+                                        <p><strong>{{ order.phone }}</strong></p>
+                                    </div>
+
+                                    <div class="item">
+                                        <p>Адрес склада:	</p>
+                                        <p><strong>{{ order.cities.name }}, {{ order.stores.name }}</strong></p>
+                                    </div>
+
+                                    <div class="item">
+                                        <p>E-mail:</p>
+                                        <p><strong>{{ order.email }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

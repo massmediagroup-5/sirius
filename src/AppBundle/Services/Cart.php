@@ -6,7 +6,9 @@ use AppBundle\Entity\CartProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModelSizes;
 use AppBundle\Entity\SkuProducts;
+use AppBundle\Entity\Users as UsersEntity;
 use AppBundle\Event\OrderEvent;
+use AppBundle\Exception\CartEmptyException;
 use AppBundle\Model\CartItem;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Arr;
@@ -394,7 +396,7 @@ class Cart
     {
         $array = [];
         foreach ($this->items as $item) {
-            if($item->getQuantity() > 0) {
+            if ($item->getQuantity() > 0) {
                 $array[$item->getSkuProduct()->getId()] = [
                     'id' => $item->getSkuProduct()->getId(),
                     'sizes' => $item->getSizes()
@@ -427,9 +429,14 @@ class Cart
      * @param $data
      * @return $this
      * @throws \Doctrine\ORM\ORMException
+     * @throws CartEmptyException
      */
     public function flushCart($user, $data)
     {
+        if (empty($this->items)) {
+            throw new CartEmptyException;
+        }
+
         $order = new Orders();
 
         if ($data['delivery_type'] == 'np') {
@@ -454,9 +461,10 @@ class Cart
                 $cartProductSize->setCart($cart);
                 $cartProductSize->setSize($this->em->getReference('AppBundle:ProductModelSizes', $sizeId));
                 $cartProductSize->setQuantity($sizeCount);
+                $cart->addSize($cartProductSize);
             }
-            $this->em->persist($order);
             $order->addCart($cart);
+            $this->em->persist($cart);
         }
         $order->setUsers($user);
         $order->setPhone(Arr::get($data, 'phone'));
@@ -474,6 +482,23 @@ class Cart
         $this->container->get('event_dispatcher')->dispatch('order.created', new OrderEvent($order));
 
         return $order;
+    }
+
+    /**
+     * @param UsersEntity $user
+     * @return array
+     */
+    public function getUserOrders(UsersEntity $user)
+    {
+        return $this->em->getRepository('AppBundle:Orders')
+            ->createQueryBuilder('orders')
+            ->select('orders')
+            ->leftJoin('orders.cart', 'cart')->addSelect('cart')
+            ->leftJoin('cart.sizes', 'sizes')->addSelect('sizes')
+            ->where('orders.users = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

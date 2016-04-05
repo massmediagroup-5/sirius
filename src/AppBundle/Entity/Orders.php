@@ -16,15 +16,16 @@ class Orders
 
     const TYPE_QUICK = 1;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    const STATUS_WAIT = 0;
+
+    const STATUS_ACCEPTED = 0;
+
+    const STATUS_REJECTED = 0;
 
     /**
      * @var integer
      */
-    private $status = '0';
+    private $id;
 
     /**
      * @var string
@@ -92,6 +93,11 @@ class Orders
     private $updateTime;
 
     /**
+     * @var OrderStatus
+     */
+    private $status;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $cart;
@@ -117,6 +123,21 @@ class Orders
     private $stores;
 
     /**
+     * @var string
+     */
+    private $email;
+
+    /**
+     * @var string
+     */
+    private $originalTotalPrice = 0;
+
+    /**
+     * @var string
+     */
+    private $individualDiscount = 0;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -137,11 +158,11 @@ class Orders
     /**
      * Set status
      *
-     * @param integer $status
+     * @param OrderStatus $status
      *
      * @return Orders
      */
-    public function setStatus($status)
+    public function setStatus(OrderStatus $status)
     {
         $this->status = $status;
 
@@ -151,7 +172,7 @@ class Orders
     /**
      * Get status
      *
-     * @return integer
+     * @return OrderStatus
      */
     public function getStatus()
     {
@@ -505,6 +526,18 @@ class Orders
     }
 
     /**
+     * Get quantity
+     *
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return array_sum(array_map(function (Cart $cartItem) {
+            return $cartItem->getQuantity();
+        }, $this->cart->toArray()));
+    }
+
+    /**
      * Set users
      *
      * @param \AppBundle\Entity\Users $users
@@ -601,9 +634,93 @@ class Orders
     }
 
     /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Orders
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
      * @return string
      */
-    public function __toString() {
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set originalTotalPrice
+     *
+     * @param string $originalTotalPrice
+     *
+     * @return Orders
+     */
+    public function setOriginalTotalPrice($originalTotalPrice)
+    {
+        $this->originalTotalPrice = $originalTotalPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get originalTotalPrice
+     *
+     * @return string
+     */
+    public function getOriginalTotalPrice()
+    {
+        return $this->originalTotalPrice;
+    }
+
+    /**
+     * Set individualDiscount
+     *
+     * @param string $individualDiscount
+     *
+     * @return Orders
+     */
+    public function setIndividualDiscount($individualDiscount)
+    {
+        $this->individualDiscount = $individualDiscount;
+
+        return $this;
+    }
+
+    /**
+     * Get individualDiscount
+     *
+     * @return string
+     */
+    public function getIndividualDiscount()
+    {
+        return $this->individualDiscount;
+    }
+
+    /**
+     * Get individualDiscount
+     *
+     * @return string
+     */
+    public function getDiscountedPrice()
+    {
+        return round($this->getTotalPrice() - $this->getTotalPrice() * $this->individualDiscount, 2);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
         return (string)$this->getId();
     }
+
 }

@@ -27,7 +27,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->where('prodMod.products = :prodId AND prodMod.active = 1 AND prodMod.published = 1')
             ->setParameter('prodId', $prodId);
 
-        if($productModelAlias) {
+        if ($productModelAlias) {
             $builder->andWhere('prodMod.alias != :alias')->setParameter('alias', $productModelAlias);
         }
 
@@ -49,9 +49,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->createQueryBuilder('productModels')
             ->select('productModels, MIN(productModels.price) AS min_price, MAX(productModels.price) AS max_price')
             ->innerJoin('productModels.products', 'products')->addselect('products')
-
             ->innerJoin('products.baseCategory', 'baseCategory')
-
             ->where('productModels.active = 1 AND productModels.published = 1');
 
         $builder = $this->addEnabledOnSiteConditions($builder);
@@ -92,8 +90,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             // todo fix this hell, doctrine lazy load is slower then over 100 queries
 //            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics')
-        ;
+            ->innerJoin('characteristicValues.characteristics', 'characteristics');
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
@@ -104,6 +101,25 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
 
         return $builder->getQuery();
+    }
+
+    /**
+     * @param array $modelIds
+     * @return \Doctrine\ORM\Query
+     */
+    public function getWishListQuery(array $modelIds)
+    {
+        return $this->createQueryBuilder('productModels')
+            ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
+            ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
+            ->innerJoin('characteristicValues.categories', 'categories')
+            ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
+            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
+            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
+            ->where('productModels.id IN (:ids)')
+            ->setParameter('ids', $modelIds)
+            ->getQuery();
     }
 
 }

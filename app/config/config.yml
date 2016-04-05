@@ -65,6 +65,7 @@ twig:
     globals:
         options: @options
         cart: @cart
+        humanizer: @humanizer
         fos_csrf_provider: "@form.csrf_provider"
     form:
         resources:

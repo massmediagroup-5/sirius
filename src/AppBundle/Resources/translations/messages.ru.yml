@@ -33,6 +33,13 @@ uah: грн
 The manager will call you and specify the details.: Менеджер перезвонит вам и уточнит детали.
 Pre order product flag: Скоро в продаже
 Pre-order: Предзаказ
+orders status wait: Ожидает обработки
+orders status accepted: Принят
+orders status rejected: Отклонен
+orders status wrong: Ошибочный статус
+orders pay cod: Наложеным платежом
+orders pay bank: На карту банка
+orders pay wrong: Ошибочный тип
 labels:
   colors: цвет|цвета|цветов
   products_count: '%count% товар|%count% товара|%count% товаров'

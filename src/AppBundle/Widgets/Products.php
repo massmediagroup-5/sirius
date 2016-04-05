@@ -3,14 +3,11 @@
 namespace AppBundle\Widgets;
 
 use AppBundle\Entity\ProductModels;
-use AppBundle\Form\Type\ChangeProductSizeQuantity;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
 use AppBundle\Form\Type\ChangeProductSizeType;
 use AppBundle\Form\Type\RemoveProductSizeType;
-use AppBundle\Form\Type\RemoveType;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 use AppBundle\Form\Type\AddInCartType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -133,6 +130,9 @@ class Products
     {
         // todo add actions and other flags
 
+        echo 'getPreorderFlag ';
+        echo((int)$model->getPreorderFlag());
+        echo 'getPreorderFlag ';
         if ($model->getPreorderFlag()) {
             $flag = 'soon';
             $flagText = $this->container->get('translator')->trans('Pre order product flag');
