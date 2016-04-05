@@ -385,4 +385,3 @@ class MainBanners
         return $this->getTitle();
     }
 }
-

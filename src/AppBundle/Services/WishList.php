@@ -24,6 +24,13 @@ class WishList
     private $container;
 
     /**
+     * Entity manager
+     *
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    /**
      * session
      *
      * @var mixed
@@ -47,8 +54,9 @@ class WishList
     {
         $this->container = $container;
         $this->session = $session;
+        $this->em = $this->container->get('doctrine.orm.entity_manager');
 
-        $this->wishList = $this->session->get('wishlist') ? : [];
+        $this->wishList = $this->session->get('wishlist') ?: [];
     }
 
     /**
@@ -60,12 +68,30 @@ class WishList
     }
 
     /**
+     * @param int $page
+     * @param int $perPage
+     * @return array|mixed
+     */
+    public function paginate($page = 1, $perPage = 8)
+    {
+        if (count($this->getIds())) {
+            $models = $this->em->getRepository('AppBundle:ProductModels')->getWishListQuery($this->getIds());
+        } else {
+            $models = [];
+        }
+
+        $models = $this->container->get('knp_paginator')->paginate($models, $page, $perPage);
+
+        return $models;
+    }
+
+    /**
      * @param $id
      * @return array
      */
     public function toggle($id)
     {
-        if(($key = array_search($id, $this->wishList)) === false) {
+        if (($key = array_search($id, $this->wishList)) === false) {
             $this->wishList[$id] = $id;
         } else {
             unset($this->wishList[$key]);
@@ -87,7 +113,8 @@ class WishList
     /**
      *
      */
-    protected function changed() {
+    protected function changed()
+    {
         $this->session->set('wishlist', $this->wishList);
     }
 

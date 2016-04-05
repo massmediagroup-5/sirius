@@ -863,4 +863,28 @@ class ProductModels
     {
         return $this->getName() ? "{$this->getName()} ({$this->getProductColors()->getName()})" : '';
     }
+
+    /**
+     * Add size
+     *
+     * @param \AppBundle\Entity\ProductModelSizes $size
+     *
+     * @return ProductModels
+     */
+    public function addSize(\AppBundle\Entity\ProductModelSizes $size)
+    {
+        $this->sizes[] = $size;
+
+        return $this;
+    }
+
+    /**
+     * Remove size
+     *
+     * @param \AppBundle\Entity\ProductModelSizes $size
+     */
+    public function removeSize(\AppBundle\Entity\ProductModelSizes $size)
+    {
+        $this->sizes->removeElement($size);
+    }
 }

@@ -70,6 +70,7 @@ class AppExtension extends \Twig_Extension
             'url_to' => new \Twig_Function_Method($this, 'urlTo'),
             'add_error' => new \Twig_Function_Method($this, 'addError'),
             'has_error' => new \Twig_Function_Method($this, 'hasError'),
+            'route_class' => new \Twig_Function_Method($this, 'addRouteClass'),
         );
     }
 
@@ -190,6 +191,29 @@ class AppExtension extends \Twig_Extension
         }
 
         return false;
+    }
+
+    /**
+     * @param $routes
+     * @param string $class
+     * @return string
+     */
+    public function addRouteClass($routes, $class = 'active')
+    {
+        return $this->isRoute($routes) ? $class : '';
+    }
+
+    /**
+     * @param $routes
+     * @return bool
+     */
+    public function isRoute($routes)
+    {
+        $routes = (array)$routes;
+        $request = $this->container->get('request');
+        $currentRoute = $request->get('_route');
+
+        return in_array($currentRoute, $routes);
     }
 
     /**

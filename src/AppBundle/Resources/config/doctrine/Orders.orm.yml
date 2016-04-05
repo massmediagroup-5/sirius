@@ -34,12 +34,6 @@ AppBundle\Entity\Orders:
             generator:
                 strategy: IDENTITY
     fields:
-        status:
-            type: integer
-            nullable: true
-            options:
-                unsigned: false
-                default: '0'
         type:
             type: string
             nullable: true
@@ -71,20 +65,40 @@ AppBundle\Entity\Orders:
             length: 45
             options:
                 fixed: false
+        email:
+            type: string
+            nullable: true
+            length: 45м категорія
         pay:
             type: string
             nullable: true
             length: 255
             options:
                 fixed: false
+        originalTotalPrice:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 2
+            options:
+                default: 0.00
+            column: original_total_price
         totalPrice:
             type: decimal
             nullable: false
             precision: 10
             scale: 2
             options:
-                default: '0.00'
+                default: 0.00
             column: total_price
+        individualDiscount:
+            type: decimal
+            nullable: false
+            precision: 5
+            scale: 2
+            options:
+                default: 0.00
+            column: individual_discount
         clientSmsId:
             type: string
             nullable: true
@@ -144,6 +158,13 @@ AppBundle\Entity\Orders:
             joinColumns:
                 users_id:
                     referencedColumnName: id
+            orphanRemoval: false
+        status:
+            targetEntity: OrderStatus
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: orders
+            inversedBy: null
             orphanRemoval: false
         carriers:
             targetEntity: Carriers

@@ -43,6 +43,21 @@ class Cart
     private $skuProducts;
 
     /**
+     * @var string
+     */
+    private $originalTotalPrice = 0;
+
+    /**
+     * @var string
+     */
+    private $totalPrice = 0;
+
+    /**
+     * @var integer
+     */
+    private $quantity;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $sizes;
@@ -234,6 +249,80 @@ class Cart
     public function getSizes()
     {
         return $this->sizes;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return array_sum(array_map(function (CartProductSize $size) {
+            return $size->getQuantity();
+        }, $this->sizes->toArray()));
+    }
+
+    /**
+     * Set originalTotalPrice
+     *
+     * @param string $originalTotalPrice
+     *
+     * @return Cart
+     */
+    public function setOriginalTotalPrice($originalTotalPrice)
+    {
+        $this->originalTotalPrice = $originalTotalPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get originalTotalPrice
+     *
+     * @return string
+     */
+    public function getOriginalTotalPrice()
+    {
+        return $this->originalTotalPrice;
+    }
+
+    /**
+     * Set totalPrice
+     *
+     * @param string $totalPrice
+     *
+     * @return Cart
+     */
+    public function setTotalPrice($totalPrice)
+    {
+        $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPrice
+     *
+     * @return string
+     */
+    public function getTotalPrice()
+    {
+        return $this->totalPrice;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     *
+     * @return Cart
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
     }
 
     /**

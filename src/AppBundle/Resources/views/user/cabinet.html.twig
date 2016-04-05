@@ -21,9 +21,9 @@
                                 <div class="lk-nav">
                                     <div class="lk-nav__i">
                                         <ul>
-                                            <li class="active"><a href="#">Мои данные</a></li>
-                                            <li><a href="#">Список желаний</a></li>
-                                            <li><a href="#">Мои заказы</a></li>
+                                            <li class="{{ route_class('user_profile') }}"><a href="{{ path('user_profile') }}">Мои данные</a></li>
+                                            <li class="{{ route_class('user_wish_list') }}"><a href="{{ path('user_wish_list') }}">Список желаний</a></li>
+                                            <li class="{{ route_class('user_orders') }}"><a href="{{ path('user_orders') }}">Мои заказы</a></li>
                                             <li><a href="#">Программа лояльности</a></li>
                                         </ul>
                                     </div>

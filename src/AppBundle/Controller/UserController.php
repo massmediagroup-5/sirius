@@ -36,4 +36,29 @@ class UserController extends Controller
         return $this->render('AppBundle:user/profile.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * @Route("/user/wish_list", name="user_wish_list")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @param Request $request
+     * @return mixed
+     */
+    public function wishListAction(Request $request)
+    {
+        $wishList = $this->container->get('wishlist')->paginate($request->get('page', 1));
+
+        return $this->render('AppBundle:user/wish_list.html.twig', compact('wishList'));
+    }
+
+    /**
+     * @Route("/user/orders", name="user_orders")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @return mixed
+     */
+    public function ordersAction()
+    {
+        $orders = $this->container->get('cart')->getUserOrders($this->getUser());
+
+        return $this->render('AppBundle:user/orders_list.html.twig', compact('orders'));
+    }
+
 }

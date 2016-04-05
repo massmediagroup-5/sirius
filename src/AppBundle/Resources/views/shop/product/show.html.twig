@@ -19,12 +19,8 @@
                                     <div class="list">
                                         <div class="item active">
                                             <div class="main-img">
-                                                <div class="flag flag_discount">
-                                                    <div class="flag__i">
-                                                        <p>25%</p>
-                                                    </div>
+                                                {{ widget('products.flags', current_model)|raw }}
 
-                                                </div>
                                                 {{ widget('products.wishButton', current_model)|raw }}
 
                                                 <div class="main-img__i big-img_slider">
