@@ -5,26 +5,25 @@
 {% block cabinet_content %}
 
     <div class="user-form">
-        <form action="" class="user-form__i" method="post">
-
+        {{ form_start(form, {'attr': {'class': 'user-form__i'}}) }}
             <div class="rw">
                 <div class="inp-name">
                     <label>Номер мобильного<sup>*</sup></label>
                 </div>
-                <div class="inp">
-                    <input type="text" class="phone-inp" name="phone" placeholder="Введите Ваш номер" value="+38059 658 56 98"/>
+                <div class="inp {{ add_error(form, 'phone') }}">
+                    {{ form_widget(form.phone, {'attr': {'placeholder': 'Введите Ваш номер', 'class': 'phone-inp'}}) }}
                 </div>
             </div>
             <div class="rw">
                 <div class="inp-name">
                     <label>Ваше имя и фамилия<sup>*</sup></label>
                 </div>
-                <div class="inp">
+                <div class="inp {{ add_error(form, 'name') }}">
                     <div class="col">
-                        <input type="text" placeholder="Введите Имя" value="Петр"/>
+                        {{ form_widget(form.name, {'attr': {'placeholder': 'Введите Имя'}}) }}
                     </div>
-                    <div class="col">
-                        <input type="text" placeholder="Введите Фамилию" value="Иванов"/>
+                    <div class="col {{ add_error(form, 'surname') }}">
+                        {{ form_widget(form.surname, {'attr': {'placeholder': 'Введите Фамилию'}}) }}
                     </div>
                 </div>
             </div>
@@ -32,37 +31,36 @@
                 <div class="inp-name">
                     <label>Ваш E-mail<sup>*</sup></label>
                 </div>
-                <div class="inp">
-                    <input type="text" placeholder="Введите E-mail адрес" value="dfhsehf@dsfhsdh.com"/>
+                <div class="inp {{ add_error(form, 'email') }}">
+                    {{ form_widget(form.email, {'attr': {'placeholder': 'Введите E-mail адрес'}}) }}
                 </div>
             </div>
             <div class="rw mb20">
                 <a href="#" class="change-passw-btn">Изменить пароль</a>
             </div>
-            <div class="passw-change">
+            <div class="passw-change {% if has_error(form, 'plainPassword.first') %} active {% endif %}">
                 <div class="rw">
                     <div class="inp-name">
                         <label>Пароль<sup>*</sup></label>
                     </div>
-                    <div class="inp">
-                        <input type="text" class="error" placeholder="Введите пароль"/>
+                    <div class="inp {{ add_error(form, 'plainPassword.first') }}">
+                        {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'Введите пароль'}}) }}
                     </div>
                 </div>
                 <div class="rw">
                     <div class="inp-name">
                         <label>Подтвердите пароль<sup>*</sup></label>
                     </div>
-                    <div class="inp">
-                        <input type="text" placeholder="Подтвердите пароль"/>
+                    <div class="inp {{ add_error(form, 'plainPassword.first') }}">
+                        {{ form_widget(form.plainPassword.second, {'attr': {'placeholder': 'Подтвердите пароль'}}) }}
                     </div>
                 </div>
             </div>
 
             <div class="rw">
-                <button type="submit" class="btn btn_blue">ПОДТВЕРДИТЬ</button>
+                {{ form_widget(form.submit, {'label': 'Подтвердить', 'attr': {'class': 'btn btn_blue'}}) }}
             </div>
-
-        </form>
+        {{ form_end(form) }}
     </div>
 
 {% endblock %}

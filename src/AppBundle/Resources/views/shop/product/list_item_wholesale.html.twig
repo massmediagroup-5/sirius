@@ -1,6 +1,6 @@
 <div class="item js_wholesale_item" data-id="{{ item.skuProducts.0.id }}">
     <div class="item__i">
-        {{ widget('products.flags', item) }}
+        {{ widget('products.flags', item)|raw }}
 
         <table>
             <tr>
