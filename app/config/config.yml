@@ -66,6 +66,7 @@ twig:
         options: @options
         cart: @cart
         humanizer: @humanizer
+        prices: @prices_calculator
         fos_csrf_provider: "@form.csrf_provider"
     form:
         resources:

@@ -19,7 +19,7 @@ class Version20160406141421 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql(
-            "INSERT INTO `order_statuses` (`name`, `code`, `description`, `base_flag`) VALUES
+            "INSERT INTO `order_status` (`name`, `code`, `description`, `base_flag`) VALUES
             ('Новый', 'new', NULL, 1)"
         );
     }
@@ -33,7 +33,7 @@ class Version20160406141421 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql(
-            "DELETE FROM `order_statuses` WHERE `code` IN ('new')"
+            "DELETE FROM `order_status` WHERE `code` IN ('new')"
         );
     }
 }

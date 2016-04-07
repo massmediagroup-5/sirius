@@ -65,7 +65,7 @@
                         <table class="single-buy">
                             <tr>
                                 <td>Итого</td>
-                                <td><span class="js_cart_original_price">{{ cart.totalOldPrice }}</span> грн.</td>
+                                <td><span class="js_cart_original_price">{{ cart.totalPrice }}</span> грн.</td>
                             </tr>
                             <tr class="discount">
                                 <td>Скидка</td>
@@ -73,7 +73,7 @@
                             </tr>
                             <tr class="pay-row">
                                 <td>Сумма к оплате</td>
-                                <td><span class="js_cart_total_price">{{ cart.totalPrice }}</span> грн.</td>
+                                <td><span class="js_cart_total_discounted_price">{{ cart.discountedTotalPrice }}</span> грн.</td>
                             </tr>
                         </table>
                     </div>

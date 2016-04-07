@@ -3,6 +3,7 @@
 namespace AppBundle\Model;
 
 use AppBundle\Entity\SkuProducts;
+use AppBundle\Services\PricesCalculator;
 use Illuminate\Support\Arr;
 
 class CartItem
@@ -20,9 +21,15 @@ class CartItem
      */
     protected $skuProduct;
 
-    public function __construct(SkuProducts $skuProducts)
+    /**
+     * @var PricesCalculator
+     */
+    protected $pricesCalculator;
+
+    public function __construct(SkuProducts $skuProducts, PricesCalculator $pricesCalculator)
     {
         $this->skuProduct = $skuProducts;
+        $this->pricesCalculator = $pricesCalculator;
     }
 
     /**
@@ -123,16 +130,15 @@ class CartItem
      */
     public function getPrice()
     {
-        return $this->skuProduct->getProductModels()->getPrice() * array_sum($this->sizesCounts);
+        return $this->getOneItemPrice() * array_sum($this->sizesCounts);
     }
 
     /**
      * @return number
      */
-    public function getOldPrice()
+    public function getDiscountedPrice()
     {
-        $price = $this->skuProduct->getProductModels()->getOldPrice() ?: $this->skuProduct->getProductModels()->getPrice();
-        return $price * array_sum($this->sizesCounts);
+        return $this->getOneItemDiscountedPrice() * array_sum($this->sizesCounts);
     }
 
     /**
@@ -167,13 +173,13 @@ class CartItem
     /**
      * @return int
      */
-    public function getPackagesPrice()
+    public function getPackagesDiscountedPrice()
     {
         $sizesInPackageCount = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
             return $size->getId();
         })->count();
 
-        return $this->getPackagesQuantity() * $sizesInPackageCount * $this->skuProduct->getProductModels()->getPrice();
+        return $this->getPackagesQuantity() * $sizesInPackageCount * $this->getOneItemDiscountedPrice();
     }
 
     /**
@@ -231,7 +237,32 @@ class CartItem
      */
     public function getSingleSizePrice($sizeId)
     {
-        return $this->getSingleSizeQuantity($sizeId) * $this->skuProduct->getProductModels()->getPrice();
+        return $this->getSingleSizeQuantity($sizeId) * $this->getOneItemPrice();
+    }
+
+    /**
+     * @param $sizeId
+     * @return int
+     */
+    public function getSingleSizeDiscountedPrice($sizeId)
+    {
+        return $this->getSingleSizeQuantity($sizeId) * $this->getOneItemDiscountedPrice();
+    }
+
+    /**
+     * @return float
+     */
+    public function getOneItemPrice()
+    {
+        return $this->pricesCalculator->getPrice($this->skuProduct->getProductModels());
+    }
+
+    /**
+     * @return float
+     */
+    public function getOneItemDiscountedPrice()
+    {
+        return $this->pricesCalculator->getDiscountedPrice($this->skuProduct->getProductModels());
     }
 
 }

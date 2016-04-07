@@ -130,7 +130,7 @@ class Orders
     /**
      * @var string
      */
-    private $originalTotalPrice = 0;
+    private $discountedTotalPrice = 0;
 
     /**
      * @var string
@@ -658,27 +658,27 @@ class Orders
     }
 
     /**
-     * Set originalTotalPrice
+     * Set discountedTotalPrice
      *
-     * @param string $originalTotalPrice
+     * @param string $discountedTotalPrice
      *
      * @return Orders
      */
-    public function setOriginalTotalPrice($originalTotalPrice)
+    public function setDiscountedTotalPrice($discountedTotalPrice)
     {
-        $this->originalTotalPrice = $originalTotalPrice;
+        $this->discountedTotalPrice = $discountedTotalPrice;
 
         return $this;
     }
 
     /**
-     * Get originalTotalPrice
+     * Get discountedTotalPrice
      *
      * @return string
      */
-    public function getOriginalTotalPrice()
+    public function getDiscountedTotalPrice()
     {
-        return $this->originalTotalPrice;
+        return $this->discountedTotalPrice;
     }
 
     /**

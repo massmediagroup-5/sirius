@@ -14,7 +14,7 @@
                         </tr>
                         <tr class="total">
                             <td>Сумма к оплате</td>
-                            <td><span class="js_cart_total_price">{{ cart.totalPrice }}</span> грн.</td>
+                            <td><span class="js_cart_total_discounted_price">{{ cart.discountedTotalPrice }}</span> грн.</td>
                         </tr>
                     </table>
                 </div>
@@ -98,7 +98,7 @@
         <div class="cart-drop__i">
             <p>В корзине <span class="js_cart_total_count">{{ cart.totalCount }}</span> товара</p>
 
-            <p> на cумму <span class="js_cart_total_price">{{ cart.totalPrice }}</span> грн.</p>
+            <p> на cумму <span class="js_cart_total_discounted_price">{{ cart.discountedTotalPrice }}</span> грн.</p>
 
             <div class="inp">
                 <a href="{{ path('cart_order') }}" class="btn btn_blue">Оформить заказ</a>

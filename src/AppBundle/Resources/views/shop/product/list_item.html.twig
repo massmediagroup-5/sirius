@@ -65,10 +65,7 @@
                     </div>
                     <div class="price price_new">
                         <p>
-                            {{ item.productModels.0.price|number_format(2, '.', ' ') }} грн.
-                            {% if item.productModels.0.oldprice is not empty %}
-                                <strong>{{ item.productModels.0.oldprice|number_format(2, '.', ' ') }} грн.</strong>
-                            {% endif %}
+                            {{ widget('products.prices', item.productModels.0)|raw }}
                         </p>
                     </div>
                 </div>

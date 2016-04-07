@@ -44,7 +44,7 @@ class CartController extends BaseController
             }
             return new JsonResponse([
                 'totalCount' => $this->get('cart')->getTotalCount(),
-                'totalPrice' => $this->get('cart')->getTotalPrice()
+                'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice()
             ]);
         }
 
@@ -99,7 +99,7 @@ class CartController extends BaseController
 
             return new JsonResponse([
                 'totalCount' => $this->get('cart')->getTotalCount(),
-                'totalPrice' => $this->get('cart')->getTotalPrice()
+                'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice()
             ]);
         }
 
@@ -258,11 +258,11 @@ class CartController extends BaseController
     {
         return [
             // todo add discount, total oldPrice
-            'originalItemsPrice' => $this->get('cart')->getTotalOldPrice(),
+            'totalPrice' => $this->get('cart')->getTotalPrice(),
             'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
             'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
             'totalCount' => $this->get('cart')->getTotalCount(),
-            'totalPrice' => $this->get('cart')->getTotalPrice()
+            'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice()
         ];
     }
 
@@ -273,8 +273,8 @@ class CartController extends BaseController
     {
         return [
             'totalCount' => $this->get('cart')->getTotalCount(),
-            'totalOriginalPrice' => $this->get('cart')->getTotalOldPrice(),
             'totalPrice' => $this->get('cart')->getTotalPrice(),
+            'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice(),
             'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
             'packagesCount' => $this->get('cart')->getPackagesCount(),
             'cartItems' => $this->get('cart')->toArrayWithExtraInfo(),
