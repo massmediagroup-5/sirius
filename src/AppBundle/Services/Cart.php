@@ -456,6 +456,9 @@ class Cart
             $cart = new \AppBundle\Entity\Cart();
             $cart->setOrders($order);
             $cart->setSkuProducts($item->getSkuProduct());
+            $cart->setQuantity($item->getQuantity());
+            $cart->setDiscountedTotalPrice($item->getDiscountedPrice());
+            $cart->setTotalPrice($item->getPrice());
             foreach ($item->getSizes() as $sizeId => $sizeCount) {
                 $cartProductSize = new CartProductSize();
                 $cartProductSize->setCart($cart);
@@ -473,7 +476,9 @@ class Cart
         $order->setPay(Arr::get($data, 'pay'));
         $order->setFio(Arr::get($data, 'name') . ' ' . Arr::get($data, 'surname'));
         $order->setTotalPrice($this->getTotalPrice());
+        $order->setDiscountedTotalPrice($this->getDiscountedTotalPrice());
         $order->setType(Orders::TYPE_NORMAL);
+        $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
         $this->em->persist($order);
         $this->em->flush();
 

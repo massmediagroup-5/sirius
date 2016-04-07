@@ -21,7 +21,7 @@
                                 {{ order.quantity }} {{ 'labels.cart_products'|transchoice(order.quantity) }} на  сумму {{ order.discountedTotalPrice }} грн.
                             </td>
                             <td>
-                                <span>Статус заказа:</span> {{ humanizer.orderStatus(order) }}
+                                <span>Статус заказа:</span> новый {# todo add status #}
                             </td>
                         </tr>
                     </table>
@@ -70,15 +70,15 @@
                                         <table>
                                             <tr>
                                                 <td>Итого</td>
-                                                <td>{{ order.discountedTotalPrice }} грн.</td>
+                                                <td>{{ order.totalPrice }} грн.</td>
                                             </tr>
                                             <tr>
                                                 <td>Скидка</td>
-                                                <td>{{ order.discountedPrice }} грн.</td>
+                                                <td>{{ order.discount }} грн.</td>
                                             </tr>
                                             <tr>
                                                 <td>Сумма к оплате</td>
-                                                <td>{{ order.discountedPrice }} грн.</td>
+                                                <td>{{ order.discountedTotalPrice }} грн.</td>
                                             </tr>
                                         </table>
                                     </div>
