@@ -38,7 +38,7 @@ class ProductModels
     /**
      * @var string
      */
-    private $oldprice;
+    private $wholesalePrice = 0.0;
 
     /**
      * @var string
@@ -264,30 +264,6 @@ class ProductModels
     public function getPackagePrice()
     {
         return $this->price * $this->sizes->count();
-    }
-
-    /**
-     * Set oldprice
-     *
-     * @param string $oldprice
-     *
-     * @return ProductModels
-     */
-    public function setOldprice($oldprice)
-    {
-        $this->oldprice = $oldprice;
-
-        return $this;
-    }
-
-    /**
-     * Get oldprice
-     *
-     * @return string
-     */
-    public function getOldprice()
-    {
-        return $this->oldprice;
     }
 
     /**
@@ -800,16 +776,6 @@ class ProductModels
     {
         // Add your code here
     }
-    /**
-     * @var string
-     */
-    private $wholesalePrice = 0.0;
-
-    /**
-     * @var string
-     */
-    private $wholesaleOldprice = 0.0;
-
 
     /**
      * Set wholesalePrice
@@ -828,35 +794,11 @@ class ProductModels
     /**
      * Get wholesalePrice
      *
-     * @return string
+     * @return int
      */
     public function getWholesalePrice()
     {
-        return $this->wholesalePrice;
-    }
-
-    /**
-     * Set wholesaleOldprice
-     *
-     * @param string $wholesaleOldprice
-     *
-     * @return ProductModels
-     */
-    public function setWholesaleOldprice($wholesaleOldprice)
-    {
-        $this->wholesaleOldprice = $wholesaleOldprice;
-
-        return $this;
-    }
-
-    /**
-     * Get wholesaleOldprice
-     *
-     * @return string
-     */
-    public function getWholesaleOldprice()
-    {
-        return $this->wholesaleOldprice;
+        return (float)$this->wholesalePrice;
     }
 
     public function __toString()

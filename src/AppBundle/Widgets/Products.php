@@ -116,8 +116,12 @@ class Products
      */
     public function prices($model)
     {
+        $price = $this->container->get('prices_calculator')->getPrice($model);
+        $discountedPrice = $this->container->get('prices_calculator')->getPrice($model);
         return $this->templating->render('AppBundle:widgets/product/prices.html.twig', [
-                'model' => $model
+                'model' => $model,
+                'price' => $price,
+                'discountedPrice' => $discountedPrice
             ]
         );
     }
@@ -130,9 +134,6 @@ class Products
     {
         // todo add actions and other flags
 
-        echo 'getPreorderFlag ';
-        echo((int)$model->getPreorderFlag());
-        echo 'getPreorderFlag ';
         if ($model->getPreorderFlag()) {
             $flag = 'soon';
             $flagText = $this->container->get('translator')->trans('Pre order product flag');
@@ -178,7 +179,7 @@ class Products
         $form = $this->container->get('form.factory')->create(ChangeProductSizeType::class, null, [
             'action' => $this->container->get('router')->generate('cart_change_size', ['id' => $skuProduct->getId()]),
             'model' => $model,
-            'selectedSize' => $this->em->getReference("AppBundle:ProductModelSizes", $selectedSize) ,
+            'selectedSize' => $this->em->getReference("AppBundle:ProductModelSizes", $selectedSize),
         ])->createView();
 
         return $this->templating->render('AppBundle:widgets/product/change_product_size.html.twig', array(

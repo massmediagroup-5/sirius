@@ -31,14 +31,14 @@ AppBundle\Entity\Cart:
             options:
                 unsigned: false
                 default: '0'
-        originalTotalPrice:
+        discountedTotalPrice:
             type: decimal
             nullable: false
             precision: 10
             scale: 2
             options:
                 default: 0.00
-            column: original_total_price
+            column: discounted_total_price
         totalPrice:
             type: decimal
             nullable: false

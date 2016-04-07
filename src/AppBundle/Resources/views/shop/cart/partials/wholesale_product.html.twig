@@ -43,11 +43,11 @@
                         </div>
                     </td>
                     <td>
-                        <span class="js_item_price" data-price="{{ item.skuProduct.productModels.price }}">
+                        <span class="js_item_price" data-price="{{ prices.getDiscountedPrice(item.skuProduct.productModels) }}">
                             {% if currentSize is defined %}
-                                {{ item.getSingleSizePrice(currentSize)|format_price }}
+                                {{ item.getSingleSizeDiscountedPrice(currentSize)|format_price }}
                             {% else %}
-                                {{ item.packagesPrice|format_price }}
+                                {{ item.packagesDiscountedPrice|format_price }}
                             {% endif %}
                         </span> грн.
                     </td>

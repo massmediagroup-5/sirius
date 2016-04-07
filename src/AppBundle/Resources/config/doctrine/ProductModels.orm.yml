@@ -18,15 +18,9 @@ AppBundle\Entity\ProductModels:
         price:
             columns:
                 - price
-        oldprice:
-            columns:
-                - oldprice
         wholesale_price:
             columns:
                 - price
-        wholesale_oldprice:
-            columns:
-                - oldprice
         stock:
             columns:
                 - in_stock
@@ -75,11 +69,6 @@ AppBundle\Entity\ProductModels:
             scale: 2
             options:
                 default: 0.00
-        oldprice:
-            type: decimal
-            nullable: true
-            precision: 8
-            scale: 2
         wholesalePrice:
             type: decimal
             precision: 8

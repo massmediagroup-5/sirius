@@ -46,7 +46,9 @@
                     </div>
                 </td>
                 <td>
-                    <span class="js_item_price" data-price="{{ item.packagePrice|format_price }}">{{ item.packagePrice|format_price }}</span> грн.
+                    <span class="js_item_price" data-price="{{ prices.getProductModelPackageDiscountedPrice(item)|format_price }}">
+                        {{ prices.getProductModelPackageDiscountedPrice(item)|format_price }}
+                    </span> грн.
                 </td>
                 <td class="buttons-holder">
                     <a href="#" class="btn btn_blue add-to-cart js_add_pack_to_cart"></a>
@@ -111,7 +113,7 @@
                                             </div>
                                         </td>
                                         <td><span class="js_item_size_price"
-                                                  data-price="{{ item.price }}">{{ item.price }}</span> грн.
+                                                  data-price="{{ prices.getDiscountedPrice(item) }}">{{ prices.getDiscountedPrice(item) }}</span> грн.
                                         </td>
                                         <td>
                                             <a href="#" class="btn btn_blue js_add_size_to_cart"></a>

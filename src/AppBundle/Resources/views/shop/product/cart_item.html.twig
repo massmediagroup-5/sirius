@@ -25,10 +25,7 @@
 
                 <div class="price price_new">
                     <p>
-                        {{ item.skuProduct.productModels.price }} грн.
-                        {% if not item.skuProduct.productModels.oldPrice is empty %}
-                            <strong>{{ item.skuProduct.productModels.oldPrice }} грн.</strong>
-                        {% endif %}
+                        {{ widget('products.prices', item.skuProduct.productModels)|raw }}
                     </p>
                 </div>
 

@@ -77,7 +77,7 @@ class Cart
             // Each size quantity
             $this->items[$skuProduct->getId()]->addSize($sizeId, $quantity);
         } else {
-            $this->items[$skuProduct->getId()] = new CartItem($skuProduct);
+            $this->items[$skuProduct->getId()] = new CartItem($skuProduct, $this->container->get('prices_calculator'));
             $this->items[$skuProduct->getId()]->addSize($sizeId, $quantity);
         }
         $this->saveInSession();
@@ -306,7 +306,7 @@ class Cart
      */
     public function getTotalPrice()
     {
-        return array_sum(array_map(function ($item) {
+        return array_sum(array_map(function (CartItem $item) {
             return $item->getPrice();
         }, $this->items));
     }
@@ -314,10 +314,10 @@ class Cart
     /**
      * @return int
      */
-    public function getTotalOldPrice()
+    public function getDiscountedTotalPrice()
     {
-        return array_sum(array_map(function ($item) {
-            return $item->getOldPrice();
+        return array_sum(array_map(function (CartItem $item) {
+            return $item->getDiscountedPrice();
         }, $this->items));
     }
 
@@ -509,7 +509,7 @@ class Cart
         $sessionArray = $this->session->get('cart_items', []);
         $skuProducts = $this->em->getRepository('AppBundle:SkuProducts')->findWithModels(array_keys($sessionArray));
         foreach ($skuProducts as $skuProduct) {
-            $cartItem = new CartItem($skuProduct);
+            $cartItem = new CartItem($skuProduct, $this->container->get('prices_calculator'));
             $cartItem->setSizes($sessionArray[$skuProduct->getId()]['sizes']);
             $this->items[$skuProduct->getId()] = $cartItem;
         }

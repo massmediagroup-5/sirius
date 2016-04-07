@@ -47,6 +47,9 @@ services:
     humanizer:
         class: AppBundle\Services\Humanizer
         arguments: ["@service_container"]
+    prices_calculator:
+        class: AppBundle\Services\PricesCalculator
+        arguments: ["@service_container"]
     request_listener:
         class: AppBundle\Event\RequestListener
         arguments: ["@service_container"]

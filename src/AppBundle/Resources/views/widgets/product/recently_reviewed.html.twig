@@ -16,7 +16,7 @@
                         <div class="info">
                             <div class="info__i">
                                 <p><strong>{{ item.name }}</strong></p>
-                                <p> {{ item.price|number_format(2, '.', ' ') }} грн.</p>
+                                <p> {{ prices.getDiscountedPrice(item)|format_price }} грн.</p>
                             </div>
                         </div>
                     </div>
