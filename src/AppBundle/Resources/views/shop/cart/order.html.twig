@@ -124,6 +124,10 @@
 {% block bottom_assets %}
     {{ parent() }}
 
+    <script>
+        var orderFormSubmitFlag = {{ orderFormSubmitFlag ? 'true' : 'false' }};
+    </script>
+
     {% javascripts '@AppBundle/Resources/public/js/order_create.js' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
