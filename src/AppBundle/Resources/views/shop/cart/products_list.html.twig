@@ -5,51 +5,55 @@
 <div class="cart-info">
     <div class="cart-info__i">
 
-        <div class="col floating-box-wr">
+        {% if cart.items is empty %}
+            {{ include('AppBundle:shop/cart/partials/empty.html.twig') }}
+        {% else %}
 
-            {% if not cart.standardItems is empty %}
-                <div class="main-cart-list">
-                    <div class="title">
-                        <h2>Основной заказ</h2>
-                    </div>
-                    <div class="main-cart-list__i">
+            <div class="col floating-box-wr">
 
-                        {% for item in cart.standardItems%}
-                            {% for sizeId, sizeCount in item.sizes%}
-                                {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
-                            {% endfor %}
-                        {% endfor %}
-
-                        <div class="main-cart-list-total">
-                            <p><strong>Итого: <span class="js_cart_standard_total_price">{{ cart.standardItemsPrice }}</span> грн.</strong></p>
+                {% if not cart.standardItems is empty %}
+                    <div class="main-cart-list">
+                        <div class="title">
+                            <h2>Основной заказ</h2>
                         </div>
+                        <div class="main-cart-list__i">
 
-                    </div>
-                </div>
-            {% endif %}
-
-            {% if not cart.preOrderItems is empty %}
-                <div class="preorder-cart-list">
-                    <div class="title">
-                        <h2>Предзаказ</h2>
-                    </div>
-                    <div class="preorder-cart-list__i">
-
-                        {% for item in cart.preOrderItems%}
-                            {% for sizeId, sizeCount in item.sizes%}
-                                {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
+                            {% for item in cart.standardItems%}
+                                {% for sizeId, sizeCount in item.sizes%}
+                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
 
-                        <div class="preorder-cart-list-total">
-                            <p><strong>Итого: <span class="js_cart_pre_order_total_price">{{ cart.standardItemsPrice }}</span> грн.</strong></p>
+                            <div class="main-cart-list-total">
+                                <p><strong>Итого: <span class="js_cart_standard_total_price">{{ cart.standardItemsPrice }}</span> грн.</strong></p>
+                            </div>
+
                         </div>
                     </div>
-                </div>
-            {% endif %}
-        </div>
+                {% endif %}
 
-        <div class="col floating-box-main">
+                {% if not cart.preOrderItems is empty %}
+                    <div class="preorder-cart-list">
+                        <div class="title">
+                            <h2>Предзаказ</h2>
+                        </div>
+                        <div class="preorder-cart-list__i">
+
+                            {% for item in cart.preOrderItems%}
+                                {% for sizeId, sizeCount in item.sizes%}
+                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
+                                {% endfor %}
+                            {% endfor %}
+
+                            <div class="preorder-cart-list-total">
+                                <p><strong>Итого: <span class="js_cart_pre_order_total_price">{{ cart.standardItemsPrice }}</span> грн.</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col floating-box-main">
             <div class="order-total floating-box">
                 <div class="order-total__i">
                     <div class="top">
@@ -65,7 +69,7 @@
                         <table class="single-buy">
                             <tr>
                                 <td>Итого</td>
-                                <td><span class="js_cart_original_price">{{ cart.totalPrice }}</span> грн.</td>
+                                <td><span class="js_cart_total_price">{{ cart.totalPrice }}</span> грн.</td>
                             </tr>
                             <tr class="discount">
                                 <td>Скидка</td>
@@ -80,6 +84,8 @@
                 </div>
             </div>
         </div>
+
+        {% endif %}
 
     </div>
 </div>

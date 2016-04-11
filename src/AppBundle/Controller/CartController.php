@@ -147,7 +147,7 @@ class CartController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            if($form->has('size')) {
+            if ($form->has('size')) {
                 $this->get('cart')->removeItemSize($skuProduct, $form->get('size')->getNormData());
             } else {
                 $this->get('cart')->removeItem($skuProduct);
@@ -219,7 +219,8 @@ class CartController extends BaseController
 
         return $this->render('AppBundle:shop:cart/order.html.twig', [
             'quickOrderForm' => $quickOrderForm->createView(),
-            'orderForm' => $orderForm->createView()
+            'orderForm' => $orderForm->createView(),
+            'orderFormSubmitFlag' => $orderForm->isSubmitted(),
         ]);
     }
 
