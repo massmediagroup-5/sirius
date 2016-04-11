@@ -4,8 +4,8 @@ imports:
     - { resource: services.yml }
     - { resource: @AppBundle/Resources/config/services.yml }
     - { resource: @AppBundle/Resources/config/widgets.yml }
-    - { resource: @AppAdminBundle/Resources/config/admin.yml }
     - { resource: @UserBundle/Resources/config/config.yml }
+    - { resource: @AppAdminBundle/Resources/config/admin.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -224,6 +224,8 @@ sonata_admin:
         blocks:
             - { position: left, type: sonata.admin.block.admin_list }
             - { position: left, type: app.admin.block.import}
+    security:
+        handler: sonata.admin.security.handler.role
 
 sonata_translation:
     locales: [ru]

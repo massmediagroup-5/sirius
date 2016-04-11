@@ -200,3 +200,13 @@ services:
         arguments: [~, AppBundle\Entity\MainBanners, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Банеры главной страницы"}
+
+    sonata.user.editable_role_builder:
+        class:     AppAdminBundle\Security\EditableRolesBuilder
+        arguments: [@security.context, @sonata.admin.pool, %security.role_hierarchy.roles%]
+
+    sonata.user.form.type.security_roles:
+        class:     AppAdminBundle\Form\Type\SecurityRolesType
+        arguments: [@sonata.user.editable_role_builder, @translator]
+        tags:
+            - { name: form.type, alias: sonata_security_roles }
