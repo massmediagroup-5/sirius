@@ -58,7 +58,8 @@ class ShopController extends Controller
         try {
             $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page, $entityName);
+                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page,
+                    $entityName);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
@@ -66,7 +67,7 @@ class ShopController extends Controller
         if ($data) {
             $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
             // Add breadcrumbs
-            if($data['category']->getParrent()) {
+            if ($data['category']->getParrent()) {
                 $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
             }
             $this->get('widgets.breadcrumbs')->push(['name' => $data['category']->getName()]);
@@ -99,49 +100,35 @@ class ShopController extends Controller
         $current_page = $request->get('page') ? $request->get('page') : 1;
 
         $filters = $request->query->all();
-        $filters['page'] = 'page';
 
         // Redirect to category if empty filters.
-        if (empty($filters))
+        if (empty($filters)) {
             return $this->redirectToRoute('category', array('category' => $category), 301);
+        }
+        $filters['page'] = 'page'; // Todo ask why that needed
         try {
             $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
             $data = $this->get('entities')
-                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page, $entityName);
+                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page,
+                    $entityName);
         } catch (\Doctrine\Orm\NoResultException $e) {
             $data = null;
         }
         if ($data) {
-            foreach ($filters as $key => $value) {
-                $filters[$key] = explode(',', $value);
-            }
-            $link_array = array();
-
-            foreach ($filters as $key => $values_array) {
-                foreach ($values_array as $value) {
-                    if ($key == 'sort') continue;
-                    if (($key == 'price_from') || ($key == 'price_to')) {
-                        $link_array[$key] = $this->makeUncheckUrl($filters, $value);
-                    } else {
-                        $link_array[$value] = $this->makeUncheckUrl($filters, $value);
-                    }
-
-                }
-            }
-            $data['link_array'] = $link_array;
             $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
             // Add breadcrumbs
-            if($data['category']->getParrent()) {
+            if ($data['category']->getParrent()) {
                 $this->buildBreadcrumb($category_list, $data['category']->getParrent()->getId());
             }
             $this->get('widgets.breadcrumbs')->push(['name' => $data['category']->getName()]);
+
             return $this->render('AppBundle:shop:category.html.twig', array(
                 'data' => $data,
                 'breadcrumb' => $this->breadcrumb,
                 'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
                 'params' => $this->get('options')->getParams(),
                 'maxPages' => ceil($data['products']->count() / $this->items_on_page),
-                'thisPage' => $current_page,
+                'thisPage' => $current_page
             ));
         } else {
             throw $this->createNotFoundException();
@@ -169,30 +156,5 @@ class ShopController extends Controller
                 }
             }
         }
-    }
-
-    /**
-     * makeUncheckUrl
-     *
-     * @param mixed $filters
-     * @param mixed $value_id
-     *
-     * @return string
-     */
-    private function makeUncheckUrl($filters, $value_id)
-    {
-        $link = '?';
-        foreach ($filters as $ch_id => $values_array) {
-            if ($ch_id == 'page') continue;
-            if ((count($values_array) <= 1) && (in_array($value_id, $values_array))) continue;
-            $link .= $ch_id . "=";
-            foreach ($values_array as $value) {
-                if ($value == $value_id) continue;
-                $link .= $value . ",";
-            }
-            $link = substr($link, 0, -1) . "&";
-        }
-        $link = substr($link, 0, -1);
-        return $link;
     }
 }

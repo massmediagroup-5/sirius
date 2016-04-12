@@ -45,4 +45,11 @@ AppBundle\Entity\ProductColors:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
+    oneToMany:
+        models:
+            targetEntity: ProductModels
+            cascade: { }
+            fetch: LAZY
+            mappedBy: productColors
+            inversedBy: null
     lifecycleCallbacks: {  }

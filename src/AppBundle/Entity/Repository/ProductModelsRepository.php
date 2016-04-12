@@ -38,22 +38,33 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      * Todo complete or remove
      *
      * @param $category
+     * @param $characteristicValues
      * @param $filters
      * @return mixed
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getPricesIntervalForFilters($category, $filters)
+    public function getPricesIntervalForFilters($category, $characteristicValues, $filters)
     {
         $builder = $this
             ->createQueryBuilder('productModels')
             ->select('productModels, MIN(productModels.price) AS min_price, MAX(productModels.price) AS max_price')
             ->innerJoin('productModels.products', 'products')->addselect('products')
             ->innerJoin('products.baseCategory', 'baseCategory')
+            ->innerJoin('products.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
+            ->innerJoin('characteristicValues.characteristics', 'characteristics')->addselect('characteristics')
             ->where('productModels.active = 1 AND productModels.published = 1');
 
         $builder = $this->addEnabledOnSiteConditions($builder);
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues);
+
+        unset($filters['price_from']);
+
+        unset($filters['price_to']);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 
         return $builder->getQuery()->getSingleResult();
     }
@@ -94,9 +105,9 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues);
+        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues, 'productModels');
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addPriceToQuery($builder, $filters);
+        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
 

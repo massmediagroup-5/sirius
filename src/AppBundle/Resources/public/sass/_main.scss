@@ -721,13 +721,13 @@ input[type="checkbox"] {
 			> li {
 				float: left;
 				list-style: none;
-				padding: 20px 2%;
 
 				&:hover {
 					@media (min-width: 1041px) {
 						background: #fff;
 						> a {
 							color: #000;
+							background: white;
 						}
 						.sub-nav {
 							display: block;
@@ -780,6 +780,8 @@ input[type="checkbox"] {
 					font-family: $lato;
 					position: relative;
 					display: block;
+					padding: 20px 15px;
+					z-index: 11;
 					@include transition(color, 250ms, ease);
 
 					.out_opt & {
@@ -787,7 +789,6 @@ input[type="checkbox"] {
 					}
 
 					&:hover {
-
 						> &:after {
 							content: "";
 							position: absolute;
@@ -810,7 +811,7 @@ input[type="checkbox"] {
 		left: 0;
 		right: 0;
 		top: 100%;
-		z-index: 10;
+		z-index: 11;
 		display: none;
 
 			li {
@@ -948,7 +949,7 @@ input[type="checkbox"] {
 	right: 0;
 	top: 100%;
 	border-bottom: 2px solid #4ca7ed;
-	z-index: 2;
+	z-index: 10;
 	background: #fff;
 	height: 55px;
 	opacity: 0;
@@ -8924,6 +8925,7 @@ input[type="checkbox"] {
 	left: -150px;
 	background: #fff;
 	display: none;
+	z-index: 9;
 	@include box-shadow(0 1px 13px 0 rgba(0, 0, 0, 0.75));
 	&.active {
 		display: block;

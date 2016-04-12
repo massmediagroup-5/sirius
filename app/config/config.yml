@@ -68,6 +68,7 @@ twig:
         humanizer: @humanizer
         prices: @prices_calculator
         fos_csrf_provider: "@form.csrf_provider"
+        filters: @filters
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
