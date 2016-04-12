@@ -60,25 +60,21 @@ class Entities
      * @param string $entity
      * @return array|bool
      */
-    public function getCollectionsByCategoriesAlias($categoryAlias, $filters = null, $perPage = 9, $currentPage = 1, $entity = 'Products')
-    {
+    public function getCollectionsByCategoriesAlias(
+        $categoryAlias,
+        $filters = null,
+        $perPage = 9,
+        $currentPage = 1,
+        $entity = 'Products'
+    ) {
 
         $category = $this->em
             ->getRepository('AppBundle:Categories')
             ->getCategoryInfo($categoryAlias);
 
         // If we didn't find any active Category.
-        if (empty($category))
+        if (empty($category)) {
             return false;
-
-        $price_filter = $this->em->getRepository('AppBundle:ProductModels')
-            ->getPricesIntervalForFilters($category, $filters);
-
-        if (empty($filters['price_from']) || $filters['price_from'] < $price_filter['min_price']) {
-            $filters['price_from'] = $price_filter['min_price'];
-        }
-        if (empty($filters['price_to']) || $filters['price_to'] > $price_filter['max_price']) {
-            $filters['price_to'] = $price_filter['max_price'];
         }
 
         $characteristicsValuesIds = [];
@@ -89,8 +85,21 @@ class Entities
             }
         }
 
+        $price_filter = $this->em->getRepository('AppBundle:ProductModels')
+            ->getPricesIntervalForFilters($category, $characteristicsValuesIds, $filters);
+
+        if (empty($filters['price_from']) || $filters['price_from'] < $price_filter['min_price']) {
+            $filters['price_from'] = $price_filter['min_price'];
+        }
+        if (empty($filters['price_to']) || $filters['price_to'] > $price_filter['max_price']) {
+            $filters['price_to'] = $price_filter['max_price'];
+        }
+
         $products = $this->em->getRepository("AppBundle:$entity")
             ->getFilteredProductsToCategoryQuery($category, $characteristicsValuesIds, $filters);
+
+        $colors = $this->em->getRepository('AppBundle:ProductColors')
+            ->getColorsForFilteredProducts($category, $characteristicsValuesIds, $filters);
 
         $products = $this->container->get('knp_paginator')->paginate(
             $products,
@@ -109,12 +118,13 @@ class Entities
                 foreach ($characteristicValuesEntities as $value) {
                     $supposedFilterValues = $characteristicsValuesIds;
                     $supposedFilterValues[] = $value->getId();
-                    $characteristicValues[$value->getId()] = count($this->em->getRepository("AppBundle:$entity")->getFilteredProductsToCategoryQuery($category, $supposedFilterValues, $filters)->getResult());
+                    $characteristicValues[$value->getId()] = count($this->em->getRepository("AppBundle:$entity")->getFilteredProductsToCategoryQuery($category,
+                        $supposedFilterValues, $filters)->getResult());
                 }
             }
         }
 
-        return compact('category', 'characteristicValues', 'products', 'characteristics', 'price_filter');
+        return compact('category', 'characteristicValues', 'products', 'characteristics', 'price_filter', 'colors', 'filters');
     }
 
     /**
@@ -123,7 +133,7 @@ class Entities
      */
     public function getModelsByProduct($modelId)
     {
-        return  $this->em
+        return $this->em
             ->getRepository('AppBundle:ProductModels')
             ->getModelsByProductId($modelId);
 
@@ -150,8 +160,9 @@ class Entities
         $result['models'] = $this->em
             ->getRepository('AppBundle:ProductModels')
             ->getModelsByProductId($result['product']['id'], $productModelAlias);
-        if (empty($result))
+        if (empty($result)) {
             return false;
+        }
         return $result;
     }
 
@@ -169,7 +180,9 @@ class Entities
         $product_id = array_column($product, 'id');
         $result = array();
         foreach ($product_id as $value) {
-            if (in_array($value, $base_category_id)) $result[] = $value;
+            if (in_array($value, $base_category_id)) {
+                $result[] = $value;
+            }
         }
         return array_values($result);
     }
@@ -184,7 +197,9 @@ class Entities
     public function setRecentlyViewed($productModelsId)
     {
         $recently_viewed = $this->container->get('session')->get('recently_viewed');
-        if (!$recently_viewed) $recently_viewed = array();
+        if (!$recently_viewed) {
+            $recently_viewed = array();
+        }
         if (!isset($recently_viewed[$productModelsId])) {
             $recently_viewed[$productModelsId] = $productModelsId;
         }

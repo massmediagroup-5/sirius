@@ -32,6 +32,18 @@ class ProductColors
      */
     private $updateTime;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $models;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->models = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -144,5 +156,39 @@ class ProductColors
      */
     public function __toString() {
         return $this->getName();
+    }
+
+    /**
+     * Add model
+     *
+     * @param \AppBundle\Entity\ProductModels $model
+     *
+     * @return ProductColors
+     */
+    public function addModel(\AppBundle\Entity\ProductModels $model)
+    {
+        $this->models[] = $model;
+
+        return $this;
+    }
+
+    /**
+     * Remove model
+     *
+     * @param \AppBundle\Entity\ProductModels $model
+     */
+    public function removeModel(\AppBundle\Entity\ProductModels $model)
+    {
+        $this->models->removeElement($model);
+    }
+
+    /**
+     * Get models
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getModels()
+    {
+        return $this->models;
     }
 }

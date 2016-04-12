@@ -162,7 +162,7 @@ services:
         class: AppAdminBundle\Admin\CallBackAdmin
         arguments: [~, AppBundle\Entity\CallBack, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Запросы на перезвон"}
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Запросы на перезвон"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
             - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]

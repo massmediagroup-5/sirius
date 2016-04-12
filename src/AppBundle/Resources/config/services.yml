@@ -14,6 +14,9 @@ services:
     cart:
         class: AppBundle\Services\Cart
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "@session"]
+    filters:
+        class: AppBundle\Services\Filters
+        arguments: ["@service_container"]
     wishlist:
         class: AppBundle\Services\WishList
         arguments: ["@service_container", "@session"]

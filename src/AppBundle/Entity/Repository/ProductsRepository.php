@@ -379,8 +379,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function setAllProductsForCategory(
         \AppBundle\Entity\Categories $category
-    )
-    {
+    ) {
         $this->query_obj = $this->createQueryBuilder('products')
             ->select('products')
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
@@ -434,7 +433,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->addCharacteristicsCondition($builder, $characteristicValues);
 
-        $builder = $this->addPriceToQuery($builder, $filters);
+        $builder = $this->addFiltersToQuery($builder, $filters);
 
         $builder = $this->addSort($builder, Arr::get($filters, 'sort'));
 
@@ -462,8 +461,13 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param string $characteristicsAlias
      * @return mixed
      */
-    public function addCharacteristicsCondition($builder, $characteristicValues, $productsAlias = 'products', $characteristicValuesAlias = 'characteristicValues', $characteristicsAlias = 'characteristics')
-    {
+    public function addCharacteristicsCondition(
+        $builder,
+        $characteristicValues,
+        $productsAlias = 'products',
+        $characteristicValuesAlias = 'characteristicValues',
+        $characteristicsAlias = 'characteristics'
+    ) {
         if ($characteristicValues) {
             $builder->andWhere($builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues))
                 ->groupBy("$productsAlias.id")
@@ -486,10 +490,22 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param string $alias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function addPriceToQuery($builder, $filters, $alias = 'productModels')
+    public function addFiltersToQuery($builder, $filters, $alias = 'productModels')
     {
-        return $builder->andWhere($builder->expr()->gte("$alias.price", $filters['price_from']))
-            ->andWhere($builder->expr()->lte("$alias.price", $filters['price_to']));
+        if(!empty($filters['price_from'])) {
+            $builder->andWhere($builder->expr()->gte("$alias.price", $filters['price_from']));
+        }
+
+        if(!empty($filters['price_to'])) {
+            $builder->andWhere($builder->expr()->lte("$alias.price", $filters['price_to']));
+        }
+
+        if ($colors = Arr::get($filters, 'colors')) {
+            $colors = explode(',', $colors);
+            $builder->andWhere($builder->expr()->in("$alias.productColors", $colors));
+        }
+
+        return $builder;
     }
 
     /**

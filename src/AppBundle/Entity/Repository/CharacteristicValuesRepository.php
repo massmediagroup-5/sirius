@@ -139,7 +139,7 @@ class CharacteristicValuesRepository extends BaseRepository
         ;
 
         // Filter price
-        $productsQueryBuilder = $this->_em->getRepository('AppBundle:Products')->addPriceToQuery($productsQueryBuilder, $filters);
+        $productsQueryBuilder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($productsQueryBuilder, $filters);
 
         $builder->addSelect("({$productsQueryBuilder->getDQL()}) as products_count")
 //            ->having("products_count > 0")

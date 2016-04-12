@@ -19,8 +19,7 @@
 
                         <div class="filter">
                             <div class="filter__i">
-
-                                {% if app.request.get('_route') in ['filter'] %}
+                                {% if filters.isShowFiltered(data) %}
                                     <div class="filtered">
                                         <div class="filtered__i">
                                             <h2>ВЫ ИЩЕТЕ <a href="{{ url('category', {'category': data.category.alias}) }}" class="clear">Очистить все</a></h2>
@@ -35,29 +34,34 @@
                                                                     {% set checked_array = app.request.get(filter_item.id)|split(',') %}
                                                                     {% if param.id in checked_array %}
                                                                         <li>
-                                                                            <a href="{{ url('filter', {'category': data.category.alias}) }}{{ data.link_array[param.id] }}" class="remove"></a>
+                                                                            <a href="{{ filters.removeQueryParameter(filter_item.id, param.id) }}" class="remove"></a>
                                                                             <strong>{{ filter_item.name }}:</strong> {{ param.name }}
                                                                         </li>
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             {% endif %}
                                                         {% endfor %}
-                                                        {%if ( app.request.get('price_from') != data.price_filter.min_price ) or ( app.request.get('price_to') != data.price_filter.max_price ) %}
-                                                            {% if app.request.get('price_from') != data.price_filter.min_price %}
-                                                                <li>
-                                                                    <a href="{{ url('filter', {'category': data.category.alias}) }}{{ data.link_array.price_from }}&price_from={{ data.price_filter.min_price|round }}" class="remove"></a>
-                                                                    <strong>Цена от:</strong>
-                                                                    {{ app.request.get('price_from') ? app.request.get('price_from') : data.price_filter.min_price }}
-                                                                </li>
-                                                            {% endif %}
-                                                            {% if app.request.get('price_to') != data.price_filter.max_price %}
-                                                                <li>
-                                                                    <a href="{{ url('filter', {'category': data.category.alias}) }}{{ data.link_array.price_to }}&price_to={{ data.price_filter.max_price|round }}" class="remove"></a>
-                                                                    <strong>Цена до:</strong>
-                                                                    {{ app.request.get('price_to') ? app.request.get('price_to') : data.price_filter.max_price }}
-                                                                </li>
-                                                            {% endif %}
+                                                        {% if data.filters.price_from != data.price_filter.min_price %}
+                                                            <li>
+                                                                <a href="{{ filters.replaceQueryParameter('price_from', data.price_filter.min_price|round) }}" class="remove"></a>
+                                                                <strong>Цена от:</strong>
+                                                                {{ app.request.get('price_from') ? app.request.get('price_from') : data.price_filter.min_price }}
+                                                            </li>
                                                         {% endif %}
+                                                        {% if data.filters.price_to != data.price_filter.max_price %}
+                                                            <li>
+                                                                <a href="{{ filters.replaceQueryParameter('price_to', data.price_filter.max_price|round) }}" class="remove"></a>
+                                                                <strong>Цена до:</strong>
+                                                                {{ app.request.get('price_to') ? app.request.get('price_to') : data.price_filter.max_price }}
+                                                            </li>
+                                                        {% endif %}
+
+                                                        {% for color in filters.selectedColors(data) %}
+                                                            <li>
+                                                                <a href="{{ filters.removeQueryParameter('colors', color.id) }}" class="remove"></a><strong>Цвет:</strong> {{ color.name }}
+                                                                <span class="color" style="background: {{ color.hex }}"></span>
+                                                            </li>
+                                                        {% endfor %}
                                                     </ul>
 
                                                 </div>
@@ -77,11 +81,11 @@
                                                 <div class="values clearfix">
                                                     <span class="from">От</span>
                                                     <input type="text" id="min"
-                                                           data-value="{{ app.request.get('price_from') ? app.request.get('price_from') : data.price_filter.min_price|round }}"
+                                                           data-value="{{ data.filters.price_from|round }}"
                                                            data-min="{{ data.price_filter.min_price|round }}"/>
                                                     <span class="to">до</span>
                                                     <input type="text" id="max"
-                                                           data-value="{{ app.request.get('price_to') ? app.request.get('price_to') : data.price_filter.max_price|round }}"
+                                                           data-value="{{ data.filters.price_to|round }}"
                                                            data-max="{{ data.price_filter.max_price|round }}"/>
                                                 </div>
                                             </div>
@@ -124,57 +128,20 @@
 
                                             <div class="item">
                                                 <div class="item-name">
-                                                    <a href="#">ЦВЕТ<span></span></a>
+                                                    <a href="#" {% if filters.selectedColors(data)|length %} data-active="1" {% endif %}>ЦВЕТ<span></span></a>
                                                 </div>
                                                 <div class="item-drop">
                                                     <div class="item-drop__i">
                                                         <div class="color-filter">
                                                             <ul>
-                                                                <li><label class="color-check">
-                                                                        <input type="checkbox" class="checkbox" checked/>
-                                                                            <span
-                                                                                    style="background-color: #dc2222"></span></label>
-                                                                </li>
-                                                                <li><label class="color-check">
-                                                                        <input type="checkbox" class="checkbox"/>
-                                                                        <span style="border-color: #cdcdcd"></span></label>
-                                                                </li>
-                                                                <li><label class="color-check">
-                                                                        <input
-                                                                                type="checkbox" class="checkbox"/>
-                                                                            <span
-                                                                                    style="background-color: #101010"></span></label>
-                                                                </li>
-                                                                <li><label class="color-check">
-                                                                        <input
-                                                                                type="checkbox" class="checkbox"/>
-                                                                            <span
-                                                                                    style="background-color: #12ad45"></span></label>
-                                                                </li>
-                                                                <li><label class="color-check">
-                                                                        <input
-                                                                                type="checkbox" class="checkbox"/>
-                                                                            <span
-                                                                                    style="background-color: #2dace7"></span></label>
-                                                                </li>
-                                                                <li><label class="color-check">
-                                                                        <input
-                                                                                type="checkbox" class="checkbox"/>
-                                                                            <span
-                                                                                    style="background-color: #ff9de4"></span></label>
-                                                                </li>
-                                                                <li><label class="color-check">
-                                                                        <input
-                                                                                type="checkbox" class="checkbox"/>
-                                                                            <span
-                                                                                    style="background-color: #878787"></span></label>
-                                                                </li>
-                                                                <li><label class="color-check">
-                                                                        <input
-                                                                                type="checkbox" class="checkbox"/>
-                                                                            <span
-                                                                                    style="background-color: #efed3f"></span></label>
-                                                                </li>
+                                                                {% for color in data.colors %}
+                                                                    <li>
+                                                                        <label class="color-check">
+                                                                            <input type="checkbox" name="colors" value="{{ color.id }}" class="checkbox" {% if filters.isSelectedColor(color) %} checked {% endif %}/>
+                                                                                <span style="background-color: {{ color.hex }}"></span>
+                                                                        </label>
+                                                                    </li>
+                                                                {% endfor %}
                                                             </ul>
                                                         </div>
                                                     </div>
