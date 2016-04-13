@@ -16,11 +16,11 @@ class VendorsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
-            ->add('priority')
-            ->add('description')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('name', null, array('label' => 'Название'))
+            ->add('priority', null, array('label' => 'Приоритет'))
+            ->add('description', null, array('label' => 'Описание'))
+            ->add('createTime', null, array('label' => 'Дата создания'))
+            ->add('updateTime', null, array('label' => 'Дата последнего обновления'))
         ;
     }
 
@@ -30,14 +30,14 @@ class VendorsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('name')
-            ->add('priority')
-            ->add('description')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('name', null, array('label' => 'Название'))
+            ->add('priority', null, array('label' => 'Приоритет'))
+            ->add('description', null, array('label' => 'Описание'))
+            ->add('createTime', null, array('label' => 'Дата создания'))
+            ->add('updateTime', null, array('label' => 'Дата последнего обновления'))
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
+//                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )
@@ -51,9 +51,9 @@ class VendorsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('priority')
-            ->add('description')
+            ->add('name', null, array('label' => 'Название'))
+            ->add('priority', null, array('label' => 'Приоритет'))
+            ->add('description', null, array('label' => 'Описание'))
         ;
     }
 
@@ -63,11 +63,11 @@ class VendorsAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name')
-            ->add('priority')
-            ->add('description')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('name', null, array('label' => 'Название'))
+            ->add('priority', null, array('label' => 'Приоритет'))
+            ->add('description', null, array('label' => 'Описание'))
+            ->add('createTime', null, array('label' => 'Дата создания'))
+            ->add('updateTime', null, array('label' => 'Дата последнего обновления'))
         ;
     }
 }

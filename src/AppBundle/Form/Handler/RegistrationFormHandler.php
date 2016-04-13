@@ -25,9 +25,6 @@ class RegistrationFormHandler extends BaseHandler
             $user->setUsername($user->getEmail());
             if ($this->form->isValid()) {
                 $this->onSuccess($user, $confirmation);
-
-                // do your custom logic here
-
                 return true;
             }
         }

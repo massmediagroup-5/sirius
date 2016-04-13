@@ -15,9 +15,6 @@ class MenuItemsAdmin extends Admin
         '_page' => 1,            // display the first page (default = 1)
         '_sort_order' => 'DESC', // reverse order (default = 'ASC')
         '_sort_by' => 'menu.id'  // name of the ordered field
-        // (default = the model's id field, if any)
-
-        // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
     );
 
     /**
@@ -26,10 +23,18 @@ class MenuItemsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
-            ->add('link')
-            ->add('linkType')
-            ->add('parent.name')
+            ->add('name', null, array('label' => 'Название пункта меню'))
+            ->add('link', null, array('label' => 'Ссылка'))
+            ->add('linkType', 'doctrine_orm_choice', array('label' => 'Тип ссылки'),
+                'choice',
+                array(
+                    'choices' => array(
+                        'local' => 'Локальная',  // The key (value1) will contain the actual value that you want to filter on
+                        'global' => 'Внешняя',  // The 'Name Two' is the "display" name in the filter
+                    ),
+                    'expanded' => true,
+                    'multiple' => true))
+            ->add('parent.name', null, array('label' => 'Название меню'))
         ;
     }
 
@@ -39,12 +44,11 @@ class MenuItemsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-            ->add('priority', 'string', array('editable' => true))
-            ->add('menu.description')
-            ->add('parent.name')
-            ->add('link')
-            ->add('linkType')
+            ->addIdentifier('name', null, array('label' => 'Название пункта меню'))
+            ->add('priority', null, array('editable' => true, 'label'=>'Приоритет'))
+            ->add('menu.description', null, array('label' => 'Название меню'))
+            ->add('parent.name', null, array('label' => 'Название родительского пункта меню'))
+            ->add('link', null, array('label' => 'Ссылка'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -63,6 +67,7 @@ class MenuItemsAdmin extends Admin
             ->add('menu','entity',array(
                 'class'=> 'AppBundle:Menu',
                 'property'=> 'description',
+                'label'=>'Меню'
             ))
             ->add('parent', 'entity', ['label' => 'Родитель', 'class' =>
                 'AppBundle:MenuItems',
@@ -72,25 +77,16 @@ class MenuItemsAdmin extends Admin
                         ->setParameter('menu', $this->getSubject()->getMenu() ? $this->getSubject()->getMenu()->getId() : null) ;
                 }
             ])
-            ->add('name', 'text', array('label' => 'Menu item name'))
-            ->add('priority', 'text', array('label' => 'Menu priority'))
-            ->add('link', 'text', array('label' => 'Url'))
-            ->add('linkType', 'text', array('label' => 'Url type'))
-        ;
-    }
-
-    /**
-     * @param ShowMapper $showMapper
-     */
-    protected function configureShowFields(ShowMapper $showMapper)
-    {
-        $showMapper
-            ->add('name')
-            ->add('priority')
-            ->add('link')
-            ->add('linkType')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('name', 'text', array('label' => 'Название пункта меню'))
+            ->add('priority', 'text', array('label' => 'Приоритет вывода'))
+            ->add('link', 'text', array('label' => 'Ссылка'))
+            ->add('linkType', 'choice', array(
+                'label' => 'Тип ссылки',
+                'choices' => array(
+                    'local' => 'Локальная',  // The key (value1) will contain the actual value that you want to filter on
+                    'global' => 'Внешняя',  // The 'Name Two' is the "display" name in the filter
+                )
+            ))
         ;
     }
 }
