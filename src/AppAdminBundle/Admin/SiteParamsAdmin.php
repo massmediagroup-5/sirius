@@ -16,8 +16,8 @@ class SiteParamsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('paramName')
-            ->add('paramValue')
+            ->add('paramName', null, array('label' => 'Название параметра'))
+            ->add('paramValue', null, array('label' => 'Значение параметра'))
         ;
     }
 
@@ -27,9 +27,9 @@ class SiteParamsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->add('paramName')
-            ->add('paramValue')
+//            ->add('id')
+            ->add('paramName', null, array('label' => 'Название параметра'))
+            ->add('paramValue', null, array('label' => 'Значение параметра'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -45,19 +45,19 @@ class SiteParamsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('paramName', 'text', array('label' => 'Parameter name'))
-            ->add('paramValue', 'text', array('label' => 'Parameter value'))
+            ->add('paramName', null, array('label' => 'Название параметра'))
+            ->add('paramValue', null, array('label' => 'Значение параметра'))
         ;
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
-    protected function configureShowFields(ShowMapper $showMapper)
-    {
-        $showMapper
-            ->add('paramName')
-            ->add('paramValue')
-        ;
-    }
+//    /**
+//     * @param ShowMapper $showMapper
+//     */
+//    protected function configureShowFields(ShowMapper $showMapper)
+//    {
+//        $showMapper
+//            ->add('paramName', null, array('label' => 'Название параметра'))
+//            ->add('paramValue', null, array('label' => 'Значение параметра'))
+//        ;
+//    }
 }

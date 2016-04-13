@@ -17,16 +17,16 @@ class SkuProductsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
-            ->add('sku')
-            ->add('name')
-            ->add('status')
-            ->add('active')
-            ->add('price')
-            ->add('wholesale_price')
-            ->add('quantity')
-            ->add('createTime')
-            ->add('updateTime');
+//            ->add('id')
+            ->add('sku', null, array('label' => 'Артикул'))
+            ->add('name', null, array('label' => 'Наименование'))
+            ->add('status', null, array('label' => 'Статус'))
+            ->add('active', null, array('label' => 'Активность'))
+            ->add('price', null, array('label' => 'Цена'))
+            ->add('wholesale_price', null, array('label' => 'Оптовая цена'))
+            ->add('quantity', null, array('label' => 'Количество'))
+            ->add('createTime', null, array('label' => 'Дата создания'))
+            ->add('updateTime', null, array('label' => 'Дата последнего обновления'));
     }
 
     /**
@@ -35,20 +35,20 @@ class SkuProductsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->add('productModels')
-            ->add('sku')
-            ->add('name')
-            ->add('status', null, ['editable' => true])
-            ->add('active', null, ['editable' => true])
-            ->add('price')
-            ->add('wholesale_price')
-            ->add('quantity')
-            ->add('createTime')
-            ->add('updateTime')
+//            ->add('id')
+            ->add('productModels', null, array('label' => 'Модель'))
+            ->add('sku', null, array('label' => 'Артикул'))
+            ->add('name', null, array('label' => 'Наименование'))
+            ->add('status', null, ['label' => 'Статус','editable' => true])
+            ->add('active', null, ['label' => 'Активность','editable' => true])
+            ->add('price', null, array('label' => 'Цена'))
+            ->add('wholesale_price', null, array('label' => 'Оптовая цена'))
+            ->add('quantity', null, array('label' => 'Количество'))
+            ->add('createTime', null, array('label' => 'Дата создания'))
+            ->add('updateTime', null, array('label' => 'Дата последнего обновления'))
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
+//                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )
@@ -63,19 +63,20 @@ class SkuProductsAdmin extends Admin
         $formMapper
             //->add('id')
             ->add('productModels', 'entity', [
+                'label' => 'Модель',
                 'class' => 'AppBundle\Entity\ProductModels',
                 'choice_label' => function (ProductModels $model) {
                     return $model->getProductColors() ? "{$model->getName()} ({$model->getProductColors()->getName()})"
                         : $model->getName();
                 }
             ])
-            ->add('sku')
-            ->add('name')
-            ->add('status')
-            ->add('active')
-            ->add('price')
-            ->add('wholesale_price')
-            ->add('quantity')
+            ->add('sku', null, array('label' => 'Артикул'))
+            ->add('name', null, array('label' => 'Наименование'))
+            ->add('status', null, array('label' => 'Статус'))
+            ->add('active', null, array('label' => 'Активность'))
+            ->add('price', null, array('label' => 'Цена'))
+            ->add('wholesale_price', null, array('label' => 'Оптовая цена'))
+            ->add('quantity', null, array('label' => 'Количество'))
             //->add('createTime')
             //->add('updateTime')
         ;
@@ -87,7 +88,7 @@ class SkuProductsAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('id')
+//            ->add('id')
             ->add('sku')
             ->add('name')
             ->add('status')
