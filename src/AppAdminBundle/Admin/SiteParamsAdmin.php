@@ -27,9 +27,9 @@ class SiteParamsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-//            ->add('id')
             ->add('paramName', null, array('label' => 'Название параметра'))
             ->add('paramValue', null, array('label' => 'Значение параметра'))
+            ->add('active', null, array('editable' => true, 'label' => 'Активность(вкл/выкл)'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -44,20 +44,23 @@ class SiteParamsAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-            ->add('paramName', null, array('label' => 'Название параметра'))
-            ->add('paramValue', null, array('label' => 'Значение параметра'))
-        ;
+        $param = $this->getSubject();
+        if($param->getEditor()){
+            $formMapper
+                ->add('paramName', null, array('label' => 'Название параметра'))
+                ->add('paramValue', 'textarea', array('label' => 'Значение параметра','attr' => array('class' => 'ckeditor')))
+                ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
+                ->add('editor', null, array('label' => 'Редактор(вкл/выкл)'))
+            ;
+        }
+        else
+        {
+            $formMapper
+                ->add('paramName', null, array('label' => 'Название параметра'))
+                ->add('paramValue', 'text', array('label' => 'Значение параметра'))
+                ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
+                ->add('editor', null, array('label' => 'Редактор(вкл/выкл)'))
+            ;
+        }
     }
-
-//    /**
-//     * @param ShowMapper $showMapper
-//     */
-//    protected function configureShowFields(ShowMapper $showMapper)
-//    {
-//        $showMapper
-//            ->add('paramName', null, array('label' => 'Название параметра'))
-//            ->add('paramValue', null, array('label' => 'Значение параметра'))
-//        ;
-//    }
 }
