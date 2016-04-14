@@ -18,16 +18,6 @@ class ProductModels
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $description;
-
-    /**
-     * @var string
-     */
     private $alias;
 
     /**
@@ -41,39 +31,9 @@ class ProductModels
     private $wholesalePrice = 0.0;
 
     /**
-     * @var string
-     */
-    private $seoTitle;
-
-    /**
-     * @var string
-     */
-    private $seoDescription;
-
-    /**
-     * @var string
-     */
-    private $seoKeywords;
-
-    /**
-     * @var string
-     */
-    private $content;
-
-    /**
-     * @var string
-     */
-    private $characteristics;
-
-    /**
-     * @var string
-     */
-    private $features;
-
-    /**
      * @var integer
      */
-    private $priority;
+    private $priority = 0;
 
     /**
      * @var integer
@@ -111,11 +71,6 @@ class ProductModels
     private $updateTime;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $skuProducts;
-
-    /**
      * @var \AppBundle\Entity\ProductColors
      */
     private $productColors;
@@ -140,7 +95,6 @@ class ProductModels
      */
     public function __construct()
     {
-        $this->skuProducts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -152,54 +106,6 @@ class ProductModels
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return ProductModels
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return ProductModels
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -258,150 +164,6 @@ class ProductModels
     public function getPackagePrice()
     {
         return $this->price * $this->sizes->count();
-    }
-
-    /**
-     * Set seoTitle
-     *
-     * @param string $seoTitle
-     *
-     * @return ProductModels
-     */
-    public function setSeoTitle($seoTitle)
-    {
-        $this->seoTitle = $seoTitle;
-
-        return $this;
-    }
-
-    /**
-     * Get seoTitle
-     *
-     * @return string
-     */
-    public function getSeoTitle()
-    {
-        return $this->seoTitle;
-    }
-
-    /**
-     * Set seoDescription
-     *
-     * @param string $seoDescription
-     *
-     * @return ProductModels
-     */
-    public function setSeoDescription($seoDescription)
-    {
-        $this->seoDescription = $seoDescription;
-
-        return $this;
-    }
-
-    /**
-     * Get seoDescription
-     *
-     * @return string
-     */
-    public function getSeoDescription()
-    {
-        return $this->seoDescription;
-    }
-
-    /**
-     * Set seoKeywords
-     *
-     * @param string $seoKeywords
-     *
-     * @return ProductModels
-     */
-    public function setSeoKeywords($seoKeywords)
-    {
-        $this->seoKeywords = $seoKeywords;
-
-        return $this;
-    }
-
-    /**
-     * Get seoKeywords
-     *
-     * @return string
-     */
-    public function getSeoKeywords()
-    {
-        return $this->seoKeywords;
-    }
-
-    /**
-     * Set content
-     *
-     * @param string $content
-     *
-     * @return ProductModels
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Set characteristics
-     *
-     * @param string $characteristics
-     *
-     * @return ProductModels
-     */
-    public function setCharacteristics($characteristics)
-    {
-        $this->characteristics = $characteristics;
-
-        return $this;
-    }
-
-    /**
-     * Get characteristics
-     *
-     * @return string
-     */
-    public function getCharacteristics()
-    {
-        return $this->characteristics;
-    }
-
-    /**
-     * Set features
-     *
-     * @param string $features
-     *
-     * @return ProductModels
-     */
-    public function setFeatures($features)
-    {
-        $this->features = $features;
-
-        return $this;
-    }
-
-    /**
-     * Get features
-     *
-     * @return string
-     */
-    public function getFeatures()
-    {
-        return $this->features;
     }
 
     /**
@@ -592,40 +354,6 @@ class ProductModels
     }
 
     /**
-     * Add skuProduct
-     *
-     * @param \AppBundle\Entity\SkuProducts $skuProduct
-     *
-     * @return ProductModels
-     */
-    public function addSkuProduct(\AppBundle\Entity\SkuProducts $skuProduct)
-    {
-        $this->skuProducts[] = $skuProduct;
-
-        return $this;
-    }
-
-    /**
-     * Remove skuProduct
-     *
-     * @param \AppBundle\Entity\SkuProducts $skuProduct
-     */
-    public function removeSkuProduct(\AppBundle\Entity\SkuProducts $skuProduct)
-    {
-        $this->skuProducts->removeElement($skuProduct);
-    }
-
-    /**
-     * Get skuProducts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSkuProducts()
-    {
-        return $this->skuProducts;
-    }
-
-    /**
      * Set productColors
      *
      * @param \AppBundle\Entity\ProductColors $productColors
@@ -761,11 +489,6 @@ class ProductModels
         return (float)$this->wholesalePrice;
     }
 
-    public function __toString()
-    {
-        return $this->getName() ? "{$this->getName()} ({$this->getProductColors()->getName()})" : '';
-    }
-
     /**
      * Add size
      *
@@ -788,5 +511,39 @@ class ProductModels
     public function removeSize(\AppBundle\Entity\ProductModelSizes $size)
     {
         $this->sizes->removeElement($size);
+    }
+    /**
+     * @var string
+     */
+    private $article;
+
+
+    /**
+     * Set article
+     *
+     * @param string $article
+     *
+     * @return ProductModels
+     */
+    public function setArticle($article)
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return string
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
+
+    public function __toString()
+    {
+        return $this->getArticle() ? "{$this->getArticle()} ({$this->getProductColors()->getName()})" : '';
     }
 }

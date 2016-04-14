@@ -44,19 +44,13 @@ class ProductsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('importName', null, array('label' => 'Название товара'))
-            ->add('active', null, array('label' => 'Активный'))
-            ->add('published', null, array('label' => 'Опубликован'))
-            //->add('createTime',
-            //'doctrine_orm_datetime_range',
-            //array(
-            //'label' => 'Дата создания',
-            //'input_type' => 'timestamp',
-            //'field_type' => 'sonata_type_date_range_picker',
-            //)
-            //)
-            //->add('updateTime', null, array('label' => 'Дата последнего изменения'))
-        ;
+            ->add('name', null, ['label' => 'Название модели'])
+            ->add('content', null, ['label' => 'Описание модели'])
+            ->add('active', null, ['label' => 'Активный'])
+            ->add('published', null, ['label' => 'Опубликован'])
+            ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
+            ->add('seoDescription', null, ['label' => 'СЕО описание'])
+            ->add('seoKeywords', null, ['label' => 'СЕО кейворды']);
     }
 
     /**
@@ -65,18 +59,18 @@ class ProductsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('importName', null, array('label' => 'Название товара'))
-            ->add('active', 'boolean', array('label' => 'Активный', 'editable' => true))
-            ->add('published', 'boolean', array('label' => 'Опубликован', 'editable' => true))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ));
+            ->addIdentifier('name', null, ['label' => 'Название товара'])
+            ->add('active', 'boolean', ['label' => 'Активный', 'editable' => true])
+            ->add('published', 'boolean', ['label' => 'Опубликован', 'editable' => true])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                    'delete' => [],
+                ]
+            ]);
     }
 
     /**
@@ -84,38 +78,43 @@ class ProductsAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-
-        $id = $this->id($this->getSubject());
-
         $formMapper
             ->tab('Товар')
             ->with('Product',
-                array(
+                [
                     'class' => 'col-md-12',
-                ))
-            ->add('importName', null, array('label' => 'Название товара'))
+                ])
+            ->add('name', null, ['label' => 'Название модели'])
+            ->add('content', null, ['label' => 'О модели', 'attr' => ['class' => 'ckeditor']])
+            ->add('characteristics', null, ['label' => 'Характеристики', 'attr' => ['class' => 'ckeditor']])
+            ->add('features', null, ['label' => 'Особенности', 'attr' => ['class' => 'ckeditor']])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('published', null, array('label' => 'Опубликован'))
-            ->add('baseCategory', 'entity', array(
+            ->add('published', null, ['label' => 'Опубликован'])
+            ->add('baseCategory', 'entity', [
                 'class' => 'AppBundle:Categories',
                 'property' => 'name',
-            ))
+            ])
+            ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
+            ->add('seoDescription', null, ['label' => 'СЕО описание'])
+            ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
             ->end()
             ->end()
             ->tab('Характеристики')
             ->with('СharacteristicValues',
-                array(
+                [
                     'class' => 'col-md-12',
-                ))
+                ])
             ->add('characteristicValues',
                 'sonata_type_model_autocomplete',
-                array(
-                    'attr' => array('class' => 'form-control'),
+                [
+                    'attr' => ['class' => 'form-control'],
                     'label' => 'Значения характеристик',
                     'multiple' => true,
                     'property' => 'name',
                     'minimum_input_length' => 1
-                )
+                ]
             )
             ->end()
             ->end();
@@ -140,15 +139,20 @@ class ProductsAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('importName', null, array('label' => 'Название товара'))
-            ->add('active', null, array('label' => 'Активный'))
-            ->add('published', null, array('label' => 'Опубликован'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'));
+            ->add('name', null, ['label' => 'Название модели'])
+            ->add('content', null, ['label' => 'Описание модели'])
+            ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
+            ->add('seoDescription', null, ['label' => 'СЕО описание'])
+            ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
+            ->add('active', null, ['label' => 'Активный'])
+            ->add('published', null, ['label' => 'Опубликован'])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
 
     /**
      * @param mixed $product
+     * @return void
      */
     public function prePersist($product)
     {
@@ -162,27 +166,6 @@ class ProductsAdmin extends Admin
      */
     public function preUpdate($product)
     {
-        $DM = $this->getConfigurationPool()->getContainer()->get('Doctrine')->getManager();
-
-        foreach ($product->getProductModels() as $productModel) {
-            // If SKU didn't set create new.
-            if (count($productModel->getSkuProducts()) === 0) {
-                $newSkuProduct = new Entity\SkuProducts;
-                $defaultVendor = $DM->getRepository('AppBundle:Vendors')
-                    ->findOneByName('none');
-                $newSkuProduct
-                    ->setProductModels($productModel)
-                    ->setVendors($defaultVendor)
-                    ->setSku(md5(time()))
-                    ->setName($productModel->getName())
-                    ->setPrice($productModel->getPrice())
-                    ->setActive(1)
-                    ->setQuantity(1);
-                $productModel->addSkuProduct($newSkuProduct);
-            }
-            $productModel->setProducts($product);
-        }
-
         foreach ($product->getImages() as $image) {
             $image->setProduct($product);
         }

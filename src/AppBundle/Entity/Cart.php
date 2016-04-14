@@ -38,11 +38,6 @@ class Cart
     private $orders;
 
     /**
-     * @var \AppBundle\Entity\SkuProducts
-     */
-    private $skuProducts;
-
-    /**
      * @var string
      */
     private $discountedTotalPrice = 0;
@@ -201,30 +196,6 @@ class Cart
     }
 
     /**
-     * Set skuProducts
-     *
-     * @param \AppBundle\Entity\SkuProducts $skuProducts
-     *
-     * @return Cart
-     */
-    public function setSkuProducts(\AppBundle\Entity\SkuProducts $skuProducts = null)
-    {
-        $this->skuProducts = $skuProducts;
-
-        return $this;
-    }
-
-    /**
-     * Get skuProducts
-     *
-     * @return \AppBundle\Entity\SkuProducts
-     */
-    public function getSkuProducts()
-    {
-        return $this->skuProducts;
-    }
-
-    /**
      * @param \AppBundle\Entity\CartProductSize $size
      * @return ProductModels
      */
@@ -329,7 +300,7 @@ class Cart
      * @return string
      */
     public function __toString() {
-        return $this->getSkuProducts()->getName();
+        return $this->id;
     }
 
 }

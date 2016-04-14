@@ -8,9 +8,6 @@ AppBundle\Entity\Cart:
         fk_cart_orders1_idx:
             columns:
                 - orders_id
-        fk_cart_sku_products1_idx:
-            columns:
-                - sku_products_id
     uniqueConstraints:
         id_UNIQUE:
             columns:
@@ -78,16 +75,6 @@ AppBundle\Entity\Cart:
             inversedBy: cart
             joinColumns:
                 orders_id:
-                    referencedColumnName: id
-            orphanRemoval: false
-        skuProducts:
-            targetEntity: SkuProducts
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                sku_products_id:
                     referencedColumnName: id
             orphanRemoval: false
     oneToMany:
