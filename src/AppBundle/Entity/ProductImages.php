@@ -18,6 +18,11 @@ class ProductImages
     private $link;
 
     /**
+     * @var int
+     */
+    private $priority;
+
+    /**
      * @var \DateTime
      */
     private $createTime;
@@ -30,8 +35,12 @@ class ProductImages
     /**
      * @var \AppBundle\Entity\Products
      */
-    private $products;
+    private $product;
 
+    /**
+     * @var
+     */
+    private $file;
 
     /**
      * Get id
@@ -116,15 +125,15 @@ class ProductImages
     }
 
     /**
-     * Set products
+     * Set product
      *
-     * @param \AppBundle\Entity\Products $products
+     * @param \AppBundle\Entity\Products $product
      *
      * @return ProductImages
      */
-    public function setProducts(\AppBundle\Entity\Products $products = null)
+    public function setProduct(\AppBundle\Entity\Products $product = null)
     {
-        $this->products = $products;
+        $this->product = $product;
 
         return $this;
     }
@@ -134,8 +143,46 @@ class ProductImages
      *
      * @return \AppBundle\Entity\Products
      */
-    public function getProducts()
+    public function getProduct()
     {
-        return $this->products;
+        return $this->product;
+    }
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     *
+     * @return ProductImages
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param $file
+     */
+    public function setFile($file) {
+        $this->file = $file;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile() {
+        return $this->file;
     }
 }

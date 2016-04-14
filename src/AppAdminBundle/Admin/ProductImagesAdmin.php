@@ -11,17 +11,17 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Class: ProductModelImagesAdmin
+ * Class: ProductImagesAdmin
  *
  * @see Admin
  */
-class ProductModelImagesAdmin extends Admin
+class ProductImagesAdmin extends Admin
 {
 
     /**
      * @var string
      */
-    protected $parentAssociationMapping = 'productModels';
+    protected $parentAssociationMapping = 'products';
 
     /**
      * configureDatagridFilters
@@ -65,38 +65,25 @@ class ProductModelImagesAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        if ($this->hasParentFieldDescription()) { // this Admin is embedded
-            $getter = 'get' . $this->getParentFieldDescription()->getFieldName();
-            $parent = $this->getParentFieldDescription()->getAdmin()->getSubject();
-            if ($parent) {
-                $images = $this->getSubject();
-            } else {
-                $images = null;
-            }
-
-            $images = $this->getSubject();
-        } else { // this Admin is not embedded
-            $images = $this->getSubject();
-
-            $formMapper->add('productModels', 'entity', [
-                'class' => 'AppBundle\Entity\ProductModels',
+        $images = $this->getSubject();
+        if (!$this->hasParentFieldDescription()) { // this Admin is not embedded
+            $formMapper->add('products', 'entity', [
+                'class' => 'AppBundle\Entity\Products',
                 'label' => 'Модель'
             ]);
         }
-        $formMapper
-            ->add('link', null, array('label' => 'Ссылка на оригинал'));
+        $formMapper->add('link', null, array('label' => 'Ссылка на оригинал'));
 
         // You can then do things with the $images, like show a thumbnail in the help:
-        $fileFieldOptions = array(
-            'required' => false,
-        );
+        $fileFieldOptions = ['required' => false];
+
         if ($images && ($webPath = $images->getLink())) {
             $fileFieldOptions['help'] = '<img src="' . $webPath . '" class="admin-preview" />';
         }
 
         $formMapper
             ->add('file', 'file', $fileFieldOptions)
-            ->add('priority', null, array('label' => 'Приоритет'));
+            ->add('priority', null, array('label' => 'Приоритет', 'required' => false));
     }
 
     /**
@@ -135,18 +122,5 @@ class ProductModelImagesAdmin extends Admin
         }
 
         return $actions;
-    }
-
-    public function preBatchAction($actionName, ProxyQueryInterface $query, array & $idx, $allElements)
-    {
-        $logger = $this->get('logger');
-        $logger->info('logger3434');
-        $logger->error('logger367');
-        // altering the query or the idx array
-        $foo = $query->getParameter('foo')->getValue();
-        // Doing something with the foo object
-        // ...
-
-        $query->setParameter('foo', $bar);
     }
 }

@@ -29,6 +29,12 @@ AppBundle\Entity\ProductImages:
             options:
                 fixed: false
                 comment: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.png
+        priority:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                default: 0
         createTime:
             type: datetime
             nullable: false
@@ -40,12 +46,12 @@ AppBundle\Entity\ProductImages:
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
     manyToOne:
-        products:
+        product:
             targetEntity: Products
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: productImages
+            inversedBy: images
             joinColumns:
                 products_id:
                     referencedColumnName: id

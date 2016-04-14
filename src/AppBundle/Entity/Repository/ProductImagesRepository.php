@@ -7,7 +7,7 @@ namespace AppBundle\Entity\Repository;
  *
  * @see \Doctrine\ORM\EntityRepository
  */
-class ProductModelImagesRepository extends \Doctrine\ORM\EntityRepository
+class ProductImagesRepository extends \Doctrine\ORM\EntityRepository
 {
 
     /**

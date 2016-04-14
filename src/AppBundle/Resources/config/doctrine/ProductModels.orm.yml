@@ -141,14 +141,6 @@ AppBundle\Entity\ProductModels:
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
     oneToMany:
-        productModelImages:
-            targetEntity: ProductModelImages
-            cascade: ["persist"]
-            fetch: EAGER
-            mappedBy: productModels
-            inversedBy: null
-            orphanRemoval: true
-            orderBy: {  }
         skuProducts:
             targetEntity: SkuProducts
             cascade: ["all"]

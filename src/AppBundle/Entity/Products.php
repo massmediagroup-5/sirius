@@ -53,7 +53,7 @@ class Products implements CharacteristicableInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $productImages;
+    private $images;
 
     /**
      * @var \AppBundle\Entity\ActionLabels
@@ -76,7 +76,7 @@ class Products implements CharacteristicableInterface
     public function __construct()
     {
         $this->productModels = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->productImages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -269,37 +269,37 @@ class Products implements CharacteristicableInterface
     }
 
     /**
-     * Add productImage
+     * Add image
      *
-     * @param \AppBundle\Entity\ProductImages $productImage
+     * @param \AppBundle\Entity\ProductImages $image
      *
      * @return Products
      */
-    public function addProductImage(\AppBundle\Entity\ProductImages $productImage)
+    public function addImage(\AppBundle\Entity\ProductImages $image)
     {
-        $this->productImages[] = $productImage;
+        $this->images[] = $image;
 
         return $this;
     }
 
     /**
-     * Remove productImage
+     * Remove image
      *
-     * @param \AppBundle\Entity\ProductImages $productImage
+     * @param \AppBundle\Entity\ProductImages $image
      */
-    public function removeProductImage(\AppBundle\Entity\ProductImages $productImage)
+    public function removeImage(\AppBundle\Entity\ProductImages $image)
     {
-        $this->productImages->removeElement($productImage);
+        $this->images->removeElement($image);
     }
 
     /**
-     * Get productImages
+     * Get images
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getProductImages()
+    public function getImages()
     {
-        return $this->productImages;
+        return $this->images;
     }
 
     /**
