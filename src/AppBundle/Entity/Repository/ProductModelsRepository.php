@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity\Repository;
 
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Illuminate\Support\Arr;
 
@@ -46,27 +47,16 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getPricesIntervalForFilters($category, $characteristicValues, $filters)
     {
-        $builder = $this
-            ->createQueryBuilder('productModels')
-            ->select('productModels, MIN(productModels.price) AS min_price, MAX(productModels.price) AS max_price')
-            ->innerJoin('productModels.products', 'products')->addselect('products')
-            ->innerJoin('products.baseCategory', 'baseCategory')
-            ->innerJoin('products.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics')->addselect('characteristics')
-            ->where('productModels.active = 1 AND productModels.published = 1');
+        $productsSubQuery = $this->getFilteredProductsToCategoryQuery($category, $characteristicValues,
+            $filters)->getSQL();
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('min_price', 'min_price');
+        $rsm->addScalarResult('max_price', 'max_price');
 
-        $builder = $this->addEnabledOnSiteConditions($builder);
-        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues);
-
-        unset($filters['price_from']);
-
-        unset($filters['price_to']);
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
-
-        return $builder->getQuery()->getSingleResult();
+        return $this->_em->createNativeQuery(
+            "SELECT MIN(m.price) AS min_price, MAX(m.price) AS max_price FROM product_models as m INNER JOIN ($productsSubQuery) AS p ON p.id_0 = m.id",
+            $rsm
+        )->getResult()[0];
     }
 
     /**
@@ -105,7 +95,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues, 'productModels');
+        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder,
+            $characteristicValues, 'productModels');
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 

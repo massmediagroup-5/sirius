@@ -470,8 +470,8 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     ) {
         if ($characteristicValues) {
             $builder->andWhere($builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues))
-                ->groupBy("$productsAlias.id")
-                ->having('COUNT(DISTINCT characteristics.id) >=
+                ->groupBy("productModels.id")
+                ->having('COUNT(DISTINCT ' . $characteristicsAlias . '.id) >=
                 (
                     SELECT COUNT( DISTINCT incchar.id )
                     FROM \AppBundle\Entity\Characteristics as incchar

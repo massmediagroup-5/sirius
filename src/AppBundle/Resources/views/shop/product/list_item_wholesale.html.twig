@@ -51,7 +51,9 @@
                     </span> грн.
                 </td>
                 <td class="buttons-holder">
-                    <a href="#" class="btn btn_blue add-to-cart js_add_pack_to_cart"></a>
+                    <a href="#" class="btn btn_blue add-to-cart js_add_pack_to_cart {% if item.preOrderFlag %} preorder {% endif %}">
+                        {% if item.preOrderFlag %} <span>предзаказ</span> {% endif %}
+                    </a>
 
                     <div class="items-in-cart">
                         Добавлено
