@@ -1,8 +1,9 @@
 <div class="item js_item">
     <div class="item__i">
-        {{ widget('products.flags', item.productModels.0)|raw }}
 
         {% for model in item.productModels %}
+            {{ widget('products.flags', model)|raw }}
+
             {{ widget('products.wishButton', model)|raw }}
         {% endfor %}
 
