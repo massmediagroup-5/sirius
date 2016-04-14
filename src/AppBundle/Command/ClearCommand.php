@@ -52,7 +52,6 @@ class ClearCommand extends ContainerAwareCommand
             'CallBack',
             'Wishlist',
             'SkuProducts',
-            'ProductModelImages',
             'ProductModels',
             'ProductColors',
             'ProductModelSizes',

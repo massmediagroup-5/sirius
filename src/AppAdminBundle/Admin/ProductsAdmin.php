@@ -102,18 +102,6 @@ class ProductsAdmin extends Admin
             ))
             ->end()
             ->end()
-            ->tab('Модели')
-            ->with('Модели',
-                array(
-                    'class' => 'col-md-12',
-                ))
-            ->add('productModels', 'sonata_type_collection',
-                array('label' => 'Модель'), array(
-                    'edit' => 'inline',
-                )
-            )
-            ->end()
-            ->end()
             ->tab('Характеристики')
             ->with('СharacteristicValues',
                 array(
@@ -131,6 +119,19 @@ class ProductsAdmin extends Admin
             )
             ->end()
             ->end();
+
+        if (!$this->hasParentFieldDescription()) {
+            $formMapper->tab('Изображения продукта')
+                ->with('ProductImages', [
+                        'class' => 'col-md-12',
+                    ]
+                )
+                ->add('images', 'sonata_type_collection',
+                    ['label' => 'Изображения'], ['edit' => 'inline']
+                )
+                ->end()
+                ->end();
+        }
     }
 
     /**
@@ -147,8 +148,6 @@ class ProductsAdmin extends Admin
     }
 
     /**
-     * prePersist
-     *
      * @param mixed $product
      */
     public function prePersist($product)
@@ -158,9 +157,8 @@ class ProductsAdmin extends Admin
     }
 
     /**
-     * preUpdate
-     *
      * @param mixed $product
+     * @return void
      */
     public function preUpdate($product)
     {
@@ -184,12 +182,15 @@ class ProductsAdmin extends Admin
             }
             $productModel->setProducts($product);
         }
+
+        foreach ($product->getImages() as $image) {
+            $image->setProduct($product);
+        }
     }
 
     /**
-     * postPersist
-     *
      * @param mixed $product
+     * @return void
      */
     public function postPersist($product)
     {
@@ -197,9 +198,8 @@ class ProductsAdmin extends Admin
     }
 
     /**
-     * postUpdate
-     *
      * @param mixed $product
+     * @return void
      */
     public function postUpdate($product)
     {

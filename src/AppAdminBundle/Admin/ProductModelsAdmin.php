@@ -123,19 +123,6 @@ class ProductModelsAdmin extends Admin
             ->add('preOrderFlag', null, array('label' => 'Предзаказ'))
             ->end()
             ->end();
-
-        if (!$this->hasParentFieldDescription()) {
-            $formMapper->tab('Изображения модели')
-                ->with('ProductModelImages', [
-                        'class' => 'col-md-12',
-                    ]
-                )
-                ->add('productModelImages', 'sonata_type_collection',
-                    ['label' => 'Изображения'], ['edit' => 'inline']
-                )
-                ->end()
-                ->end();
-        }
     }
 
     /**
@@ -157,12 +144,5 @@ class ProductModelsAdmin extends Admin
             ->add('published', null, array('label' => 'Опубликовано'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'));
-    }
-
-    public function preUpdate($param)
-    {
-        foreach ($param->getProductModelImages() as $image) {
-            $image->setProductModels($param);
-        }
     }
 }

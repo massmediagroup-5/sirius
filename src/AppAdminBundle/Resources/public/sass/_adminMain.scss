@@ -64,8 +64,8 @@ label {
     }
 }
 
-div[class="form-group"][id$="_productModelImages"] {
-    span[id$="_productModelImages"]>div {
+div[class="form-group"][id$="_images"] {
+    span[id$="_images"]>div {
         /*margin-top: 80px;*/
         .product_model_image_item {
             display: inline-block;

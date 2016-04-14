@@ -69,13 +69,14 @@ AppBundle\Entity\Products:
             mappedBy: products
             inversedBy: null
             orphanRemoval: true
-        productImages:
+        images:
             targetEntity: ProductImages
-            cascade: {  }
+            cascade: ["persist"]
             fetch: LAZY
-            mappedBy: products
+            mappedBy: product
             inversedBy: null
-            orphanRemoval: false
+            orphanRemoval: true
+            orderBy: {priority: ASC}
     manyToOne:
         actionLabels:
             targetEntity: ActionLabels

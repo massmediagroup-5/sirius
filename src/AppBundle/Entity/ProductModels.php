@@ -113,11 +113,6 @@ class ProductModels
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $productModelImages;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
     private $skuProducts;
 
     /**
@@ -145,7 +140,6 @@ class ProductModels
      */
     public function __construct()
     {
-        $this->productModelImages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->skuProducts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -595,40 +589,6 @@ class ProductModels
     public function getUpdateTime()
     {
         return $this->updateTime;
-    }
-
-    /**
-     * Add productModelImage
-     *
-     * @param \AppBundle\Entity\ProductModelImages $productModelImage
-     *
-     * @return ProductModels
-     */
-    public function addProductModelImage(\AppBundle\Entity\ProductModelImages $productModelImage)
-    {
-        $this->productModelImages[] = $productModelImage;
-
-        return $this;
-    }
-
-    /**
-     * Remove productModelImage
-     *
-     * @param \AppBundle\Entity\ProductModelImages $productModelImage
-     */
-    public function removeProductModelImage(\AppBundle\Entity\ProductModelImages $productModelImage)
-    {
-        $this->productModelImages->removeElement($productModelImage);
-    }
-
-    /**
-     * Get productModelImages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProductModelImages()
-    {
-        return $this->productModelImages;
     }
 
     /**
