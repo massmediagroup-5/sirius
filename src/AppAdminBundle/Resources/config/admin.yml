@@ -68,15 +68,6 @@ services:
             - [ setTemplate, [form, AppAdminBundle:admin:form_admin_fields.html.twig]]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
-    app.admin.sku_products:
-        class: AppAdminBundle\Admin\SkuProductsAdmin
-        arguments: [~, AppBundle\Entity\SkuProducts, AppAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Артикулы"}
-        calls:
-            - [ setTranslationDomain, [AppAdminBundle]]
-            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
-
     app.admin.product_images:
         class: AppAdminBundle\Admin\ProductImagesAdmin
         arguments: [~, AppBundle\Entity\ProductImages, SonataAdminBundle:CRUD]

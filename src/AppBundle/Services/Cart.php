@@ -512,12 +512,12 @@ class Cart
     protected function initCartFromSession()
     {
         $sessionArray = $this->session->get('cart_items', []);
-        $skuProducts = $this->em->getRepository('AppBundle:SkuProducts')->findWithModels(array_keys($sessionArray));
-        foreach ($skuProducts as $skuProduct) {
-            $cartItem = new CartItem($skuProduct, $this->container->get('prices_calculator'));
-            $cartItem->setSizes($sessionArray[$skuProduct->getId()]['sizes']);
-            $this->items[$skuProduct->getId()] = $cartItem;
-        }
+//        $skuProducts = $this->em->getRepository('AppBundle:SkuProducts')->findWithModels(array_keys($sessionArray));
+//        foreach ($skuProducts as $skuProduct) {
+//            $cartItem = new CartItem($skuProduct, $this->container->get('prices_calculator'));
+//            $cartItem->setSizes($sessionArray[$skuProduct->getId()]['sizes']);
+//            $this->items[$skuProduct->getId()] = $cartItem;
+//        }
         $this->session->set('cart_items', $sessionArray);
     }
 
