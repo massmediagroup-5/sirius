@@ -16,4 +16,12 @@ AppBundle\Entity\ProductModelSizes:
         size:
             type: string
             length: '8'
+    oneToMany:
+        sizes:
+            targetEntity: ProductModelSpecificSize
+            cascade: { }
+            fetch: LAZY
+            mappedBy: size
+            inversedBy: null
+            orphanRemoval: true
     lifecycleCallbacks: {  }

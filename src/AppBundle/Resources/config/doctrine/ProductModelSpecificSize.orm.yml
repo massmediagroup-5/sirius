@@ -1,0 +1,34 @@
+AppBundle\Entity\ProductModelSpecificSize:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        price:
+            type: decimal
+        wholesalePrice:
+            type: decimal
+        preOrderFlag:
+            type: boolean
+        quantity:
+            type: integer
+    manyToOne:
+        model:
+            targetEntity: ProductModels
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: sizes
+            orphanRemoval: false
+        size:
+            targetEntity: ProductModelSizes
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: sizes
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

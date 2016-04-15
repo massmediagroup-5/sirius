@@ -92,6 +92,14 @@ AppBundle\Entity\ProductModels:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
+    oneToMany:
+        sizes:
+            targetEntity: ProductModelSpecificSize
+            cascade: ["all"]
+            fetch: LAZY
+            mappedBy: model
+            inversedBy: null
+            orphanRemoval: true
     manyToOne:
         productColors:
             targetEntity: ProductColors
@@ -123,26 +131,6 @@ AppBundle\Entity\ProductModels:
                 products_id:
                     referencedColumnName: id
             orphanRemoval: false
-    manyToMany:
-        sizes:
-            targetEntity: ProductModelSizes
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: productModels
-            joinTable:
-                name: product_models_has_sizes
-                joinColumns:
-                    -
-                        name: product_model_id
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    -
-                        name: size_id
-                        referencedColumnName: id
-            orderBy:
-                size: ASC
-
     lifecycleCallbacks:
         prePersist: [ checkPrice, checkColor ]
         preUpdate:  [ checkPrice, checkColor ]
