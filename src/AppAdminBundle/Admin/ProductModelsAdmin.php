@@ -60,26 +60,16 @@ class ProductModelsAdmin extends Admin
     {
         $formMapper
             ->tab('Продукт')
-            ->with('ProductModels', [
+            ->with('Продукт', [
                 'class' => 'col-md-12',
-            ]);
-
-        $formMapper->add('alias', null, ['label' => 'Ссылка'])
+            ])
+            ->add('alias', null, ['label' => 'Ссылка'])
             ->add('productColors', 'entity',
                 [
                     'class' => 'AppBundle:ProductColors',
                     'property' => 'name',
                     'label' => 'Цвет модели',
                     'empty_value' => 'Выберите цвет модели'
-                ]
-            )
-            ->add('sizes', 'entity',
-                [
-                    'class' => 'AppBundle:ProductModelSizes',
-                    'multiple' => true,
-                    'property' => 'size',
-                    'label' => 'Размер',
-                    'empty_value' => 'Выберите размер модели'
                 ]
             )
             ->add('decorationColor', 'entity',
@@ -96,6 +86,15 @@ class ProductModelsAdmin extends Admin
             ->add('active', null, ['label' => 'Активная'])
             ->add('inStock', null, ['label' => 'Наличие на складе'])
             ->add('published', null, ['label' => 'Опубликовано'])
+            ->end()
+            ->end()
+            ->tab('Размеры')
+            ->with('Размеры', ['class' => 'col-md-12'])
+            ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                ]
+            )
             ->end()
             ->end();
     }
@@ -114,5 +113,16 @@ class ProductModelsAdmin extends Admin
             ->add('published', null, ['label' => 'Опубликовано'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
+    }
+
+    /**
+     * @param mixed $model
+     * @return void
+     */
+    public function preUpdate($model)
+    {
+        foreach ($model->getSizes() as $size) {
+            $size->setModel($model);
+        }
     }
 }

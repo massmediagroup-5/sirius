@@ -79,8 +79,8 @@ class ProductsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->tab('Товар')
-            ->with('Product',
+            ->tab('Модель')
+            ->with('Модель',
                 [
                     'class' => 'col-md-12',
                 ])

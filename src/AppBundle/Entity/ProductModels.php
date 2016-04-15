@@ -81,14 +81,14 @@ class ProductModels
     private $decorationColor;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $sizes;
-
-    /**
      * @var \AppBundle\Entity\Products
      */
     private $products;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $sizes;
 
     /**
      * Constructor
@@ -402,30 +402,6 @@ class ProductModels
     }
 
     /**
-     * Set sizes
-     *
-     * @param array $sizes
-     *
-     * @return ProductModels
-     */
-    public function setSizes($sizes)
-    {
-        $this->setHasMany('sizes', $sizes);
-
-        return $this;
-    }
-
-    /**
-     * Get sizes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSizes()
-    {
-        return $this->sizes;
-    }
-
-    /**
      * Set products
      *
      * @param \AppBundle\Entity\Products $products
@@ -492,11 +468,11 @@ class ProductModels
     /**
      * Add size
      *
-     * @param \AppBundle\Entity\ProductModelSizes $size
+     * @param ProductModelSpecificSize $size
      *
      * @return ProductModels
      */
-    public function addSize(\AppBundle\Entity\ProductModelSizes $size)
+    public function addSize(ProductModelSpecificSize $size)
     {
         $this->sizes[] = $size;
 
@@ -506,44 +482,25 @@ class ProductModels
     /**
      * Remove size
      *
-     * @param \AppBundle\Entity\ProductModelSizes $size
+     * @param ProductModelSpecificSize $size
      */
-    public function removeSize(\AppBundle\Entity\ProductModelSizes $size)
+    public function removeSize(ProductModelSpecificSize $size)
     {
         $this->sizes->removeElement($size);
     }
-    /**
-     * @var string
-     */
-    private $article;
-
 
     /**
-     * Set article
+     * Get sizes
      *
-     * @param string $article
-     *
-     * @return ProductModels
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setArticle($article)
+    public function getSizes()
     {
-        $this->article = $article;
-
-        return $this;
-    }
-
-    /**
-     * Get article
-     *
-     * @return string
-     */
-    public function getArticle()
-    {
-        return $this->article;
+        return $this->sizes;
     }
 
     public function __toString()
     {
-        return $this->getArticle() ? "{$this->getArticle()} ({$this->getProductColors()->getName()})" : '';
+        return $this->products ? "{$this->products->getName()} ({$this->productColors->getName()})" : '';
     }
 }
