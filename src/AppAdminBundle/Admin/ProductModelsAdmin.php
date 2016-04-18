@@ -22,6 +22,7 @@ class ProductModelsAdmin extends Admin
         $datagridMapper
             ->add('alias', null, ['label' => 'Ссылка'])
             ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
             ->add('inStock', null, ['label' => 'Наличие на складе'])
@@ -38,6 +39,7 @@ class ProductModelsAdmin extends Admin
         $listMapper
             ->addIdentifier('alias', null, ['label' => 'Ссылка'])
             ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['editable' => true, 'label' => 'Активная'])
             ->add('inStock', null, ['editable' => true, 'label' => 'Наличие на складе'])
@@ -82,6 +84,7 @@ class ProductModelsAdmin extends Admin
                 ]
             )
             ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
             ->add('inStock', null, ['label' => 'Наличие на складе'])
@@ -120,6 +123,7 @@ class ProductModelsAdmin extends Admin
         $showMapper
             ->add('alias', null, ['label' => 'Ссылка'])
             ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
             ->add('inStock', null, ['label' => 'Наличие на складе'])

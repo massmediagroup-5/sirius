@@ -44,6 +44,7 @@ class ProductsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('article', null, ['label' => 'Артикул'])
             ->add('name', null, ['label' => 'Название модели'])
             ->add('content', null, ['label' => 'Описание модели'])
             ->add('active', null, ['label' => 'Активный'])
@@ -85,6 +86,7 @@ class ProductsAdmin extends Admin
                     'class' => 'col-md-12',
                 ])
             ->add('name', null, ['label' => 'Название модели'])
+            ->add('article', null, ['label' => 'Артикул'])
             ->add('content', null, ['label' => 'О модели', 'attr' => ['class' => 'ckeditor']])
             ->add('characteristics', null, ['label' => 'Характеристики', 'attr' => ['class' => 'ckeditor']])
             ->add('features', null, ['label' => 'Особенности', 'attr' => ['class' => 'ckeditor']])
@@ -127,6 +129,7 @@ class ProductsAdmin extends Admin
     {
         $showMapper
             ->add('name', null, ['label' => 'Название модели'])
+            ->add('article', null, ['label' => 'Артикул'])
             ->add('content', null, ['label' => 'Описание модели'])
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
             ->add('seoDescription', null, ['label' => 'СЕО описание'])

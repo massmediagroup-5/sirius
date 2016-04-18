@@ -4,6 +4,8 @@ namespace AppBundle\Services;
 
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\ProductModelSpecificSize;
+use AppBundle\Entity\Products;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -43,8 +45,12 @@ class PricesCalculator
     public function getPrice($object)
     {
         switch ($object) {
+            case $object instanceof Products:
+                return $this->getProductPrice($object);
             case $object instanceof ProductModels:
                 return $this->getProductModelPrice($object);
+            case $object instanceof ProductModelSpecificSize:
+                return $this->getProductModelSpecificSizePrice($object);
             default:
                 return 0;
         }
@@ -57,18 +63,22 @@ class PricesCalculator
     public function getDiscountedPrice($object)
     {
         switch ($object) {
+            case $object instanceof Products:
+                return $this->getProductDiscountedPrice($object);
             case $object instanceof ProductModels:
                 return $this->getProductModelDiscountedPrice($object);
+            case $object instanceof ProductModelSpecificSize:
+                return $this->getProductModelSpecificSizeDiscountedPrice($object);
             default:
                 return 0;
         }
     }
 
     /**
-     * @param ProductModels $object
+     * @param Products $object
      * @return float
      */
-    public function getProductModelPrice(ProductModels $object)
+    public function getProductPrice(Products $object)
     {
         if($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
             return $object->getWholesalePrice() ?: $object->getPrice();
@@ -77,17 +87,96 @@ class PricesCalculator
     }
 
     /**
-     * Todo add actions, discounts
+     * Todo Currently return price without discounts, add actions, discounts
+     *
+     * @param Products $object
+     * @return float
+     */
+    public function getProductDiscountedPrice(Products $object)
+    {
+        return $this->getProductPrice($object);
+    }
+
+    /**
+     * Return self or parent price
+     *
+     * @param ProductModels $object
+     * @return float
+     */
+    public function getProductModelPrice(ProductModels $object)
+    {
+        if($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            if($object->getWholesalePrice()) {
+                return $object->getWholesalePrice();
+            }
+            return $this->getProductPrice($object->getProducts());
+        }
+        if($object->getWholesalePrice()) {
+            return $object->getPrice();
+        }
+        return $this->getProductPrice($object->getProducts());
+    }
+
+    /**
+     * Todo Currently return price without discounts, add actions, discounts
      *
      * @param ProductModels $object
      * @return float
      */
     public function getProductModelDiscountedPrice(ProductModels $object)
     {
+        return $this->getProductModelPrice($object);
+    }
+
+    /**
+     * Return self or parent price
+     *
+     * @param ProductModelSpecificSize $object
+     * @return float
+     */
+    public function getProductModelSpecificSizePrice(ProductModelSpecificSize $object)
+    {
         if($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            return $object->getWholesalePrice() ?: $object->getPrice();
+            if($object->getWholesalePrice()) {
+                return $object->getWholesalePrice();
+            }
+            return $this->getProductModelPrice($object->getModel());
         }
-        return $object->getPrice();
+        if($object->getWholesalePrice()) {
+            return $object->getPrice();
+        }
+        return $this->getProductModelPrice($object->getModel());
+    }
+
+    /**
+     * @param ProductModelSpecificSize $object
+     * @return float
+     */
+    public function getProductModelSpecificSizeDiscountedPrice(ProductModelSpecificSize $object)
+    {
+        return $this->getProductModelSpecificSizePrice($object);
+    }
+
+    /**
+     * @param ProductModels $object
+     * @return float
+     */
+    public function getProductModelLowestSpecificSizePrice(ProductModels $object)
+    {
+        return min(array_map(function ($item) {
+            return $this->getProductModelSpecificSizePrice($item);
+        }, $object->getSizes()->toArray()));
+    }
+
+    /**
+     * @param ProductModels $object
+     * @return float
+     */
+    public function getProductModelLowestSpecificSizeDiscountedPrice(ProductModels $object)
+    {
+        return min(array_map(function ($item) {
+            return $this->getProductModelSpecificSizeDiscountedPrice($item);
+        }, $object->getSizes()->toArray()));
     }
 
     /**
@@ -98,8 +187,9 @@ class PricesCalculator
      */
     public function getProductModelPackageDiscountedPrice(ProductModels $object)
     {
-        $oneItemPrice = $this->getProductModelDiscountedPrice($object);
-        return $oneItemPrice * $object->getSizes()->count();
+        return array_sum(array_map(function ($item) {
+            return $this->getProductModelSpecificSizeDiscountedPrice($item);
+        }, $object->getSizes()->toArray()));
     }
 
 }
