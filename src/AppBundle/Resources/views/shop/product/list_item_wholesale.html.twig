@@ -108,7 +108,7 @@
                             {% for size in item.sizes %}
                                 <table class="js_wholesale_item_size" data-id="{{ size.id }}">
                                     <tr>
-                                        <td>{{ size.size }}</td>
+                                        <td>{{ size.size.size }}</td>
                                         <td>
                                             <div class="amount-control">
                                                 <a href="#" class="minus"></a>
@@ -117,7 +117,7 @@
                                             </div>
                                         </td>
                                         <td><span class="js_item_size_price"
-                                                  data-price="{{ prices.getDiscountedPrice(item) }}">{{ prices.getDiscountedPrice(item) }}</span> грн.
+                                                  data-price="{{ prices.getDiscountedPrice(size)|format_price }}">{{ prices.getDiscountedPrice(size)|format_price }}</span> грн.
                                         </td>
                                         <td>
                                             <a href="#" class="btn btn_blue js_add_size_to_cart"></a>
