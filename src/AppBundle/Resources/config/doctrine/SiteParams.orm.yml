@@ -27,10 +27,16 @@ AppBundle\Entity\SiteParams:
                 fixed: false
             column: param_name
         paramValue:
-            type: string
+            type: text
             nullable: true
-            length: 255
+            length: null
             options:
                 fixed: false
             column: param_value
+        active:
+            type: boolean
+            nullable: true
+        editor:
+            type: boolean
+            nullable: true
     lifecycleCallbacks: {  }

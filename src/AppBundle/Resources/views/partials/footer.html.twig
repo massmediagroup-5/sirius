@@ -1,63 +1,152 @@
 <footer class="footer">
     <div class="footer__top">
         <div class="wrap">
-            <div class="contacts">
-                <div class="contacts__i">
-                    <ul>
-                        <li><i class="icon icon-mobile"></i>{{ options.params.phone1 }}</li>
-                        <li>{{ options.params.phone2 }}</li>
-                        <li>{{ options.params.phone3 }}</li>
-                        <li class="email"><i class="icon icon-email"></i><a href="mailto:{{ options.params.email }}">{{ options.params.email }}</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="share">
-                <div class="share__i">
-                    <ul>
-                        <li><a href="{{ options.params.fb_link }}"><i class="icon icon-fb"></i></a></li>
-                        <li><a href="{{ options.params.vk_link }}"><i class="icon icon-vk"></i></a></li>
-                        <li><a href="{{ options.params.gp_link }}"><i class="icon icon-gplus"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-
+            <table>
+                <tr>
+                    <td>
+                        <div class="contacts">
+                            <div class="contacts__i">
+                                <ul>
+                                    {% if options.params.phone1 is defined %}
+                                        <li><i class="icon icon-mobile"></i>{{ options.params.phone1 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone2 is defined %}
+                                        <li>{{ options.params.phone2 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone3 is defined %}
+                                        <li>{{ options.params.phone3 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone4 is defined %}
+                                        <li>{{ options.params.phone4 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone5 is defined %}
+                                        <li>{{ options.params.phone5 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone6 is defined %}
+                                        <li>{{ options.params.phone6 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone7 is defined %}
+                                        <li>{{ options.params.phone7 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone8 is defined %}
+                                        <li>{{ options.params.phone8 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone9 is defined %}
+                                        <li>{{ options.params.phone9 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone10 is defined %}
+                                        <li>{{ options.params.phone10 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone11 is defined %}
+                                        <li>{{ options.params.phone11 }}</li>
+                                    {% endif %}
+                                    {% if options.params.phone12 is defined %}
+                                        <li>{{ options.params.phone12 }}</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="contacts">
+                            <div class="contacts__i">
+                                <ul>
+                                    {% if options.params.email1 is defined %}
+                                    <li class="email">
+                                        <i class="icon icon-email"></i>
+                                        <a href="mailto:{{ options.params.email1 }}">{{ options.params.email1 }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% if options.params.email2 is defined %}
+                                    <li>
+                                        <a href="mailto:{{ options.params.email2 }}">{{ options.params.email2 }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% if options.params.email3 is defined %}
+                                        <li>
+                                            <a href="mailto:{{ options.params.email3 }}">{{ options.params.email3 }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if options.params.email4 is defined %}
+                                        <li>
+                                            <a href="mailto:{{ options.params.email4 }}">{{ options.params.email4 }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if options.params.email5 is defined %}
+                                        <li>
+                                            <a href="mailto:{{ options.params.email5 }}">{{ options.params.email5 }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if options.params.email6 is defined %}
+                                        <li>
+                                            <a href="mailto:{{ options.params.email6 }}">{{ options.params.email6 }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if options.params.email7 is defined %}
+                                        <li>
+                                            <a href="mailto:{{ options.params.email7 }}">{{ options.params.email7 }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if options.params.email8 is defined %}
+                                        <li>
+                                            <a href="mailto:{{ options.params.email8 }}">{{ options.params.email8 }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if options.params.email9 is defined %}
+                                        <li>
+                                            <a href="mailto:{{ options.params.email9 }}">{{ options.params.email9 }}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="share">
+                            <div class="share__i">
+                                <ul>
+                                    <li><a href="{{ options.params.fb_link }}"><i class="icon icon-fb"></i></a></li>
+                                    <li><a href="{{ options.params.vk_link }}"><i class="icon icon-vk"></i></a></li>
+                                    <li><a href="{{ options.params.gp_link }}"><i class="icon icon-gplus"></i></a></li>
+                                    <li><a href="{{ options.params.fb_link }}"><i class="icon icon-fb"></i></a></li>
+                                    <li><a href="{{ options.params.vk_link }}"><i class="icon icon-vk"></i></a></li>
+                                    <li><a href="{{ options.params.gp_link }}"><i class="icon icon-gplus"></i></a></li>
+                                    <li><a href="{{ options.params.gp_link }}"><i class="icon icon-gplus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
     <div class="footer__bottom">
         <div class="wrap">
             <div class="main">
-
                 <nav class="f-nav">
                     <div class="f-nav__i clearfix">
-
                         <div class="col">
                             <h2>Каталог товаров</h2>
                             {{ knp_menu_render('AppBundle:Builder:footercategoriesMenu') }}
                         </div>
-
                         <div class="col">
                             <h2>Компания</h2>
                             {{ knp_menu_render('AppBundle:Builder:sideleftMenu') }}
                         </div>
-
                         <div class="col">
                             <h2>Выгодные предложения</h2>
                             {{ knp_menu_render('AppBundle:Builder:footerleftMenu') }}
                         </div>
-
                         <div class="col">
                             <h2>Информация покупателям</h2>
                             {{ knp_menu_render('AppBundle:Builder:footerrightMenu') }}
                         </div>
                     </div>
                 </nav>
-
                 <div class="back-call">
                     <div class="back-call__i">
                         <h2>Обратный звонок</h2>
-
                         <form method="post">
                             <div class="inp">
                                 <input type="text" class="phone-inp" name="phone" placeholder="Введите Ваш номер"/>
@@ -70,9 +159,7 @@
                         </form>
                     </div>
                 </div>
-
             </div>
-
             <p class="copy">{{ options.params.copyright|raw }}</p>
         </div>
     </div>
@@ -82,20 +169,16 @@
     <div class="text-popup" id="email-change">
         <div class="text-popup__i">
             <p class="email">Новый пароль был выслан на электронную почту</p>
-
             <p class="email"><a href="mailto:sfdgsfhsfhs@cgsdg.com">sfdgsfhsfhs@cgsdg.com</a></p>
-
             <div class="btn-row">
                 <a href="#" class="btn btn_blue close-popup">OK</a>
             </div>
         </div>
     </div>
-
     <div class="text-popup" id="tnx">
         <div class="text-popup__i">
             <p>Спасибо</p>
             <p>В ближайшее время с Вами свяжется менеждер</p>
-
             <div class="btn-row">
                 <a href="#" class="btn btn_blue close-popup">OK</a>
             </div>

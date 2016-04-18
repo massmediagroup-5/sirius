@@ -5,5 +5,12 @@
     {% stylesheets 'bundles/appadmin/sass/admin.scss' filter='compass' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    <script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+<script type="text/javascript">
+    CKEDITOR.config.allowedContent = true;
+</script>
 {% endblock %}

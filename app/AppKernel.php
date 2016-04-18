@@ -86,5 +86,4 @@ class AppKernel extends Kernel
             $this->container->get('cache_warmer')->warmUp($this->container->getParameter('kernel.cache_dir'));
         }
     }
-
 }

@@ -16,8 +16,8 @@ class ProductModelSizesAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
-            ->add('size')
+//            ->add('id')
+            ->add('size', null, array('label' => 'Размер'))
         ;
     }
 
@@ -27,11 +27,11 @@ class ProductModelSizesAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->add('size')
+//            ->add('id')
+            ->add('size', null, array('label' => 'Размер'))
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
+//                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )
@@ -45,18 +45,18 @@ class ProductModelSizesAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('size')
+            ->add('size', null, array('label' => 'Размер'))
         ;
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
-    protected function configureShowFields(ShowMapper $showMapper)
-    {
-        $showMapper
-            ->add('id')
-            ->add('size')
-        ;
-    }
+//    /**
+//     * @param ShowMapper $showMapper
+//     */
+//    protected function configureShowFields(ShowMapper $showMapper)
+//    {
+//        $showMapper
+//            ->add('id')
+//            ->add('size')
+//        ;
+//    }
 }

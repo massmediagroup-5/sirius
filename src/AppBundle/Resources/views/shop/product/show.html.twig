@@ -134,14 +134,9 @@
 
                                                     <div class="col">
                                                         <div class="product-share">
-                                                            <ul>
-                                                                <li class="fb"><a href="#"><i
-                                                                                class="icon icon-fb3"></i>1</a></li>
-                                                                <li class="gplus"><a href="#"><i
-                                                                                class="icon icon-gplus3"></i>0</a></li>
-                                                                <li class="vk"><a href="#"><i
-                                                                                class="icon icon-vk3"></i>0</a></li>
-                                                            </ul>
+                                                            <script type="text/javascript" src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
+                                                            <script type="text/javascript" src="//yastatic.net/share2/share.js" charset="utf-8"></script>
+                                                            <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,gplus" data-counter=""></div>
                                                         </div>
                                                     </div>
 
@@ -183,22 +178,7 @@
                                         <div class="item">
                                             <div class="item__i">
                                                 <h2><i class="icon icon-delivery"></i>Доставка</h2>
-                                                <ul>
-                                                    <li>— Доставка на склад Новой Почты:
-                                                        <strong>35 грн.</strong> <br/>
-                                                        Срок доставки 1-2 дня
-                                                    </li>
-                                                    <li>— Доставка курьером: <strong>бесплатно</strong><br/>
-                                                        Срок доставки 1-2 дня
-                                                    </li>
-                                                    <li>
-                                                        — Адресная доставка Новой Почтой:
-                                                        <strong>70 грн.</strong> <br/>
-                                                        Срок доставки 1-2 дня
-
-                                                    </li>
-
-                                                </ul>
+                                                {{ options.params.delivery|raw }}
                                             </div>
                                         </div>
                                         <!--item end-->
@@ -206,13 +186,7 @@
                                         <div class="item">
                                             <div class="item__i">
                                                 <h2><i class="icon icon-wallet"></i>Оплата</h2>
-                                                <ul>
-                                                    <li>— наличными при получении
-                                                        товара
-                                                    </li>
-                                                    <li>— безналичная оплата</li>
-                                                    <li>— картой VISA</li>
-                                                </ul>
+                                                {{ options.params.payment|raw }}
                                             </div>
                                         </div>
                                         <!--item end-->
@@ -220,9 +194,7 @@
                                         <div class="item">
                                             <div class="item__i">
                                                 <h2><i class="icon icon-warranty"></i>Гарантия</h2>
-
-                                                <p>Обмен или возврат в течение
-                                                    14 дней. </p>
+                                                {{ options.params.guarantee|raw }}
                                             </div>
                                         </div>
                                         <!--item end-->

@@ -22,6 +22,16 @@ class SiteParams
      */
     private $paramValue;
 
+    /**
+     * @var boolean
+     */
+    private $active;
+
+    /**
+     * @var boolean
+     */
+    private $editor;
+
 
     /**
      * Get id
@@ -79,5 +89,53 @@ class SiteParams
     public function getParamValue()
     {
         return $this->paramValue;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return SiteParams
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set editor
+     *
+     * @param boolean $editor
+     *
+     * @return SiteParams
+     */
+    public function setEditor($editor)
+    {
+        $this->editor = $editor;
+
+        return $this;
+    }
+
+    /**
+     * Get editor
+     *
+     * @return boolean
+     */
+    public function getEditor()
+    {
+        return $this->editor;
     }
 }

@@ -10,7 +10,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale:                                             en
+    locale:                                             ru
     assetic.filter.compass.bin:                         %compass_path%
     assetic.filter.compass.images_dir:                  %kernel.root_dir%/../web/bundles/app/img
     assetic.filter.compass.fonts_dir:                   %kernel.root_dir%/../web/bundles/app/fonts
@@ -230,8 +230,8 @@ sonata_translation:
     locales: [ru]
     default_locale: ru
     # here enable the types you need
-    gedmo:
-        enabled: true
+#    gedmo:
+#        enabled: true
     #phpcr:
     #    enabled: true
 

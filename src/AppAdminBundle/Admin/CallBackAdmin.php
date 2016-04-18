@@ -16,8 +16,8 @@ class CallBackAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('phone')
-            ->add('status')
+            ->add('phone', null, array('label' => 'Номер телефона'))
+            ->add('status', null, array('label' => 'Статус'))
         ;
     }
 
@@ -27,10 +27,10 @@ class CallBackAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('phone')
-            ->add('status')
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('phone', null, array('label' => 'Номер телефона'))
+            ->add('status', null, array('label' => 'Статус'))
+            ->add('createTime', null, array('label' => 'Время получения'))
+            ->add('updateTime', null, array('label' => 'Время последнего обновления'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -47,8 +47,8 @@ class CallBackAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('phone')
-            ->add('status')
+            ->add('phone', null, array('label' => 'Номер телефона'))
+            ->add('status', null, array('label' => 'Статус'))
         ;
     }
 
@@ -58,8 +58,8 @@ class CallBackAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('phone')
-            ->add('status')
+            ->add('phone', null, array('label' => 'Номер телефона'))
+            ->add('status', null, array('label' => 'Статус'))
         ;
     }
 }
