@@ -58,7 +58,7 @@
                     <div class="items-in-cart">
                         Добавлено
                         <span class="items-in-cart-count">
-                            <span class="js_cart_item_packages_count" data-id="{{ item.products.article }}">
+                            <span class="js_cart_item_packages_count" data-id="{{ item.id }}">
                                 {{ cart.itemPackagesQuantity(item) }}
                             </span>
                             {{ 'labels.cart_products_packages'|transchoice(cart.itemPackagesQuantity(item)) }}
@@ -128,9 +128,9 @@
                                                     <span class="js_cart_item_size_count"
                                                           data-id="{{ item.id }}"
                                                           data-size_id="{{ size.id }}">
-                                                        {{ cart.getItemSizeQuantity(item, size.id) }}
+                                                        {{ cart.getItemSizeQuantity(size) }}
                                                     </span>
-                                                    {{ 'labels.cart_products'|transchoice(cart.getItemSizeQuantity(item, size.id)) }}
+                                                    {{ 'labels.cart_products'|transchoice(cart.getItemSizeQuantity(size)) }}
                                                 </span>
                                             </div>
                                         </td>

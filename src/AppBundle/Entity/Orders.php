@@ -100,7 +100,7 @@ class Orders
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $cart;
+    private $sizes;
 
     /**
      * @var \AppBundle\Entity\Users
@@ -142,7 +142,7 @@ class Orders
      */
     public function __construct()
     {
-        $this->cart = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -492,40 +492,6 @@ class Orders
     }
 
     /**
-     * Add cart
-     *
-     * @param \AppBundle\Entity\Cart $cart
-     *
-     * @return Orders
-     */
-    public function addCart(\AppBundle\Entity\Cart $cart)
-    {
-        $this->cart[] = $cart;
-
-        return $this;
-    }
-
-    /**
-     * Remove cart
-     *
-     * @param \AppBundle\Entity\Cart $cart
-     */
-    public function removeCart(\AppBundle\Entity\Cart $cart)
-    {
-        $this->cart->removeElement($cart);
-    }
-
-    /**
-     * Get cart
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCart()
-    {
-        return $this->cart;
-    }
-
-    /**
      * Get quantity
      *
      * @return int
@@ -722,12 +688,6 @@ class Orders
     {
         return (string)$this->getId();
     }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $sizes;
-
 
     /**
      * Add size
