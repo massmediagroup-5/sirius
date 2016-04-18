@@ -4674,12 +4674,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataUserBundle.git",
-                "reference": "e1e021a30ca0693e181e17f4bf5636d0e300330f"
+                "reference": "82e5769c8c1e98fcdb8298d6e0c2054da90d76b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/e1e021a30ca0693e181e17f4bf5636d0e300330f",
-                "reference": "e1e021a30ca0693e181e17f4bf5636d0e300330f",
+                "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/82e5769c8c1e98fcdb8298d6e0c2054da90d76b5",
+                "reference": "82e5769c8c1e98fcdb8298d6e0c2054da90d76b5",
                 "shasum": ""
             },
             "require": {
@@ -4743,7 +4743,7 @@
                 "sonata",
                 "user"
             ],
-            "time": "2016-04-08 16:21:08"
+            "time": "2016-04-16 11:21:38"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
@@ -4931,20 +4931,20 @@
         },
         {
             "name": "symfony/monolog-bundle",
-            "version": "2.11.0",
+            "version": "2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "d156f625dc3ce04f44e6d0ce36ae19cc35f51a97"
+                "reference": "e7caf4936c7be82bc6d68df87f1d23a0d5bf6e00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/d156f625dc3ce04f44e6d0ce36ae19cc35f51a97",
-                "reference": "d156f625dc3ce04f44e6d0ce36ae19cc35f51a97",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/e7caf4936c7be82bc6d68df87f1d23a0d5bf6e00",
+                "reference": "e7caf4936c7be82bc6d68df87f1d23a0d5bf6e00",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "~1.12",
+                "monolog/monolog": "~1.18",
                 "php": ">=5.3.2",
                 "symfony/config": "~2.3|~3.0",
                 "symfony/dependency-injection": "~2.3|~3.0",
@@ -4987,7 +4987,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2016-04-12 18:48:21"
+            "time": "2016-04-13 16:21:01"
         },
         {
             "name": "symfony/polyfill-apcu",

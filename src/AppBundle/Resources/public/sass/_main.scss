@@ -2092,9 +2092,12 @@ input[type="checkbox"] {
 	.wrap {
 		@extend .clearfix;
 	}
-
+	table {
+		width: 100%;
+	}
 	.contacts {
 		ul {
+		  	@extend .clearfix;
 			li {
 				float: left;
 				padding-left: 30px;
@@ -2112,8 +2115,8 @@ input[type="checkbox"] {
 				}
 
 				&.email {
-					margin-left: 30px;
-					padding-left: 35px;
+					//margin-left: 30px;
+					//padding-left: 35px;
 				}
 
 				a {
@@ -2136,18 +2139,18 @@ input[type="checkbox"] {
 		}
 	}
 	.share {
-		position: absolute;
-		right: 10px;
-		top: 50%;
-		@include translate(0, -50%);
+		float: right;
+		min-width: 200px;
+		//position: absolute;
+		//right: 10px;
+		//top: 50%;
+		//@include translate(0, -50%);
 
 		li {
 			list-style: none;
 			float: left;
-			margin-left: 6px;
-			&:first-child {
-				margin-left: 0;
-			}
+			margin-right: 6px;
+			margin-bottom: 6px;
 		}
 
 		a {
@@ -2159,7 +2162,7 @@ input[type="checkbox"] {
 			@include border-radius(50%);
 			@include transition(background, 250ms, ease);
 			&:hover {
-				background: #4ca7ed;
+			  background: #4ca7ed;
 			}
 		}
 
@@ -3416,6 +3419,9 @@ input[type="checkbox"] {
 .last-viewed {
 	padding-bottom: 112px;
 	position: relative;
+  	.owl-stage {
+		margin: 0 auto;
+  	}
 
 	h2 {
 		color: #050505;
@@ -3807,6 +3813,10 @@ input[type="checkbox"] {
 	padding-left: 25px;
 	padding-right: 25px;
 	position: relative;
+
+  	.owl-stage {
+		margin: 0 auto;
+  	}
 
 	.owl-item {
 		a {
