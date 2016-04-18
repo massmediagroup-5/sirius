@@ -251,4 +251,12 @@ class ProductModelSpecificSize
     {
         return $this->size->getSize();
     }
+
+    /**
+     *
+     */
+    public function __clone()
+    {
+        $this->id = null;
+    }
 }

@@ -6,6 +6,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
@@ -59,6 +60,9 @@ class ProductModelsAdmin extends Admin
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
+                    'clone' => [
+                        'template' => 'AppAdminBundle:CRUD:list__action_clone.html.twig'
+                    ]
                 ]
             ]);
     }
@@ -160,5 +164,10 @@ class ProductModelsAdmin extends Admin
         foreach ($model->getImages() as $image) {
             $image->setModel($model);
         }
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Traits\ProcessHasMany;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * ProductModels
@@ -545,5 +546,22 @@ class ProductModels
     public function __toString()
     {
         return $this->products ? "{$this->products->getName()} ({$this->productColors->getName()})" : '';
+    }
+
+    /**
+     *
+     */
+    public function __clone()
+    {
+        $this->id = null;
+        $this->images = new ArrayCollection();
+        $sizes = new ArrayCollection();
+        foreach ($this->sizes as $size) {
+            $size = clone $size;
+            $size->setModel($this);
+            $sizes->add($size);
+        }
+        $this->sizes = $sizes;
+        $this->alias .= '-clone';
     }
 }
