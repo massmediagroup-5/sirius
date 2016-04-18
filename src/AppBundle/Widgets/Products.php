@@ -118,7 +118,7 @@ class Products
      */
     public function prices($model)
     {
-        $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizePrice($model);
+        $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($model);
         $discountedPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($model);
         return $this->templating->render('AppBundle:widgets/product/prices.html.twig', [
                 'model' => $model,

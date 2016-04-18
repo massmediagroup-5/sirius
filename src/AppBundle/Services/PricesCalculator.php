@@ -163,9 +163,10 @@ class PricesCalculator
      */
     public function getProductModelLowestSpecificSizePrice(ProductModels $object)
     {
-        return min(array_map(function ($item) {
+        $sizes = $object->getSizes()->toArray();
+        return count($sizes) ? min(array_map(function ($item) {
             return $this->getProductModelSpecificSizePrice($item);
-        }, $object->getSizes()->toArray()));
+        }, $object->getSizes()->toArray())) : 0;
     }
 
     /**
@@ -174,9 +175,10 @@ class PricesCalculator
      */
     public function getProductModelLowestSpecificSizeDiscountedPrice(ProductModels $object)
     {
-        return min(array_map(function ($item) {
+        $sizes = $object->getSizes()->toArray();
+        return count($sizes) ? min(array_map(function ($item) {
             return $this->getProductModelSpecificSizeDiscountedPrice($item);
-        }, $object->getSizes()->toArray()));
+        }, $sizes)) : 0;
     }
 
     /**
@@ -187,9 +189,10 @@ class PricesCalculator
      */
     public function getProductModelPackageDiscountedPrice(ProductModels $object)
     {
-        return array_sum(array_map(function ($item) {
+        $sizes = $object->getSizes()->toArray();
+        return count($sizes) ? array_sum(array_map(function ($item) {
             return $this->getProductModelSpecificSizeDiscountedPrice($item);
-        }, $object->getSizes()->toArray()));
+        }, $object->getSizes()->toArray())) : 0;
     }
 
 }
