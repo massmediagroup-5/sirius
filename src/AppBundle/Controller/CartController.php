@@ -84,7 +84,7 @@ class CartController extends BaseController
      */
     public function changeSizeAction(ProductModelSpecificSize $size, Request $request)
     {
-        $form = $this->createForm(ChangeProductSizeType::class, null, ['model' => $size->getModel()]);
+        $form = $this->createForm(ChangeProductSizeType::class, null, ['size' => $size]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

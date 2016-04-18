@@ -113,15 +113,20 @@ class Products
     /**
      * Render old and new prices
      *
-     * @param $model
+     * @param $object
      * @return mixed
      */
-    public function prices($model)
+    public function prices($object)
     {
-        $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($model);
-        $discountedPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($model);
+        if ($object instanceof ProductModels) {
+            $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizePrice($object);
+            $discountedPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($object);
+        } else {
+            $price = $this->container->get('prices_calculator')->getPrice($object);
+            $discountedPrice = $this->container->get('prices_calculator')->getDiscountedPrice($object);
+        }
         return $this->templating->render('AppBundle:widgets/product/prices.html.twig', [
-                'model' => $model,
+                'object' => $object,
                 'price' => $price,
                 'discountedPrice' => $discountedPrice
             ]
@@ -174,6 +179,7 @@ class Products
     public function changeProductSize(CartSize $size)
     {
         $form = $this->container->get('form.factory')->create(ChangeProductSizeType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_change_size', ['id' => $size->getSize()->getId()]),
             'size' => $size->getSize(),
         ])->createView();
 
@@ -199,7 +205,7 @@ class Products
         ])->createView();
 
         return $this->templating->render('AppBundle:widgets/product/change_product_size_count.html.twig', [
-                'model' => $selectedSize->getModel(),
+                'model' => $selectedSize->getSize()->getModel(),
                 'form' => $form,
             ]
         );
