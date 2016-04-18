@@ -198,13 +198,13 @@ class Cart
     }
 
     /**
-     * @param ProductModels $model
+     * @param ProductModelSpecificSize $size
      * @return int
      */
-    public function getItemSizeQuantity(ProductModels $model, $sizeId)
+    public function getItemSizeQuantity(ProductModelSpecificSize $size)
     {
-        $item = Arr::get($this->items, $model->getId());
-        return $item ? $item->getSize($sizeId)->getQuantity() : 0;
+        $item = Arr::get($this->items, $size->getModel()->getId());
+        return $item ? $item->getSize($size)->getQuantity() : 0;
     }
 
     /**

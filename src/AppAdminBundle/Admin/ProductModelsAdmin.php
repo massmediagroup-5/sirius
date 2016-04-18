@@ -66,6 +66,14 @@ class ProductModelsAdmin extends Admin
                 'class' => 'col-md-12',
             ])
             ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('products', 'entity',
+                [
+                    'class' => 'AppBundle:Products',
+                    'property' => 'name',
+                    'label' => 'Продукт',
+                    'empty_value' => 'Выберите продукт'
+                ]
+            )
             ->add('productColors', 'entity',
                 [
                     'class' => 'AppBundle:ProductColors',

@@ -11,12 +11,6 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
 
-    app.admin.cart_product_size:
-        class: AppAdminBundle\Admin\CartProductSizeAdmin
-        arguments: [~, AppBundle\Entity\CartProductSize, SonataAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
-
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin
         #arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:CategoriesAdmin]

@@ -80,7 +80,7 @@ class CartItem
      */
     public function getSize(ProductModelSpecificSize $size)
     {
-        return isset($this->sizes[$size->getId()]) ? $this->sizes[$size] : null;
+        return isset($this->sizes[$size->getId()]) ? $this->sizes[$size->getId()] : null;
     }
 
     /**
