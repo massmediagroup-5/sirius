@@ -196,11 +196,14 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param string $sizeAlias
      * @return mixed
      */
-    public function addSort($query, $sort, $productAlias = 'products', $modelAlias = 'productModels', $sizeAlias = 'productModels')
+    public function addSort($query, $sort, $productAlias = 'products', $modelAlias = 'productModels', $sizeAlias = 'sizes')
     {
         $query->orderBy("$modelAlias.inStock", 'DESC');
         switch ($sort) {
             case false:
+            case 'new':
+                $query->addOrderBy("$modelAlias.createTime", 'DESC');
+                break;
             case 'az':
                 $query->addOrderBy("$productAlias.name", 'ASC');
                 break;
@@ -208,6 +211,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 $query->addOrderBy("$productAlias.name", 'DESC');
                 break;
             case 'cheap':
+                // todo replace with sql COALESCE
                 $query->addOrderBy("$sizeAlias.price", 'ASC');
                 break;
             case 'expensive':
@@ -223,6 +227,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 break;
         }
 
+        $query->addOrderBy("$modelAlias.createTime", 'DESC');
         $query->addOrderBy("$modelAlias.id", 'DESC');
 
         return $query;

@@ -15,6 +15,14 @@ use Sonata\AdminBundle\Show\ShowMapper;
 class ProductModelsAdmin extends Admin
 {
     /**
+     * @var array
+     */
+    protected $datagridValues = array(
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'createTime',
+    );
+
+    /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

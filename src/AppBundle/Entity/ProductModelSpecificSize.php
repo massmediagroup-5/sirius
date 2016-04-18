@@ -15,7 +15,7 @@ class ProductModelSpecificSize
     /**
      * @var string
      */
-    private $price;
+    private $price = 0;
 
     /**
      * @var string
