@@ -20,19 +20,15 @@ class ProductModelsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name', null, array('label' => 'Название модели'))
-            ->add('description', null, array('label' => 'Описание модели'))
-            ->add('alias', null, array('label' => 'Ссылка'))
-            ->add('price', null, array('label' => 'Цена'))
-            ->add('seoTitle', null, array('label' => 'СЕО заглавие'))
-            ->add('seoDescription', null, array('label' => 'СЕО описание'))
-            ->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
-            ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('active', null, array('label' => 'Активная'))
-            ->add('inStock', null, array('label' => 'Наличие на складе'))
-            ->add('published', null, array('label' => 'Опубликовано'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'));
+            ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('active', null, ['label' => 'Активная'])
+            ->add('inStock', null, ['label' => 'Наличие на складе'])
+            ->add('published', null, ['label' => 'Опубликовано'])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
 
     /**
@@ -41,26 +37,22 @@ class ProductModelsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, array('label' => 'Название модели'))
-            //->add('description', null, array('label' => 'Описание модели'))
-            ->addIdentifier('alias', null, array('label' => 'Ссылка'))
-            ->add('price', null, array('label' => 'Цена'))
-            //->add('seoTitle', null, array('label' => 'СЕО заглавие'))
-            //->add('seoDescription', null, array('label' => 'СЕО описание'))
-            //->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
-            ->add('priority', null, array('label' => 'Приоритет'))
+            ->addIdentifier('alias', null, ['label' => 'Ссылка'])
+            ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['editable' => true, 'label' => 'Активная'])
             ->add('inStock', null, ['editable' => true, 'label' => 'Наличие на складе'])
             ->add('published', null, ['editable' => true, 'label' => 'Опубликовано'])
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ));
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                    'delete' => [],
+                ]
+            ]);
     }
 
     /**
@@ -69,68 +61,53 @@ class ProductModelsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->tab('Модель')
-            ->with('ProductModels',
-                array(
-                    'class' => 'col-md-12',
-                ));
-        if (!$this->hasParentFieldDescription()) {
-            $formMapper->add('products', 'entity', [
-                'class' => 'AppBundle\Entity\Products',
-                'label' => 'Продукт'
-            ]);
-        }
-
-        $formMapper->add('name', null, array('label' => 'Название модели'))
-            ->add('content', null, array('label' => 'О модели', 'attr' => array('class' => 'ckeditor')))
-            ->add('characteristics', null, array('label' => 'Характеристики', 'attr' => array('class' => 'ckeditor')))
-            ->add('features', null, array('label' => 'Особенности', 'attr' => array('class' => 'ckeditor')))
-            ->add('alias', null, array('label' => 'Ссылка'))
+            ->tab('Продукт')
+            ->with('Продукт', [
+                'class' => 'col-md-12',
+            ])
+            ->add('alias', null, ['label' => 'Ссылка'])
             ->add('productColors', 'entity',
-                array(
+                [
                     'class' => 'AppBundle:ProductColors',
                     'property' => 'name',
                     'label' => 'Цвет модели',
                     'empty_value' => 'Выберите цвет модели'
-                )
-            )
-            ->add('sizes', 'entity',
-                array(
-                    'class' => 'AppBundle:ProductModelSizes',
-                    'multiple' => true,
-                    'property' => 'size',
-                    'label' => 'Размер',
-                    'empty_value' => 'Выберите размер модели'
-                )
+                ]
             )
             ->add('decorationColor', 'entity',
-                array(
+                [
                     'class' => 'AppBundle:ProductColors',
                     'property' => 'name',
                     'label' => 'Цвет отделки',
                     'empty_value' => 'Выберите цвет отделки',
                     'required' => false
-                )
+                ]
             )
-            ->add('price', null, array('label' => 'Цена'))
-            ->add('seoTitle', null, array('label' => 'СЕО заглавие'))
-            ->add('seoDescription', null, array('label' => 'СЕО описание'))
-            ->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
-            ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('active', null, array('label' => 'Активная'))
-            ->add('inStock', null, array('label' => 'Наличие на складе'))
-            ->add('published', null, array('label' => 'Опубликовано'))
-            ->add('preOrderFlag', null, array('label' => 'Предзаказ'))
+            ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('active', null, ['label' => 'Активная'])
+            ->add('inStock', null, ['label' => 'Наличие на складе'])
+            ->add('published', null, ['label' => 'Опубликовано'])
+            ->end()
+            ->end()
+            ->tab('Размеры')
+            ->with('Размеры', ['class' => 'col-md-12'])
+            ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                ]
+            )
             ->end()
             ->end();
 
         if (!$this->hasParentFieldDescription()) {
-            $formMapper->tab('Изображения модели')
-                ->with('ProductModelImages', [
+            $formMapper->tab('Изображения продукта')
+                ->with('Изображения продукта', [
                         'class' => 'col-md-12',
                     ]
                 )
-                ->add('productModelImages', 'sonata_type_collection',
+                ->add('images', 'sonata_type_collection',
                     ['label' => 'Изображения'], ['edit' => 'inline']
                 )
                 ->end()
@@ -144,25 +121,28 @@ class ProductModelsAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, array('label' => 'Название модели'))
-            ->add('description', null, array('label' => 'Описание модели'))
-            ->add('alias', null, array('label' => 'Ссылка'))
-            ->add('price', null, array('label' => 'Цена'))
-            ->add('seoTitle', null, array('label' => 'СЕО заглавие'))
-            ->add('seoDescription', null, array('label' => 'СЕО описание'))
-            ->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
-            ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('active', null, array('label' => 'Активная'))
-            ->add('inStock', null, array('label' => 'Наличие на складе'))
-            ->add('published', null, array('label' => 'Опубликовано'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'));
+            ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('active', null, ['label' => 'Активная'])
+            ->add('inStock', null, ['label' => 'Наличие на складе'])
+            ->add('published', null, ['label' => 'Опубликовано'])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
 
-    public function preUpdate($param)
+    /**
+     * @param mixed $model
+     * @return void
+     */
+    public function preUpdate($model)
     {
-        foreach ($param->getProductModelImages() as $image) {
-            $image->setProductModels($param);
+        foreach ($model->getSizes() as $size) {
+            $size->setModel($model);
+        }
+        foreach ($model->getImages() as $image) {
+            $image->setModel($model);
         }
     }
 }

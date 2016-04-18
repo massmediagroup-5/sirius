@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
+
 use AppBundle\Traits\ProcessHasMany;
 
 /**
@@ -18,16 +19,6 @@ class ProductModels
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $description;
-
-    /**
-     * @var string
-     */
     private $alias;
 
     /**
@@ -41,39 +32,9 @@ class ProductModels
     private $wholesalePrice = 0.0;
 
     /**
-     * @var string
-     */
-    private $seoTitle;
-
-    /**
-     * @var string
-     */
-    private $seoDescription;
-
-    /**
-     * @var string
-     */
-    private $seoKeywords;
-
-    /**
-     * @var string
-     */
-    private $content;
-
-    /**
-     * @var string
-     */
-    private $characteristics;
-
-    /**
-     * @var string
-     */
-    private $features;
-
-    /**
      * @var integer
      */
-    private $priority;
+    private $priority = 0;
 
     /**
      * @var integer
@@ -111,16 +72,6 @@ class ProductModels
     private $updateTime;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $productModelImages;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $skuProducts;
-
-    /**
      * @var \AppBundle\Entity\ProductColors
      */
     private $productColors;
@@ -131,22 +82,25 @@ class ProductModels
     private $decorationColor;
 
     /**
+     * @var \AppBundle\Entity\Products
+     */
+    private $products;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $sizes;
 
     /**
-     * @var \AppBundle\Entity\Products
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $products;
+    private $images;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->productModelImages = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->skuProducts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -158,54 +112,6 @@ class ProductModels
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return ProductModels
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return ProductModels
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -254,160 +160,6 @@ class ProductModels
     public function getPrice()
     {
         return $this->price;
-    }
-
-    /**
-     * Get price
-     *
-     * @return string
-     */
-    public function getPackagePrice()
-    {
-        return $this->price * $this->sizes->count();
-    }
-
-    /**
-     * Set seoTitle
-     *
-     * @param string $seoTitle
-     *
-     * @return ProductModels
-     */
-    public function setSeoTitle($seoTitle)
-    {
-        $this->seoTitle = $seoTitle;
-
-        return $this;
-    }
-
-    /**
-     * Get seoTitle
-     *
-     * @return string
-     */
-    public function getSeoTitle()
-    {
-        return $this->seoTitle;
-    }
-
-    /**
-     * Set seoDescription
-     *
-     * @param string $seoDescription
-     *
-     * @return ProductModels
-     */
-    public function setSeoDescription($seoDescription)
-    {
-        $this->seoDescription = $seoDescription;
-
-        return $this;
-    }
-
-    /**
-     * Get seoDescription
-     *
-     * @return string
-     */
-    public function getSeoDescription()
-    {
-        return $this->seoDescription;
-    }
-
-    /**
-     * Set seoKeywords
-     *
-     * @param string $seoKeywords
-     *
-     * @return ProductModels
-     */
-    public function setSeoKeywords($seoKeywords)
-    {
-        $this->seoKeywords = $seoKeywords;
-
-        return $this;
-    }
-
-    /**
-     * Get seoKeywords
-     *
-     * @return string
-     */
-    public function getSeoKeywords()
-    {
-        return $this->seoKeywords;
-    }
-
-    /**
-     * Set content
-     *
-     * @param string $content
-     *
-     * @return ProductModels
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Set characteristics
-     *
-     * @param string $characteristics
-     *
-     * @return ProductModels
-     */
-    public function setCharacteristics($characteristics)
-    {
-        $this->characteristics = $characteristics;
-
-        return $this;
-    }
-
-    /**
-     * Get characteristics
-     *
-     * @return string
-     */
-    public function getCharacteristics()
-    {
-        return $this->characteristics;
-    }
-
-    /**
-     * Set features
-     *
-     * @param string $features
-     *
-     * @return ProductModels
-     */
-    public function setFeatures($features)
-    {
-        $this->features = $features;
-
-        return $this;
-    }
-
-    /**
-     * Get features
-     *
-     * @return string
-     */
-    public function getFeatures()
-    {
-        return $this->features;
     }
 
     /**
@@ -475,6 +227,16 @@ class ProductModels
     public function getPreOrderFlag()
     {
         return $this->preOrderFlag;
+    }
+
+    /**
+     * @return integer
+     */
+    public function hasPreOrderSize()
+    {
+        return (bool)$this->sizes->filter(function (ProductModelSpecificSize $size) {
+            return $size->getPreOrderFlag();
+        });
     }
 
     /**
@@ -598,74 +360,6 @@ class ProductModels
     }
 
     /**
-     * Add productModelImage
-     *
-     * @param \AppBundle\Entity\ProductModelImages $productModelImage
-     *
-     * @return ProductModels
-     */
-    public function addProductModelImage(\AppBundle\Entity\ProductModelImages $productModelImage)
-    {
-        $this->productModelImages[] = $productModelImage;
-
-        return $this;
-    }
-
-    /**
-     * Remove productModelImage
-     *
-     * @param \AppBundle\Entity\ProductModelImages $productModelImage
-     */
-    public function removeProductModelImage(\AppBundle\Entity\ProductModelImages $productModelImage)
-    {
-        $this->productModelImages->removeElement($productModelImage);
-    }
-
-    /**
-     * Get productModelImages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProductModelImages()
-    {
-        return $this->productModelImages;
-    }
-
-    /**
-     * Add skuProduct
-     *
-     * @param \AppBundle\Entity\SkuProducts $skuProduct
-     *
-     * @return ProductModels
-     */
-    public function addSkuProduct(\AppBundle\Entity\SkuProducts $skuProduct)
-    {
-        $this->skuProducts[] = $skuProduct;
-
-        return $this;
-    }
-
-    /**
-     * Remove skuProduct
-     *
-     * @param \AppBundle\Entity\SkuProducts $skuProduct
-     */
-    public function removeSkuProduct(\AppBundle\Entity\SkuProducts $skuProduct)
-    {
-        $this->skuProducts->removeElement($skuProduct);
-    }
-
-    /**
-     * Get skuProducts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSkuProducts()
-    {
-        return $this->skuProducts;
-    }
-
-    /**
      * Set productColors
      *
      * @param \AppBundle\Entity\ProductColors $productColors
@@ -711,30 +405,6 @@ class ProductModels
     public function getDecorationColor()
     {
         return $this->decorationColor;
-    }
-
-    /**
-     * Set sizes
-     *
-     * @param array $sizes
-     *
-     * @return ProductModels
-     */
-    public function setSizes($sizes)
-    {
-        $this->setHasMany('sizes', $sizes);
-
-        return $this;
-    }
-
-    /**
-     * Get sizes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSizes()
-    {
-        return $this->sizes;
     }
 
     /**
@@ -801,19 +471,14 @@ class ProductModels
         return (float)$this->wholesalePrice;
     }
 
-    public function __toString()
-    {
-        return $this->getName() ? "{$this->getName()} ({$this->getProductColors()->getName()})" : '';
-    }
-
     /**
      * Add size
      *
-     * @param \AppBundle\Entity\ProductModelSizes $size
+     * @param ProductModelSpecificSize $size
      *
      * @return ProductModels
      */
-    public function addSize(\AppBundle\Entity\ProductModelSizes $size)
+    public function addSize(ProductModelSpecificSize $size)
     {
         $this->sizes[] = $size;
 
@@ -823,10 +488,62 @@ class ProductModels
     /**
      * Remove size
      *
-     * @param \AppBundle\Entity\ProductModelSizes $size
+     * @param ProductModelSpecificSize $size
      */
-    public function removeSize(\AppBundle\Entity\ProductModelSizes $size)
+    public function removeSize(ProductModelSpecificSize $size)
     {
         $this->sizes->removeElement($size);
+    }
+
+    /**
+     * Get sizes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSizes()
+    {
+        return $this->sizes;
+    }
+
+    /**
+     * Add image
+     *
+     * @param \AppBundle\Entity\ProductModelImage $image
+     *
+     * @return ProductModels
+     */
+    public function addImage(\AppBundle\Entity\ProductModelImage $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \AppBundle\Entity\ProductModelImage $image
+     */
+    public function removeImage(\AppBundle\Entity\ProductModelImage $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->products ? "{$this->products->getName()} ({$this->productColors->getName()})" : '';
     }
 }

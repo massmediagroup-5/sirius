@@ -723,4 +723,43 @@ class Orders
         return (string)$this->getId();
     }
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $sizes;
+
+
+    /**
+     * Add size
+     *
+     * @param \AppBundle\Entity\OrderProductSize $size
+     *
+     * @return Orders
+     */
+    public function addSize(\AppBundle\Entity\OrderProductSize $size)
+    {
+        $this->sizes[] = $size;
+
+        return $this;
+    }
+
+    /**
+     * Remove size
+     *
+     * @param \AppBundle\Entity\OrderProductSize $size
+     */
+    public function removeSize(\AppBundle\Entity\OrderProductSize $size)
+    {
+        $this->sizes->removeElement($size);
+    }
+
+    /**
+     * Get sizes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSizes()
+    {
+        return $this->sizes;
+    }
 }

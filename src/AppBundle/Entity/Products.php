@@ -51,11 +51,6 @@ class Products implements CharacteristicableInterface
     private $productModels;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $productImages;
-
-    /**
      * @var \AppBundle\Entity\ActionLabels
      */
     private $actionLabels;
@@ -71,12 +66,66 @@ class Products implements CharacteristicableInterface
     private $characteristicValues;
 
     /**
+     * @var string
+     */
+    private $article;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $seoTitle;
+
+    /**
+     * @var string
+     */
+    private $seoDescription;
+
+    /**
+     * @var string
+     */
+    private $seoKeywords;
+
+    /**
+     * @var string
+     */
+    private $content;
+
+    /**
+     * @var string
+     */
+    private $characteristics;
+
+    /**
+     * @var string
+     */
+    private $features;
+
+    /**
+     * @var string
+     */
+    private $price = 0;
+
+    /**
+     * @var string
+     */
+    private $wholesalePrice = 0;
+
+    /**
+     * @var integer
+     */
+    private $quantity = 0;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->productModels = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->productImages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -269,40 +318,6 @@ class Products implements CharacteristicableInterface
     }
 
     /**
-     * Add productImage
-     *
-     * @param \AppBundle\Entity\ProductImages $productImage
-     *
-     * @return Products
-     */
-    public function addProductImage(\AppBundle\Entity\ProductImages $productImage)
-    {
-        $this->productImages[] = $productImage;
-
-        return $this;
-    }
-
-    /**
-     * Remove productImage
-     *
-     * @param \AppBundle\Entity\ProductImages $productImage
-     */
-    public function removeProductImage(\AppBundle\Entity\ProductImages $productImage)
-    {
-        $this->productImages->removeElement($productImage);
-    }
-
-    /**
-     * Get productImages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProductImages()
-    {
-        return $this->productImages;
-    }
-
-    /**
      * Set actionLabels
      *
      * @param \AppBundle\Entity\ActionLabels $actionLabels
@@ -421,10 +436,274 @@ class Products implements CharacteristicableInterface
     }
 
     /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Products
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set seoTitle
+     *
+     * @param string $seoTitle
+     *
+     * @return Products
+     */
+    public function setSeoTitle($seoTitle)
+    {
+        $this->seoTitle = $seoTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get seoTitle
+     *
+     * @return string
+     */
+    public function getSeoTitle()
+    {
+        return $this->seoTitle;
+    }
+
+    /**
+     * Set seoDescription
+     *
+     * @param string $seoDescription
+     *
+     * @return Products
+     */
+    public function setSeoDescription($seoDescription)
+    {
+        $this->seoDescription = $seoDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get seoDescription
+     *
+     * @return string
+     */
+    public function getSeoDescription()
+    {
+        return $this->seoDescription;
+    }
+
+    /**
+     * Set seoKeywords
+     *
+     * @param string $seoKeywords
+     *
+     * @return Products
+     */
+    public function setSeoKeywords($seoKeywords)
+    {
+        $this->seoKeywords = $seoKeywords;
+
+        return $this;
+    }
+
+    /**
+     * Get seoKeywords
+     *
+     * @return string
+     */
+    public function getSeoKeywords()
+    {
+        return $this->seoKeywords;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     *
+     * @return Products
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set characteristics
+     *
+     * @param string $characteristics
+     *
+     * @return Products
+     */
+    public function setCharacteristics($characteristics)
+    {
+        $this->characteristics = $characteristics;
+
+        return $this;
+    }
+
+    /**
+     * Get characteristics
+     *
+     * @return string
+     */
+    public function getCharacteristics()
+    {
+        return $this->characteristics;
+    }
+
+    /**
+     * Set features
+     *
+     * @param string $features
+     *
+     * @return Products
+     */
+    public function setFeatures($features)
+    {
+        $this->features = $features;
+
+        return $this;
+    }
+
+    /**
+     * Get features
+     *
+     * @return string
+     */
+    public function getFeatures()
+    {
+        return $this->features;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
         return $this->getImportName() ? : '';
+    }
+
+    /**
+     * Set article
+     *
+     * @param string $article
+     *
+     * @return Products
+     */
+    public function setArticle($article)
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return string
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
+
+    /**
+     * Set price
+     *
+     * @param string $price
+     *
+     * @return Products
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set wholesalePrice
+     *
+     * @param string $wholesalePrice
+     *
+     * @return Products
+     */
+    public function setWholesalePrice($wholesalePrice)
+    {
+        $this->wholesalePrice = $wholesalePrice;
+
+        return $this;
+    }
+
+    /**
+     * Get wholesalePrice
+     *
+     * @return string
+     */
+    public function getWholesalePrice()
+    {
+        return $this->wholesalePrice;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     *
+     * @return Products
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return integer
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 }
