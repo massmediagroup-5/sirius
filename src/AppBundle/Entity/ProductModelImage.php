@@ -2,14 +2,11 @@
 
 namespace AppBundle\Entity;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 /**
- * ProductModelImages
+ * ProductModelImage
  */
-class ProductModelImages
+class ProductModelImage
 {
-
     /**
      * @var integer
      */
@@ -23,7 +20,7 @@ class ProductModelImages
     /**
      * @var integer
      */
-    private $priority = '0';
+    private $priority = 0;
 
     /**
      * @var \DateTime
@@ -38,12 +35,13 @@ class ProductModelImages
     /**
      * @var \AppBundle\Entity\ProductModels
      */
-    private $productModels;
+    private $model;
 
     /**
      * @var
      */
     private $file;
+
 
     /**
      * Get id
@@ -60,7 +58,7 @@ class ProductModelImages
      *
      * @param string $link
      *
-     * @return ProductModelImages
+     * @return ProductModelImage
      */
     public function setLink($link)
     {
@@ -84,7 +82,7 @@ class ProductModelImages
      *
      * @param integer $priority
      *
-     * @return ProductModelImages
+     * @return ProductModelImage
      */
     public function setPriority($priority)
     {
@@ -108,7 +106,7 @@ class ProductModelImages
      *
      * @param \DateTime $createTime
      *
-     * @return ProductModelImages
+     * @return ProductModelImage
      */
     public function setCreateTime($createTime)
     {
@@ -132,7 +130,7 @@ class ProductModelImages
      *
      * @param \DateTime $updateTime
      *
-     * @return ProductModelImages
+     * @return ProductModelImage
      */
     public function setUpdateTime($updateTime)
     {
@@ -152,38 +150,40 @@ class ProductModelImages
     }
 
     /**
-     * Set productModels
+     * Set model
      *
-     * @param \AppBundle\Entity\ProductModels $productModels
+     * @param \AppBundle\Entity\ProductModels $model
      *
-     * @return ProductModelImages
+     * @return ProductModelImage
      */
-    public function setProductModels(\AppBundle\Entity\ProductModels $productModels = null)
+    public function setModel(\AppBundle\Entity\ProductModels $model = null)
     {
-        $this->productModels = $productModels;
+        $this->model = $model;
 
         return $this;
     }
 
     /**
-     * Get productModels
+     * Get model
      *
      * @return \AppBundle\Entity\ProductModels
      */
-    public function getProductModels()
+    public function getModel()
     {
-        return $this->productModels;
+        return $this->model;
     }
 
+    /**
+     * @param $file
+     */
     public function setFile($file) {
         $this->file = $file;
     }
 
+    /**
+     * @return mixed
+     */
     public function getFile() {
         return $this->file;
-    }
-
-    public function __toString() {
-        return $this->getLink() ?: '';
     }
 }

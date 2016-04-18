@@ -45,8 +45,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.actionLabels', 'actionLabels')->addselect('actionLabels')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategories')
             ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->orderBy('productModels.priority', 'ASC');
@@ -68,8 +67,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.actionLabels', 'actionLabels')->addselect('actionLabels')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('products.baseCategory', 'baseCategories')->addselect('baseCategories')
             ->orderBy('productModels.priority', 'ASC');
         return $this;
@@ -114,7 +112,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * - products;
      * - productsBaseCategories;
      * - productModels;
-     * - productModelImages;
+     * - images;
      * - productColors;
      * - actionLabels.
      *
@@ -147,7 +145,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 case 'productModels':
                 case 'productColors':
                 case 'productsBaseCategories':
-                case 'productModelImages':
+                case 'images':
                 case 'actionLabels':
                     $table = $whereKey;
                     break;
@@ -193,25 +191,27 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     /**
      * @param $query
      * @param $sort
-     * @param string $alias
+     * @param string $productAlias
+     * @param string $modelAlias
+     * @param string $sizeAlias
      * @return mixed
      */
-    public function addSort($query, $sort, $alias = 'productModels')
+    public function addSort($query, $sort, $productAlias = 'products', $modelAlias = 'productModels', $sizeAlias = 'productModels')
     {
-        $query->orderBy("$alias.inStock", 'DESC');
+        $query->orderBy("$modelAlias.inStock", 'DESC');
         switch ($sort) {
             case false:
             case 'az':
-                $query->addOrderBy("$alias.name", 'ASC');
+                $query->addOrderBy("$productAlias.name", 'ASC');
                 break;
             case 'za':
-                $query->addOrderBy("$alias.name", 'DESC');
+                $query->addOrderBy("$productAlias.name", 'DESC');
                 break;
             case 'cheap':
-                $query->addOrderBy("$alias.price", 'ASC');
+                $query->addOrderBy("$sizeAlias.price", 'ASC');
                 break;
             case 'expensive':
-                $query->addOrderBy("$alias.price", 'DESC');
+                $query->addOrderBy("$sizeAlias.price", 'DESC');
                 break;
             case 'novelty':
                 //$query->orderBy('prodSkuVnd.priority', 'ASC');
@@ -223,7 +223,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 break;
         }
 
-        $query->addOrderBy("$alias.id", 'DESC');
+        $query->addOrderBy("$modelAlias.id", 'DESC');
 
         return $query;
     }
@@ -303,12 +303,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             //->innerJoin('catb.characteristicValues', 'catbChVal')->addselect('catbChVal')
             ->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
             ->innerJoin('prodMod.productColors', 'prodCol')->addselect('prodCol')
-            ->innerJoin('prodMod.skuProducts', 'prodSku')->addselect('prodSku')
-            ->innerJoin('prodSku.vendors', 'prodSkuVnd')->addselect('prodSkuVnd')
-            ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
+            ->leftJoin('prodMod.images', 'prodMImg')->addselect('prodMImg')
             ->where('prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
-            ->setParameter('alias', $modelAlias)
-            ->orderBy('prodSkuVnd.priority', 'ASC');
+            ->setParameter('alias', $modelAlias);
         return $query_obj->getQuery()->getSingleResult();
     }
 
@@ -329,8 +326,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('prod.productModels', 'prodMod')->addselect('prodMod')
             ->innerJoin('prod.characteristicValues', 'prodChVal')->addselect('prodChVal')
             ->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
-            ->innerJoin('prodMod.skuProducts', 'prodSku')->addselect('prodSku')
-            ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
+            ->leftJoin('prodMod.images', 'prodImg')->addselect('prodImg')
             ->where('prodChName.inFilter = 1 AND prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.id = :id')
             ->setParameter('id', $productModelId)
             ->orderBy('prodChVal.characteristics', 'ASC');
@@ -357,12 +353,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             //->innerJoin('catb.characteristicValues', 'catbChVal')->addselect('catbChVal')
             //->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
             ->innerJoin('prodMod.productColors', 'prodCol')->addselect('prodCol')
-            ->innerJoin('prodMod.skuProducts', 'prodSku')->addselect('prodSku')
-            ->innerJoin('prodSku.vendors', 'prodSkuVnd')->addselect('prodSkuVnd')
-            ->leftJoin('prodMod.productModelImages', 'prodMImg')->addselect('prodMImg')
+            ->leftJoin('prodMod.images', 'prodImg')->addselect('prodImg')
             ->where('prod.active = 1 AND prod.published = 1 AND prodMod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
-            ->setParameter('alias', $productModelAlias)
-            ->orderBy('prodSkuVnd.priority', 'ASC');
+            ->setParameter('alias', $productModelAlias);
         return $query_obj->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 
@@ -422,10 +415,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('characteristicValues.categories', 'categories')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
-            // todo fix this hell, doctrine lazy load is slower then over 100 queries
-//            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
 
@@ -434,6 +426,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->addCharacteristicsCondition($builder, $characteristicValues);
 
         $builder = $this->addFiltersToQuery($builder, $filters);
+
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->addPriceToQuery($builder, $filters);
 
         $builder = $this->addSort($builder, Arr::get($filters, 'sort'));
 
@@ -492,14 +487,6 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function addFiltersToQuery($builder, $filters, $alias = 'productModels')
     {
-        if(!empty($filters['price_from'])) {
-            $builder->andWhere($builder->expr()->gte("$alias.price", $filters['price_from']));
-        }
-
-        if(!empty($filters['price_to'])) {
-            $builder->andWhere($builder->expr()->lte("$alias.price", $filters['price_to']));
-        }
-
         if ($colors = Arr::get($filters, 'colors')) {
             $colors = explode(',', $colors);
             $builder->andWhere($builder->expr()->in("$alias.productColors", $colors));

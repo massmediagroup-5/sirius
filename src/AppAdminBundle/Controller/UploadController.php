@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Controller;
 
+use AppBundle\Entity\ProductModelImage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,25 +18,34 @@ class UploadController extends Controller
     /**
      * uploadFileAction
      *
+     * @param Request $request
      * @return Response
      */
-    public function uploadFileAction()
+    public function uploadFileAction(Request $request)
     {
 
         $filename = $_FILES['file'];
         $uploadPath = $this->get('uploader')->upload($this->container->getParameter('upload_img_directory'), $filename);
-        $modelId = (int)$this->getRequest()->request->get('model');
-
+        $modelId = (int)$request->request->get('model');
         $em = $this->getDoctrine()->getManager();
-        $productModels = $em
-            ->getRepository('AppBundle:ProductModels')
-            ->findOneById($modelId);
-        $productModelImage = new \AppBundle\Entity\ProductModelImages;
-        $productModelImage
+        $model = $em->getRepository('AppBundle:ProductModels')->findOneById($modelId);
+        $lastImage = $model->getImages()->last();
+
+        if($lastImage) {
+            $priority = $lastImage->getPriority() + 1;
+        } else {
+            $priority = 1;
+        }
+
+        $producImage = new ProductModelImage();
+        $producImage
             ->setLink($uploadPath)
-            ->setProductModels($productModels);
-//        $em->persist($productModelImage);
-//        $em->flush();
+            ->setPriority($priority)
+            ->setModel($model);
+        
+        $em->persist($producImage);
+        
+        $em->flush();
 
         return null === $uploadPath
             ? new Response(json_encode(array(
@@ -47,7 +57,8 @@ class UploadController extends Controller
             : new Response(json_encode(array(
                         'status' => 1,
                         'message' => $filename, # имя файла
-                        'filePath' => $uploadPath # полный путь к нему
+                        'filePath' => $uploadPath, # полный путь к нему
+                        'priority' => $priority
                     )
                 )
             );
@@ -62,8 +73,8 @@ class UploadController extends Controller
      */
     public function sortProductModelsImagesAction(Request $request)
     {
-        $productModelImagesIds = $this->getRequest()->request->get('imageIds');
-        $ids = json_decode($productModelImagesIds);
+        $producImagesIds = $this->getRequest()->request->get('imageIds');
+        $ids = json_decode($producImagesIds);
         $images = $this->get('sort')
             ->rebuildPriorityProductModelImages($ids);
 

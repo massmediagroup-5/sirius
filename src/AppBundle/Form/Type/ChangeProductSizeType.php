@@ -18,13 +18,13 @@ class ChangeProductSizeType extends AbstractType
     {
         $builder
             ->add('size', 'entity', [
-                'class' => 'AppBundle:ProductModelSizes',
-                'choices' => $options['model']->getSizes(),
+                'class' => 'AppBundle:ProductModelSpecificSize',
+                'choices' => $options['size']->getModel()->getSizes(),
                 'required' => true,
-                'data' => isset($options['selectedSize']) ? $options['selectedSize'] : null,
+                'data' => $options['size'],
                 'constraints' => [new NotBlank]
             ])->add('old_size', HiddenType::class, [
-                'data' => isset($options['selectedSize']) ? $options['selectedSize']->getId() : null,
+                'data' => $options['size']->getId(),
                 'constraints' => [new NotBlank]
             ]);
 
@@ -33,12 +33,8 @@ class ChangeProductSizeType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setRequired(array(
-            'model',
-        ));
-
-        $resolver->setOptional(array(
-            'selectedSize',
-        ));
+        $resolver->setRequired([
+            'size',
+        ]);
     }
 }

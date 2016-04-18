@@ -8,12 +8,12 @@
         {% endfor %}
 
         <div class="img">
-            <a href="{{ url_to(item.baseCategory, item.productModels.0) }}" title="{{ item.productModels.0.name }}">
-            <a href="{{ url('product', {'category': item.baseCategory.alias,'product': item.productModels.0.alias}) }}" title="{{ item.productModels.0.name }}">
-                {% if item.productModels.0.productModelImages.0 is defined and item.productModels.0.productModelImages.0.link is not null %}
-                    <img src="{{ item.productModels.0.productModelImages.0.link | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
+            <a href="{{ url_to(item.baseCategory, item.productModels.0) }}" title="{{ item.name }}">
+            <a href="{{ url('product', {'category': item.baseCategory.alias,'product': item.productModels.0.alias}) }}" title="{{ item.name }}">
+                {% if item.productModels.0.images.0 is defined and item.productModels.0.images.0.link is not null %}
+                    <img src="{{ item.productModels.0.images.0.link | imagine_filter('medium') }}" alt="{{ item.name }}"/>
                 {% else %}
-                    <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.productModels.0.name }}"/>
+                    <img src="{{ param('no_image') | imagine_filter('medium') }}" alt="{{ item.name }}"/>
                 {% endif %}
             </a>
         </div>
@@ -23,14 +23,12 @@
                     <p>{{ item.productModels.count }} {{ 'labels.colors'|transchoice(item.productModels.count) }}</p>
                 </div>
 
-                <div class="name"><p>{{ item.productModels.0.name }}</p></div>
+                <div class="name"><p>{{ item.name }}</p></div>
                 <div class="type">
                     <p>{{ item.baseCategory.name }}</p>
                 </div>
                 <div class="price price_new">
-                    <p>
-                        {{ widget('products.prices', item.productModels.0)|raw }}
-                    </p>
+                    {{ include('AppBundle:shop/partials/prices.html.twig') }}
                 </div>
             </div>
         </div>
@@ -42,15 +40,15 @@
                 <div class="color-slider__i">
                     {% for model  in item.productModels %}
                         {% set selectedClass = selectedModel is defined and selectedModel.id == model.id ? 'js_selected' : '' %}
-                        {% if model.productModelImages.0 is defined and model.productModelImages.0.link is not null%}
+                        {% if model.images.0 is defined and model.images.0.link is not null%}
                             <a href="#" class="js_change_model {{ selectedClass }}"
                                data-model-id="{{ model.id }}"
-                               data-big-img="{{ model.productModelImages.0.link|imagine_filter('medium') }}">
-                                <img src="{{ model.productModelImages.0.link|imagine_filter('mini') }}" alt="{{ item.productModels.0.name }}"/>
+                               data-big-img="{{ model.images.0.link|imagine_filter('medium') }}">
+                                <img src="{{ model.images.0.link|imagine_filter('mini') }}" alt="{{ item.name }}"/>
                             </a>
                         {% else %}
                             <a href="#" class="js_change_model {{ selectedClass }}" data-model-id="{{ model.id }}" data-big-img="{{ param('no_image')|imagine_filter('medium') }}">
-                                <img src="{{ param('no_image')|imagine_filter('mini') }}" alt="{{ item.productModels.0.name }}"/>
+                                <img src="{{ param('no_image')|imagine_filter('mini') }}" alt="{{ item.name }}"/>
                             </a>
                         {% endif %}
                     {% endfor %}
@@ -60,14 +58,12 @@
                 <div class="item-info__i">
 
 
-                    <div class="name"><p>{{ item.productModels.0.name }}</p></div>
+                    <div class="name"><p>{{ item.name }}</p></div>
                     <div class="type">
                         <p>{{ item.baseCategory.name }}</p>
                     </div>
                     <div class="price price_new">
-                        <p>
-                            {{ widget('products.prices', item.productModels.0)|raw }}
-                        </p>
+                        {{ include('AppBundle:shop/partials/prices.html.twig') }}
                     </div>
                 </div>
             </div>

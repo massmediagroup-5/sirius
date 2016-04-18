@@ -83,56 +83,17 @@ class CharacteristicsRepository extends BaseRepository
     }
 
     /**
-     * joinFilters
-     *
-     * Add JOIN with characteristicValues
-     *
-     * @param mixed $skuProduct
-     * @param mixed $vendor
-     *
+     * @param $model
      * @return mixed
      */
-    public function joinSku(
-        $skuProduct,
-        $vendor = null
-    )
-    {
-        $this->query_obj
-            ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->andWhere("skuProducts.sku = :skuProduct")->setParameter('skuProduct', $skuProduct);
-        if (!is_null($vendor))
-            $this->query_obj
-                ->innerJoin('skuProducts.vendors', 'vendors')->addselect('vendors')
-                ->andWhere("vendors.name = :vendor")
-                ->setParameter('vendor', $vendor);
-        return $this;
-    }
-
-    /**
-     * getAllCharacteristicsByProduct
-     *
-     * @param array $skuProduct
-     *
-     * $product - is array with columns structure for `categories` table.
-     * Example:
-     * $product = array(
-     *    'id'    => 1,
-     *    ...
-     *    'alias' => 'some-alias'
-     * );
-     *
-     * @return mixed
-     */
-    public function getAllCharacteristicsByProductSku($skuProduct)
+    public function getAllCharacteristicsByProductModel($model)
     {
         $query_obj = $this->createQueryBuilder('characteristics')
             ->select('characteristics')
             ->innerJoin('characteristics.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
             ->innerJoin('characteristicValues.products', 'products')->addselect('products')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->where("skuProducts.sku = :skuProduct")->setParameter('skuProduct', $skuProduct);
+            ->where("productModels.id = :id")->setParameter('id', $model);
         return $query_obj->getQuery()->getResult();
     }
 

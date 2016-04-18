@@ -12,9 +12,6 @@ AppBundle\Entity\ProductModels:
         fk_product_models_product_colors1_idx:
             columns:
                 - product_colors_id
-        name:
-            columns:
-                - name
         price:
             columns:
                 - price
@@ -44,24 +41,9 @@ AppBundle\Entity\ProductModels:
             generator:
                 strategy: IDENTITY
     fields:
-        name:
-            type: string
-            nullable: false
-            length: 255
-            options:
-                fixed: false
-        description:
-            type: text
-            nullable: true
-            length: 16777215
-            options:
-                fixed: false
         alias:
             type: string
             nullable: false
-            length: 255
-            options:
-                fixed: false
         price:
             type: decimal
             nullable: true
@@ -79,36 +61,6 @@ AppBundle\Entity\ProductModels:
             type: boolean
             options:
                 default: false
-        seoTitle:
-            type: string
-            nullable: true
-            length: 255
-            options:
-                fixed: false
-            column: seo_title
-        seoDescription:
-            type: string
-            nullable: true
-            length: 255
-            options:
-                fixed: false
-            column: seo_description
-        seoKeywords:
-            type: string
-            nullable: true
-            length: 255
-            options:
-                fixed: false
-            column: seo_keywords
-        content:
-            type: text
-            nullable: true
-        characteristics:
-            type: text
-            nullable: true
-        features:
-            type: text
-            nullable: true
         priority:
             type: integer
             nullable: true
@@ -141,21 +93,21 @@ AppBundle\Entity\ProductModels:
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
     oneToMany:
-        productModelImages:
-            targetEntity: ProductModelImages
-            cascade: ["persist"]
-            fetch: EAGER
-            mappedBy: productModels
+        sizes:
+            targetEntity: ProductModelSpecificSize
+            cascade: ["all"]
+            fetch: LAZY
+            mappedBy: model
             inversedBy: null
             orphanRemoval: true
-            orderBy: {  }
-        skuProducts:
-            targetEntity: SkuProducts
-            cascade: ["all"]
-            fetch: EAGER
-            mappedBy: productModels
-            inversedBy: productModels
+        images:
+            targetEntity: ProductModelImage
+            cascade: ["persist"]
+            fetch: LAZY
+            mappedBy: model
+            inversedBy: null
             orphanRemoval: true
+            orderBy: {priority: ASC}
     manyToOne:
         productColors:
             targetEntity: ProductColors
@@ -187,26 +139,6 @@ AppBundle\Entity\ProductModels:
                 products_id:
                     referencedColumnName: id
             orphanRemoval: false
-    manyToMany:
-        sizes:
-            targetEntity: ProductModelSizes
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: productModels
-            joinTable:
-                name: product_models_has_sizes
-                joinColumns:
-                    -
-                        name: product_model_id
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    -
-                        name: size_id
-                        referencedColumnName: id
-            orderBy:
-                size: ASC
-
     lifecycleCallbacks:
         prePersist: [ checkPrice, checkColor ]
         preUpdate:  [ checkPrice, checkColor ]

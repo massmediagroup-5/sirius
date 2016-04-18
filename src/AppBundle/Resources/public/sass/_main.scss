@@ -5322,7 +5322,7 @@ input[type="checkbox"] {
 	.remove-info-btn {
 		@include sized-sprite($icons, remove);
 		display: block;
-
+		border: none;
 	}
 
 	.opt-list {
