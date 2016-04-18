@@ -16,9 +16,9 @@ class ProductColorsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
-            ->add('name')
-            ->add('hex')
+//            ->add('id')
+            ->add('name', null, array('label' => 'Название цвета'))
+            ->add('hex', null, array('label' => 'HEX код цвета'))
             ->add('createTime')
             ->add('updateTime')
         ;
@@ -30,14 +30,14 @@ class ProductColorsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->add('name')
-            ->add('hex')
+//            ->add('id')
+            ->add('name', null, array('label' => 'Название цвета'))
+            ->add('hex', null, array('label' => 'HEX код цвета'))
             ->add('createTime')
             ->add('updateTime')
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
+//                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )
@@ -51,22 +51,22 @@ class ProductColorsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('hex')
+            ->add('name', null, array('label' => 'Название цвета'))
+            ->add('hex', null, array('label' => 'HEX код цвета'))
         ;
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
-    protected function configureShowFields(ShowMapper $showMapper)
-    {
-        $showMapper
-            ->add('id')
-            ->add('name')
-            ->add('hex')
-            ->add('createTime')
-            ->add('updateTime')
-        ;
-    }
+//    /**
+//     * @param ShowMapper $showMapper
+//     */
+//    protected function configureShowFields(ShowMapper $showMapper)
+//    {
+//        $showMapper
+//            ->add('id')
+//            ->add('name')
+//            ->add('hex')
+//            ->add('createTime')
+//            ->add('updateTime')
+//        ;
+//    }
 }

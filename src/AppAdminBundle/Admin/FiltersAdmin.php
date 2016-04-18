@@ -16,10 +16,10 @@ class FiltersAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
-            ->add('name')
-            ->add('createTime')
-            ->add('updateTime')
+//            ->add('id')
+            ->add('name', null, array('label' => 'Название фильтра'))
+            ->add('createTime', null, array('label' => 'Время создания'))
+            ->add('updateTime', null, array('label' => 'Время последнего обновления'))
         ;
     }
 
@@ -29,10 +29,10 @@ class FiltersAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->add('name')
-            ->add('createTime')
-            ->add('updateTime')
+//            ->add('id')
+            ->add('name', null, array('label' => 'Название фильтра'))
+            ->add('createTime', null, array('label' => 'Время создания'))
+            ->add('updateTime', null, array('label' => 'Время последнего обновления'))
             ->add('_action', 'actions', array(
                 'actions' => array(
 //                    'show' => array(),
@@ -49,7 +49,7 @@ class FiltersAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
+            ->add('name', null, array('label' => 'Название фильтра'))
             ->end()
             ->with('CharacteristicValues',
                 array(
@@ -75,10 +75,10 @@ class FiltersAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('id')
-            ->add('name')
-            ->add('createTime')
-            ->add('updateTime')
+//            ->add('id')
+            ->add('name', null, array('label' => 'Название фильтра'))
+            ->add('createTime', null, array('label' => 'Время создания'))
+            ->add('updateTime', null, array('label' => 'Время последнего обновления'))
         ;
     }
 }

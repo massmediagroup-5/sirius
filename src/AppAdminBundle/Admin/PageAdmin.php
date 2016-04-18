@@ -13,12 +13,12 @@ class PageAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('title', 'text', array('label' => 'Post Title'))
-            ->add('alias', 'text', array('label' => 'Alias'))
-            ->add('description', 'text', array('label' => 'Description'))
-            ->add('seo_title', 'text', array('label' => 'SEO Title'))
-            ->add('seo_description', 'text', array('label' => 'SEO Description'))
-            ->add('seo_keywords', 'text', array('label' => 'SEO Keywords'))
+            ->add('title', 'text', array('label' => 'Заглавие'))
+            ->add('alias', 'text', array('label' => 'Ссылка'))
+            ->add('description', 'text', array('label' => 'Описание страницы'))
+            ->add('seo_title', 'text', array('label' => 'СЕО заглавие'))
+            ->add('seo_description', 'text', array('label' => 'СЕО описание'))
+            ->add('seo_keywords', 'text', array('label' => 'СЕО кейворды'))
             ->add('content', 'textarea', array('label' => 'Контент','attr' => array('class' => 'ckeditor'))) //if no type is specified, SonataAdminBundle tries to guess it
         ;
     }
@@ -27,8 +27,8 @@ class PageAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('title')
-            ->add('alias')
+            ->add('title', null, array('label' => 'Заглавие страницы'))
+            ->add('alias', null, array('label' => 'Ссылка'))
         ;
     }
 
@@ -36,9 +36,9 @@ class PageAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('title')
-            ->add('alias')
-            ->add('description')
+            ->addIdentifier('title', 'text', array('label' => 'Заглавие страницы'))
+            ->add('alias', null, array('label' => 'Ссылка'))
+            ->add('description', null, array('label' => 'Описание'))
         ;
     }
 }

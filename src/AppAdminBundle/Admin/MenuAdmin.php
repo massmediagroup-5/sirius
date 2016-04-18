@@ -16,9 +16,9 @@ class MenuAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
-            ->add('title')
-            ->add('description')
+            ->add('name', null, array('label' => 'Код меню'))
+            ->add('title', null, array('label' => 'Название меню'))
+            ->add('description', null, array('label' => 'Описание'))
         ;
     }
 
@@ -28,9 +28,9 @@ class MenuAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('name')
-            ->add('title')
-            ->add('description')
+            ->add('name', null, array('label' => 'Код меню'))
+            ->add('title', null, array('label' => 'Название меню'))
+            ->add('description', null, array('label' => 'Описание'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -46,9 +46,9 @@ class MenuAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', 'text', array('label' => 'Имя'))
-            ->add('title', 'text', array('label' => 'Тайтл'))
-            ->add('description', 'text', array('label' => 'Описание'))
+            ->add('name', null, array('label' => 'Код меню'))
+            ->add('title', null, array('label' => 'Название'))
+            ->add('description', null, array('label' => 'Описание'))
         ;
     }
 
@@ -58,8 +58,9 @@ class MenuAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name')
-            ->add('description')
+            ->add('name', null, array('label' => 'Код меню'))
+            ->add('title', null, array('label' => 'Название'))
+            ->add('description', null, array('label' => 'Описание'))
         ;
     }
 }
