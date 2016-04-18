@@ -18,7 +18,7 @@ class AddInCartType extends AbstractType
         $quantities = range(1, 10);
         $builder
             ->add('size', 'entity', [
-                'class' => 'AppBundle:ProductModelSizes',
+                'class' => 'AppBundle:ProductModelSpecificSize',
                 'choices' => $options['model']->getSizes(),
                 'required' => true,
                 'placeholder' => '',

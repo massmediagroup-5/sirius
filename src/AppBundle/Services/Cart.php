@@ -3,9 +3,10 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\CartProductSize;
+use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
-use AppBundle\Entity\ProductModelSizes;
-use AppBundle\Entity\SkuProducts;
+use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Users as UsersEntity;
 use AppBundle\Event\OrderEvent;
 use AppBundle\Exception\CartEmptyException;
@@ -65,31 +66,29 @@ class Cart
     }
 
     /**
-     * @param $skuProduct
-     * @param $size
+     * @param ProductModelSpecificSize $size
      * @param $quantity
      */
-    public function addItemToCard($skuProduct, $size, $quantity)
+    public function addItemToCard(ProductModelSpecificSize $size, $quantity)
     {
-        $sizeId = $size instanceof ProductModelSizes ? $size->getId() : $size;
-
-        if (isset($this->items[$skuProduct->getId()])) {
+        if (isset($this->items[$size->getModel()->getId()])) {
             // Each size quantity
-            $this->items[$skuProduct->getId()]->addSize($sizeId, $quantity);
+            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
         } else {
-            $this->items[$skuProduct->getId()] = new CartItem($skuProduct, $this->container->get('prices_calculator'));
-            $this->items[$skuProduct->getId()]->addSize($sizeId, $quantity);
+            $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(),
+                $this->container->get('prices_calculator'));
+            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
         }
         $this->saveInSession();
     }
 
     /**
-     * @param $skuProduct
+     * @param ProductModels $model
      * @return $this
      */
-    public function removeItem($skuProduct)
+    public function removeItem(ProductModels $model)
     {
-        unset($this->items[$skuProduct->getId()]);
+        unset($this->items[$model->getId()]);
         $this->saveInSession();
         return $this;
     }
@@ -105,55 +104,52 @@ class Cart
     }
 
     /**
-     * @param $skuProduct
      * @param $size
      * @return $this
      */
-    public function removeItemSize($skuProduct, $size)
+    public function removeItemSize(ProductModelSpecificSize $size)
     {
-        $this->items[$skuProduct->getId()]->removeSize($size);
-        if (!$this->items[$skuProduct->getId()]->getQuantity()) {
-            $this->removeItem($skuProduct);
+        if (isset($this->items[$size->getModel()->getId()])) {
+            $this->items[$size->getModel()->getId()]->removeSize($size);
+            if (!$this->items[$size->getModel()->getId()]->getQuantity()) {
+                $this->removeItem($size->getModel());
+            }
+            $this->saveInSession();
         }
-        $this->saveInSession();
         return $this;
     }
 
     /**
-     * @param $skuProduct
-     * @param $oldSize
-     * @param $newSize
+     * @param ProductModelSpecificSize $oldSize
+     * @param ProductModelSpecificSize $newSize
      * @return $this
      */
-    public function changeItemSize($skuProduct, $oldSize, $newSize)
+    public function changeItemSize(ProductModelSpecificSize $oldSize, ProductModelSpecificSize $newSize)
     {
-        $this->items[$skuProduct->getId()]->changeSize($oldSize, $newSize);
+        $this->items[$oldSize->getModel()->getId()]->changeSize($oldSize, $newSize);
         $this->saveInSession();
         return $this;
     }
 
     /**
-     * @param $skuProduct
      * @param $size
      * @param $quantity
      * @return $this
      */
-    public function changeItemSizeCount($skuProduct, $size, $quantity)
+    public function changeItemSizeCount(ProductModelSpecificSize $size, $quantity)
     {
-        $this->items[$skuProduct->getId()]->setSize($size, $quantity);
+        $this->items[$size->getModel()->getId()]->setSize($size, $quantity);
         $this->saveInSession();
         return $this;
     }
 
     /**
-     * @param $skuProduct
+     * @param ProductModels $model
      * @return bool
      */
-    public function inCart($skuProduct)
+    public function inCart(ProductModels $model)
     {
-        $skuProductId = $skuProduct instanceof SkuProducts ? $skuProduct->getId() : $skuProduct;
-
-        return isset($this->items[$skuProductId]);
+        return isset($this->items[$model->getId()]);
     }
 
     /**
@@ -170,45 +166,45 @@ class Cart
     public function getModels()
     {
         return array_map(function (CartItem $item) {
-            return $item->getSkuProduct()->getProductModels();
+            return $item->getProductModel();
         }, $this->items);
     }
 
     /**
-     * @param SkuProducts $productSku
+     * @param ProductModels $model
      * @return CartItem[]
      */
-    public function getItem(SkuProducts $productSku)
+    public function getItem(ProductModels $model)
     {
-        return isset($this->items[$productSku->getId()]) ? $this->items[$productSku->getId()] : false;
+        return Arr::get($this->items, $model->getId());
     }
 
     /**
-     * @param SkuProducts $productSku
+     * @param ProductModels $model
      * @return int
      */
-    public function getItemQuantity(SkuProducts $productSku)
+    public function getItemQuantity(ProductModels $model)
     {
-        return isset($this->items[$productSku->getId()]) ? $this->items[$productSku->getId()]->getQuantity() : 0;
+        return isset($this->items[$model->getId()]) ? $this->items[$model->getId()]->getQuantity() : 0;
     }
 
     /**
-     * @param SkuProducts $productSku
+     * @param ProductModels $model
      * @return int
      */
-    public function getItemPackagesQuantity(SkuProducts $productSku)
+    public function getItemPackagesQuantity(ProductModels $model)
     {
-        return isset($this->items[$productSku->getId()]) ? $this->items[$productSku->getId()]->getPackagesQuantity() : 0;
+        return isset($this->items[$model->getId()]) ? $this->items[$model->getId()]->getPackagesQuantity() : 0;
     }
 
     /**
-     * @param SkuProducts $productSku
+     * @param ProductModels $model
      * @return int
      */
-    public function getItemSizeQuantity(SkuProducts $productSku, $sizeId)
+    public function getItemSizeQuantity(ProductModels $model, $sizeId)
     {
-        $item = Arr::get($this->items, $productSku->getId());
-        return $item ? $item->getSize($sizeId) : 0;
+        $item = Arr::get($this->items, $model->getId());
+        return $item ? $item->getSize($sizeId)->getQuantity() : 0;
     }
 
     /**
@@ -217,7 +213,7 @@ class Cart
     public function getPreOrderItems()
     {
         return array_filter($this->items, function (CartItem $item) {
-            return $item->getSkuProduct()->getProductModels()->getPreOrderFlag();
+            return $item->getProductModel()->hasPreOrderSize();
         });
     }
 
@@ -227,7 +223,7 @@ class Cart
     public function getStandardItems()
     {
         return array_filter($this->items, function (CartItem $item) {
-            return !$item->getSkuProduct()->getProductModels()->getPreOrderFlag();
+            return !$item->getProductModel()->hasPreOrderSize();
         });
     }
 
@@ -256,7 +252,7 @@ class Cart
      */
     public function getTotalCount()
     {
-        return array_sum(array_map(function ($item) {
+        return array_sum(array_map(function (CartItem $item) {
             return $item->getQuantity();
         }, $this->items));
     }
@@ -397,12 +393,19 @@ class Cart
         $array = [];
         foreach ($this->items as $item) {
             if ($item->getQuantity() > 0) {
-                $array[$item->getSkuProduct()->getId()] = [
-                    'id' => $item->getSkuProduct()->getId(),
-                    'sizes' => $item->getSizes()
+                $array[$item->getProductModel()->getId()] = [
+                    'id' => $item->getProductModel()->getId(),
                 ];
+                $sizes = [];
+                foreach ($item->getSizes() as $size) {
+                    $sizes[$size->getSize()->getId()] = [
+                        'id' => $size->getSize()->getId(),
+                        'quantity' => $size->getQuantity()
+                    ];
+                }
+                $array[$item->getProductModel()->getId()]['sizes'] = $sizes;
             } else {
-                unset($this->items[$item->getSkuProduct()->getId()]);
+                unset($this->items[$item->getProductModel()->getId()]);
             }
         }
         return $array;
@@ -415,11 +418,18 @@ class Cart
     {
         $array = [];
         foreach ($this->items as $item) {
-            $array[$item->getSkuProduct()->getId()] = [
-                'id' => $item->getSkuProduct()->getId(),
-                'sizes' => $item->getSizes(),
+            $array[$item->getProductModel()->getId()] = [
+                'id' => $item->getProductModel()->getId(),
                 'packagesAmount' => $item->getPackagesQuantity()
             ];
+            $sizes = [];
+            foreach ($item->getSizes() as $size) {
+                $sizes[$size->getSize()->getId()] = [
+                    'id' => $size->getSize()->getId(),
+                    'quantity' => $size->getQuantity()
+                ];
+            }
+            $array[$item->getProductModel()->getId()]['sizes'] = $sizes;
         }
         return $array;
     }
@@ -453,21 +463,16 @@ class Cart
         $order->setStores($stores);
 
         foreach ($this->items as $item) {
-            $cart = new \AppBundle\Entity\Cart();
-            $cart->setOrders($order);
-            $cart->setSkuProducts($item->getSkuProduct());
-            $cart->setQuantity($item->getQuantity());
-            $cart->setDiscountedTotalPrice($item->getDiscountedPrice());
-            $cart->setTotalPrice($item->getPrice());
-            foreach ($item->getSizes() as $sizeId => $sizeCount) {
-                $cartProductSize = new CartProductSize();
-                $cartProductSize->setCart($cart);
-                $cartProductSize->setSize($this->em->getReference('AppBundle:ProductModelSizes', $sizeId));
-                $cartProductSize->setQuantity($sizeCount);
-                $cart->addSize($cartProductSize);
+            foreach ($item->getSizes() as $sizeId => $size) {
+                $orderSize = new OrderProductSize();
+                $orderSize->setOrder($order);
+                $orderSize->setQuantity($size->getQuantity());
+                $orderSize->setDiscountedTotalPrice($size->getDiscountedPrice());
+                $orderSize->setTotalPrice($size->getPrice());
+                $orderSize->setSize($size);
+                $order->addSize($orderSize);
             }
-            $order->addCart($cart);
-            $this->em->persist($cart);
+            $this->em->persist($order);
         }
         $order->setUsers($user);
         $order->setPhone(Arr::get($data, 'phone'));
@@ -512,12 +517,16 @@ class Cart
     protected function initCartFromSession()
     {
         $sessionArray = $this->session->get('cart_items', []);
-//        $skuProducts = $this->em->getRepository('AppBundle:SkuProducts')->findWithModels(array_keys($sessionArray));
-//        foreach ($skuProducts as $skuProduct) {
-//            $cartItem = new CartItem($skuProduct, $this->container->get('prices_calculator'));
-//            $cartItem->setSizes($sessionArray[$skuProduct->getId()]['sizes']);
-//            $this->items[$skuProduct->getId()] = $cartItem;
-//        }
+        $ids = [];
+        foreach ($sessionArray as $item) {
+            foreach ($item['sizes'] as $size) {
+                $ids[] = $size['id'];
+            }
+        }
+        $sizes = $this->em->getRepository('AppBundle:ProductModelSpecificSize')->findWithModels($ids);
+        foreach ($sizes as $size) {
+            $this->addItemToCard($size, $sessionArray[$size->getModel()->getId()]['sizes'][$size->getId()]['quantity']);
+        }
         $this->session->set('cart_items', $sessionArray);
     }
 

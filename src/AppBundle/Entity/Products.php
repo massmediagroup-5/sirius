@@ -51,11 +51,6 @@ class Products implements CharacteristicableInterface
     private $productModels;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $images;
-
-    /**
      * @var \AppBundle\Entity\ActionLabels
      */
     private $actionLabels;
@@ -131,7 +126,6 @@ class Products implements CharacteristicableInterface
     public function __construct()
     {
         $this->productModels = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -321,40 +315,6 @@ class Products implements CharacteristicableInterface
     public function getProductModels()
     {
         return $this->productModels;
-    }
-
-    /**
-     * Add image
-     *
-     * @param \AppBundle\Entity\ProductImages $image
-     *
-     * @return Products
-     */
-    public function addImage(\AppBundle\Entity\ProductImages $image)
-    {
-        $this->images[] = $image;
-
-        return $this;
-    }
-
-    /**
-     * Remove image
-     *
-     * @param \AppBundle\Entity\ProductImages $image
-     */
-    public function removeImage(\AppBundle\Entity\ProductImages $image)
-    {
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * Get images
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getImages()
-    {
-        return $this->images;
     }
 
     /**

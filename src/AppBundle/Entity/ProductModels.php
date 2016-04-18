@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
+
 use AppBundle\Traits\ProcessHasMany;
 
 /**
@@ -91,6 +92,11 @@ class ProductModels
     private $sizes;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $images;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -154,16 +160,6 @@ class ProductModels
     public function getPrice()
     {
         return $this->price;
-    }
-
-    /**
-     * Get price
-     *
-     * @return string
-     */
-    public function getPackagePrice()
-    {
-        return $this->price * $this->sizes->count();
     }
 
     /**
@@ -231,6 +227,16 @@ class ProductModels
     public function getPreOrderFlag()
     {
         return $this->preOrderFlag;
+    }
+
+    /**
+     * @return integer
+     */
+    public function hasPreOrderSize()
+    {
+        return (bool)$this->sizes->filter(function (ProductModelSpecificSize $size) {
+            return $size->getPreOrderFlag();
+        });
     }
 
     /**
@@ -499,6 +505,43 @@ class ProductModels
         return $this->sizes;
     }
 
+    /**
+     * Add image
+     *
+     * @param \AppBundle\Entity\ProductModelImage $image
+     *
+     * @return ProductModels
+     */
+    public function addImage(\AppBundle\Entity\ProductModelImage $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \AppBundle\Entity\ProductModelImage $image
+     */
+    public function removeImage(\AppBundle\Entity\ProductModelImage $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->products ? "{$this->products->getName()} ({$this->productColors->getName()})" : '';

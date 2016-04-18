@@ -3,9 +3,9 @@
 namespace AppBundle\Entity;
 
 /**
- * ProductImages
+ * ProductModelImage
  */
-class ProductImages
+class ProductModelImage
 {
     /**
      * @var integer
@@ -18,9 +18,9 @@ class ProductImages
     private $link;
 
     /**
-     * @var int
+     * @var integer
      */
-    private $priority;
+    private $priority = 0;
 
     /**
      * @var \DateTime
@@ -33,14 +33,15 @@ class ProductImages
     private $updateTime;
 
     /**
-     * @var \AppBundle\Entity\Products
+     * @var \AppBundle\Entity\ProductModels
      */
-    private $product;
+    private $model;
 
     /**
      * @var
      */
     private $file;
+
 
     /**
      * Get id
@@ -57,7 +58,7 @@ class ProductImages
      *
      * @param string $link
      *
-     * @return ProductImages
+     * @return ProductModelImage
      */
     public function setLink($link)
     {
@@ -77,11 +78,35 @@ class ProductImages
     }
 
     /**
+     * Set priority
+     *
+     * @param integer $priority
+     *
+     * @return ProductModelImage
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
      * Set createTime
      *
      * @param \DateTime $createTime
      *
-     * @return ProductImages
+     * @return ProductModelImage
      */
     public function setCreateTime($createTime)
     {
@@ -105,7 +130,7 @@ class ProductImages
      *
      * @param \DateTime $updateTime
      *
-     * @return ProductImages
+     * @return ProductModelImage
      */
     public function setUpdateTime($updateTime)
     {
@@ -125,51 +150,27 @@ class ProductImages
     }
 
     /**
-     * Set product
+     * Set model
      *
-     * @param \AppBundle\Entity\Products $product
+     * @param \AppBundle\Entity\ProductModels $model
      *
-     * @return ProductImages
+     * @return ProductModelImage
      */
-    public function setProduct(\AppBundle\Entity\Products $product = null)
+    public function setModel(\AppBundle\Entity\ProductModels $model = null)
     {
-        $this->product = $product;
+        $this->model = $model;
 
         return $this;
     }
 
     /**
-     * Get products
+     * Get model
      *
-     * @return \AppBundle\Entity\Products
+     * @return \AppBundle\Entity\ProductModels
      */
-    public function getProduct()
+    public function getModel()
     {
-        return $this->product;
-    }
-
-    /**
-     * Set priority
-     *
-     * @param integer $priority
-     *
-     * @return ProductImages
-     */
-    public function setPriority($priority)
-    {
-        $this->priority = $priority;
-
-        return $this;
-    }
-
-    /**
-     * Get priority
-     *
-     * @return integer
-     */
-    public function getPriority()
-    {
-        return $this->priority;
+        return $this->model;
     }
 
     /**

@@ -1,35 +1,36 @@
 {# Display package and call self to display single size items #}
 
 {% if item.packagesQuantity or currentSize is defined %}
-    <div class="item js_cart_item" data-package="{{ currentSize is defined ? '1' : '0' }}" data-id="{{ item.skuProduct.id }}">
+    <div class="item js_cart_item" data-package="{{ currentSize is defined ? '1' : '0' }}"
+         data-id="{{ currentSize is defined ? currentSize.size.id : item.productModel.id }}">
         <div class="item__i">
-            {{ widget('products.flags', item.skuProduct.productModels)|raw }}
+            {{ widget('products.flags', item.productModel)|raw }}
 
             <table>
                 <tr>
                     <td>
-                        <span>{{ item.skuProduct.sku }}</span>
+                        <span>{{ item.productModel.products.article }}</span>
                     </td>
                     <td>
                         <span class="img-wrap">
-                            <a href="#product-popup-{{ item.skuProduct.productModels.id }}" class="img popup_gallery">
-                                {% if item.skuProduct.productModels.productModelImages.0 is defined %}
-                                    <img src="{{ item.skuProduct.productModels.productModelImages.0.link | imagine_filter('on_wholesale_cart_page') }}"/>
+                            <a href="#product-popup-{{ item.productModel.id }}" class="img popup_gallery">
+                                {% if item.productModel.images.0 is defined %}
+                                    <img src="{{ item.productModel.images.0.link | imagine_filter('on_wholesale_cart_page') }}"/>
                                 {% else %}
                                     <img src="{{ param('no_image') | imagine_filter('on_wholesale_cart_page') }}"/>
                                 {% endif %}
                             </a>
-                            {{ widget('products.wishButton', item.skuProduct.productModels)|raw }}
+                            {{ widget('products.wishButton', item.productModel)|raw }}
                         </span>
                     </td>
                     <td>
-                        <strong>{{ item.skuProduct.productModels.name }}</strong>
+                        <strong>{{ item.productModel.products.name }}</strong>
                     </td>
-                    <td>{{ item.skuProduct.productModels.productColors.name }}</td>
-                    <td>{{ item.skuProduct.productModels.products.getCharacteristicValueByType('material') }}</td>
+                    <td>{{ item.productModel.productColors.name }}</td>
+                    <td>{{ item.productModel.products.getCharacteristicValueByType('material') }}</td>
                     <td>
-                        {% for size in item.skuProduct.productModels.sizes %}
-                            {% if not currentSize is defined or size.id == currentSize %}
+                        {% for size in item.productModel.sizes %}
+                            {% if not currentSize is defined or size.id == currentSize.size.id %}
                                 <p class="js_item_size" data-id="{{ size.id }}">{{ size.size }}/1</p>
                             {% endif %}
                         {% endfor %}
@@ -38,14 +39,14 @@
                         <div class="amount-control">
                             <a href="#" class="minus"></a>
                             <input type="text" class="js_amounts_changer" data-min=1
-                                   value="{{ currentSize is defined ? currentSizeAmount : item.packagesQuantity }}"/>
+                                   value="{{ currentSize is defined ? currentSize.quantity : item.packagesQuantity }}"/>
                             <a href="#" class="plus"></a>
                         </div>
                     </td>
                     <td>
-                        <span class="js_item_price" data-price="{{ prices.getDiscountedPrice(item.skuProduct.productModels) }}">
+                        <span class="js_item_price" data-price="{{ prices.getDiscountedPrice(item.productModel) }}">
                             {% if currentSize is defined %}
-                                {{ item.getSingleSizeDiscountedPrice(currentSize)|format_price }}
+                                {{ currentSize.discountedPrice|format_price }}
                             {% else %}
                                 {{ item.packagesDiscountedPrice|format_price }}
                             {% endif %}
@@ -61,7 +62,7 @@
 {% endif %}
 
 {% if not currentSize is defined %}
-    {% for sizeId, currentSizeAmount in item.singleItems %}
-        {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig', {'currentSize': sizeId, 'currentSizeAmount': currentSizeAmount}) }}
+    {% for sizeId, size in item.singleItems %}
+        {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig', {'currentSize': size}) }}
     {% endfor %}
 {% endif %}

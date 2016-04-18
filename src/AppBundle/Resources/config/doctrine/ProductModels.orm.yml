@@ -100,6 +100,14 @@ AppBundle\Entity\ProductModels:
             mappedBy: model
             inversedBy: null
             orphanRemoval: true
+        images:
+            targetEntity: ProductModelImage
+            cascade: ["persist"]
+            fetch: LAZY
+            mappedBy: model
+            inversedBy: null
+            orphanRemoval: true
+            orderBy: {priority: ASC}
     manyToOne:
         productColors:
             targetEntity: ProductColors

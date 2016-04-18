@@ -11,17 +11,17 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Class: ProductImagesAdmin
+ * Class: ProductModelImageAdmin
  *
  * @see Admin
  */
-class ProductImagesAdmin extends Admin
+class ProductModelImagesAdmin extends Admin
 {
 
     /**
      * @var string
      */
-    protected $parentAssociationMapping = 'products';
+    protected $parentAssociationMapping = 'model';
 
     /**
      * configureDatagridFilters

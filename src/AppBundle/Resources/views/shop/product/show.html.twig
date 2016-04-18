@@ -24,10 +24,10 @@
                                                 {{ widget('products.wishButton', current_model)|raw }}
 
                                                 <div class="main-img__i big-img_slider">
-                                                    {% if current_model.productModelImages is empty %}
+                                                    {% if current_model.images is empty %}
                                                         <a href="#"><img src="{{ param('no_image') | imagine_filter('medium') }}" alt="#"/></a>
                                                     {% else %}
-                                                        {% for image in current_model.productModelImages %}
+                                                        {% for image in current_model.images %}
                                                             <a href="#"><img src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}" alt="#"/></a>
                                                         {% endfor %}
                                                     {% endif %}
@@ -36,13 +36,13 @@
 
                                             <div class="main-img-slider">
                                                 <div class="main-img-slider__i">
-                                                    {% if current_model.productModelImages is empty %}
+                                                    {% if current_model.images is empty %}
                                                         <a href="#product-popup" class="popup_gallery"
                                                            data-src="{{ param('no_image') | imagine_filter('medium') }}">
                                                             <img src="{{ param('no_image') | imagine_filter('small') }}" alt="#"/>
                                                         </a>
                                                     {% else %}
-                                                        {% for image in current_model.productModelImages %}
+                                                        {% for image in current_model.images %}
                                                             <a href="#product-popup-{{ current_model.id }}" class="popup_gallery"
                                                                data-src="{{ (image.link ? : param('no_image')) | imagine_filter('medium') }}">
                                                                 <img src="{{ (image.link ? : param('no_image')) | imagine_filter('small') }}" alt="#"/>
@@ -61,7 +61,7 @@
 
                                         <h3 class="type">{{ product.baseCategory.name }}</h3>
 
-                                        <h2 class="name">{{ current_model.name }}</h2>
+                                        <h2 class="name">{{ current_model.products.name }}</h2>
 
                                         <div class="price price_new">
                                             <p>{{ widget('products.prices', current_model)|raw }}</p>
@@ -69,14 +69,14 @@
 
                                         <div class="color-select">
                                             <div class="color-select__i">
-                                                <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ skuProduct.sku }})</p>
+                                                <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ current_model.products.name }})</p>
 
                                                 <div class="list">
                                                     <ul>
                                                         {% for key, model in models %}
                                                             <li class="{% if model.id == current_model.id %} active {% endif %}">
                                                                 <a href="{{ url_to(product.baseCategory, model) }}">
-                                                                    <img src="{{ (model.productModelImages is empty ? param('no_image') : model.productModelImages.0.link) | imagine_filter('mini') }}" alt="#"/>
+                                                                    <img src="{{ (model.images is empty ? param('no_image') : model.images.0.link) | imagine_filter('mini') }}" alt="#"/>
                                                                 </a>
                                                             </li>
                                                         {% endfor %}
@@ -92,7 +92,7 @@
 
                                                     <ul>
                                                         <li>
-                                                            {{ form_widget(form.size, {'attr': {'data-placeholder': 'Выберите размер', 'class': 'select'}}) }}
+                                                            {{ form_widget(form.size, {'attr': {'data-placeholder': 'Выберите размер', 'class': 'select js_cart_size'}}) }}
                                                         </li>
                                                         <li>
                                                             {{ form_widget(form.quantity, {'attr': {'data-placeholder': 'К-во', 'class': 'select'}}) }}
@@ -106,7 +106,7 @@
                                             </div>
 
                                             <div class="product-message">
-                                                {% if skuProduct.quantity < 10 %}
+                                                {% if current_model.products.quantity < 10 %}
                                                     <p>Этот размер скоро закончится</p>
                                                 {% endif %}
                                             </div>
@@ -237,20 +237,20 @@
 
                 <div class="product-description">
                     <div class="product-description__i">
-                        <h1>{{ current_model.name }}</h1>
+                        <h1>{{ current_model.products.name }}</h1>
 
                         <div class="row">
                             <div class="col-md-4 col-lg-4">
                                 <h2>О модели</h2>
-                                {{ current_model.content|raw }}
+                                {{ current_model.products.content|raw }}
                             </div>
                             <div class="col-md-4 col-lg-4">
                                 <h2>Характеристики</h2>
-                                {{ current_model.characteristics|raw }}
+                                {{ current_model.products.characteristics|raw }}
                             </div>
                             <div class="col-md-4 col-lg-4">
                                 <h2>Особенности</h2>
-                                {{ current_model.features|raw }}
+                                {{ current_model.products.features|raw }}
                             </div>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Controller;
 
+use AppBundle\Entity\ProductModelImage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,10 +26,10 @@ class UploadController extends Controller
 
         $filename = $_FILES['file'];
         $uploadPath = $this->get('uploader')->upload($this->container->getParameter('upload_img_directory'), $filename);
-        $productId = (int)$request->request->get('model');
+        $modelId = (int)$request->request->get('model');
         $em = $this->getDoctrine()->getManager();
-        $product = $em->getRepository('AppBundle:Products')->findOneById($productId);
-        $lastImage = $product->getImages()->last();
+        $model = $em->getRepository('AppBundle:ProductModels')->findOneById($modelId);
+        $lastImage = $model->getImages()->last();
 
         if($lastImage) {
             $priority = $lastImage->getPriority() + 1;
@@ -36,11 +37,11 @@ class UploadController extends Controller
             $priority = 1;
         }
 
-        $producImage = new \AppBundle\Entity\ProductImages;
+        $producImage = new ProductModelImage();
         $producImage
             ->setLink($uploadPath)
             ->setPriority($priority)
-            ->setProduct($product);
+            ->setModel($model);
         
         $em->persist($producImage);
         
