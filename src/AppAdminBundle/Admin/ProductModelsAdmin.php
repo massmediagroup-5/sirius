@@ -97,6 +97,19 @@ class ProductModelsAdmin extends Admin
             )
             ->end()
             ->end();
+
+        if (!$this->hasParentFieldDescription()) {
+            $formMapper->tab('Изображения продукта')
+                ->with('Изображения продукта', [
+                        'class' => 'col-md-12',
+                    ]
+                )
+                ->add('images', 'sonata_type_collection',
+                    ['label' => 'Изображения'], ['edit' => 'inline']
+                )
+                ->end()
+                ->end();
+        }
     }
 
     /**
@@ -123,6 +136,9 @@ class ProductModelsAdmin extends Admin
     {
         foreach ($model->getSizes() as $size) {
             $size->setModel($model);
+        }
+        foreach ($model->getImages() as $image) {
+            $image->setModel($model);
         }
     }
 }

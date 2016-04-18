@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\SkuProducts;
+use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Form\Type\AddInCartType;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
 use AppBundle\Form\Type\ChangeProductSizeType;
@@ -22,20 +22,18 @@ class CartController extends BaseController
     /**
      * @Route("/cart/add/{id}", name="cart_add", options={"expose"=true})
      * @Method("POST")
-     * @ParamConverter("model")
-     * @param SkuProducts $skuProduct
+     * @param ProductModelSpecificSize $size
      * @param Request $request
      * @return JsonResponse|RedirectResponse
      */
-    public function addInCartAction(SkuProducts $skuProduct, Request $request)
+    public function addInCartAction(ProductModelSpecificSize $size, Request $request)
     {
-        $form = $this->createForm(AddInCartType::class, null, ['model' => $skuProduct->getProductModels()]);
+        $form = $this->createForm(AddInCartType::class, null, ['model' => $size->getModel()]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $this->get('cart')->addItemToCard(
-                $skuProduct,
-                $form->get('size')->getNormData(),
+                $size,
                 $form->get('quantity')->getNormData()
             );
 
@@ -67,8 +65,7 @@ class CartController extends BaseController
         foreach ($products as $productId => $sizes) {
             foreach ($sizes as $sizeId => $quantity) {
                 $this->get('cart')->addItemToCard(
-                    $this->getDoctrine()->getManager()->getReference('AppBundle:SkuProducts', $productId),
-                    $sizeId,
+                    $this->getDoctrine()->getManager()->getReference('AppBundle:ProductModelSpecificSize', $sizeId),
                     $quantity
                 );
             }
@@ -81,20 +78,19 @@ class CartController extends BaseController
      * @Route("/cart/change_size/{id}", name="cart_change_size", options={"expose"=true})
      * @Method("POST")
      * @ParamConverter("model")
-     * @param SkuProducts $skuProduct
+     * @param ProductModelSpecificSize $size
      * @param Request $request
      * @return JsonResponse|RedirectResponse
      */
-    public function changeSizeAction(SkuProducts $skuProduct, Request $request)
+    public function changeSizeAction(ProductModelSpecificSize $size, Request $request)
     {
-        $form = $this->createForm(ChangeProductSizeType::class, null, ['model' => $skuProduct->getProductModels()]);
+        $form = $this->createForm(ChangeProductSizeType::class, null, ['model' => $size->getModel()]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $this->get('cart')->changeItemSize(
-                $skuProduct,
-                $form->get('old_size')->getNormData(),
-                $form->get('size')->getNormData()->getId()
+                $size,
+                $form->get('size')->getNormData()
             );
 
             return new JsonResponse([
@@ -110,23 +106,22 @@ class CartController extends BaseController
      * @Route("/cart/change_size_count/{id}", name="cart_change_size_count", options={"expose"=true})
      * @Method("POST")
      * @ParamConverter("model")
-     * @param SkuProducts $skuProduct
+     * @param ProductModelSpecificSize $size
      * @param Request $request
      * @return JsonResponse|RedirectResponse
      */
-    public function changeSizeCountAction(SkuProducts $skuProduct, Request $request)
+    public function changeSizeCountAction(ProductModelSpecificSize $size, Request $request)
     {
-        $form = $this->createForm(ChangeProductSizeQuantityType::class, null, ['size' => $skuProduct->getProductModels()]);
+        $form = $this->createForm(ChangeProductSizeQuantityType::class, null, ['size' => $size->getModel()]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $this->get('cart')->changeItemSizeCount(
-                $skuProduct,
-                $form->get('size')->getNormData(),
+                $size,
                 $form->get('quantity')->getNormData()
             );
             $cartInfo = $this->getGeneralCartInfo();
-            $cartInfo['currentPrice'] = $this->get('cart')->getItem($skuProduct)->getPrice();
+            $cartInfo['currentPrice'] = $this->get('cart')->getItem($size->getModel())->getPrice();
             return new JsonResponse($cartInfo);
         }
 
@@ -137,20 +132,20 @@ class CartController extends BaseController
      * @Route("/cart/remove/{id}", name="cart_remove", options={"expose"=true})
      * @Method("POST")
      * @ParamConverter("model")
-     * @param SkuProducts $skuProduct
+     * @param ProductModelSpecificSize $size
      * @param Request $request
      * @return JsonResponse|RedirectResponse
      */
-    public function cartRemove(SkuProducts $skuProduct, Request $request)
+    public function cartRemove(ProductModelSpecificSize $size, Request $request)
     {
-        $form = $this->createForm(RemoveProductSizeType::class, null, ['size' => $skuProduct->getProductModels()]);
+        $form = $this->createForm(RemoveProductSizeType::class, null, ['size' => $size->getModel()]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             if ($form->has('size')) {
-                $this->get('cart')->removeItemSize($skuProduct, $form->get('size')->getNormData());
+                $this->get('cart')->removeItemSize($size, $form->get('size')->getNormData());
             } else {
-                $this->get('cart')->removeItem($skuProduct);
+                $this->get('cart')->removeItem($size->getModel());
             }
 
             return new JsonResponse($this->getGeneralCartInfo());
@@ -163,13 +158,34 @@ class CartController extends BaseController
      * @Route("/cart/remove_item/{id}", name="cart_remove_item", options={"expose"=true})
      * @Method("POST")
      * @ParamConverter("model")
-     * @param SkuProducts $skuProduct
+     * @param ProductModelSpecificSize $size
      * @param Request $request
      * @return JsonResponse|RedirectResponse
      */
-    public function cartRemoveItem(SkuProducts $skuProduct, Request $request)
+    public function cartRemoveItem(ProductModelSpecificSize $size, Request $request)
     {
-        $this->get('cart')->removeItem($skuProduct);
+        $this->get('cart')->removeItem($size->getModel());
+
+        if ($this->isGranted('ROLE_WHOLESALER')) {
+            return new JsonResponse($this->getGeneralCartInfoWholesale());
+        }
+
+        return new JsonResponse($this->getGeneralCartInfo());
+    }
+
+    /**
+     * @Route("/cart/remove_sizes", name="cart_remove_sizes", options={"expose"=true})
+     * @Method("POST")
+     * @ParamConverter("model")
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function cartRemoveSizes(Request $request)
+    {
+        foreach ($request->get('sizes', []) as $sizeId) {
+            $this->get('cart')->removeItemSize($this->getDoctrine()->getManager()->getReference('AppBundle:ProductModelSpecificSize',
+                $sizeId));
+        }
 
         if ($this->isGranted('ROLE_WHOLESALER')) {
             return new JsonResponse($this->getGeneralCartInfoWholesale());
@@ -241,14 +257,14 @@ class CartController extends BaseController
      * @Route("/cart/quick_order/{id}", name="cart_quick_order_single_product", options={"expose"=true})
      * @Method("POST")
      * @ParamConverter("model")
-     * @param SkuProducts $skuProducts
+     * @param ProductModelSpecificSize $size
      * @param Request $request
      */
-    public function quickOrderSingleProductAction(SkuProducts $skuProducts, Request $request)
+    public function quickOrderSingleProductAction(ProductModelSpecificSize $size, Request $request)
     {
         // todo here is only beginning, complete
         $this->get('cart')->clear();
-        $this->get('cart')->addInCart($skuProducts);
+        $this->get('cart')->addInCart($size);
         $this->get('cart')->createQuickOrder();
     }
 

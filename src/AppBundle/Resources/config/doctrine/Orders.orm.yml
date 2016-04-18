@@ -138,16 +138,12 @@ AppBundle\Entity\Orders:
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
     oneToMany:
-        cart:
-            targetEntity: Cart
+        sizes:
+            targetEntity: OrderProductSize
             cascade: [ persist ]
             fetch: LAZY
-            mappedBy: orders
+            mappedBy: order
             inversedBy: null
-            joinColumns:
-                orders_id:
-                    referencedColumnName: id
-            orphanRemoval: false
     manyToOne:
         users:
             targetEntity: Users

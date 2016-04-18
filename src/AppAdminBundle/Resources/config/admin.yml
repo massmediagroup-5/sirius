@@ -50,7 +50,7 @@ services:
         class: AppAdminBundle\Admin\ProductsAdmin
         arguments: [~, AppBundle\Entity\Products, AppAdminBundle:CRUD, @service_container]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Товары"}
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Модели"}
         calls:
             - [ addChild, [@app.admin.product_images, @app.admin.product_model_specific_size] ]
             - [ setTranslationDomain, [AppAdminBundle]]
@@ -61,7 +61,7 @@ services:
         class: AppAdminBundle\Admin\ProductModelsAdmin
         arguments: [~, AppBundle\Entity\ProductModels, AppAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Модели"}
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Товары"}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
             - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
@@ -69,10 +69,10 @@ services:
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
     app.admin.product_images:
-        class: AppAdminBundle\Admin\ProductImagesAdmin
-        arguments: [~, AppBundle\Entity\ProductImages, SonataAdminBundle:CRUD]
+        class: AppAdminBundle\Admin\ProductModelImagesAdmin
+        arguments: [~, AppBundle\Entity\ProductModelImage, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Меню", label: "Изображения продуктов"}
+            - {name: sonata.admin, manager_type: orm, group: "Меню", label: "Изображения товаров", show_in_dashboard: false}
         calls:
             - [ setTranslationDomain, [AppAdminBundle]]
             - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]

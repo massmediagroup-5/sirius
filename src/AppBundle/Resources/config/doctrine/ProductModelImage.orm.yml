@@ -1,13 +1,5 @@
-AppBundle\Entity\ProductImages:
+AppBundle\Entity\ProductModelImage:
     type: entity
-    table: product_images
-    indexes:
-        index3:
-            columns:
-                - link
-        fk_product_images_products1_idx:
-            columns:
-                - products_id
     uniqueConstraints:
         id_UNIQUE:
             columns:
@@ -46,14 +38,11 @@ AppBundle\Entity\ProductImages:
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
     manyToOne:
-        product:
-            targetEntity: Products
+        model:
+            targetEntity: ProductModels
             cascade: {  }
             fetch: LAZY
             mappedBy: null
             inversedBy: images
-            joinColumns:
-                products_id:
-                    referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

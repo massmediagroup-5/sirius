@@ -1,6 +1,7 @@
 AppBundle\Entity\ProductModelSpecificSize:
     type: entity
     table: null
+    repositoryClass: AppBundle\Entity\Repository\ProductModelSpecificSizeRepository
     id:
         id:
             type: integer
@@ -31,4 +32,12 @@ AppBundle\Entity\ProductModelSpecificSize:
             mappedBy: null
             inversedBy: sizes
             orphanRemoval: false
+    oneToMany:
+        orderedSizes:
+            targetEntity: OrderProductSize
+            cascade: { }
+            fetch: LAZY
+            mappedBy: size
+            inversedBy: null
+            orphanRemoval: true
     lifecycleCallbacks: {  }

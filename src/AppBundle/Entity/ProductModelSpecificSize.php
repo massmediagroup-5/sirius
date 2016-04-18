@@ -195,4 +195,60 @@ class ProductModelSpecificSize
     {
         return $this->size;
     }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $orderedSizes;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->orderedSizes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add orderedSize
+     *
+     * @param \AppBundle\Entity\OrderProductSize $orderedSize
+     *
+     * @return ProductModelSpecificSize
+     */
+    public function addOrderedSize(\AppBundle\Entity\OrderProductSize $orderedSize)
+    {
+        $this->orderedSizes[] = $orderedSize;
+
+        return $this;
+    }
+
+    /**
+     * Remove orderedSize
+     *
+     * @param \AppBundle\Entity\OrderProductSize $orderedSize
+     */
+    public function removeOrderedSize(\AppBundle\Entity\OrderProductSize $orderedSize)
+    {
+        $this->orderedSizes->removeElement($orderedSize);
+    }
+
+    /**
+     * Get orderedSizes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOrderedSizes()
+    {
+        return $this->orderedSizes;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->size->getSize();
+    }
 }

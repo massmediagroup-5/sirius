@@ -1,4 +1,4 @@
-<div class="item js_wholesale_item" data-id="{{ item.skuProducts.0.id }}">
+<div class="item js_wholesale_item" data-id="{{ item.id }}">
     <div class="item__i">
         {{ widget('products.flags', item)|raw }}
 
@@ -7,14 +7,14 @@
                 <td>
                     <span>
                         <a href="#" class="open-btn"></a>
-                        {{ item.skuProducts.0.sku }}
+                        {{ item.products.article }}
                     </span>
                 </td>
                 <td>
                     <span class="img-wrap">
                         <a href="#product-popup-{{ item.id }}" class="img popup_gallery">
-                            {% if item.productModelImages.0 is defined %}
-                                <img src="{{ item.productModelImages.0.link | imagine_filter('on_wholesale_cart_page') }}" />
+                            {% if item.images.0 is defined %}
+                                <img src="{{ item.images.0.link | imagine_filter('on_wholesale_cart_page') }}" />
                             {% else %}
                                 <img src="{{ param('no_image') | imagine_filter('on_wholesale_cart_page') }}"/>
                             {% endif %}
@@ -23,7 +23,7 @@
                     </span>
                 </td>
                 <td>
-                    <strong>{{ item.name }}</strong>
+                    <strong>{{ item.products.name }}</strong>
                 </td>
                 <td>{{ item.productColors.name }}</td>
                 <td>{{ item.products.getCharacteristicValueByType('material') }}</td>
@@ -58,10 +58,10 @@
                     <div class="items-in-cart">
                         Добавлено
                         <span class="items-in-cart-count">
-                            <span class="js_cart_item_packages_count" data-id="{{ item.skuProducts.0.id }}">
-                                {{ cart.itemPackagesQuantity(item.skuProducts.0) }}
+                            <span class="js_cart_item_packages_count" data-id="{{ item.products.article }}">
+                                {{ cart.itemPackagesQuantity(item) }}
                             </span>
-                            {{ 'labels.cart_products_packages'|transchoice(cart.itemPackagesQuantity(item.skuProducts.0)) }}
+                            {{ 'labels.cart_products_packages'|transchoice(cart.itemPackagesQuantity(item)) }}
                         </span>
                     </div>
                 </td>
@@ -89,15 +89,17 @@
                             <div class="text">
                                 <h2>О модели</h2>
 
-                                {{ item.content|raw }}
+                                {{ item.products.content|raw }}
 
-                                <h2>Характеристики</h2>
+                                {% if item.products.characteristics %}
+                                    <h2>Характеристики</h2>
 
-                                {{ item.characteristics|raw }}
+                                    {{ item.products.characteristics|raw }}
+                                {% endif %}
 
                                 <h2>Особенности</h2>
 
-                                {{ item.features|raw }}
+                                {{ item.products.features|raw }}
                             </div>
                         </div>
                     </div>
@@ -124,11 +126,11 @@
                                                 Добавлено
                                                 <span class="items-in-cart-count">
                                                     <span class="js_cart_item_size_count"
-                                                          data-id="{{ item.skuProducts.0.id }}"
+                                                          data-id="{{ item.id }}"
                                                           data-size_id="{{ size.id }}">
-                                                        {{ cart.getItemSizeQuantity(item.skuProducts.0, size.id) }}
+                                                        {{ cart.getItemSizeQuantity(item, size.id) }}
                                                     </span>
-                                                    {{ 'labels.cart_products'|transchoice(cart.getItemSizeQuantity(item.skuProducts.0, size.id)) }}
+                                                    {{ 'labels.cart_products'|transchoice(cart.getItemSizeQuantity(item, size.id)) }}
                                                 </span>
                                             </div>
                                         </td>

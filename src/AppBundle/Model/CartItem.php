@@ -2,9 +2,9 @@
 
 namespace AppBundle\Model;
 
-use AppBundle\Entity\SkuProducts;
+use AppBundle\Entity\ProductModelSpecificSize;
+use AppBundle\Entity\ProductModels;
 use AppBundle\Services\PricesCalculator;
-use Illuminate\Support\Arr;
 
 class CartItem
 {
@@ -12,40 +12,42 @@ class CartItem
     /**
      * Array contain size id as key and count as value
      *
-     * @var array
+     * @var CartSize[]
      */
-    protected $sizesCounts = [];
+    protected $sizes = [];
 
     /**
-     * @var SkuProducts
+     * @var ProductModels
      */
-    protected $skuProduct;
+    protected $productModel;
 
     /**
      * @var PricesCalculator
      */
     protected $pricesCalculator;
 
-    public function __construct(SkuProducts $skuProducts, PricesCalculator $pricesCalculator)
+    public function __construct(ProductModels $productModels, PricesCalculator $pricesCalculator)
     {
-        $this->skuProduct = $skuProducts;
+        $this->productModel = $productModels;
         $this->pricesCalculator = $pricesCalculator;
     }
 
     /**
-     * @param $sizeId
+     * @param ProductModelSpecificSize $size
      * @param $quantity
      * @return $this
      */
-    public function addSize($sizeId, $quantity = 1)
+    public function addSize(ProductModelSpecificSize $size, $quantity = 1)
     {
-        if (empty($this->sizesCounts[$sizeId])) {
-            $this->sizesCounts[$sizeId] = $quantity;
+        if (empty($this->sizes[$size->getId()])) {
+            $cartSize = new CartSize($size, $this->pricesCalculator);
+            $cartSize->setQuantity($quantity);
+            $this->sizes[$size->getId()] = $cartSize;
         } else {
-            $this->sizesCounts[$sizeId] += $quantity;
+            $this->sizes[$size->getId()]->incrementQuantity($quantity);
         }
-        if($this->sizesCounts[$sizeId] <= 0) {
-            $this->removeSize($sizeId);
+        if ($this->sizes[$size->getId()]->getQuantity() <= 0) {
+            $this->removeSize($size);
         }
 
         return $this;
@@ -58,7 +60,8 @@ class CartItem
      */
     public function setSize($size, $quantity)
     {
-        $this->sizesCounts[$size] = $quantity;
+        $this->sizes[$size]->setQuantity($quantity);
+
         return $this;
     }
 
@@ -68,51 +71,60 @@ class CartItem
      */
     public function setSizes(array $sizes)
     {
-        return $this->sizesCounts = $sizes;
+        return $this->sizes = $sizes;
     }
 
     /**
      * @param $size
-     * @return int
+     * @return ProductModelSpecificSize|null
      */
     public function getSize($size)
     {
-        return isset($this->sizesCounts[$size]) ? $this->sizesCounts[$size] : 0;
+        return isset($this->sizes[$size]) ? $this->sizes[$size] : null;
     }
 
     /**
-     * @param $size
+     * @param ProductModelSpecificSize $size
      * @return int
      */
-    public function removeSize($size)
+    public function getSizeQuantity(ProductModelSpecificSize $size)
     {
-        unset($this->sizesCounts[$size]);
+        return isset($this->sizes[$size->getId()]) ? $this->sizes[$size->getId()]->getQuantity() : null;
+    }
+
+    /**
+     * @param ProductModelSpecificSize $size
+     * @return int
+     */
+    public function removeSize(ProductModelSpecificSize $size)
+    {
+        unset($this->sizes[$size->getId()]);
         return $this;
     }
 
     /**
-     * @return array
+     * @return CartSize[]
      */
     public function getSizes()
     {
-        return $this->sizesCounts;
+        return $this->sizes;
     }
 
     /**
-     * @param $oldSize
-     * @param $newSize
+     * @param ProductModelSpecificSize $oldSize
+     * @param ProductModelSpecificSize $newSize
      * @return $this
      */
-    public function changeSize($oldSize, $newSize)
+    public function changeSize(ProductModelSpecificSize $oldSize, ProductModelSpecificSize $newSize)
     {
-        if (isset($this->sizesCounts[$oldSize])) {
-            if (isset($this->sizesCounts[$newSize])) {
-                $this->sizesCounts[$newSize] += $this->sizesCounts[$oldSize];
+        if (isset($this->sizes[$oldSize->getId()])) {
+            if (isset($this->sizes[$newSize->getId()])) {
+                $this->sizes[$newSize->getId()] += $this->sizes[$oldSize->getId()];
             } else {
-                $this->sizesCounts[$newSize] = $this->sizesCounts[$oldSize];
+                $this->sizes[$newSize->getId()] = $this->sizes[$oldSize->getId()];
             }
 
-            unset($this->sizesCounts[$oldSize]);
+            unset($this->sizes[$oldSize->getId()]);
         }
         return $this;
     }
@@ -122,7 +134,7 @@ class CartItem
      */
     public function getQuantity()
     {
-        return array_sum($this->sizesCounts);
+        return $this->sumSizesQuantity($this->sizes);
     }
 
     /**
@@ -130,7 +142,7 @@ class CartItem
      */
     public function getPrice()
     {
-        return $this->getOneItemPrice() * array_sum($this->sizesCounts);
+        return $this->sumSizesPrice($this->sizes);
     }
 
     /**
@@ -138,15 +150,15 @@ class CartItem
      */
     public function getDiscountedPrice()
     {
-        return $this->getOneItemDiscountedPrice() * array_sum($this->sizesCounts);
+        return $this->sumSizesDiscountedPrice($this->sizes);
     }
 
     /**
-     * @return SkuProducts
+     * @return ProductModels
      */
-    public function getSkuProduct()
+    public function getProductModel()
     {
-        return $this->skuProduct;
+        return $this->productModel;
     }
 
     /**
@@ -154,20 +166,41 @@ class CartItem
      */
     public function getPackagesQuantity()
     {
-        $availableSizesIds = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
+        $availableSizesIds = $this->productModel->getSizes()->map(function ($size) {
             return $size->getId();
         })->toArray();
-        $currentSizesIds = array_keys($this->sizesCounts);
+        $currentSizesIds = array_keys($this->sizes);
 
         // If array equals in cart all available model sizes.
         if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
             // Packages count - is minimal amount of concrete size.
             // When we have only one size "52-54" - we can`n have more then one package.
-            $packagesCount = min($this->sizesCounts);
+            $packagesCount = min(array_map(function ($size) {
+                return $size->getQuantity();
+            }, $this->sizes));
             return $packagesCount;
         }
-
         return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPackagePrice()
+    {
+        return array_sum(array_map(function (ProductModelSpecificSize $size) {
+            return $this->pricesCalculator->getPrice($size);
+        }, $this->productModel->getSizes()->toArray()));
+    }
+
+    /**
+     * @return int
+     */
+    public function getPackageDiscountedPrice()
+    {
+        return array_sum(array_map(function (ProductModelSpecificSize $size) {
+            return $this->pricesCalculator->getDiscountedPrice($size);
+        }, $this->productModel->getSizes()->toArray()));
     }
 
     /**
@@ -175,11 +208,7 @@ class CartItem
      */
     public function getPackagesDiscountedPrice()
     {
-        $sizesInPackageCount = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
-            return $size->getId();
-        })->count();
-
-        return $this->getPackagesQuantity() * $sizesInPackageCount * $this->getOneItemDiscountedPrice();
+        return $this->getPackagesQuantity() * $this->getPackageDiscountedPrice();
     }
 
     /**
@@ -187,7 +216,7 @@ class CartItem
      */
     public function getSingleItemsQuantity()
     {
-        return array_sum($this->getSingleItems());
+        return $this->sumSizesQuantity($this->getSingleItems());
     }
 
     /**
@@ -195,74 +224,97 @@ class CartItem
      */
     public function getSingleItems()
     {
-        $availableSizesIds = $this->skuProduct->getProductModels()->getSizes()->map(function ($size) {
+        $availableSizesIds = $this->productModel->getSizes()->map(function ($size) {
             return $size->getId();
         })->toArray();
-        $currentSizesIds = array_keys($this->sizesCounts);
+        $currentSizesIds = array_keys($this->sizes);
 
         $singleSizes = [];
         // If array equals in cart all available model sizes.
         if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
             // Packages count - is minimal amount of concrete size.
             // When we have only one size "52-54" - we can`n have more then one package.
-            $packagesCount = min($this->sizesCounts);
+            $packagesCount = min(array_map(function ($size) {
+                return $size->getQuantity();
+            }, $this->sizes));
             // All product sizes after $packagesCount - is single items
-            foreach ($this->sizesCounts as $sizeId => $count) {
-                $singleSizeCount = $count - $packagesCount;
-                if($singleSizeCount) {
-                    $singleSizes[$sizeId] = $singleSizeCount;
+            foreach ($this->sizes as $sizeId => $size) {
+                $singleSizeCount = $size->getQuantity() - $packagesCount;
+                if ($singleSizeCount) {
+                    // Create new size object for new quantity
+                    $newSize = new CartSize($size->getSize(), $this->pricesCalculator);
+                    $newSize->setQuantity($singleSizeCount);
+                    $singleSizes[$sizeId] = $newSize;
                 }
             }
         } else {
-            return $this->sizesCounts;
+            return $this->sizes;
         }
 
         return $singleSizes;
     }
 
     /**
-     * @param $sizeId
+     * @param ProductModelSpecificSize $size
      * @return int
      */
-    public function getSingleSizeQuantity($sizeId)
+    public function getSingleSizeQuantity(ProductModelSpecificSize $size)
     {
         $singleItems = $this->getSingleItems();
 
-        return Arr::get($singleItems, $sizeId, 0);
+        return isset($singleItems[$size->getId()]) ? $singleItems[$size->getId()]->getQuantity() : 0;
     }
 
     /**
-     * @param $sizeId
+     * @param ProductModelSpecificSize $size
      * @return int
      */
-    public function getSingleSizePrice($sizeId)
+    public function getSingleSizePrice(ProductModelSpecificSize $size)
     {
-        return $this->getSingleSizeQuantity($sizeId) * $this->getOneItemPrice();
+        $singleItems = $this->getSingleItems();
+
+        return isset($singleItems[$size->getId()]) ? $singleItems[$size->getId()]->getPrice() : 0;
     }
 
     /**
-     * @param $sizeId
+     * @param ProductModelSpecificSize $size
      * @return int
      */
-    public function getSingleSizeDiscountedPrice($sizeId)
+    public function getSingleSizeDiscountedPrice(ProductModelSpecificSize $size)
     {
-        return $this->getSingleSizeQuantity($sizeId) * $this->getOneItemDiscountedPrice();
+        $singleItems = $this->getSingleItems();
+
+        return isset($singleItems[$size->getId()]) ? $singleItems[$size->getId()]->getDiscountedPrice() : 0;
     }
 
     /**
-     * @return float
+     * @param $sizes
+     * @return number
      */
-    public function getOneItemPrice()
-    {
-        return $this->pricesCalculator->getPrice($this->skuProduct->getProductModels());
+    protected function sumSizesQuantity($sizes) {
+        return array_sum(array_map(function (CartSize $size) {
+            return $size->getQuantity();
+        }, $sizes));
     }
 
     /**
-     * @return float
+     * @param $sizes
+     * @return number
      */
-    public function getOneItemDiscountedPrice()
-    {
-        return $this->pricesCalculator->getDiscountedPrice($this->skuProduct->getProductModels());
+    protected function sumSizesPrice($sizes) {
+        return array_sum(array_map(function (CartSize $size) {
+            return $size->getPrice();
+        }, $sizes));
+    }
+
+    /**
+     * @param $sizes
+     * @return number
+     */
+    protected function sumSizesDiscountedPrice($sizes) {
+        return array_sum(array_map(function (CartSize $size) {
+            return $size->getDiscountedPrice();
+        }, $sizes));
     }
 
 }

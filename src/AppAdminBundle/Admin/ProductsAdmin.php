@@ -118,19 +118,6 @@ class ProductsAdmin extends Admin
             )
             ->end()
             ->end();
-
-        if (!$this->hasParentFieldDescription()) {
-            $formMapper->tab('Изображения продукта')
-                ->with('ProductImages', [
-                        'class' => 'col-md-12',
-                    ]
-                )
-                ->add('images', 'sonata_type_collection',
-                    ['label' => 'Изображения'], ['edit' => 'inline']
-                )
-                ->end()
-                ->end();
-        }
     }
 
     /**
@@ -158,17 +145,6 @@ class ProductsAdmin extends Admin
     {
         $this->preUpdate($product);
         $this->container->get('entities')->setActionLabels($product);
-    }
-
-    /**
-     * @param mixed $product
-     * @return void
-     */
-    public function preUpdate($product)
-    {
-        foreach ($product->getImages() as $image) {
-            $image->setProduct($product);
-        }
     }
 
     /**

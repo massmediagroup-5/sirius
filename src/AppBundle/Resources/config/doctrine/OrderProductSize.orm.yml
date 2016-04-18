@@ -1,26 +1,12 @@
-AppBundle\Entity\Cart:
+AppBundle\Entity\OrderProductSize:
     type: entity
-    table: cart
-    indexes:
-        fk_call_back_users1_idx:
-            columns:
-                - users_id
-        fk_cart_orders1_idx:
-            columns:
-                - orders_id
-    uniqueConstraints:
-        id_UNIQUE:
-            columns:
-                - id
+    table: null
     id:
         id:
             type: integer
-            nullable: false
-            options:
-                unsigned: false
             id: true
             generator:
-                strategy: IDENTITY
+                strategy: AUTO
     fields:
         status:
             type: integer
@@ -44,8 +30,6 @@ AppBundle\Entity\Cart:
             options:
                 default: 0.00
             column: total_price
-        quantity:
-            type: integer
         createTime:
             type: datetime
             nullable: false
@@ -56,33 +40,21 @@ AppBundle\Entity\Cart:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
+        quantity:
+            type: integer
     manyToOne:
-        users:
-            targetEntity: Users
+        size:
+            targetEntity: ProductModelSizes
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: null
-            joinColumns:
-                users_id:
-                    referencedColumnName: id
+            inversedBy: orderedSizes
             orphanRemoval: false
-        orders:
+        order:
             targetEntity: Orders
-            cascade: {  }
+            cascade: ["persist"]
             fetch: LAZY
             mappedBy: null
-            inversedBy: cart
-            joinColumns:
-                orders_id:
-                    referencedColumnName: id
-            orphanRemoval: false
-    oneToMany:
-        sizes:
-            targetEntity: CartProductSize
-            cascade: [ persist ]
-            fetch: LAZY
-            mappedBy: cart
-            inversedBy: null
-            orphanRemoval: false
+            inversedBy: sizes
+            orphanRemoval: true
     lifecycleCallbacks: {  }

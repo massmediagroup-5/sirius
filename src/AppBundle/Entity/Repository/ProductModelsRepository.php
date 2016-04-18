@@ -86,10 +86,9 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.categories', 'categories')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
-            // todo fix this hell, doctrine lazy load is slower then over 100 queries
-//            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
+            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->leftJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
 
@@ -99,6 +98,9 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             $characteristicValues, 'productModels');
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
+
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->addPriceToQuery($builder, $filters);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
 
@@ -117,8 +119,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.categories', 'categories')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
             ->where('productModels.id IN (:ids)')
             ->setParameter('ids', $modelIds)
             ->getQuery();
