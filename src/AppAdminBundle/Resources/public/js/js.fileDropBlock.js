@@ -13,7 +13,7 @@ function fileDropBlock(block, type, uploadedCallback) {
             model: model,
         },
         fallbackid: 'upload_button',
-        maxfiles: 1,
+        maxfiles: 10,
         maxfilesize: 2,
 
         error: function (err, file) {
@@ -25,7 +25,7 @@ function fileDropBlock(block, type, uploadedCallback) {
                     console.log('File Too Large');
                     break;
                 case 'TooManyFiles':
-                    console.log('Only 1 file can be downloader');
+                    console.log('Максимум 10 файлов может быть загружено');
                     break;
                 case 'FileTypeNotAllowed':
                     console.log('Wrong file type');
