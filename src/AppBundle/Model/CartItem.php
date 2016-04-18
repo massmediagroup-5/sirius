@@ -58,9 +58,9 @@ class CartItem
      * @param $quantity
      * @return $this
      */
-    public function setSize($size, $quantity)
+    public function setSize(ProductModelSpecificSize $size, $quantity)
     {
-        $this->sizes[$size]->setQuantity($quantity);
+        $this->sizes[$size->getId()]->setQuantity($quantity);
 
         return $this;
     }
@@ -78,9 +78,9 @@ class CartItem
      * @param $size
      * @return ProductModelSpecificSize|null
      */
-    public function getSize($size)
+    public function getSize(ProductModelSpecificSize $size)
     {
-        return isset($this->sizes[$size]) ? $this->sizes[$size] : null;
+        return isset($this->sizes[$size->getId()]) ? $this->sizes[$size] : null;
     }
 
     /**
@@ -119,11 +119,12 @@ class CartItem
     {
         if (isset($this->sizes[$oldSize->getId()])) {
             if (isset($this->sizes[$newSize->getId()])) {
-                $this->sizes[$newSize->getId()] += $this->sizes[$oldSize->getId()];
+                $this->sizes[$newSize->getId()]->incrementQuantity($this->sizes[$oldSize->getId()]->getQuantity());
             } else {
-                $this->sizes[$newSize->getId()] = $this->sizes[$oldSize->getId()];
+                $cartSize = new CartSize($newSize, $this->pricesCalculator);
+                $cartSize->setQuantity($this->sizes[$oldSize->getId()]->getQuantity());
+                $this->sizes[$newSize->getId()] = $cartSize;
             }
-
             unset($this->sizes[$oldSize->getId()]);
         }
         return $this;

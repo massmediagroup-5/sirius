@@ -18,7 +18,7 @@ class ChangeProductSizeType extends AbstractType
     {
         $builder
             ->add('size', 'entity', [
-                'class' => 'AppBundle:ProductModelSizes',
+                'class' => 'AppBundle:ProductModelSpecificSize',
                 'choices' => $options['size']->getModel()->getSizes(),
                 'required' => true,
                 'data' => $options['size'],

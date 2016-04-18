@@ -28,9 +28,7 @@
                     <p>{{ item.baseCategory.name }}</p>
                 </div>
                 <div class="price price_new">
-                    <p>
-                        {{ widget('products.prices', item.productModels.0)|raw }}
-                    </p>
+                    {{ include('AppBundle:shop/partials/prices.html.twig') }}
                 </div>
             </div>
         </div>
@@ -65,9 +63,7 @@
                         <p>{{ item.baseCategory.name }}</p>
                     </div>
                     <div class="price price_new">
-                        <p>
-                            {{ widget('products.prices', item.productModels.0)|raw }}
-                        </p>
+                        {{ include('AppBundle:shop/partials/prices.html.twig') }}
                     </div>
                 </div>
             </div>

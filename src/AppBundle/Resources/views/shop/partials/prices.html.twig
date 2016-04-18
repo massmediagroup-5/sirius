@@ -1,0 +1,10 @@
+{% for model in item.productModels %}
+    <p class="js_item_price_block" data-model-id="{{ model.id }}">
+        {{ widget('products.prices', model)|raw }}
+    </p>
+    {% for size in model.sizes %}
+        <p class="js_item_price_block" data-size-id="{{ size.id }}">
+            {{ widget('products.prices', size)|raw }}
+        </p>
+    {% endfor %}
+{% endfor %}
