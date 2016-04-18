@@ -416,8 +416,8 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
-            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
-            ->leftJoin('sizes.size', 'modelSize')->addselect('modelSize')
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
 

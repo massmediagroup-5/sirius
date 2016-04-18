@@ -15,14 +15,18 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
      * @param string $alias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function addPriceToQuery($builder, $filters, $alias = 'sizes')
+    public function addPriceToQuery($builder, $filters, $alias = 'sizes', $modelAlias = 'productModels', $productAlias = 'products')
     {
-        if(!empty($filters['price_from'])) {
-            $builder->andWhere($builder->expr()->gte("$alias.price", $filters['price_from']));
+        if (!empty($filters['price_from'])) {
+            $builder->andWhere(
+                $builder->expr()->gte("COALESCE(NULLIF($alias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", $filters['price_from'])
+            );
         }
 
-        if(!empty($filters['price_to'])) {
-            $builder->andWhere($builder->expr()->lte("$alias.price", $filters['price_to']));
+        if (!empty($filters['price_to'])) {
+            $builder->andWhere(
+                $builder->expr()->lte("COALESCE(NULLIF($alias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", $filters['price_to'])
+            );
         }
 
         return $builder;
