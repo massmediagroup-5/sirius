@@ -15,31 +15,41 @@
 
             this.$reloadButton = false;
 
-            this.newImage = false;
+            this.newImage = [];
+            this.imagesQueue = [];
 
             this.initContent();
         }
 
         UploadFile.prototype.initContent = function () {
-            if (this.$content && this.$content.data('isInit')) return;
-
+            var newImage, processNextImage;
             this.$content = $('div[class="field-container"][id$="_' + this.blockName + '"]');
+
+            if (this.$content && this.$content.data('isInit')) return;
 
             this.$content.data('isInit', true);
 
-            if (this.newImage) {
+            console.log('imagesQueue', this.newImage);
+
+            this.$reloadButton = this.$content.find('a.btn.btn-success.sonata-ba-action');
+            this.$reloadButton.hide();
+
+            if (newImage = this.newImage.shift()) {
                 var $newImageBlock = $('<span class="help-block sonata-ba-field-help"></span>');
 
-                $newImageBlock.append('<img class="admin-preview" src="' + this.newImage.filePath + '" />');
+                $newImageBlock.append('<img class="admin-preview" src="' + newImage.filePath + '" />');
                 this.$hoder.find('.product_model_image_item:last-child [id$="_file"] .sonata-ba-field')
                     .append($newImageBlock);
                 this.$hoder.find('.product_model_image_item:last-child input[id$="_link"]')
-                    .val(this.newImage.filePath);
+                    .val(newImage.filePath);
                 this.$hoder.find('.product_model_image_item:last-child input[id$="_priority"]')
-                    .val(this.newImage.priority);
+                    .val(newImage.priority);
                 this.$hoder.find('.product_model_image_item:last-child select[id$="_products"]')
                     .val(this.modelId).trigger('change');
-                this.newImage = false;
+
+                if(processNextImage = this.imagesQueue.shift()) {
+                    processNextImage();
+                }
             }
 
             this.$content.prepend('<div class="drag_n_drop"></div>');
@@ -53,8 +63,6 @@
             this.$content.find('.form-group[id$="_link"]').hide();
             this.$content.find('.form-group[id$="_priority"]').hide();
             this.$content.find('input').hide();
-            this.$reloadButton = this.$content.find('a.btn.btn-success.sonata-ba-action');
-            this.$reloadButton.hide();
             div.find('a');
 
             // Init sorting
@@ -74,49 +82,17 @@
             fileDropBlock(div, this.type, this.uploaded.bind(this));
         };
 
-        UploadFile.prototype.upload = function () {
-            var uri = $(location).attr('pathname').split('/');
-            var model = uri[uri.indexOf('edit') - 1];
-
-            var $fileInput = this.$content.find('input[type="file"]'),
-                type = $fileInput.data('type'),
-                reader,
-                file;
-            file = $fileInput[0].files[0];
-
-            var formdata = new FormData();
-
-            if (window.FileReader) {
-                reader = new FileReader();
-                reader.readAsDataURL(file);
-            }
-
-            formdata.append("file", file);
-            formdata.append("model", model);
-
-            if (!$.inArray(file.type, arrayType[type])) {
-                $.ajax({
-                    url: Routing.generate('upload_file', {}, true),
-                    type: "POST",
-                    data: formdata,
-                    processData: false,
-                    contentType: false,
-                    success: function (res) {
-                        var userData = jQuery.parseJSON(res);
-                        $fileInput.parent().find('input[type="text"]').val(userData.filePath);
-                        $('button[type="submit"]').addClass('reload');
-                    }
-                });
-            } else {
-                alert('Wrong type')
-            }
-        };
-
         UploadFile.prototype.uploaded = function (response) {
-            console.log('uploaded');
-            console.log(this.$reloadButton);
-            this.newImage = response;
-            this.$reloadButton.click();
+            this.newImage.push(response);
+
+            // wait when previous image processed
+            this.imagesQueue.push(function () {
+                this.$reloadButton.click()
+            }.bind(this));
+
+            if(this.newImage.length == 1) {
+                this.imagesQueue.shift()();
+            }
         };
 
         return UploadFile;
