@@ -32,8 +32,6 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Модели"}
         calls:
-            - [ setTranslationDomain, [AppAdminBundle]]
-            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
     app.admin.product_models:
@@ -43,7 +41,6 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Товары"}
         calls:
             - [ addChild, [@app.admin.product_model_images] ]
-            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
             - [ setTemplate, [form, AppAdminBundle:admin:form_admin_fields.html.twig]]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
@@ -146,3 +143,9 @@ services:
         arguments: [~, AppBundle\Entity\OrderStatus, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Статусы заказов"}
+    app_admin.admin.price_list:
+        pattern:  /admin/app/price-list
+        class: AppAdminBundle\Admin\PriceListAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Магазин", label: "Прайс" }
+        arguments: [~, AppBundle\Entity\ProductModelSpecificSize, SonataAdminBundle:CRUD]
