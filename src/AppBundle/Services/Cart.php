@@ -53,6 +53,13 @@ class Cart
     private $items = [];
 
     /**
+     * Items objects list
+     *
+     * @var CartItem[]
+     */
+    private $backup = null;
+
+    /**
      * @param EntityManager $em
      * @param ContainerInterface $container
      * @param Session $session
@@ -437,11 +444,12 @@ class Cart
     /**
      * @param $user
      * @param $data
+     * @param $quickFlag
      * @return $this
      * @throws \Doctrine\ORM\ORMException
      * @throws CartEmptyException
      */
-    public function flushCart($user, $data)
+    public function flushCart($data, $user, $quickFlag = false)
     {
         if (empty($this->items)) {
             throw new CartEmptyException;
@@ -449,18 +457,32 @@ class Cart
 
         $order = new Orders();
 
-        if ($data['delivery_type'] == 'np') {
-            // Nova poshta
-            $prefix = 'np_';
-        } else {
-            // Delivery
-            $prefix = 'del_';
-        }
-        $cities = Arr::get($data, $prefix . 'delivery_city', null);
-        $stores = Arr::get($data, $prefix . 'delivery_store', null);
+        if(!$quickFlag) {
+            if ($data['delivery_type'] == 'np') {
+                // Nova poshta
+                $prefix = 'np_';
+            } else {
+                // Delivery
+                $prefix = 'del_';
+            }
+            $cities = Arr::get($data, $prefix . 'delivery_city', null);
+            $stores = Arr::get($data, $prefix . 'delivery_store', null);
 
-        $order->setCities($cities);
-        $order->setStores($stores);
+            $order->setCities($cities);
+            $order->setStores($stores);
+            $order->setCarriers($cities->getCarriers());
+            $order->setComment(Arr::get($data, 'comment'));
+            $order->setPay(Arr::get($data, 'pay'));
+            $order->setFio(Arr::get($data, 'name') . ' ' . Arr::get($data, 'surname'));
+            $order->setTotalPrice($this->getTotalPrice());
+            $order->setDiscountedTotalPrice($this->getDiscountedTotalPrice());
+            $order->setType(Orders::TYPE_NORMAL);
+            $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
+        }
+
+        $order->setUsers($user ?: null);
+        $order->setQuickFlag($quickFlag);
+        $order->setPhone(Arr::get($data, 'phone'));
 
         foreach ($this->items as $item) {
             foreach ($item->getSizes() as $sizeId => $size) {
@@ -469,21 +491,12 @@ class Cart
                 $orderSize->setQuantity($size->getQuantity());
                 $orderSize->setDiscountedTotalPrice($size->getDiscountedPrice());
                 $orderSize->setTotalPrice($size->getPrice());
-                $orderSize->setSize($size);
+                $orderSize->setSize($size->getSize());
                 $order->addSize($orderSize);
             }
             $this->em->persist($order);
         }
-        $order->setUsers($user);
-        $order->setPhone(Arr::get($data, 'phone'));
-        $order->setCarriers($cities->getCarriers());
-        $order->setComment(Arr::get($data, 'comment'));
-        $order->setPay(Arr::get($data, 'pay'));
-        $order->setFio(Arr::get($data, 'name') . ' ' . Arr::get($data, 'surname'));
-        $order->setTotalPrice($this->getTotalPrice());
-        $order->setDiscountedTotalPrice($this->getDiscountedTotalPrice());
-        $order->setType(Orders::TYPE_NORMAL);
-        $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
+
         $this->em->persist($order);
         $this->em->flush();
 
@@ -528,6 +541,22 @@ class Cart
             $this->addItemToCard($size, $sessionArray[$size->getModel()->getId()]['sizes'][$size->getId()]['quantity']);
         }
         $this->session->set('cart_items', $sessionArray);
+    }
+
+    /**
+     *
+     */
+    public function backupCart() {
+        $this->backup = $this->items;
+    }
+
+    /**
+     *
+     */
+    public function restoreCartFromBackup() {
+        $this->items = $this->backup;
+        unset($this->backup);
+        $this->saveInSession();
     }
 
 }

@@ -42,7 +42,9 @@ class ProductController extends Controller
             'model' => $currentModel
         ])->createView();
 
-        $quickForm = $this->createForm(QuickOrderType::class, null)->createView();
+        $quickForm = $this->createForm(QuickOrderType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_quick_order_single_product', ['id' => $currentModel->getSizes()->first()->getId()])
+        ])->createView();
 
         return $this->render('AppBundle:shop:product/show.html.twig', [
             'product' => $product,

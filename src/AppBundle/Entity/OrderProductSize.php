@@ -43,7 +43,7 @@ class OrderProductSize
     private $quantity;
 
     /**
-     * @var \AppBundle\Entity\ProductModelSizes
+     * @var \AppBundle\Entity\ProductModelSpecificSize
      */
     private $size;
 
@@ -210,11 +210,11 @@ class OrderProductSize
     /**
      * Set size
      *
-     * @param \AppBundle\Entity\ProductModelSizes $size
+     * @param \AppBundle\Entity\ProductModelSpecificSize $size
      *
      * @return OrderProductSize
      */
-    public function setSize(\AppBundle\Entity\ProductModelSizes $size = null)
+    public function setSize(\AppBundle\Entity\ProductModelSpecificSize $size = null)
     {
         $this->size = $size;
 
@@ -224,7 +224,7 @@ class OrderProductSize
     /**
      * Get size
      *
-     * @return \AppBundle\Entity\ProductModelSizes
+     * @return \AppBundle\Entity\ProductModelSpecificSize
      */
     public function getSize()
     {
