@@ -7,41 +7,41 @@
                         <div class="contacts">
                             <div class="contacts__i">
                                 <ul>
-                                    {% if options.params.phone1 is defined %}
-                                        <li><i class="icon icon-mobile"></i>{{ options.params.phone1 }}</li>
+                                    {% if options.params.phone1.value is defined and options.params.phone1.active == true %}
+                                        <li><i class="icon icon-mobile"></i>{{ options.params.phone1.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone2 is defined %}
-                                        <li>{{ options.params.phone2 }}</li>
+                                    {% if options.params.phone2.value is defined and options.params.phone2.active == true %}
+                                        <li>{{ options.params.phone2.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone3 is defined %}
-                                        <li>{{ options.params.phone3 }}</li>
+                                    {% if options.params.phone3.value is defined and options.params.phone3.active == true %}
+                                        <li>{{ options.params.phone3.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone4 is defined %}
-                                        <li>{{ options.params.phone4 }}</li>
+                                    {% if options.params.phone4.value is defined and options.params.phone4.active == true %}
+                                        <li>{{ options.params.phone4.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone5 is defined %}
-                                        <li>{{ options.params.phone5 }}</li>
+                                    {% if options.params.phone5.value is defined and options.params.phone5.active == true %}
+                                        <li>{{ options.params.phone5.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone6 is defined %}
-                                        <li>{{ options.params.phone6 }}</li>
+                                    {% if options.params.phone6.value is defined and options.params.phone6.active == true %}
+                                        <li>{{ options.params.phone6.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone7 is defined %}
-                                        <li>{{ options.params.phone7 }}</li>
+                                    {% if options.params.phone7.value is defined and options.params.phone7.active == true %}
+                                        <li>{{ options.params.phone7.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone8 is defined %}
-                                        <li>{{ options.params.phone8 }}</li>
+                                    {% if options.params.phone8.value is defined and options.params.phone8.active == true %}
+                                        <li>{{ options.params.phone8.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone9 is defined %}
-                                        <li>{{ options.params.phone9 }}</li>
+                                    {% if options.params.phone9.value is defined and options.params.phone9.active == true %}
+                                        <li>{{ options.params.phone9.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone10 is defined %}
-                                        <li>{{ options.params.phone10 }}</li>
+                                    {% if options.params.phone10.value is defined and options.params.phone10.active == true %}
+                                        <li>{{ options.params.phone10.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone11 is defined %}
-                                        <li>{{ options.params.phone11 }}</li>
+                                    {% if options.params.phone11.value is defined and options.params.phone11.active == true %}
+                                        <li>{{ options.params.phone11.value }}</li>
                                     {% endif %}
-                                    {% if options.params.phone12 is defined %}
-                                        <li>{{ options.params.phone12 }}</li>
+                                    {% if options.params.phone12.value is defined and options.params.phone12.active == true %}
+                                        <li>{{ options.params.phone12.value }}</li>
                                     {% endif %}
                                 </ul>
                             </div>
@@ -51,50 +51,50 @@
                         <div class="contacts">
                             <div class="contacts__i">
                                 <ul>
-                                    {% if options.params.email1 is defined %}
+                                    {% if options.params.email1.value is defined and options.params.email1.active == true %}
                                     <li class="email">
                                         <i class="icon icon-email"></i>
-                                        <a href="mailto:{{ options.params.email1 }}">{{ options.params.email1 }}</a>
+                                        <a href="mailto:{{ options.params.email1.value }}">{{ options.params.email1.value }}</a>
                                     </li>
                                     {% endif %}
-                                    {% if options.params.email2 is defined %}
+                                    {% if options.params.email2.value is defined and options.params.email2.active == true %}
                                     <li>
-                                        <a href="mailto:{{ options.params.email2 }}">{{ options.params.email2 }}</a>
+                                        <a href="mailto:{{ options.params.email2.value }}">{{ options.params.email2.value }}</a>
                                     </li>
                                     {% endif %}
-                                    {% if options.params.email3 is defined %}
+                                    {% if options.params.email3.value is defined and options.params.email3.active == true %}
                                         <li>
-                                            <a href="mailto:{{ options.params.email3 }}">{{ options.params.email3 }}</a>
+                                            <a href="mailto:{{ options.params.email3.value }}">{{ options.params.email3.value }}</a>
                                         </li>
                                     {% endif %}
-                                    {% if options.params.email4 is defined %}
+                                    {% if options.params.email4.value is defined and options.params.email4.active == true %}
                                         <li>
-                                            <a href="mailto:{{ options.params.email4 }}">{{ options.params.email4 }}</a>
+                                            <a href="mailto:{{ options.params.email4.value }}">{{ options.params.email4.value }}</a>
                                         </li>
                                     {% endif %}
-                                    {% if options.params.email5 is defined %}
+                                    {% if options.params.email5.value is defined and options.params.email5.active == true %}
                                         <li>
-                                            <a href="mailto:{{ options.params.email5 }}">{{ options.params.email5 }}</a>
+                                            <a href="mailto:{{ options.params.email5.value }}">{{ options.params.email5.value }}</a>
                                         </li>
                                     {% endif %}
-                                    {% if options.params.email6 is defined %}
+                                    {% if options.params.email6.value is defined and options.params.email6.active == true %}
                                         <li>
-                                            <a href="mailto:{{ options.params.email6 }}">{{ options.params.email6 }}</a>
+                                            <a href="mailto:{{ options.params.email6.value }}">{{ options.params.email6.value }}</a>
                                         </li>
                                     {% endif %}
-                                    {% if options.params.email7 is defined %}
+                                    {% if options.params.email7.value is defined and options.params.email7.active == true %}
                                         <li>
-                                            <a href="mailto:{{ options.params.email7 }}">{{ options.params.email7 }}</a>
+                                            <a href="mailto:{{ options.params.email7.value }}">{{ options.params.email7.value }}</a>
                                         </li>
                                     {% endif %}
-                                    {% if options.params.email8 is defined %}
+                                    {% if options.params.email8.value is defined and options.params.email8.active == true %}
                                         <li>
-                                            <a href="mailto:{{ options.params.email8 }}">{{ options.params.email8 }}</a>
+                                            <a href="mailto:{{ options.params.email8.value }}">{{ options.params.email8.value }}</a>
                                         </li>
                                     {% endif %}
-                                    {% if options.params.email9 is defined %}
+                                    {% if options.params.email9.value is defined and options.params.email9.active == true %}
                                         <li>
-                                            <a href="mailto:{{ options.params.email9 }}">{{ options.params.email9 }}</a>
+                                            <a href="mailto:{{ options.params.email9.value }}">{{ options.params.email9.value }}</a>
                                         </li>
                                     {% endif %}
                                 </ul>
@@ -105,13 +105,15 @@
                         <div class="share">
                             <div class="share__i">
                                 <ul>
-                                    <li><a href="{{ options.params.fb_link }}"><i class="icon icon-fb"></i></a></li>
-                                    <li><a href="{{ options.params.vk_link }}"><i class="icon icon-vk"></i></a></li>
-                                    <li><a href="{{ options.params.gp_link }}"><i class="icon icon-gplus"></i></a></li>
-                                    <li><a href="{{ options.params.fb_link }}"><i class="icon icon-fb"></i></a></li>
-                                    <li><a href="{{ options.params.vk_link }}"><i class="icon icon-vk"></i></a></li>
-                                    <li><a href="{{ options.params.gp_link }}"><i class="icon icon-gplus"></i></a></li>
-                                    <li><a href="{{ options.params.gp_link }}"><i class="icon icon-gplus"></i></a></li>
+                                    {% if options.params.fb_link.value is defined and options.params.fb_link.active == true %}
+                                        <li><a href="{{ options.params.fb_link.value }}"><i class="icon icon-fb"></i></a></li>
+                                    {% endif %}
+                                    {% if options.params.vk_link.value is defined and options.params.vk_link.active == true %}
+                                    <li><a href="{{ options.params.vk_link.value }}"><i class="icon icon-vk"></i></a></li>
+                                    {% endif %}
+                                    {% if options.params.gp_link.value is defined and options.params.gp_link.active == true %}
+                                    <li><a href="{{ options.params.gp_link.value }}"><i class="icon icon-gplus"></i></a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -160,7 +162,7 @@
                     </div>
                 </div>
             </div>
-            <p class="copy">{{ options.params.copyright|raw }}</p>
+            <p class="copy">{{ options.params.copyright.value|raw }}</p>
         </div>
     </div>
 </footer>
