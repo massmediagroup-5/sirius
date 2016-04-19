@@ -143,3 +143,9 @@ services:
         arguments: [~, AppBundle\Entity\MainBanners, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Банеры главной страницы"}
+
+    app_admin.admin.order_status:
+        class: AppAdminBundle\Admin\OrderStatusAdmin
+        arguments: [~, AppBundle\Entity\OrderStatus, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Статусы заказов"}
