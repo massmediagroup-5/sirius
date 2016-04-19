@@ -1,7 +1,7 @@
 <div class="breadcrumbs">
     <div class="breadcrumbs__i">
         <ul>
-            {% if breadcrumbs.0.name != 'TM Sirius' %}
+            {% if breadcrumbs.0.name is defined and breadcrumbs.0.name != 'TM Sirius' %}
             <li><a href="{{ url('category', {'category': 'all'}) }}">{% trans %}TM Sirius{% endtrans %}</a></li>
             {% endif %}
             {% for item in breadcrumbs %}
