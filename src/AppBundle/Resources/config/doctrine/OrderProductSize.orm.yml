@@ -44,7 +44,7 @@ AppBundle\Entity\OrderProductSize:
             type: integer
     manyToOne:
         size:
-            targetEntity: ProductModelSizes
+            targetEntity: ProductModelSpecificSize
             cascade: {  }
             fetch: LAZY
             mappedBy: null

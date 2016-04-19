@@ -221,7 +221,7 @@ class CartController extends BaseController
         $orderForm->handleRequest($request);
         if ($orderForm->isValid()) {
 
-            $order = $this->get('cart')->flushCart($this->getUser(), $orderForm->getData());
+            $order = $this->get('cart')->flushCart($orderForm->getData(), $this->getUser());
 
             return $this->render('AppBundle:shop:cart/order_approve.html.twig', [
                 'order' => $order,
@@ -229,9 +229,18 @@ class CartController extends BaseController
             ]);
         }
 
-        $quickOrderForm = $this->createForm(QuickOrderType::class, null, [
-            'action' => $this->container->get('router')->generate('cart_quick_order')
-        ]);
+        $quickOrderForm = $this->createForm(QuickOrderType::class, null);
+
+        $quickOrderForm->handleRequest($request);
+        if ($quickOrderForm->isValid()) {
+
+            $order = $this->get('cart')->flushCart($quickOrderForm->getData(), $this->getUser(), true);
+
+            return $this->render('AppBundle:shop:cart/order_approve.html.twig', [
+                'order' => $order,
+                'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
+            ]);
+        }
 
         return $this->render('AppBundle:shop:cart/order.html.twig', [
             'quickOrderForm' => $quickOrderForm->createView(),
@@ -241,31 +250,29 @@ class CartController extends BaseController
     }
 
     /**
-     * @Route("/cart/quick_order", name="cart_quick_order", options={"expose"=true})
-     * @Method("POST")
-     * @param Request $request
-     */
-    public function quickOrderAction(Request $request)
-    {
-        // todo here is only beginning, complete
-        $this->get('cart')->createQuickOrder();
-
-        $form = $this->createForm(QuickOrderType::class);
-    }
-
-    /**
      * @Route("/cart/quick_order/{id}", name="cart_quick_order_single_product", options={"expose"=true})
      * @Method("POST")
      * @ParamConverter("model")
      * @param ProductModelSpecificSize $size
      * @param Request $request
+     * @return JsonResponse
      */
     public function quickOrderSingleProductAction(ProductModelSpecificSize $size, Request $request)
     {
-        // todo here is only beginning, complete
-        $this->get('cart')->clear();
-        $this->get('cart')->addInCart($size);
-        $this->get('cart')->createQuickOrder();
+        $quickOrderForm = $this->createForm(QuickOrderType::class, null);
+
+        $quickOrderForm->handleRequest($request);
+        if ($quickOrderForm->isValid()) {
+            $this->get('cart')->backupCart();
+            $this->get('cart')->clear();
+            $this->get('cart')->addItemToCard($size, 1);
+            $this->get('cart')->flushCart($quickOrderForm->getData(), $this->getUser(), true);
+            $this->get('cart')->restoreCartFromBackup();
+
+            return new JsonResponse();
+        }
+
+        return new JsonResponse([], 422);
     }
 
     /**

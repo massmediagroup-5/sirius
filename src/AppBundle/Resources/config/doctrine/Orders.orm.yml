@@ -127,6 +127,10 @@ AppBundle\Entity\Orders:
             options:
                 fixed: false
             column: manager_sms_status
+        quickFlag:
+            type: boolean
+            options:
+                default: false
         createTime:
             type: datetime
             nullable: false
