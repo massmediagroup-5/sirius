@@ -141,12 +141,7 @@ class Products
     {
         // todo add actions and other flags
 
-        if ($model->getPreorderFlag()) {
-            $flag = 'soon';
-            $flagText = $this->container->get('translator')->trans('Pre order product flag');
-        } else {
-            $flag = $flagText = false;
-        }
+        $flag = $flagText = false;
 
         return $this->templating->render('AppBundle:widgets/product/flags.html.twig',
             compact('model', 'flag', 'flagText'));

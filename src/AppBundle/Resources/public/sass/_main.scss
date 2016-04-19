@@ -4111,6 +4111,10 @@ input[type="checkbox"] {
 	}
 }
 
+.product-info-size-price{
+	display: none;
+}
+
 .product-options {
 	padding-bottom: 5px;
 	ul {
@@ -4176,6 +4180,10 @@ input[type="checkbox"] {
 		display: block;
 		text-align: center;
 		padding: 14px 10px;
+
+		&.preorder_btn {
+			display: none;
+		}
 
 		span {
 			position: relative;

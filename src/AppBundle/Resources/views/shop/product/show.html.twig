@@ -64,7 +64,14 @@
                                         <h2 class="name">{{ current_model.products.name }}</h2>
 
                                         <div class="price price_new">
-                                            <p>{{ widget('products.prices', current_model)|raw }}</p>
+                                            <p class="js_product_price" data-model-id="{{ current_model.id }}">
+                                                {{ widget('products.prices', current_model)|raw }}
+                                            </p>
+                                            {% for size in current_model.sizes %}
+                                                <p class="js_product_price product-info-size-price" data-size-id="{{ size.id }}">
+                                                    {{ widget('products.prices', size)|raw }}
+                                                </p>
+                                            {% endfor %}
                                         </div>
 
                                         <div class="color-select">
@@ -107,7 +114,7 @@
 
                                             <div class="product-message">
                                                 {% if current_model.products.quantity < 10 %}
-                                                    <p>Этот размер скоро закончится</p>
+                                                    <p>Этот товар скоро закончится</p>
                                                 {% endif %}
                                             </div>
 
@@ -116,9 +123,14 @@
 
                                                     <div class="col">
                                                         <div class="not-added-part">
-                                                            <a href="#" class="btn btn_blue btn_buy">
+                                                            <a href="#" class="btn btn_blue btn_buy preorder_btn js_preorder_btn">
                                                                 <span>
-                                                                    {{ (current_model.preOrderFlag ? 'Pre-order' : 'Buy')|trans }}
+                                                                    {{ 'Pre-order'|trans }}
+                                                                </span>
+                                                            </a>
+                                                            <a href="#" class="btn btn_blue btn_buy js_buy_btn">
+                                                                <span>
+                                                                    {{ 'Buy'|trans }}
                                                                 </span>
                                                             </a>
                                                             {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn'}, 'label': current_model.preOrderFlag ? 'Pre-order' : 'Buy'}) }}
