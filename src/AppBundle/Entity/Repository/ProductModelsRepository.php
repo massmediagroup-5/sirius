@@ -55,7 +55,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
 
-        $builder->select(
+        $builder->addSelect(
             "MAX(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price)),
             MIN(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price))"
         );
