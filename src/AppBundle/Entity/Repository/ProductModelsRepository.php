@@ -25,7 +25,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     {
         $builder = $this
             ->createQueryBuilder('prodMod')
-            ->where('prodMod.products = :prodId AND prodMod.active = 1 AND prodMod.published = 1')
+            ->where('prodMod.products = :prodId AND prodMod.active = 1')
             ->setParameter('prodId', $prodId);
 
         if ($productModelAlias) {
@@ -72,7 +72,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function addEnabledOnSiteConditions(QueryBuilder $builder, $alias = 'productModels')
     {
-        return $builder->andWhere("$alias.active = 1 AND $alias.published = 1");
+        return $builder->andWhere("$alias.active = 1");
     }
 
     /**
@@ -116,7 +116,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
-            ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
+            ->andWhere('productModels.active = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
     }
 

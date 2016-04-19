@@ -12,9 +12,6 @@ AppBundle\Entity\Products:
         active:
             columns:
                 - active
-        published:
-            columns:
-                - published
     uniqueConstraints:
         id_UNIQUE:
             columns:
@@ -92,9 +89,6 @@ AppBundle\Entity\Products:
                 unsigned: false
                 default: '0'
         active:
-            type: boolean
-            nullable: true
-        published:
             type: boolean
             nullable: true
         createTime:

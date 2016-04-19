@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use AppBundle\Entity as Entity;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 class ProductsAdmin extends Admin
 {
@@ -48,7 +49,6 @@ class ProductsAdmin extends Admin
             ->add('name', null, ['label' => 'Название модели'])
             ->add('content', null, ['label' => 'Описание модели'])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('published', null, ['label' => 'Опубликован'])
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды']);
@@ -62,7 +62,6 @@ class ProductsAdmin extends Admin
         $listMapper
             ->addIdentifier('name', null, ['label' => 'Название товара'])
             ->add('active', 'boolean', ['label' => 'Активный', 'editable' => true])
-            ->add('published', 'boolean', ['label' => 'Опубликован', 'editable' => true])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [
@@ -70,6 +69,9 @@ class ProductsAdmin extends Admin
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
+                    'clone' => [
+                        'template' => 'AppAdminBundle:CRUD:list__action_clone.html.twig'
+                    ]
                 ]
             ]);
     }
@@ -91,7 +93,6 @@ class ProductsAdmin extends Admin
             ->add('characteristics', null, ['label' => 'Характеристики', 'attr' => ['class' => 'ckeditor']])
             ->add('features', null, ['label' => 'Особенности', 'attr' => ['class' => 'ckeditor']])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('published', null, ['label' => 'Опубликован'])
             ->add('baseCategory', 'entity', [
                 'class' => 'AppBundle:Categories',
                 'property' => 'name',
@@ -109,13 +110,14 @@ class ProductsAdmin extends Admin
                     'class' => 'col-md-12',
                 ])
             ->add('characteristicValues',
-                'sonata_type_model_autocomplete',
+                'entity',
                 [
-                    'attr' => ['class' => 'form-control'],
+                    'class'    => 'AppBundle:CharacteristicValues' ,
                     'label' => 'Значения характеристик',
+                    'expanded' => true,
                     'multiple' => true,
-                    'property' => 'name',
-                    'minimum_input_length' => 1
+                    'by_reference' => false,
+
                 ]
             )
             ->end()
@@ -135,7 +137,6 @@ class ProductsAdmin extends Admin
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('published', null, ['label' => 'Опубликован'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
@@ -166,6 +167,11 @@ class ProductsAdmin extends Admin
     public function postUpdate($product)
     {
         $this->container->get('proc')->runUpdateRelationship();
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
 
 }

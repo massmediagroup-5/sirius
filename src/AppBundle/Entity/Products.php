@@ -1,7 +1,9 @@
 <?php
 
 namespace AppBundle\Entity;
+
 use AppBundle\Traits\ProcessHasMany;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Products
@@ -29,11 +31,6 @@ class Products implements CharacteristicableInterface
      * @var boolean
      */
     private $active;
-
-    /**
-     * @var boolean
-     */
-    private $published;
 
     /**
      * @var \DateTime
@@ -209,30 +206,6 @@ class Products implements CharacteristicableInterface
     public function getActive()
     {
         return $this->active;
-    }
-
-    /**
-     * Set published
-     *
-     * @param boolean $published
-     *
-     * @return Products
-     */
-    public function setPublished($published)
-    {
-        $this->published = $published;
-
-        return $this;
-    }
-
-    /**
-     * Get published
-     *
-     * @return boolean
-     */
-    public function getPublished()
-    {
-        return $this->published;
     }
 
     /**
@@ -608,7 +581,7 @@ class Products implements CharacteristicableInterface
      */
     public function __toString()
     {
-        return $this->getImportName() ? : '';
+        return $this->getName() ? : '';
     }
 
     /**
@@ -705,5 +678,19 @@ class Products implements CharacteristicableInterface
     public function getQuantity()
     {
         return $this->quantity;
+    }
+
+    /**
+     *
+     */
+    public function __clone()
+    {
+        $this->id = null;
+        $characteristicValues = new ArrayCollection();
+        foreach ($this->characteristicValues as $characteristicValue) {
+            $characteristicValues->add($characteristicValue);
+        }
+        $this->characteristicValues = $characteristicValues;
+        $this->article .= '-clone';
     }
 }

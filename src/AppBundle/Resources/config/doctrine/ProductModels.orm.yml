@@ -79,9 +79,6 @@ AppBundle\Entity\ProductModels:
             type: boolean
             nullable: true
             column: in_stock
-        published:
-            type: boolean
-            nullable: true
         createTime:
             type: datetime
             nullable: false

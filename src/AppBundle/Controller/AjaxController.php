@@ -23,7 +23,7 @@ class AjaxController extends Controller
      */
     public function callbackAction(Request $request)
     {
-        if($request->get('phone')){
+        if ($request->get('phone')) {
             $phone = new \AppBundle\Entity\CallBack();
             $phone->setPhone($request->get('phone'));
 //            $phone->setUsers($this->getUser());
@@ -36,17 +36,16 @@ class AjaxController extends Controller
                 ->setSubject('Callback from orders@mytex.com.ua')
                 ->setFrom('callback@mytex.com.ua')
                 ->setTo('mytex777@gmail.com')
-                ->setBody('<h2>Запрос на обратный звонок с сайта mytex.com.ua!</h2><hr>'.
-                    '<p>Номер телефона: '.$request->get('phone').'</p>'
+                ->setBody('<h2>Запрос на обратный звонок с сайта mytex.com.ua!</h2><hr>' .
+                    '<p>Номер телефона: ' . $request->get('phone') . '</p>'
                 )
-                ->setContentType("text/html")
-            ;
+                ->setContentType("text/html");
 
             $this->container->get('mailer')->send($message);
 
             $this->result['status'] = 'OK';
             return new JsonResponse($this->result);
-        }else{
+        } else {
             $this->result['message'] = 'Type phone number';
             $this->result['status'] = 'ERROR';
             return new JsonResponse($this->result, 422);
@@ -58,11 +57,11 @@ class AjaxController extends Controller
      */
     public function oneClickOrder(Request $request)
     {
-        if($request->get('phone') && $request->get('sku')){
-            $this->get('cart')->oneClickOrder($request->get('sku'),$request->get('phone'));
+        if ($request->get('phone') && $request->get('sku')) {
+            $this->get('cart')->oneClickOrder($request->get('sku'), $request->get('phone'));
 
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -73,11 +72,11 @@ class AjaxController extends Controller
      */
     public function reportThePresence(Request $request)
     {
-        if($request->get('sku') && $request->get('email')){
+        if ($request->get('sku') && $request->get('email')) {
             $this->get('cart')->reportThePresence($request->get('sku'), $request->get('email'));
 
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -88,10 +87,10 @@ class AjaxController extends Controller
      */
     public function FollowThePrice(Request $request)
     {
-        if($request->get('sku') && $request->get('email')){
+        if ($request->get('sku') && $request->get('email')) {
             $this->get('cart')->FollowThePrice($request->get('sku'), $request->get('email'));
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -102,10 +101,11 @@ class AjaxController extends Controller
      */
     public function buyInCredit(Request $request)
     {
-        if($request->get('sku') && $request->get('name') && $request->get('city') && $request->get('phone')){
-            $this->get('cart')->byInCredit($request->get('sku'),$request->get('name'), $request->get('city'), $request->get('phone'));
+        if ($request->get('sku') && $request->get('name') && $request->get('city') && $request->get('phone')) {
+            $this->get('cart')->byInCredit($request->get('sku'), $request->get('name'), $request->get('city'),
+                $request->get('phone'));
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -116,13 +116,13 @@ class AjaxController extends Controller
      */
     public function addToCartAction(Request $request)
     {
-        if($request->get('sku_id')){
+        if ($request->get('sku_id')) {
             $this->get('cart')->addItemToCard($request->get('sku_id'));
 
             $this->result['basket'] = $this->get('cart')->getHeaderBasketInfo();
 
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -133,12 +133,12 @@ class AjaxController extends Controller
      */
     public function deleteCartItem(Request $request)
     {
-        if($request->get('sku_id')){
+        if ($request->get('sku_id')) {
             $this->get('cart')->removeFromCart($request->get('sku_id'));
 
             $this->result['basket'] = $this->get('cart')->getHeaderBasketInfo();
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -149,12 +149,12 @@ class AjaxController extends Controller
      */
     public function increasingCartQuantity(Request $request)
     {
-        if($request->get('cart_id')){
+        if ($request->get('cart_id')) {
             $this->get('cart')->increasingQuantity($request->get('cart_id'));
-            
+
             $this->result['basket'] = $this->get('cart')->getHeaderBasketInfo();
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -165,12 +165,12 @@ class AjaxController extends Controller
      */
     public function decreaseCartQuantity(Request $request)
     {
-        if($request->get('cart_id')){
+        if ($request->get('cart_id')) {
             $this->get('cart')->decreaseQuantity($request->get('cart_id'));
 
             $this->result['basket'] = $this->get('cart')->getHeaderBasketInfo();
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -181,17 +181,16 @@ class AjaxController extends Controller
      */
     public function getStoresByCityId(Request $request)
     {
-        if($request->get('city_id')){
+        if ($request->get('city_id')) {
             $em = $this->getDoctrine()->getManager()->getRepository('AppBundle:Stores');
             $query = $em->createQueryBuilder('s')
                 ->where('s.cities = :city_id')
                 ->setParameter('city_id', $request->get('city_id'))
-                ->getQuery()
-            ;
+                ->getQuery();
             $data = $query->getArrayResult();
             $this->result['stores'] = $data;
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -202,11 +201,11 @@ class AjaxController extends Controller
      */
     public function addToCompare(Request $request)
     {
-        if($request->get('category_id') && $request->get('model_id')){
-            $this->get('compare')->addToCompare($request->get('category_id'),$request->get('model_id'));
+        if ($request->get('category_id') && $request->get('model_id')) {
+            $this->get('compare')->addToCompare($request->get('category_id'), $request->get('model_id'));
             $this->result['compare'] = $this->get('compare')->getHeaderCompareInfo();
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -217,29 +216,30 @@ class AjaxController extends Controller
      */
     public function removeFromCompare(Request $request)
     {
-        if($request->get('category_id') && $request->get('model_id')){
-            $this->get('compare')->removeFromCompare($request->get('category_id'),$request->get('model_id'));
+        if ($request->get('category_id') && $request->get('model_id')) {
+            $this->get('compare')->removeFromCompare($request->get('category_id'), $request->get('model_id'));
             $compare = $this->get('compare')->getHeaderCompareInfo();
             $this->result['compare'] = $compare;
-            if($compare['compare_qty'] == 0){
+            if ($compare['compare_qty'] == 0) {
                 $data = $this->getDoctrine()->getRepository('AppBundle:Categories')->findOneBy(
-                    array('active'=>1,'inMenu'=>1,'id'=>$request->get('category_id'))
+                    array('active' => 1, 'inMenu' => 1, 'id' => $request->get('category_id'))
                 );
                 $this->result['url'] = $data->getAlias();
                 $this->result['del'] = 'redirect';
-            }else{
-                foreach($compare['compare_ids'] as $category_id => $model_ids){
+            } else {
+                foreach ($compare['compare_ids'] as $category_id => $model_ids) {
                     $models = $this->getDoctrine()->getRepository('AppBundle:ProductModels')->findBy(
-                        array('active'=>1,'published'=>1,'id'=>array_keys($model_ids['models'])),
-                        array('id'=>'ASC')
+                        array('active' => 1, 'id' => array_keys($model_ids['models'])),
+                        array('id' => 'ASC')
                     );
                     $compare['categories'][$compare['compare_ids'][$category_id]['date']]['models'] = $models;
                 }
-                $this->result['tpl'] = $this->render('AppBundle:userpart:compare_lists.html.twig',array('compare'=>$compare))->getContent();
+                $this->result['tpl'] = $this->render('AppBundle:userpart:compare_lists.html.twig',
+                    array('compare' => $compare))->getContent();
                 $this->result['del'] = 'delete';
             }
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -250,29 +250,30 @@ class AjaxController extends Controller
      */
     public function removeCategoryFromCompare(Request $request)
     {
-        if($request->get('category_id')){
+        if ($request->get('category_id')) {
             $this->get('compare')->removeCategoryFromCompare($request->get('category_id'));
             $compare = $this->get('compare')->getHeaderCompareInfo();
             $this->result['compare'] = $compare;
-            if($compare['compare_qty'] == 0){
+            if ($compare['compare_qty'] == 0) {
                 $data = $this->getDoctrine()->getRepository('AppBundle:Categories')->findOneBy(
-                    array('active'=>1,'inMenu'=>1,'id'=>$request->get('category_id'))
+                    array('active' => 1, 'inMenu' => 1, 'id' => $request->get('category_id'))
                 );
                 $this->result['url'] = $data->getAlias();
                 $this->result['del'] = 'redirect';
-            }else{
-                foreach($compare['compare_ids'] as $category_id => $model_ids){
+            } else {
+                foreach ($compare['compare_ids'] as $category_id => $model_ids) {
                     $models = $this->getDoctrine()->getRepository('AppBundle:ProductModels')->findBy(
-                        array('active'=>1,'published'=>1,'id'=>array_keys($model_ids['models'])),
-                        array('id'=>'ASC')
+                        array('active' => 1, 'id' => array_keys($model_ids['models'])),
+                        array('id' => 'ASC')
                     );
                     $compare['categories'][$compare['compare_ids'][$category_id]['date']]['models'] = $models;
                 }
-                $this->result['tpl'] = $this->render('AppBundle:userpart:compare_lists.html.twig',array('compare'=>$compare))->getContent();
+                $this->result['tpl'] = $this->render('AppBundle:userpart:compare_lists.html.twig',
+                    array('compare' => $compare))->getContent();
                 $this->result['del'] = 'delete';
             }
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
@@ -283,25 +284,25 @@ class AjaxController extends Controller
      */
     public function getOrderInfoByPhone(Request $request)
     {
-        if($request->get('phone')){
+        if ($request->get('phone')) {
             $data = $this->getDoctrine()->getRepository('AppBundle:Orders')->findOneBy(array(
-                'phone'=> $request->get('phone'),
+                'phone' => $request->get('phone'),
                 'type' => 'Обычный заказ'
             ));
 
-            if($data){
+            if ($data) {
                 $this->result['info']['fio'] = $data->getFio();
                 $this->result['info']['pay'] = $data->getPay();
                 $this->result['info']['carriers'] = $data->getCarriers()->getId();
-                if(!$data->getCustomDelivery()){
+                if (!$data->getCustomDelivery()) {
                     $this->result['info']['cities'] = $data->getCities()->getId();
                     $this->result['info']['stores'] = $data->getStores()->getId();
-                }else{
+                } else {
                     $this->result['info']['custom_delivery'] = $data->getCustomDelivery();
                 }
             }
             $this->result['status'] = 'OK';
-        }else{
+        } else {
             $this->result['status'] = 'ERROR';
         }
         return new Response(json_encode($this->result));
