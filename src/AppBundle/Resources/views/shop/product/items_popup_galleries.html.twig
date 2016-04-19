@@ -1,9 +1,9 @@
 {% for item in items %}
-    {% if item.productModelImages.count() > 0 %}
+    {% if item.images.count() > 0 %}
         <div class="product-popup" id="product-popup-{{ item.id }}">
             <div class="product-popup__i">
                 <div class="big-img">
-                    {% for image in item.productModelImages %}
+                    {% for image in item.images %}
                         <img src="{{ image.link | imagine_filter('medium') }}" />
                     {% endfor %}
                 </div>

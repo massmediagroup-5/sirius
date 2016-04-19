@@ -60,15 +60,15 @@
                                         <a href=>
                                             <div class="item__i">
                                                 <div class="img">
-                                                    {% if item.skuProduct.productModels.productModelImages.0 is defined %}
-                                                        <img src="{{ item.skuProduct.productModels.productModelImages.0.link | imagine_filter('in_wholesale_cart') }}"/>
+                                                    {% if item.productModel.images.0 is defined %}
+                                                        <img src="{{ item.productModel.images.0.link | imagine_filter('in_wholesale_cart') }}"/>
                                                     {% else %}
                                                         <img src="{{ param('no_image') | imagine_filter('in_wholesale_cart') }}"/>
                                                     {% endif %}
                                                 </div>
                                                 <div class="text">
                                                     <p>
-                                                        {{ item.skuProduct.productModels.name }} (Арт. {{ item.skuProduct.sku }})
+                                                        {{ item.productModel.products.name }} (Арт. {{ item.productModel.products.article }})
                                                     </p>
                                                 </div>
                                             </div>

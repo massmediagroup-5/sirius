@@ -53,7 +53,6 @@ class CartAdmin extends Admin
                     (string)Orders::TYPE_QUICK => 'Быстрый',
                 ]
             ])
-            ->add('skuProducts.productModels.name', null, array('label' => 'Имя модели'))
             ->add('status', 'choice', array(
                 'label' => 'Статус заказа',
                 'choices' => [
@@ -84,12 +83,6 @@ class CartAdmin extends Admin
                 'read_only' => true,
                 'disabled' => true,
             ))
-            ->add('skuProducts.name', 'text'
-                , array('label' => 'Название модели',
-                    'read_only' => true,
-                    'disabled' => true,
-                )
-            )
             ->add('status', 'choice', array(
                 'label' => 'Статус заказа',
                 'choices' => array(
@@ -115,7 +108,6 @@ class CartAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('skuProducts.name', null, array('label' => 'Статус заказа'))
             ->add('status', null, array('label' => 'Название модели'))
             ->add('createTime', null, array('label' => 'Дата создания(заказа)'))
             ->add('updateTime', null, array('label' => 'Дата последнего редактирования(заказа)'));

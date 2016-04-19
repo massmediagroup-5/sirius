@@ -3,9 +3,11 @@
 namespace AppBundle\Widgets;
 
 use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
 use AppBundle\Form\Type\ChangeProductSizeType;
 use AppBundle\Form\Type\RemoveProductSizeType;
+use AppBundle\Model\CartSize;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Form\Type\AddInCartType;
@@ -62,10 +64,10 @@ class Products
     {
         $addedFlag = in_array($item->getId(), $this->container->get('wishlist')->getIds());
 
-        return $this->templating->render('AppBundle:widgets/product/wish_button.html.twig', array(
+        return $this->templating->render('AppBundle:widgets/product/wish_button.html.twig', [
                 'item' => $item,
                 'addedFlag' => $addedFlag,
-            )
+            ]
         );
     }
 
@@ -111,15 +113,20 @@ class Products
     /**
      * Render old and new prices
      *
-     * @param $model
+     * @param $object
      * @return mixed
      */
-    public function prices($model)
+    public function prices($object)
     {
-        $price = $this->container->get('prices_calculator')->getPrice($model);
-        $discountedPrice = $this->container->get('prices_calculator')->getPrice($model);
+        if ($object instanceof ProductModels) {
+            $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizePrice($object);
+            $discountedPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($object);
+        } else {
+            $price = $this->container->get('prices_calculator')->getPrice($object);
+            $discountedPrice = $this->container->get('prices_calculator')->getDiscountedPrice($object);
+        }
         return $this->templating->render('AppBundle:widgets/product/prices.html.twig', [
-                'model' => $model,
+                'object' => $object,
                 'price' => $price,
                 'discountedPrice' => $discountedPrice
             ]
@@ -134,14 +141,10 @@ class Products
     {
         // todo add actions and other flags
 
-        if ($model->getPreorderFlag()) {
-            $flag = 'soon';
-            $flagText = $this->container->get('translator')->trans('Pre order product flag');
-        } else {
-            $flag = $flagText = false;
-        }
+        $flag = $flagText = false;
 
-        return $this->templating->render('AppBundle:widgets/product/flags.html.twig', compact('model', 'flag', 'flagText'));
+        return $this->templating->render('AppBundle:widgets/product/flags.html.twig',
+            compact('model', 'flag', 'flagText'));
     }
 
     /**
@@ -150,84 +153,73 @@ class Products
      */
     public function addInCart($model)
     {
-        $skuProduct = $model->getSkuProducts()->first();
-
         $form = $this->container->get('form.factory')->create(AddInCartType::class, null, [
-            'action' => $this->container->get('router')->generate('cart_add', ['id' => $skuProduct->getId()]),
             'model' => $model
         ])->add('quantity', HiddenType::class, [
             'data' => 1,
         ])->createView();
 
-        return $this->templating->render('AppBundle:widgets/product/add_in_cart.html.twig', array(
+        return $this->templating->render('AppBundle:widgets/product/add_in_cart.html.twig', [
                 'model' => $model,
                 'form' => $form,
-            )
+            ]
         );
     }
 
     /**
-     * @param $model
-     * @param $selectedSize
+     * @param CartSize $size
      * @return mixed
      * @throws \Doctrine\ORM\ORMException
      */
-    public function changeProductSize($model, $selectedSize)
+    public function changeProductSize(CartSize $size)
     {
-        $skuProduct = $model->getSkuProducts()->first();
-
         $form = $this->container->get('form.factory')->create(ChangeProductSizeType::class, null, [
-            'action' => $this->container->get('router')->generate('cart_change_size', ['id' => $skuProduct->getId()]),
-            'model' => $model,
-            'selectedSize' => $this->em->getReference("AppBundle:ProductModelSizes", $selectedSize),
+            'action' => $this->container->get('router')->generate('cart_change_size', ['id' => $size->getSize()->getId()]),
+            'size' => $size->getSize(),
         ])->createView();
 
-        return $this->templating->render('AppBundle:widgets/product/change_product_size.html.twig', array(
-                'model' => $model,
+        return $this->templating->render('AppBundle:widgets/product/change_product_size.html.twig', [
+                'model' => $size->getSize()->getModel(),
                 'form' => $form,
-            )
+            ]
         );
     }
 
     /**
-     * @param $model
      * @param $selectedSize
-     * @param $count
      * @return mixed
      * @throws \Doctrine\ORM\ORMException
      */
-    public function changeProductSizeCount($model, $selectedSize, $count)
+    public function changeProductSizeCount(CartSize $selectedSize)
     {
-        $skuProduct = $model->getSkuProducts()->first();
-
         $form = $this->container->get('form.factory')->create(ChangeProductSizeQuantityType::class, null, [
-            'action' => $this->container->get('router')->generate('cart_change_size_count', ['id' => $skuProduct->getId()]),
-            'size' => $selectedSize,
-            'selected' => $count,
+            'action' => $this->container->get('router')->generate('cart_change_size_count',
+                ['id' => $selectedSize->getSize()->getId()]),
+            'size' => $selectedSize->getSize(),
+            'selected' => $selectedSize->getQuantity(),
         ])->createView();
 
-        return $this->templating->render('AppBundle:widgets/product/change_product_size_count.html.twig', array(
-                'skuProduct' => $skuProduct,
+        return $this->templating->render('AppBundle:widgets/product/change_product_size_count.html.twig', [
+                'model' => $selectedSize->getSize()->getModel(),
                 'form' => $form,
-            )
+            ]
         );
     }
 
     /**
-     * @param $skuProduct
      * @param $size
      * @return mixed
      */
-    public function removeProductFromCart($skuProduct, $size)
+    public function removeProductFromCart(CartSize $size)
     {
         $form = $this->container->get('form.factory')->create(RemoveProductSizeType::class, null, [
-            'action' => $this->container->get('router')->generate('cart_remove', ['id' => $skuProduct->getId()]),
-            'size' => $size
+            'action' => $this->container->get('router')->generate('cart_remove', ['id' => $size->getSize()->getId()]),
+            'size' => $size->getSize()
         ])->createView();
 
-        return $this->templating->render('AppBundle:widgets/product/remove_product_size.html.twig', array(
+        return $this->templating->render('AppBundle:widgets/product/remove_product_size.html.twig', [
                 'form' => $form,
-            )
+            ]
         );
     }
 

@@ -19,8 +19,8 @@
                         <div class="main-cart-list__i">
 
                             {% for item in cart.standardItems%}
-                                {% for sizeId, sizeCount in item.sizes%}
-                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
+                                {% for sizeId, size in item.sizes%}
+                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'size': size}) }}
                                 {% endfor %}
                             {% endfor %}
 
@@ -40,13 +40,13 @@
                         <div class="preorder-cart-list__i">
 
                             {% for item in cart.preOrderItems%}
-                                {% for sizeId, sizeCount in item.sizes%}
-                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'sizeId': sizeId, 'sizeCount': sizeCount}) }}
+                                {% for sizeId, size in item.sizes%}
+                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'size': size}) }}
                                 {% endfor %}
                             {% endfor %}
 
                             <div class="preorder-cart-list-total">
-                                <p><strong>Итого: <span class="js_cart_pre_order_total_price">{{ cart.standardItemsPrice }}</span> грн.</strong></p>
+                                <p><strong>Итого: <span class="js_cart_pre_order_total_price">{{ cart.preorderItemsPrice }}</span> грн.</strong></p>
                             </div>
                         </div>
                     </div>

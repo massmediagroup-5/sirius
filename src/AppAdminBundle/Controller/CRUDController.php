@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -19,7 +20,7 @@ class CRUDController extends BaseController
      * batchActionMerge
      *
      * @param ProxyQueryInterface $selectedModelQuery
-     * @param Request             $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -34,7 +35,7 @@ class CRUDController extends BaseController
 
         $target = $modelManager->find($this->admin->getClass(), $request->get('targetId'));
 
-        if ($target === null){
+        if ($target === null) {
             $this->addFlash('sonata_flash_info', 'flash_batch_merge_no_target');
 
             return new RedirectResponse(
@@ -71,7 +72,7 @@ class CRUDController extends BaseController
      * Batch action activate
      *
      * @param ProxyQueryInterface $selectedModelQuery
-     * @param Request             $request
+     * @param Request $request
      * @return RedirectResponse
      */
     public function batchActionActivate(ProxyQueryInterface $selectedModelQuery, Request $request = null)
@@ -83,7 +84,7 @@ class CRUDController extends BaseController
      * Batch action deactivate
      *
      * @param ProxyQueryInterface $selectedModelQuery
-     * @param Request             $request
+     * @param Request $request
      * @return RedirectResponse
      */
     public function batchActionDeactivate(ProxyQueryInterface $selectedModelQuery, Request $request = null)
@@ -111,7 +112,7 @@ class CRUDController extends BaseController
 
         $target = $modelManager->findBy($this->admin->getClass(), ['id' => $request->get('targetId')]);
 
-        if ($target === null){
+        if ($target === null) {
             $this->addFlash('sonata_flash_info', 'flash_batch_merge_no_target');
 
             return new RedirectResponse(
@@ -140,6 +141,28 @@ class CRUDController extends BaseController
         return new RedirectResponse(
             $this->admin->generateUrl('list', $this->admin->getFilterParameters())
         );
+    }
+
+    /**
+     * @return RedirectResponse
+     * @throws NotFoundHttpException
+     */
+    public function cloneAction()
+    {
+        $object = $this->admin->getSubject();
+
+        if (!$object) {
+            throw new NotFoundHttpException(sprintf('unable to find the object with id : %s',
+                $this->admin->getIdParameter()));
+        }
+
+        $clonedObject = clone $object;  // Careful, you may need to overload the __clone method of your object
+
+        $clonedObject = $this->admin->create($clonedObject);
+
+        $this->addFlash('sonata_flash_success', 'Cloned successfully');
+
+        return new RedirectResponse($this->admin->generateUrl('edit', ['id' => $clonedObject->getId()]));
     }
 
 }

@@ -2,10 +2,6 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\ProductModelSizes;
-use AppBundle\Entity\SkuProducts;
-use AppBundle\Model\CartItem;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 

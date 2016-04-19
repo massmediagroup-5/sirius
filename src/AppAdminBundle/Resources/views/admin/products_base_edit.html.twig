@@ -13,7 +13,7 @@ file that was distributed with this source code.
 
 {% block title %}
     {% if admin.id(object) is not null %}
-        {{ "title_edit"|trans({'%name%': admin.toString(object)|truncate(15) }, 'SonataAdminBundle') }}
+        {{ "title_edit"|trans({'%name%': admin.toString(object)|truncate(30) }, 'SonataAdminBundle') }}
     {% else %}
         {{ "title_create"|trans({}, 'SonataAdminBundle') }}
     {% endif %}
@@ -33,8 +33,8 @@ file that was distributed with this source code.
 
 {% block tab_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'template': admin_pool.getTemplate('tab_menu_template')}, 'twig') }}{% endblock %}
 
-{% use 'AppAdminBundle:admin:product_models_base_edit_form.html.twig' with form as parentForm %}
-{% import "AppAdminBundle:admin:product_models_base_edit_form_macro.html.twig" as form_helper %}
+{% use 'AppAdminBundle:admin:products_base_edit_form.html.twig' with form as parentForm %}
+{% import "AppAdminBundle:admin:products_base_edit_form_macro.html.twig" as form_helper %}
 
 {% block form %}
     {{ block('parentForm') }}

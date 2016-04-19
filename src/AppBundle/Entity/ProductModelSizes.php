@@ -17,6 +17,18 @@ class ProductModelSizes
      */
     private $size;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $sizes;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -52,9 +64,42 @@ class ProductModelSizes
         return $this->size;
     }
 
+    /**
+     * Add size
+     *
+     * @param \AppBundle\Entity\ProductModelSpecificSize $size
+     *
+     * @return ProductModelSizes
+     */
+    public function addSize(\AppBundle\Entity\ProductModelSpecificSize $size)
+    {
+        $this->sizes[] = $size;
+
+        return $this;
+    }
+
+    /**
+     * Remove size
+     *
+     * @param \AppBundle\Entity\ProductModelSpecificSize $size
+     */
+    public function removeSize(\AppBundle\Entity\ProductModelSpecificSize $size)
+    {
+        $this->sizes->removeElement($size);
+    }
+
+    /**
+     * Get sizes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSizes()
+    {
+        return $this->sizes;
+    }
+
     public function __toString()
     {
         return $this->getSize() ? : '';
     }
-
 }
