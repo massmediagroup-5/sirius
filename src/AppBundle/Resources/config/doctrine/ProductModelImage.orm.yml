@@ -1,13 +1,5 @@
-AppBundle\Entity\ProductModelDecorationColors:
+AppBundle\Entity\ProductModelImage:
     type: entity
-    table: product_model_decoration_colors
-    indexes:
-        name:
-            columns:
-                - name
-        hex:
-            columns:
-                - hex
     uniqueConstraints:
         id_UNIQUE:
             columns:
@@ -22,18 +14,19 @@ AppBundle\Entity\ProductModelDecorationColors:
             generator:
                 strategy: IDENTITY
     fields:
-        name:
+        link:
             type: string
             nullable: true
-            length: 255
+            length: 150
             options:
                 fixed: false
-        hex:
-            type: string
-            nullable: true
-            length: 25
+                comment: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.png
+        priority:
+            type: integer
+            nullable: false
             options:
-                fixed: false
+                unsigned: false
+                default: 0
         createTime:
             type: datetime
             nullable: false
@@ -44,4 +37,12 @@ AppBundle\Entity\ProductModelDecorationColors:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
+    manyToOne:
+        model:
+            targetEntity: ProductModels
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: images
+            orphanRemoval: false
     lifecycleCallbacks: {  }

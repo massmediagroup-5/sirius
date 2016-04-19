@@ -18,11 +18,17 @@ class AddInCartType extends AbstractType
         $quantities = range(1, 10);
         $builder
             ->add('size', 'entity', [
-                'class' => 'AppBundle:ProductModelSizes',
+                'class' => 'AppBundle:ProductModelSpecificSize',
                 'choices' => $options['model']->getSizes(),
                 'required' => true,
                 'placeholder' => '',
-                'constraints' => [new NotBlank]
+                'constraints' => [new NotBlank],
+                'choice_attr' => function ($val, $key, $index) {
+                    return [
+                        'data-preorderflag' => (int)$val->getPreOrderFlag(),
+                        'data-id' => $val->getId(),
+                    ];
+                },
             ])
             ->add('quantity', ChoiceType::class, [
                 'choices' => array_combine($quantities, $quantities),

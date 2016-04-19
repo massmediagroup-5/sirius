@@ -11,12 +11,6 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
 
-    app.admin.cart_product_size:
-        class: AppAdminBundle\Admin\CartProductSizeAdmin
-        arguments: [~, AppBundle\Entity\CartProductSize, SonataAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
-
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin
         #arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:CategoriesAdmin]
@@ -36,31 +30,34 @@ services:
         class: AppAdminBundle\Admin\ProductsAdmin
         arguments: [~, AppBundle\Entity\Products, AppAdminBundle:CRUD, @service_container]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Товары"}
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Модели"}
         calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
     app.admin.product_models:
         class: AppAdminBundle\Admin\ProductModelsAdmin
         arguments: [~, AppBundle\Entity\ProductModels, AppAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Модели"}
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Товары"}
         calls:
             - [ addChild, [@app.admin.product_model_images] ]
+            - [ setLabelTranslatorStrategy, [ @sonata.admin.label.strategy.underscore ] ]
             - [ setTemplate, [form, AppAdminBundle:admin:form_admin_fields.html.twig]]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
 
-    app.admin.sku_products:
-        class: AppAdminBundle\Admin\SkuProductsAdmin
-        arguments: [~, AppBundle\Entity\SkuProducts, AppAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Артикулы"}
-
     app.admin.product_model_images:
         class: AppAdminBundle\Admin\ProductModelImagesAdmin
-        arguments: [~, AppBundle\Entity\ProductModelImages, SonataAdminBundle:CRUD]
+        arguments: [~, AppBundle\Entity\ProductModelImage, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Изображения моделей"}
+            - {name: sonata.admin, manager_type: orm, group: "Меню", label: "Изображения товаров", show_in_dashboard: false}
+
+    app.admin.product_model_specific_size:
+        class: AppAdminBundle\Admin\ProductModelSpecificSizeAdmin
+        arguments: [~, AppBundle\Entity\ProductModelSpecificSize, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, show_in_dashboard: false}
 
     app.admin.characteristics:
         class: AppAdminBundle\Admin\CharacteristicsAdmin

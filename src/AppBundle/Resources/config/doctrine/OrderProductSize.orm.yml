@@ -1,0 +1,60 @@
+AppBundle\Entity\OrderProductSize:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        status:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+        discountedTotalPrice:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 2
+            options:
+                default: 0.00
+            column: discounted_total_price
+        totalPrice:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 2
+            options:
+                default: 0.00
+            column: total_price
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+        quantity:
+            type: integer
+    manyToOne:
+        size:
+            targetEntity: ProductModelSizes
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: orderedSizes
+            orphanRemoval: false
+        order:
+            targetEntity: Orders
+            cascade: ["persist"]
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: sizes
+            orphanRemoval: true
+    lifecycleCallbacks: {  }

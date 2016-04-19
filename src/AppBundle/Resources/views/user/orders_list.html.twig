@@ -37,17 +37,17 @@
                                                 <tr>
                                                     <td>
                                                         <div class="prod-img">
-                                                            {% if cartItem.skuProduct.productModels.productModelImages.0 is defined %}
-                                                                <img src="{{ cartItem.skuProduct.productModels.productModelImages.0.link | imagine_filter('on_wholesale_cart_page') }}" />
+                                                            {% if cartItem.productModel.images.0 is defined %}
+                                                                <img src="{{ cartItem.productModel.images.0.link | imagine_filter('on_wholesale_cart_page') }}" />
                                                             {% else %}
                                                                 <img src="{{ param('no_image') | imagine_filter('on_wholesale_cart_page') }}"/>
                                                             {% endif %}
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <p class="name"><a href="#">{{ cartItem.skuProducts.productModels.name }}</a></p>
-                                                        <p class="description">Цвет {{ cartItem.skuProducts.productModels.productColors.name }}</p>
-                                                        <p class="description">(Артикул: {{ cartItem.skuProducts.sku }})</p>
+                                                        <p class="name"><a href="#">{{ cartItem.productModel.products.name }}</a></p>
+                                                        <p class="description">Цвет {{ cartItem.productModel.productColors.name }}</p>
+                                                        <p class="description">(Артикул: {{ cartItem.productModel.products.article }})</p>
                                                     </td>
                                                     <td>
                                                         <p class="title">Количество</p>

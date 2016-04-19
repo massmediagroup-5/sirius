@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity\Repository;
 
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Illuminate\Support\Arr;
 
@@ -35,38 +36,33 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * Todo complete or remove
-     *
      * @param $category
      * @param $characteristicValues
      * @param $filters
+     * @param bool|false $wholesale
      * @return mixed
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getPricesIntervalForFilters($category, $characteristicValues, $filters)
+    public function getPricesIntervalForFilters($category, $characteristicValues, $filters, $wholesale = false)
     {
-        $builder = $this
-            ->createQueryBuilder('productModels')
-            ->select('productModels, MIN(productModels.price) AS min_price, MAX(productModels.price) AS max_price')
-            ->innerJoin('productModels.products', 'products')->addselect('products')
-            ->innerJoin('products.baseCategory', 'baseCategory')
-            ->innerJoin('products.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics')->addselect('characteristics')
-            ->where('productModels.active = 1 AND productModels.published = 1');
+        $builder = $this->createQueryBuilderWithJoins();
 
-        $builder = $this->addEnabledOnSiteConditions($builder);
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues);
-
-        unset($filters['price_from']);
-
-        unset($filters['price_to']);
+        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder,
+            $characteristicValues, 'productModels');
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 
-        return $builder->getQuery()->getSingleResult();
+        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
+
+        $builder->select(
+            "MAX(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price)),
+            MIN(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price))"
+        );
+
+        $prices = $builder->getQuery()->getResult()[0];
+
+        return ['max_price' => $prices[1], 'min_price' => $prices[2]];
     }
 
     /**
@@ -87,31 +83,41 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters)
     {
-        $builder = $this->createQueryBuilder('productModels')
-            ->select('productModels');
-        // Add a starting Joins.
-        $builder
+        $builder = $this->createQueryBuilderWithJoins();
+
+        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder,
+            $characteristicValues, 'productModels');
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
+
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->addPriceToQuery($builder, $filters);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function createQueryBuilderWithJoins()
+    {
+
+        return $this->createQueryBuilder('productModels')
+            ->select('productModels')
             ->innerJoin('productModels.products', 'products')->addselect('products')
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.categories', 'categories')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
-            // todo fix this hell, doctrine lazy load is slower then over 100 queries
-//            ->leftJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND productModels.active = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
-
-        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder, $characteristicValues, 'productModels');
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
-
-        return $builder->getQuery();
     }
 
     /**
@@ -126,8 +132,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.categories', 'categories')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
-            ->innerJoin('productModels.skuProducts', 'skuProducts')->addselect('skuProducts')
-            ->leftJoin('productModels.productModelImages', 'productModelImages')->addselect('productModelImages')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
             ->where('productModels.id IN (:ids)')
             ->setParameter('ids', $modelIds)
             ->getQuery();
