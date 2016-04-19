@@ -368,14 +368,12 @@ class ImportCharacteristics
                         $product
                             ->setStatus(1)
                             ->setActive(1)
-                            //->setPublished(1)
                             ;
                         $this->em->persist($product);
                         $productModels
                             ->setProductColors($color)
                             ->setStatus(1)
                             ->setActive(1)
-                            //->setPublished(1)
                             ;
                         $this->em->persist($productModels);
                         $skuProduct

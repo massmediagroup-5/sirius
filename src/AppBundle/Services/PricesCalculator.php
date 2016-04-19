@@ -44,7 +44,7 @@ class PricesCalculator
      */
     public function getPrice($object)
     {
-        switch ($object) {
+        switch (true) {
             case $object instanceof Products:
                 return $this->getProductPrice($object);
             case $object instanceof ProductModels:
@@ -62,7 +62,7 @@ class PricesCalculator
      */
     public function getDiscountedPrice($object)
     {
-        switch ($object) {
+        switch (true) {
             case $object instanceof Products:
                 return $this->getProductDiscountedPrice($object);
             case $object instanceof ProductModels:

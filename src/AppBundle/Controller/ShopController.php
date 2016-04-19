@@ -27,7 +27,7 @@ class ShopController extends Controller
     {
         $wishlist = $request->getSession()->get('wishlist');
         $data = $this->getDoctrine()->getRepository('AppBundle:ProductModels')->findBy(
-            array('active' => 1, 'published' => 1, 'id' => $wishlist),
+            array('active' => 1, 'id' => $wishlist),
             array('id' => 'ASC')
         );
         return $this->render('AppBundle:userpart:wishlist.html.twig', array(

@@ -220,8 +220,7 @@ class ImportAdmin
             ->setAlias($alias)
             ->setStatus($this->publishFlag)
             ->setActive($this->publishFlag)
-            ->setInStock($this->getCurrentRowData('count') > 0)
-            ->setPublished(1);
+            ->setInStock($this->getCurrentRowData('count') > 0);
 
         $this->em->persist($productModel);
 
@@ -268,8 +267,7 @@ class ImportAdmin
                         ->findOneByName('none')
                 )
                 ->setStatus($this->publishFlag)
-                ->setActive($this->publishFlag)
-                ->setPublished($this->publishFlag);
+                ->setActive($this->publishFlag);
             $this->em->persist($product);
         }
 

@@ -18,7 +18,6 @@ class CharacteristicValuesAdmin extends Admin
         $datagridMapper
             ->add('name', null, array('label' => 'Название'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
-            ->add('notParse', null, array('label' => 'Не парсить'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
         ;
@@ -32,7 +31,6 @@ class CharacteristicValuesAdmin extends Admin
         $listMapper
             ->add('name', null, array('label' => 'Название'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
-            ->add('notParse', null, array('label' => 'Не парсить'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
             ->add('_action', 'actions', array(
@@ -54,7 +52,6 @@ class CharacteristicValuesAdmin extends Admin
             ->add('characteristics', null, array('label' => 'Характеристика'))
             ->add('name', null, array('label' => 'Значение'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
-//            ->add('notParse', null, array('label' => 'Не спарсилась'))
         ;
     }
 
@@ -66,7 +63,6 @@ class CharacteristicValuesAdmin extends Admin
         $showMapper
             ->add('name', null, array('label' => 'Название'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
-            ->add('notParse', null, array('label' => 'Не парсить'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
         ;

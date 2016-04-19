@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use Cocur\Slugify\Slugify;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -35,7 +36,6 @@ class ProductModelsAdmin extends Admin
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
             ->add('inStock', null, ['label' => 'Наличие на складе'])
-            ->add('published', null, ['label' => 'Опубликовано'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
@@ -52,7 +52,6 @@ class ProductModelsAdmin extends Admin
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['editable' => true, 'label' => 'Активная'])
             ->add('inStock', null, ['editable' => true, 'label' => 'Наличие на складе'])
-            ->add('published', null, ['editable' => true, 'label' => 'Опубликовано'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [
@@ -77,7 +76,7 @@ class ProductModelsAdmin extends Admin
             ->with('Продукт', [
                 'class' => 'col-md-12',
             ])
-            ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
             ->add('products', 'entity',
                 [
                     'class' => 'AppBundle:Products',
@@ -108,7 +107,6 @@ class ProductModelsAdmin extends Admin
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
             ->add('inStock', null, ['label' => 'Наличие на складе'])
-            ->add('published', null, ['label' => 'Опубликовано'])
             ->end()
             ->end()
             ->tab('Размеры')
@@ -147,7 +145,6 @@ class ProductModelsAdmin extends Admin
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
             ->add('inStock', null, ['label' => 'Наличие на складе'])
-            ->add('published', null, ['label' => 'Опубликовано'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
@@ -158,6 +155,13 @@ class ProductModelsAdmin extends Admin
      */
     public function preUpdate($model)
     {
+        if(!$model->getAlias()) {
+            $slugify = new Slugify();
+            $alias = $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
+            $alias = $slugify->slugify($alias);
+            $model->setAlias($alias);
+        }
+
         foreach ($model->getSizes() as $size) {
             $size->setModel($model);
         }

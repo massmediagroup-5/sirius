@@ -27,7 +27,7 @@ class CompareController extends Controller
         }
         foreach($compare['compare_ids'] as $category_id => $model_ids){
             $models = $this->getDoctrine()->getRepository('AppBundle:ProductModels')->findBy(
-                array('active'=>1,'published'=>1,'id'=>array_keys($model_ids['models'])),
+                array('active'=>1, 'id'=>array_keys($model_ids['models'])),
                 array('id'=>'ASC')
             );
             $compare['categories'][$compare['compare_ids'][$category_id]['date']]['models'] = $models;

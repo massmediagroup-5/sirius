@@ -58,11 +58,6 @@ class ProductModels
     private $inStock;
 
     /**
-     * @var boolean
-     */
-    private $published;
-
-    /**
      * @var \DateTime
      */
     private $createTime;
@@ -286,30 +281,6 @@ class ProductModels
     public function getInStock()
     {
         return $this->inStock;
-    }
-
-    /**
-     * Set published
-     *
-     * @param boolean $published
-     *
-     * @return ProductModels
-     */
-    public function setPublished($published)
-    {
-        $this->published = $published;
-
-        return $this;
-    }
-
-    /**
-     * Get published
-     *
-     * @return boolean
-     */
-    public function getPublished()
-    {
-        return $this->published;
     }
 
     /**

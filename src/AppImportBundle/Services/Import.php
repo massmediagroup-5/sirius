@@ -357,7 +357,6 @@ class Import
             ->setAlias($alias)
             ->setStatus(0)
             ->setActive(0)
-            ->setPublished(1)
             ;
         // Check if Price column exists.
         if ($this->titleColumn['titlePrice']) {
@@ -409,7 +408,6 @@ class Import
                 )
                 ->setStatus(0)
                 ->setActive(0)
-                ->setPublished(1)
                 ;
             $this->em->persist($product);
             $this->em->flush();

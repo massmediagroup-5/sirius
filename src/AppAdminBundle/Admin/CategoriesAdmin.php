@@ -21,16 +21,16 @@ class CategoriesAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('name', null, array('label' => 'Название категории'))
-            ->add('alias', null, array('label' => 'Ссылка'))
-            ->add('parrent.name', null, array('label' => 'Родительская категория'))
-            ->add('inMenu', null, array('label' => 'В меню'))
-            ->add('active', null, array('label' => 'Актиная'))
-            ->add('seoTitle', null, array('label' => 'СЕО заглавие'))
-            ->add('seoDescription', null, array('label' => 'СЕО описание'))
-            ->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
+            ->add('name', null, ['label' => 'Название категории'])
+            ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('parrent.name', null, ['label' => 'Родительская категория'])
+            ->add('inMenu', null, ['label' => 'В меню'])
+            ->add('active', null, ['label' => 'Актиная'])
+            ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
+            ->add('seoDescription', null, ['label' => 'СЕО описание'])
+            ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
         ;
     }
 
@@ -41,26 +41,26 @@ class CategoriesAdmin extends Admin
     {
         $listMapper
             ->add('id')
-            ->addIdentifier('name', null, array('label' => 'Название категории'))
-            ->addIdentifier('alias', null, array('label' => 'Ссылка'))
+            ->addIdentifier('name', null, ['label' => 'Название категории'])
+            ->addIdentifier('alias', null, ['label' => 'Ссылка'])
             ->add('parrent.name', 'entity',
-                array(
+                [
                     'class'         => 'AppBundle:Categories',
                     'associated_property'      => 'name',
                     'label'         => 'Родительская категория',
                     'editable' => true
-                )
+                ]
             )
-            ->add('inMenu', 'boolean', array('label' => 'В меню', 'editable' => true))
-            ->add('active', 'boolean', array('label' => 'Актиная', 'editable' => true))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'edit' => array(),
-                    'delete' => array(),
-                ),
-            ))
+            ->add('inMenu', 'boolean', ['label' => 'В меню', 'editable' => true])
+            ->add('active', 'boolean', ['label' => 'Актиная', 'editable' => true])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'edit' => [],
+                    'delete' => [],
+                ],
+            ])
         ;
     }
 
@@ -88,52 +88,52 @@ class CategoriesAdmin extends Admin
         $formMapper
             ->tab('Категория')
                 ->with('Categories',
-                    array(
+                    [
                         'class'       => 'col-md-12',
-                    ))
-                    ->add('name', null, array('label' => 'Название категории'))
-                    ->add('alias', null, array('label' => 'Ссылка'))
+                    ])
+                    ->add('name', null, ['label' => 'Название категории'])
+                    ->add('alias', null, ['label' => 'Ссылка'])
                     ->add('parrent','entity',
-                        array(
+                        [
                             'class'         => 'AppBundle:Categories',
                             'property'      => 'name',
                             'label'         => 'Родительская категория',
                             'empty_value'   => 'Выберите родительскую категорию'
-                        )
+                        ]
                     )
-                    ->add('inMenu', null, array('label' => 'В меню'))
-                    ->add('active', null, array('label' => 'Актиная'))
-                    ->add('content', null, array('label' => 'Контент'))
-                    ->add('seoTitle', null, array('label' => 'СЕО заглавие'))
-                    ->add('seoDescription', null, array('label' => 'СЕО описание'))
-                    ->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
+                    ->add('inMenu', null, ['label' => 'В меню'])
+                    ->add('active', null, ['label' => 'Актиная'])
+                    ->add('content', null, ['label' => 'Контент'])
+                    ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
+                    ->add('seoDescription', null, ['label' => 'СЕО описание'])
+                    ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
                 ->end()
             ->end()
             ->tab('Характеристик')
                 ->with('Characteristics',
-                    array(
+                    [
                         'class'       => 'col-md-12',
                         'collapsed' => true
-                    ))
+                    ])
                     ->add('characteristics', 'entity',
-                        array(
+                        [
                             'class'     => 'AppBundle:Characteristics',
                             'label'     => 'Характеристик',
                             'expanded' => true,
                             'multiple' => true,
                             'by_reference' => false,
-                        )
+                        ]
                     )
                 ->end()
             ->end()
             ->tab('Значения характеристик')
                 ->with('CharacteristicValues',
-                    array(
+                    [
                         'class'       => 'col-md-12',
                         'collapsed' => true
-                    ))
+                    ])
                     ->add('characteristicValues', 'entity',
-                        array(
+                        [
                             'class'    => 'AppBundle:CharacteristicValues' ,
                             'label' => 'Значения характеристик',
                             'expanded' => true,
@@ -149,23 +149,23 @@ class CategoriesAdmin extends Admin
                                     ;
                                     return $qb;
                                 }
-                        )
+                        ]
                     )
                 ->end()
             ->end()
             ->tab('Фильтры')
                 ->with('Filters',
-                    array(
+                    [
                         'class'       => 'col-md-12',
                         'collapsed' => true
-                    ))
+                    ])
                     ->add('filters', 'sonata_type_model',
-                        array(
+                        [
                             'class'     => 'AppBundle:Filters',
                             'label'     => 'Фильтры',
                             'property'=> 'name',
                             'by_reference' => false,
-                        )
+                        ]
                     )
                 ->end()
             ->end()
@@ -185,16 +185,16 @@ class CategoriesAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('name', null, array('label' => 'Название категории'))
-            ->add('alias', null, array('label' => 'Ссылка'))
-            ->add('parrent', 'entity', array('label' => 'Родительская категория'))
-            ->add('inMenu', null, array('label' => 'В меню'))
-            ->add('active', null, array('label' => 'Актиная'))
-            ->add('seoTitle', null, array('label' => 'СЕО заглавие'))
-            ->add('seoDescription', null, array('label' => 'СЕО описание'))
-            ->add('seoKeywords', null, array('label' => 'СЕО кейворды'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
+            ->add('name', null, ['label' => 'Название категории'])
+            ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('parrent', 'entity', ['label' => 'Родительская категория'])
+            ->add('inMenu', null, ['label' => 'В меню'])
+            ->add('active', null, ['label' => 'Актиная'])
+            ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
+            ->add('seoDescription', null, ['label' => 'СЕО описание'])
+            ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
         ;
     }
 }
