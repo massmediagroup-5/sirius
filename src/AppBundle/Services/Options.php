@@ -44,7 +44,10 @@ class Options
         if (empty($this->params)) {
             $params = $this->em->getRepository('AppBundle:SiteParams')->findAll();
             foreach($params as $value){
-                $this->params[$value->getParamName()] = $value->getParamValue();
+                $this->params[$value->getParamName()] = array(
+                    'value' => $value->getParamValue(),
+                    'active' => $value->getActive()
+                );
             }
         }
         return $this->params;
