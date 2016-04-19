@@ -22,7 +22,13 @@ class AddInCartType extends AbstractType
                 'choices' => $options['model']->getSizes(),
                 'required' => true,
                 'placeholder' => '',
-                'constraints' => [new NotBlank]
+                'constraints' => [new NotBlank],
+                'choice_attr' => function ($val, $key, $index) {
+                    return [
+                        'data-preorderflag' => (int)$val->getPreOrderFlag(),
+                        'data-id' => $val->getId(),
+                    ];
+                },
             ])
             ->add('quantity', ChoiceType::class, [
                 'choices' => array_combine($quantities, $quantities),
