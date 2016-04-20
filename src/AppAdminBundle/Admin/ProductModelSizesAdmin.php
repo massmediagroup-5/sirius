@@ -11,6 +11,14 @@ use Sonata\AdminBundle\Show\ShowMapper;
 class ProductModelSizesAdmin extends Admin
 {
     /**
+     * @var array
+     */
+    protected $datagridValues = array(
+        '_sort_order' => 'ASC',
+        '_sort_by' => 'size',
+    );
+
+    /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

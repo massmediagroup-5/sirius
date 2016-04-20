@@ -31,11 +31,10 @@ class ProductModelsAdmin extends Admin
     {
         $datagridMapper
             ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('products.baseCategory', null, ['label' => 'Категория'])
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
-            ->add('active', null, ['label' => 'Активная'])
-            ->add('inStock', null, ['label' => 'Наличие на складе'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
@@ -46,12 +45,15 @@ class ProductModelsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->add('products.name', null, ['label' => 'Название товара'])
             ->addIdentifier('alias', null, ['label' => 'Ссылка'])
+            ->add('products.article', null, ['label' => 'Артикул'])
+            ->add('products.baseCategory.name', null, ['label' => 'Категория'])
+            ->add('productColors.name', null, ['label' => 'Цвет'])
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['editable' => true, 'label' => 'Активная'])
-            ->add('inStock', null, ['editable' => true, 'label' => 'Наличие на складе'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [
@@ -72,8 +74,8 @@ class ProductModelsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->tab('Продукт')
-            ->with('Продукт', [
+            ->tab('Товар')
+            ->with('Товар', [
                 'class' => 'col-md-12',
             ])
             ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
@@ -81,16 +83,16 @@ class ProductModelsAdmin extends Admin
                 [
                     'class' => 'AppBundle:Products',
                     'property' => 'name',
-                    'label' => 'Продукт',
-                    'empty_value' => 'Выберите продукт'
+                    'label' => 'Товар',
+                    'empty_value' => 'Выберите товар'
                 ]
             )
             ->add('productColors', 'entity',
                 [
                     'class' => 'AppBundle:ProductColors',
                     'property' => 'name',
-                    'label' => 'Цвет модели',
-                    'empty_value' => 'Выберите цвет модели'
+                    'label' => 'Цвет товара',
+                    'empty_value' => 'Выберите цвет товара'
                 ]
             )
             ->add('decorationColor', 'entity',
@@ -106,7 +108,6 @@ class ProductModelsAdmin extends Admin
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
-            ->add('inStock', null, ['label' => 'Наличие на складе'])
             ->end()
             ->end()
             ->tab('Размеры')
@@ -121,8 +122,8 @@ class ProductModelsAdmin extends Admin
             ->end();
 
         if (!$this->hasParentFieldDescription()) {
-            $formMapper->tab('Изображения продукта')
-                ->with('Изображения продукта', [
+            $formMapper->tab('Изображения товара')
+                ->with('Изображения товара', [
                         'class' => 'col-md-12',
                     ]
                 )
@@ -145,7 +146,6 @@ class ProductModelsAdmin extends Admin
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('active', null, ['label' => 'Активная'])
-            ->add('inStock', null, ['label' => 'Наличие на складе'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }

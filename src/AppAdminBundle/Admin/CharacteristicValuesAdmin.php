@@ -29,13 +29,14 @@ class CharacteristicValuesAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('name', null, array('label' => 'Название'))
+            ->add('name', null, array('label' => 'Название значения характеристики'))
+            ->add('characteristics.name', null, array('label' => 'Название характеристики'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
+//                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )

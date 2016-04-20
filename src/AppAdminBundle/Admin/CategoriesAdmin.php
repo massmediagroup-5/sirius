@@ -40,9 +40,8 @@ class CategoriesAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->addIdentifier('name', null, ['label' => 'Название категории'])
-            ->addIdentifier('alias', null, ['label' => 'Ссылка'])
+            ->addIdentifier('name', null, array('label' => 'Название категории'))
+            ->addIdentifier('alias', null, array('label' => 'Ссылка'))
             ->add('parrent.name', 'entity',
                 [
                     'class'         => 'AppBundle:Categories',
@@ -51,16 +50,17 @@ class CategoriesAdmin extends Admin
                     'editable' => true
                 ]
             )
-            ->add('inMenu', 'boolean', ['label' => 'В меню', 'editable' => true])
-            ->add('active', 'boolean', ['label' => 'Актиная', 'editable' => true])
-            ->add('createTime', null, ['label' => 'Дата создания'])
-            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
-            ->add('_action', 'actions', [
-                'actions' => [
-                    'edit' => [],
-                    'delete' => [],
-                ],
-            ])
+            ->add('inMenu', 'boolean', array('label' => 'В меню', 'editable' => true))
+            ->add('active', 'boolean', array('label' => 'Актиная', 'editable' => true))
+            ->add('getProductsCount', null, array('label' => 'Количество продуктов'))
+            ->add('createTime', null, array('label' => 'Дата создания'))
+            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'edit' => array(),
+                    'delete' => array(),
+                ),
+            ))
         ;
     }
 

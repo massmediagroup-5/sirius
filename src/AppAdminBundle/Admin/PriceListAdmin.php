@@ -29,7 +29,8 @@ class PriceListAdmin extends Admin
             ->add('model.productColors', null, ['label' => 'Цвет'])
             ->add('size.size', null, ['label' => 'Размер'])
             ->add('quantity', null, ['label' => 'Количество'])
-            ->add('price', null, ['label' => 'Цена'])
+            ->add('price', null, ['label' => 'Цена размера'])
+            ->add('model.price', null, ['label' => 'Цена продукта'])
             ->add('model.updateTime', null, ['label' => 'Дата последнего обновления'])
         ;
     }
@@ -41,7 +42,8 @@ class PriceListAdmin extends Admin
         $exportFields["Цвет"] = 'model.productColors';
         $exportFields["Размер"] = 'size.size';
         $exportFields["Количество"] = 'quantity';
-        $exportFields["Цена"] = 'price';
+        $exportFields["Цена размера"] = 'price';
+        $exportFields["Цена продукта"] = 'model.price';
         $exportFields["Дата последнего обновления"] = 'model.updateTime';
         return $exportFields;
     }
