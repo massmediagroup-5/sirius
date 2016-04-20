@@ -506,6 +506,11 @@ class Categories implements CharacteristicableInterface
         return $this->products;
     }
 
+    public function getProductsCount()
+    {
+        return count($this->getBasedProducts());
+    }
+
     /**
      * Add basedProduct
      *
