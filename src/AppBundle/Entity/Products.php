@@ -691,6 +691,6 @@ class Products implements CharacteristicableInterface
             $characteristicValues->add($characteristicValue);
         }
         $this->characteristicValues = $characteristicValues;
-        $this->article .= '-clone';
+        $this->article .= '-clone-' . uniqid();
     }
 }

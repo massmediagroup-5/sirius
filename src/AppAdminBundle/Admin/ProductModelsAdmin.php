@@ -154,6 +154,14 @@ class ProductModelsAdmin extends Admin
      * @param mixed $model
      * @return void
      */
+    public function prePersist($model) {
+        $this->preUpdate($model);
+    }
+
+    /**
+     * @param mixed $model
+     * @return void
+     */
     public function preUpdate($model)
     {
         if(!$model->getAlias()) {
