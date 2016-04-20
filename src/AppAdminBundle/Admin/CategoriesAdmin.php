@@ -40,7 +40,7 @@ class CategoriesAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
+//            ->add('id')
             ->addIdentifier('name', null, array('label' => 'Название категории'))
             ->addIdentifier('alias', null, array('label' => 'Ссылка'))
             ->add('parrent.name', 'entity',
@@ -53,6 +53,7 @@ class CategoriesAdmin extends Admin
             )
             ->add('inMenu', 'boolean', array('label' => 'В меню', 'editable' => true))
             ->add('active', 'boolean', array('label' => 'Актиная', 'editable' => true))
+            ->add('getProductsCount', null, array('label' => 'Количество продуктов'))
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
             ->add('_action', 'actions', array(

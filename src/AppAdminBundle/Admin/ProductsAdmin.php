@@ -48,7 +48,7 @@ class ProductsAdmin extends Admin
             ->add('name', null, ['label' => 'Название модели'])
             ->add('content', null, ['label' => 'Описание модели'])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('published', null, ['label' => 'Опубликован'])
+//            ->add('published', null, ['label' => 'Опубликован'])
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды']);
@@ -60,9 +60,11 @@ class ProductsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, ['label' => 'Название товара'])
+            ->addIdentifier('name', null, ['label' => 'Название модели'])
+            ->add('article', null, ['label' => 'Артикул'])
+            ->add('baseCategory.name', null, ['label' => 'Категория'])
             ->add('active', 'boolean', ['label' => 'Активный', 'editable' => true])
-            ->add('published', 'boolean', ['label' => 'Опубликован', 'editable' => true])
+//            ->add('published', 'boolean', ['label' => 'Опубликован', 'editable' => true])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [
@@ -91,7 +93,7 @@ class ProductsAdmin extends Admin
             ->add('characteristics', null, ['label' => 'Характеристики', 'attr' => ['class' => 'ckeditor']])
             ->add('features', null, ['label' => 'Особенности', 'attr' => ['class' => 'ckeditor']])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('published', null, ['label' => 'Опубликован'])
+//            ->add('published', null, ['label' => 'Опубликован'])
             ->add('baseCategory', 'entity', [
                 'class' => 'AppBundle:Categories',
                 'property' => 'name',
@@ -135,7 +137,7 @@ class ProductsAdmin extends Admin
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('published', null, ['label' => 'Опубликован'])
+//            ->add('published', null, ['label' => 'Опубликован'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
     }
