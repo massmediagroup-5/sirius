@@ -84,7 +84,7 @@ services:
         class: AppAdminBundle\Admin\VendorsAdmin
         arguments: [~, AppBundle\Entity\Vendors, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Поставщики"}
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Поставщики", show_in_dashboard: false}
 
     app_admin.admin.main_slider:
         class: AppAdminBundle\Admin\MainSliderAdmin
