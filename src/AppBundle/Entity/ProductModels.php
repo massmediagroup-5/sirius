@@ -98,6 +98,7 @@ class ProductModels
     public function __construct()
     {
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -533,6 +534,6 @@ class ProductModels
             $sizes->add($size);
         }
         $this->sizes = $sizes;
-        $this->alias .= '-clone';
+        $this->alias .= '-clone-' . uniqid();
     }
 }

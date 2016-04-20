@@ -70,11 +70,10 @@
             this.$hoder.find("#sortable").sortable({
                 //placeholder: "ui-state-highlight"
                 stop: function (event, ui) {
-                    var imageIds = [];
                     $(this).find('.product_model_image_item').each(function () {
-                        imageIds.push(this.id);
+                        var $this = $(this);
+                        $this.find('input[id$=_priority]').val($this.index() + 1);
                     });
-                    putSortingImages(imageIds);
                 }
             });
             this.$hoder.find("#sortable").disableSelection();

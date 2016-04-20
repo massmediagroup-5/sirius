@@ -12,6 +12,13 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class ProductsAdmin extends Admin
 {
+    /**
+     * @var array
+     */
+    protected $datagridValues = array(
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'createTime',
+    );
 
     /**
      * em
