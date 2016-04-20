@@ -111,13 +111,13 @@ class ProductsAdmin extends Admin
                     'class' => 'col-md-12',
                 ])
             ->add('characteristicValues',
-                'sonata_type_model_autocomplete',
+                'entity',
                 [
-                    'attr' => ['class' => 'form-control'],
+                    'class'    => 'AppBundle:CharacteristicValues',
                     'label' => 'Значения характеристик',
                     'multiple' => true,
+                    'expanded' => true,
                     'property' => 'name',
-                    'minimum_input_length' => 1
                 ]
             )
             ->end()
