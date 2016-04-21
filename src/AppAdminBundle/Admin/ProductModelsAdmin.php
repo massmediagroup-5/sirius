@@ -45,20 +45,20 @@ class ProductModelsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('products.name', null, ['label' => 'Название товара'])
             ->addIdentifier('alias', null, ['label' => 'Ссылка'])
             ->add('products.article', null, ['label' => 'Артикул'])
-            ->add('products.baseCategory.name', null, ['label' => 'Категория'])
+            ->addIdentifier('products.name', null, ['label' => 'Модель'])
             ->add('productColors.name', null, ['label' => 'Цвет'])
+            ->add('products.baseCategory.name', null, ['label' => 'Категория'])
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
-            ->add('active', null, ['editable' => true, 'label' => 'Активная'])
+            ->add('published', null, ['editable' => true, 'label' => 'Опубликованно'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [
                 'actions' => [
-                    'show' => [],
+//                    'show' => [],
                     'edit' => [],
                     'delete' => [],
                     'clone' => [
@@ -83,8 +83,8 @@ class ProductModelsAdmin extends Admin
                 [
                     'class' => 'AppBundle:Products',
                     'property' => 'name',
-                    'label' => 'Товар',
-                    'empty_value' => 'Выберите товар'
+                    'label' => 'Модель',
+                    'empty_value' => 'Выберите Модель'
                 ]
             )
             ->add('productColors', 'entity',
@@ -107,7 +107,7 @@ class ProductModelsAdmin extends Admin
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
-            ->add('active', null, ['label' => 'Активная'])
+            ->add('published', null, ['label' => 'Опубликованно'])
             ->end()
             ->end()
             ->tab('Размеры')
