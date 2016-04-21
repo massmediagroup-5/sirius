@@ -53,7 +53,7 @@ class ProductModelsAdmin extends Admin
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
-            ->add('active', null, ['editable' => true, 'label' => 'Активная'])
+            ->add('published', null, ['editable' => true, 'label' => 'Опубликованно'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [
