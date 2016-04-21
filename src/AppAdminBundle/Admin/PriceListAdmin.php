@@ -24,13 +24,15 @@ class PriceListAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->add('model.products.name', null, ['label' => 'Модель'])
             ->add('model.products.article', null, ['label' => 'Артикул'])
             ->add('model.products.baseCategory.name', null, ['label' => 'Категория'])
-            ->add('model.productColors', null, ['label' => 'Цвет'])
-            ->add('size.size', null, ['label' => 'Размер'])
+            ->add('model.productColors.name', null, ['label' => 'Цвет'])
+            ->add('size.size', 'text', ['label' => 'Размер'])
             ->add('quantity', null, ['label' => 'Количество'])
             ->add('price', null, ['label' => 'Цена размера'])
             ->add('model.price', null, ['label' => 'Цена продукта'])
+            ->add('model.wholesalePrice', null, ['label' => 'Оптовая цена продукта'])
             ->add('model.updateTime', null, ['label' => 'Дата последнего обновления'])
         ;
     }
