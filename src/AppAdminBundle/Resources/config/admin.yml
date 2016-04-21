@@ -104,6 +104,18 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, show_in_dashboard: false}
 
+    app.admin.cities:
+        class: AppAdminBundle\Admin\CitiesAdmin
+        arguments: [~, AppBundle\Entity\Cities, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, show_in_dashboard: false}
+
+    app.admin.stores:
+        class: AppAdminBundle\Admin\StoresAdmin
+        arguments: [~, AppBundle\Entity\Stores, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, show_in_dashboard: false}
+
     app.admin.characteristics:
         class: AppAdminBundle\Admin\CharacteristicsAdmin
         arguments: [~, AppBundle\Entity\Characteristics, SonataAdminBundle:CRUD]

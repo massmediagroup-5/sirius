@@ -22,4 +22,6 @@ class NewOrdersAdmin extends OrdersAdmin
 
     protected $statusName = 'new';
 
+    protected $disableEdit = false;
+
 }
