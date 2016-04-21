@@ -5,9 +5,9 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
-        ROLE_SONATA_ADMIN: []
+        ROLE_ADMIN: []
         ROLE_WHOLESALER: []
-        ROLE_SUPER_ADMIN: [ROLE_SONATA_ADMIN]
+        ROLE_SUPER_ADMIN: []
 
     providers:
         fos_userbundle:

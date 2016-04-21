@@ -1,3 +1,24 @@
-'ROLE_SONATA_ADMIN: ': Администратор
-'ROLE_WHOLESALER: ': Оптовый покупатель
-'ROLE_SUPER_ADMIN: ROLE_SONATA_ADMIN': Суперадминистратор
+ROLE ADMIN: Администратор
+ROLE WHOLESALER: Оптовый покупатель
+ROLE SUPER ADMIN: Суперадминистратор
+orders: Заказы
+main slider: Главный слайдер
+slider: Слайдер
+pages: Страницы
+site params: Настройки сайта
+call back: Обратные звонки
+main banners: Банера
+categories: Категории
+filters: Фильтра
+products: Продукты
+product models: Модели продуктов
+sku products: Продукты SKU
+product model images: Изображения продуктов
+characteristics: Характеристики
+characteristic values: Значения характеристик
+product colors: Цвета продуктов
+product model sizes: Размеры продуктов
+vendors: Постащики
+cart: Корзина
+user: Пользователь
+cart product size: Размеры продукта в корзине

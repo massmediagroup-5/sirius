@@ -2,6 +2,7 @@ breadcrumb:
   link_dashboard: '<i class="fa fa-home"></i>'
   link_orders_list: Заказы
   link_products_list: Продукты
+  link_categories_list: Категории
 form:
   label_size: Размер
   label_base_category: Базовая категория
@@ -38,3 +39,5 @@ filter:
   label_active: Активность
   label_quantity: Количество
   label_price: Цена
+show:
+  label_id: ID
