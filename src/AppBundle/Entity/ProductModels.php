@@ -50,7 +50,7 @@ class ProductModels
     /**
      * @var boolean
      */
-    private $active;
+    private $published;
 
     /**
      * @var boolean
@@ -237,27 +237,27 @@ class ProductModels
     }
 
     /**
-     * Set active
+     * Set published
      *
-     * @param boolean $active
+     * @param boolean $published
      *
      * @return ProductModels
      */
-    public function setActive($active)
+    public function setPublished($published)
     {
-        $this->active = $active;
+        $this->published = $published;
 
         return $this;
     }
 
     /**
-     * Get active
+     * Get published
      *
      * @return boolean
      */
-    public function getActive()
+    public function getPublished()
     {
-        return $this->active;
+        return $this->published;
     }
 
     /**
