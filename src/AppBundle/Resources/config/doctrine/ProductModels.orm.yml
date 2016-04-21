@@ -72,7 +72,7 @@ AppBundle\Entity\ProductModels:
             options:
                 unsigned: false
                 default: '0'
-        active:
+        published:
             type: boolean
             nullable: true
         inStock:
