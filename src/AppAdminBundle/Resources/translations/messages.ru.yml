@@ -7,7 +7,19 @@ slider: Слайдер
 pages: Страницы
 site params: Настройки сайта
 call back: Обратные звонки
+new orders: Новые заказы
+accepted orders: Принятые заказы
+wait orders: Ждущие заказы
+formed orders: Сформированные заказы
+waiting for departure orders: Заказы ожидающие отправки
+sent orders: Отправленые заказы
+canceled orders: Отмененые заказы
+done orders: Обратные звонки
 main banners: Банера
+order status: Статусы заказов
+price list: Прайс лист
+menu items: Елементы меню
+menu: Меню
 categories: Категории
 filters: Фильтра
 products: Продукты
