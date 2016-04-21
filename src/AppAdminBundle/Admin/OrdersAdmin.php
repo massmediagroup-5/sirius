@@ -139,25 +139,18 @@ class OrdersAdmin extends Admin
                     (string)Orders::TYPE_QUICK => 'Быстрый',
                 ]
             ])
-            ->add('customDelivery', null, [
-                'label' => '"Своя доставка"',
-                'read_only' => true,
-                'disabled' => true,
-            ])
             ->add('fio', null, [
                 'label' => 'Ф.И.О.',
-                'read_only' => true,
-                'disabled' => true,
             ])
             ->add('phone', null, [
                 'label' => 'Телефон',
-                'read_only' => true,
-                'disabled' => true,
             ])
-            ->add('pay', null, [
+            ->add('pay', 'choice', [
                 'label' => 'Способ оплаты',
-                'read_only' => true,
-                'disabled' => true,
+                'choices' => [
+                    (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
+                    (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
+                ]
             ])
             ->add('totalPrice', null, [
                 'label' => 'Сумма заказа',
