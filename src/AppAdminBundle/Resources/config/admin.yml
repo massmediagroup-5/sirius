@@ -1,9 +1,57 @@
 services:
-    app.admin.orders:
-        class: AppAdminBundle\Admin\OrdersAdmin
+    app.admin.new_orders:
+        class: AppAdminBundle\Admin\NewOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Заказы"}
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Новые заказы"}
+
+    app.admin.accepted_orders:
+        class: AppAdminBundle\Admin\AcceptedOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Принятые заказы"}
+
+    app.admin.wait_orders:
+        class: AppAdminBundle\Admin\WaitOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Ожидающие заказы"}
+
+    app.admin.formed_orders:
+        class: AppAdminBundle\Admin\FormedOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Сформированные заказы"}
+
+    app.admin.waiting_for_departure_orders:
+        class: AppAdminBundle\Admin\WaitingForDepartureOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Заказы ожидающие отправки"}
+
+    app.admin.sent_orders:
+        class: AppAdminBundle\Admin\SentOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отправленые заказы"}
+
+    app.admin.canceled_orders:
+        class: AppAdminBundle\Admin\CanceledOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отмененые заказы"}
+
+    app.admin.done_orders:
+        class: AppAdminBundle\Admin\CanceledOrdersAdmin
+        arguments: [~, AppBundle\Entity\Done, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Исполненые заказы"}
+
+    app.admin.order_product_size:
+        class: AppAdminBundle\Admin\OrderProductSizeAdmin
+        arguments: [~, AppBundle\Entity\OrderProductSize, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, show_in_dashboard: false}
 
     app.admin.cart:
         class: AppAdminBundle\Admin\CartAdmin
@@ -143,6 +191,7 @@ services:
         arguments: [~, AppBundle\Entity\OrderStatus, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Статусы заказов"}
+
     app_admin.admin.price_list:
         pattern:  /admin/app/price-list
         class: AppAdminBundle\Admin\PriceListAdmin

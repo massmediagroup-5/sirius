@@ -45,6 +45,11 @@ class Orders
     /**
      * @var string
      */
+    private $comment_admin;
+
+    /**
+     * @var string
+     */
     private $fio;
 
     /**
@@ -687,6 +692,16 @@ class Orders
     }
 
     /**
+     * Get individualDiscount
+     *
+     * @return string
+     */
+    public function getIndividualDiscountedTotalPrice()
+    {
+        return $this->getDiscountedTotalPrice() - $this->individualDiscount;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
@@ -750,5 +765,29 @@ class Orders
     public function getQuickFlag()
     {
         return $this->quickFlag;
+    }
+
+    /**
+     * Set commentAdmin
+     *
+     * @param string $commentAdmin
+     *
+     * @return Orders
+     */
+    public function setCommentAdmin($commentAdmin)
+    {
+        $this->comment_admin = $commentAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get commentAdmin
+     *
+     * @return string
+     */
+    public function getCommentAdmin()
+    {
+        return $this->comment_admin;
     }
 }

@@ -477,9 +477,9 @@ class Cart
             $order->setTotalPrice($this->getTotalPrice());
             $order->setDiscountedTotalPrice($this->getDiscountedTotalPrice());
             $order->setType(Orders::TYPE_NORMAL);
-            $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
         }
 
+        $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
         $order->setUsers($user ?: null);
         $order->setQuickFlag($quickFlag);
         $order->setPhone(Arr::get($data, 'phone'));

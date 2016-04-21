@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-success">
+            <div class="box-header">
+                <h4 class="box-title">{{ form_tab.name }}</h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Артикул</th>
+                            <th>Модель</th>
+                            <th>Цвет</th>
+                            <th>Размер</th>
+                            <th>Количество</th>
+                            <th>Цена</th>
+                            <th>Цена со скидкой</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sonata-ba-tbody">
+                    {% for size in admin.subject.sizes %}
+
+                        <tr>
+                            <td class="control-group">{{ size.size.model.products.article }}</td>
+                            <td class="control-group">{{ size.size.model.products.name }}</td>
+                            <td class="control-group">{{ size.size.model.productColors.name }}</td>
+                            <td class="control-group">{{ size.size }}</td>
+                            <td class="control-group">{{ size.quantity }}</td>
+                            <td class="control-group">{{ size.totalPrice }}</td>
+                            <td class="control-group">{{ size.discountedTotalPrice }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-right">Всього</td>
+                            <th id="discountedTotalPrice">{{ admin.subject.discountedTotalPrice }}</th>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-right">Погасити</td>
+                            <th>{{ form_widget(form.individualDiscount, {'attr': {'class': 'table-input'}}) }}</th>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-right">К оплате</td>
+                            <th id="individualDiscountedTotalPrice">{{ object.individualDiscountedTotalPrice }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
