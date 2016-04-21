@@ -31,6 +31,11 @@ class OrdersAdmin extends Admin
     protected $statusName = 'new';
 
     /**
+     * @var bool
+     */
+    protected $disableEdit = true;
+
+    /**
      * @param string $context
      * @return \Sonata\AdminBundle\Datagrid\ProxyQueryInterface
      */
@@ -109,6 +114,21 @@ class OrdersAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        if ($user = $this->subject->getUsers()) {
+            $otherSizes = $this->modelManager->getEntityManager('AppBundle:OrderProductSize')
+                ->getRepository('AppBundle:OrderProductSize')
+                ->createQueryBuilder('orderedSize')
+                ->innerJoin('orderedSize.size', 'size')
+                ->innerJoin('orderedSize.order', 'sizeOrder')
+                ->where('sizeOrder.users = :user_id AND sizeOrder.id <> :id')
+                ->setParameter('user_id', $user->getId())
+                ->setParameter('id', $this->subject->getId())
+                ->getQuery()
+                ->getResult();
+        } else {
+            $otherSizes = [];
+        }
+
         $formMapper
             ->tab('Заказ')
             ->with('Orders',
@@ -122,11 +142,13 @@ class OrdersAdmin extends Admin
                     'label' => 'Сатус заказа',
                     'empty_value' => 'Выберите статус заказа',
                     'query_builder' => function (EntityRepository $er) {
+                        $status = $this->getSubject()->getStatus();
                         return $er->createQueryBuilder('s')
                             ->orderBy('s.priority', 'ASC')
                             ->where('s.priority >= :priority')
-                            ->setParameter('priority',
-                                $this->getSubject()->getStatus()->getPriority())->setMaxResults(2);
+                            ->orWhere('s.code = :code')
+                            ->setParameter('code', 'canceled')
+                            ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(2);
                     }
                 ]
             )
@@ -141,16 +163,38 @@ class OrdersAdmin extends Admin
             ])
             ->add('fio', null, [
                 'label' => 'Ф.И.О.',
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('phone', null, [
                 'label' => 'Телефон',
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('pay', 'choice', [
                 'label' => 'Способ оплаты',
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
                 'choices' => [
                     (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
                 ]
+            ])
+            ->add('cities', 'sonata_type_model_autocomplete', [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'Город',
+                'property' => 'name',
+                'minimum_input_length' => 1,
+                'read_only' => true,
+                'disabled' => true
+            ])
+            ->add('stores', 'sonata_type_model_autocomplete', [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'Склад',
+                'property' => 'name',
+                'minimum_input_length' => 1,
+                'read_only' => true,
+                'disabled' => true,
             ])
             ->add('totalPrice', null, [
                 'label' => 'Сумма заказа',
@@ -190,8 +234,19 @@ class OrdersAdmin extends Admin
             ])
             ->add('individualDiscount', null, [
                 'label' => 'Индивидуальная скидка',
+                'read_only' => true,
+                'disabled' => true,
             ])
+            ->end()
             ->end();
+
+        if($otherSizes) {
+            $formMapper->tab('Другие заказы покупателя', [
+                    'tab_template' => 'AppAdminBundle:admin:order_other_sizes.html.twig',
+                    'otherSizes' => $otherSizes
+                ])
+                ->end();
+        }
     }
 
     public function getTemplate($name)
