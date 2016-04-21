@@ -144,11 +144,6 @@ class OrdersAdmin extends Admin
                 'read_only' => true,
                 'disabled' => true,
             ])
-            ->add('comment', null, [
-                'label' => 'Коментарий к заказу',
-                'read_only' => true,
-                'disabled' => true,
-            ])
             ->add('fio', null, [
                 'label' => 'Ф.И.О.',
                 'read_only' => true,
@@ -188,6 +183,12 @@ class OrdersAdmin extends Admin
                 'label' => 'Статус смс менеджера',
                 'read_only' => true,
                 'disabled' => true,
+            ])
+            ->add('comment', null, [
+                'label' => 'Коментарий к заказу',
+            ])
+            ->add('comment_admin', null, [
+                'label' => 'Коментарий к заказу для администратора',
             ])
             ->end()
             ->end()
@@ -240,6 +241,7 @@ class OrdersAdmin extends Admin
             ->add('type', null, ['label' => 'Тип заказа'])
             ->add('customDelivery', null, ['label' => '"Своя доставка"'])
             ->add('comment', null, ['label' => 'Коментарий к заказу'])
+            ->add('comment_admin', null, ['label' => 'Коментарий к заказу для администратора'])
             ->add('fio', null, ['label' => 'Ф.И.О.'])
             ->add('phone', null, ['label' => 'Телефон'])
             ->add('pay', null, ['label' => 'Способ оплаты'])
