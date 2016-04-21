@@ -41,3 +41,5 @@ filter:
   label_price: Цена
 show:
   label_id: ID
+
+flash_categories_delete_not_empty_error: 'Не возможно удалить категорию поскольку она не пуста'

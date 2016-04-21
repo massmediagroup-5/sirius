@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cdeef10b793fe7e2351144917b716ca4",
-    "content-hash": "69fbc5157dabdef36af265f9a41a4b9c",
+    "hash": "6e1b5d7128b23e6ee16c72386bb51894",
+    "content-hash": "a8dbb765e6fea6ae2a1238b7e522c6fc",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2022,6 +2022,42 @@
                 "password"
             ],
             "time": "2014-11-20 16:49:30"
+        },
+        {
+            "name": "jakeasmith/http_build_url",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jakeasmith/http_build_url.git",
+                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jakeasmith/http_build_url/zipball/15bdd686e5178ddfa3e88de60fa585adffb292bb",
+                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/http_build_url.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jake A. Smith",
+                    "email": "theman@jakeasmith.com"
+                }
+            ],
+            "description": "Provides functionality for http_build_url() to environments without pecl_http.",
+            "time": "2015-05-06 12:27:20"
         },
         {
             "name": "jdorn/sql-formatter",

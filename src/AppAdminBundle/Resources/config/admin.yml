@@ -62,7 +62,7 @@ services:
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin
         #arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:CategoriesAdmin]
-        arguments: [~, AppBundle\Entity\Categories, SonataAdminBundle:CRUD]
+        arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:Categories]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Категории"}
         calls:
