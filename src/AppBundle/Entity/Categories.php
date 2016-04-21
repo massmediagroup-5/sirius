@@ -26,6 +26,11 @@ class Categories implements CharacteristicableInterface
     private $alias;
 
     /**
+     * @var integer
+     */
+    private $priority;
+
+    /**
      * @var boolean
      */
     private $inMenu;
@@ -162,6 +167,30 @@ class Categories implements CharacteristicableInterface
     public function getAlias()
     {
         return $this->alias;
+    }
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     *
+     * @return Categories
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 
     /**
