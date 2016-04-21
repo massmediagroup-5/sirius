@@ -198,3 +198,13 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: "Магазин", label: "Прайс" }
         arguments: [~, AppBundle\Entity\ProductModelSpecificSize, SonataAdminBundle:CRUD]
+
+    sonata.user.editable_role_builder:
+        class:     AppAdminBundle\Security\EditableRolesBuilder
+        arguments: [@security.context, @sonata.admin.pool, %security.role_hierarchy.roles%]
+
+    sonata.user.form.type.security_roles:
+        class:     AppAdminBundle\Form\Type\SecurityRolesType
+        arguments: [@sonata.user.editable_role_builder, @translator]
+        tags:
+            - { name: form.type, alias: sonata_security_roles }
