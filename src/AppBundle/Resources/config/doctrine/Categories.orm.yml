@@ -44,6 +44,11 @@ AppBundle\Entity\Categories:
             length: 255
             options:
                 fixed: false
+        priority:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
         inMenu:
             type: boolean
             nullable: true

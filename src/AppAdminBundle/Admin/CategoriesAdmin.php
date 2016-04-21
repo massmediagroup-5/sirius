@@ -23,6 +23,7 @@ class CategoriesAdmin extends Admin
             ->add('id')
             ->add('name', null, ['label' => 'Название категории'])
             ->add('alias', null, ['label' => 'Ссылка'])
+            ->add('priority', null, ['label' => 'Приоритет'])
             ->add('parrent.name', null, ['label' => 'Родительская категория'])
             ->add('inMenu', null, ['label' => 'В меню'])
             ->add('active', null, ['label' => 'Актиная'])
@@ -50,6 +51,7 @@ class CategoriesAdmin extends Admin
                     'editable' => true
                 ]
             )
+            ->add('priority', null, array('label' => 'Приоритет', 'editable' => true))
             ->add('inMenu', 'boolean', array('label' => 'В меню', 'editable' => true))
             ->add('active', 'boolean', array('label' => 'Актиная', 'editable' => true))
             ->add('getProductsCount', null, array('label' => 'Количество продуктов'))
@@ -101,6 +103,7 @@ class CategoriesAdmin extends Admin
                             'empty_value'   => 'Выберите родительскую категорию'
                         ]
                     )
+                    ->add('priority', null, ['label' => 'Приоритет'])
                     ->add('inMenu', null, ['label' => 'В меню'])
                     ->add('active', null, ['label' => 'Актиная'])
                     ->add('content', null, ['label' => 'Контент'])
