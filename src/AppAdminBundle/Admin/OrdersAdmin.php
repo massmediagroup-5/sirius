@@ -3,6 +3,7 @@
 namespace AppAdminBundle\Admin;
 
 use AppBundle\Entity\Orders;
+use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -10,16 +11,37 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-
+/**
+ * Class OrdersAdmin
+ * @package AppAdminBundle\Admin
+ */
 class OrdersAdmin extends Admin
 {
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_page' => 1,            // display the first page (default = 1)
         '_sort_order' => 'DESC', // reverse order (default = 'ASC')
         '_sort_by' => 'createTime'  // name of the ordered field
 
         // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
-    );
+    ];
+
+    /**
+     * @var string
+     */
+    protected $statusName = 'new';
+
+    /**
+     * @param string $context
+     * @return \Sonata\AdminBundle\Datagrid\ProxyQueryInterface
+     */
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+        $alias = $query->getRootAliases()[0];
+        $query->innerJoin("$alias.status", 'status');
+        $query->andWhere('status.code = :status')->setParameter('status', $this->statusName);
+        return $query;
+    }
 
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -36,14 +58,13 @@ class OrdersAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('status', null, array('label' => 'Статус заказа'))
-            ->add('type', null, array('label' => 'Тип заказа'))
-            ->add('fio', null, array('label' => 'Ф.И.О.'))
-            ->add('phone', null, array('label' => 'Телефон'))
-            ->add('pay', null, array('label' => 'Способ оплаты'))
-            ->add('totalPrice', null, array('label' => 'Способ оплаты'))
-            ->add('createTime', null, array('label' => 'Время оформления'))
-            ->add('updateTime', null, array('label' => 'Время последнего редактирования заказа'));
+            ->add('type', null, ['label' => 'Тип заказа'])
+            ->add('fio', null, ['label' => 'Ф.И.О.'])
+            ->add('phone', null, ['label' => 'Телефон'])
+            ->add('pay', null, ['label' => 'Способ оплаты'])
+            ->add('totalPrice', null, ['label' => 'Способ оплаты'])
+            ->add('createTime', null, ['label' => 'Время оформления'])
+            ->add('updateTime', null, ['label' => 'Время последнего редактирования заказа']);
     }
 
     /**
@@ -53,41 +74,34 @@ class OrdersAdmin extends Admin
     {
 
         $listMapper
-            ->add('status', 'choice', array(
-                'label' => 'Статус заказа',
-                'editable' => true,
-                'choices' => array(
-                    '0' => 'Ожидает обработки',
-                    '1' => 'Принят',
-                    '2' => 'Отклонен'
-                )
-            ))
-            ->addIdentifier('type', 'choice', array(
+            ->addIdentifier('type', 'choice', [
                 'label' => 'Тип заказа',
-                'route' => array('name' => 'edit'),
+                'route' => ['name' => 'edit'],
                 'choices' => [
                     (string)Orders::TYPE_NORMAL => 'Обычный',
                     (string)Orders::TYPE_QUICK => 'Быстрый',
-                ]))
-            ->addIdentifier('fio', null, array('label' => 'Ф.И.О.', 'route' => array('name' => 'edit')))
-            ->addIdentifier('phone', null, array('label' => 'Телефон', 'route' => array('name' => 'edit')))
+                ]
+            ])
+            ->addIdentifier('fio', null, ['label' => 'Ф.И.О.', 'route' => ['name' => 'edit']])
+            ->addIdentifier('phone', null, ['label' => 'Телефон', 'route' => ['name' => 'edit']])
             ->add('pay', 'choice', [
                 'label' => 'Способ оплаты',
                 'choices' => [
                     (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
-                ]])
-            ->add('carriers.name', null, array('label' => 'Способ доставки'))
-            ->add('cities.name', null, array('label' => 'Город'))
-            ->add('stores.name', null, array('label' => 'Адрес склада'))
-            ->add('totalPrice', null, array('label' => 'Сумма заказа'))
-            ->add('createTime', null, array('label' => 'Время оформления'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'show' => array(),
-                    'edit' => array(),
-                )
-            ));
+                ]
+            ])
+            ->add('carriers.name', null, ['label' => 'Способ доставки'])
+            ->add('cities.name', null, ['label' => 'Город'])
+            ->add('stores.name', null, ['label' => 'Адрес склада'])
+            ->add('totalPrice', null, ['label' => 'Сумма заказа'])
+            ->add('createTime', null, ['label' => 'Время оформления'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                ]
+            ]);
     }
 
     /**
@@ -98,74 +112,91 @@ class OrdersAdmin extends Admin
         $formMapper
             ->tab('Заказ')
             ->with('Orders',
-                array(
+                [
                     'class' => 'col-md-12',
-                ))
-            ->add('status', 'choice', array(
-                'label' => 'Статус заказа',
-                'choices' => array(
-                    '0' => 'Ожидает обработки',
-                    '1' => 'Принят',
-                    '2' => 'Отклонен'
-                )
-            ))
-            ->add('type', 'choice', array('label' => 'Тип заказа',
+                ])
+            ->add('status', 'entity',
+                [
+                    'class' => 'AppBundle:OrderStatus',
+                    'property' => 'name',
+                    'label' => 'Сатус заказа',
+                    'empty_value' => 'Выберите статус заказа',
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('s')
+                            ->orderBy('s.priority', 'ASC')
+                            ->where('s.priority >= :priority')
+                            ->setParameter('priority',
+                                $this->getSubject()->getStatus()->getPriority())->setMaxResults(2);
+                    }
+                ]
+            )
+            ->add('type', 'choice', [
+                'label' => 'Тип заказа',
                 'read_only' => true,
                 'disabled' => true,
                 'choices' => [
                     (string)Orders::TYPE_NORMAL => 'Обычный',
                     (string)Orders::TYPE_QUICK => 'Быстрый',
-                ]))
-            ->add('customDelivery', null, array('label' => '"Своя доставка"',
+                ]
+            ])
+            ->add('customDelivery', null, [
+                'label' => '"Своя доставка"',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('comment', null, array('label' => 'Коментарий к заказу',
+                'disabled' => true,
+            ])
+            ->add('comment', null, [
+                'label' => 'Коментарий к заказу',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('fio', null, array('label' => 'Ф.И.О.',
+                'disabled' => true,
+            ])
+            ->add('fio', null, [
+                'label' => 'Ф.И.О.',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('phone', null, array('label' => 'Телефон',
+                'disabled' => true,
+            ])
+            ->add('phone', null, [
+                'label' => 'Телефон',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('pay', null, array('label' => 'Способ оплаты',
+                'disabled' => true,
+            ])
+            ->add('pay', null, [
+                'label' => 'Способ оплаты',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('totalPrice', null, array('label' => 'Сумма заказа',
+                'disabled' => true,
+            ])
+            ->add('totalPrice', null, [
+                'label' => 'Сумма заказа',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('clientSmsId', null, array('label' => 'Идентификатор смс клиента',
+                'disabled' => true,
+            ])
+            ->add('clientSmsId', null, [
+                'label' => 'Идентификатор смс клиента',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('clientSmsStatus', null, array('label' => 'Статус смс клиента',
+                'disabled' => true,
+            ])
+            ->add('clientSmsStatus', null, [
+                'label' => 'Статус смс клиента',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('managerSmsId', null, array('label' => 'Идентификатор смс менеджера',
+                'disabled' => true,
+            ])
+            ->add('managerSmsId', null, [
+                'label' => 'Идентификатор смс менеджера',
                 'read_only' => true,
-                'disabled' => true,))
-            ->add('managerSmsStatus', null, array('label' => 'Статус смс менеджера',
+                'disabled' => true,
+            ])
+            ->add('managerSmsStatus', null, [
+                'label' => 'Статус смс менеджера',
                 'read_only' => true,
-                'disabled' => true,))
+                'disabled' => true,
+            ])
             ->end()
             ->end()
-            ->tab('Список заказанных товаров')
-            ->with('Cart',
-                array(
-                    'class' => 'col-md-12',
-                ))
-            ->add('cart', 'sonata_type_collection',
-                array(
-                    'label' => 'Модель',
-                    'type_options' => array('delete' => false)
-                ),
-                array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                    'by_reference' => false,
-                    'sortable' => 'id'
-                )
-            )
-            ->end()
+            ->tab('Список заказанных товаров', [
+                'tab_template' => 'AppAdminBundle:admin:order_sizes.html.twig'
+            ])
+            ->add('individualDiscount', null, [
+                'label' => 'Индивидуальная скидка',
+            ])
             ->end();
     }
 
@@ -174,6 +205,10 @@ class OrdersAdmin extends Admin
         switch ($name) {
             case 'show':
                 return 'AppAdminBundle:admin:order_show.html.twig';
+                break;
+
+            case 'edit':
+                return 'AppAdminBundle:admin:order_edit.html.twig';
                 break;
 
             default:
@@ -190,40 +225,44 @@ class OrdersAdmin extends Admin
         $showMapper
             ->tab('Заказ')
             ->with('Orders',
-                array(
+                [
                     'class' => 'col-md-12',
-                ))
+                ])
             ->add('id')
-            ->add('status', 'choice', array(
-                'label' => 'Статус заказа',
-                'choices' => array(
-                    '0' => 'Ожидает обработки',
-                    '1' => 'Принят',
-                    '2' => 'Отклонен'
-                )
-            ))
-            ->add('type', null, array('label' => 'Тип заказа'))
-            ->add('customDelivery', null, array('label' => '"Своя доставка"'))
-            ->add('comment', null, array('label' => 'Коментарий к заказу'))
-            ->add('fio', null, array('label' => 'Ф.И.О.'))
-            ->add('phone', null, array('label' => 'Телефон'))
-            ->add('pay', null, array('label' => 'Способ оплаты'))
-            ->add('totalPrice', null, array('label' => 'Сумма заказа'))
-            ->add('clientSmsId', null, array('label' => 'Идентификатор смс клиента'))
-            ->add('clientSmsStatus', null, array('label' => 'Статус смс клиента'))
-            ->add('managerSmsId', null, array('label' => 'Идентификатор смс менеджера'))
-            ->add('managerSmsStatus', null, array('label' => 'Статус смс менеджера'))
-            ->add('createTime', null, array('label' => 'Время оформления'))
-            ->add('updateTime', null, array('label' => 'Время последнего редактирования заказа'))
+            ->add('status', 'entity',
+                [
+                    'class' => 'AppBundle:OrderStatus',
+                    'associated_property' => 'name',
+                    'label' => 'Сатус заказа',
+                    'empty_value' => 'Выберите статус заказа'
+                ]
+            )
+            ->add('type', null, ['label' => 'Тип заказа'])
+            ->add('customDelivery', null, ['label' => '"Своя доставка"'])
+            ->add('comment', null, ['label' => 'Коментарий к заказу'])
+            ->add('fio', null, ['label' => 'Ф.И.О.'])
+            ->add('phone', null, ['label' => 'Телефон'])
+            ->add('pay', null, ['label' => 'Способ оплаты'])
+            ->add('totalPrice', null, ['label' => 'Сумма заказа'])
+            ->add('clientSmsId', null, ['label' => 'Идентификатор смс клиента'])
+            ->add('clientSmsStatus', null, ['label' => 'Статус смс клиента'])
+            ->add('managerSmsId', null, ['label' => 'Идентификатор смс менеджера'])
+            ->add('managerSmsStatus', null, ['label' => 'Статус смс менеджера'])
+            ->add('createTime', null, ['label' => 'Время оформления'])
+            ->add('updateTime', null, ['label' => 'Время последнего редактирования заказа'])
             ->end()
             ->end()
             ->tab('Список заказанных товаров')
             ->with('Cart',
-                array(
+                [
                     'class' => 'col-md-12',
-                ))->add('cart', 'sonata_type_collection', array('label' => 'Модель',
-                'required' => false, 'cascade_validation' => true, 'associated_property' => 'skuProducts.name',
-                'by_reference' => false), array('edit' => 'inline', 'inline' => 'table'))
+                ])->add('cart', 'sonata_type_collection', [
+                'label' => 'Модель',
+                'required' => false,
+                'cascade_validation' => true,
+                'associated_property' => 'skuProducts.name',
+                'by_reference' => false
+            ], ['edit' => 'inline', 'inline' => 'table'])
             ->end()
             ->end();
     }

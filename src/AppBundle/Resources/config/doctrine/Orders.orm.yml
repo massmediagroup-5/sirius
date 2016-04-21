@@ -53,6 +53,9 @@ AppBundle\Entity\Orders:
             length: 16777215
             options:
                 fixed: false
+        comment_admin:
+            type: text
+            nullable: true
         fio:
             type: string
             nullable: true

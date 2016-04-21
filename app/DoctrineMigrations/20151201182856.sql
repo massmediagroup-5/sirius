@@ -108,3 +108,18 @@ INSERT INTO `product_colors` (`id`, `name`, `hex`, `create_time`, `update_time`)
 -- --------------------------------------------------------
 
 
+
+--
+-- Dumping data for table `product_colors`
+--
+
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (1,'Новый','new',NULL,1,1,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (2,'Принят','accepted',NULL,1,2,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (3,'Ожидание','wait','',1,3,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (4,'Сформировано','formed','',1,4,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (5,'Ожидает отправки','waiting_for_departure',NULL,1,5,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (6,'Отправлено','sent',NULL,1,6,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (7,'Отменено','canceled',NULL,1,7,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (8,'Исполнено','done','',1,8,0,0,NULL,NULL,NULL);
+
+-- --------------------------------------------------------
