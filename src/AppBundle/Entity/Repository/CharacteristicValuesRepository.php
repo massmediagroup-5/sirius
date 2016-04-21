@@ -119,7 +119,7 @@ class CharacteristicValuesRepository extends BaseRepository
             ->innerJoin('products.characteristicValues', 'productCharacteristicValues')
             ->innerJoin('products.productModels', 'productModels')
             ->innerJoin('products.baseCategory', 'baseCategory')
-            ->andWhere('productModels.active = 1 AND baseCategory.active = 1')
+            ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->andWhere($qb->expr()->eq('products.baseCategory', $category->getId()))
 
             ->innerJoin('productCharacteristicValues.characteristics', 'pCharacteristics')

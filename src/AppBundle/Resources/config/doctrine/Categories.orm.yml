@@ -154,14 +154,6 @@ AppBundle\Entity\Categories:
                         name: characteristics_id
                         referencedColumnName: id
             orderBy: null
-        products:
-            targetEntity: Products
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: categories
-            inversedBy: null
-            joinTable: null
-            orderBy: null
     lifecycleCallbacks:
         prePersist: [ setAllFilters ]
         preUpdate:  [ setAllFilters ]

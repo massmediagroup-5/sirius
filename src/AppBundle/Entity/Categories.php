@@ -93,11 +93,6 @@ class Categories implements CharacteristicableInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $products;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
     private $basedProducts;
 
     /**
@@ -107,7 +102,6 @@ class Categories implements CharacteristicableInterface
     {
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristics = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->basedProducts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -502,39 +496,8 @@ class Categories implements CharacteristicableInterface
     }
 
     /**
-     * Add product
-     *
-     * @param \AppBundle\Entity\Products $product
-     *
-     * @return Categories
+     * @return int
      */
-    public function addProduct(\AppBundle\Entity\Products $product)
-    {
-        $this->products[] = $product;
-
-        return $this;
-    }
-
-    /**
-     * Remove product
-     *
-     * @param \AppBundle\Entity\Products $product
-     */
-    public function removeProduct(\AppBundle\Entity\Products $product)
-    {
-        $this->products->removeElement($product);
-    }
-
-    /**
-     * Get products
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProducts()
-    {
-        return $this->products;
-    }
-
     public function getProductsCount()
     {
         return count($this->getBasedProducts());

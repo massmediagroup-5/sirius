@@ -308,7 +308,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
             ->innerJoin('prodMod.productColors', 'prodCol')->addselect('prodCol')
             ->leftJoin('prodMod.images', 'prodMImg')->addselect('prodMImg')
-            ->where('prod.active = 1 AND prodMod.active = 1 AND prodMod.alias = :alias')
+            ->where('prod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
             ->setParameter('alias', $modelAlias);
         return $query_obj->getQuery()->getSingleResult();
     }
@@ -331,7 +331,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('prod.characteristicValues', 'prodChVal')->addselect('prodChVal')
             ->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
             ->leftJoin('prodMod.images', 'prodImg')->addselect('prodImg')
-            ->where('prodChName.inFilter = 1 AND prod.active = 1 AND prodMod.active = 1 AND prodMod.id = :id')
+            ->where('prodChName.inFilter = 1 AND prod.active = 1 AND prodMod.published = 1 AND prodMod.id = :id')
             ->setParameter('id', $productModelId)
             ->orderBy('prodChVal.characteristics', 'ASC');
         return $query_obj->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -358,7 +358,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             //->innerJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
             ->innerJoin('prodMod.productColors', 'prodCol')->addselect('prodCol')
             ->leftJoin('prodMod.images', 'prodImg')->addselect('prodImg')
-            ->where('prod.active = 1 AND prodMod.active = 1 AND prodMod.alias = :alias')
+            ->where('prod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
             ->setParameter('alias', $productModelAlias);
         return $query_obj->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
@@ -422,7 +422,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
-            ->andWhere('productModels.active = 1 AND baseCategory.active = 1')
+            ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);

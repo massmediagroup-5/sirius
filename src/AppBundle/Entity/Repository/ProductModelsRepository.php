@@ -116,7 +116,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
-            ->andWhere('productModels.active = 1 AND baseCategory.active = 1')
+            ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
     }
 

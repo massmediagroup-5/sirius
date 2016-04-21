@@ -89,7 +89,7 @@ class CategoriesAdmin extends Admin
 
         $formMapper
             ->tab('Категория')
-                ->with('Categories',
+                ->with('Категория',
                     [
                         'class'       => 'col-md-12',
                     ])
