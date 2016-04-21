@@ -60,9 +60,9 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             MIN(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price))"
         );
 
-        $prices = $builder->getQuery()->getResult()[0];
+        $prices = $builder->getQuery()->getResult();
 
-        return ['max_price' => $prices[1], 'min_price' => $prices[2]];
+        return ['max_price' => Arr::get($prices, '0.1', 0), 'min_price' => Arr::get($prices, '0.2', 0)];
     }
 
     /**
