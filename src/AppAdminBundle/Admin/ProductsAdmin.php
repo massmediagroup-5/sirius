@@ -125,8 +125,7 @@ class ProductsAdmin extends Admin
                     'label' => 'Значения характеристик',
                     'expanded' => true,
                     'multiple' => true,
-                    'by_reference' => false,
-                    'property' => 'name',
+                    'by_reference' => false
                 ]
             )
             ->end()

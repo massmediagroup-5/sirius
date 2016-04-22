@@ -52,6 +52,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             $characteristicValues, 'productModels');
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
+        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
 
@@ -92,6 +93,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 
+        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
+
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters);
 
@@ -116,7 +119,6 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
-            ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
     }
 

@@ -2,6 +2,8 @@
 
 namespace AppAdminBundle\Controller;
 
+use AppBundle\Entity\Categories;
+use AppBundle\Entity\Products;
 use Illuminate\Support\Str;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -165,4 +167,36 @@ class CRUDController extends BaseController
         return new RedirectResponse($this->admin->generateUrl('edit', ['id' => $clonedObject->getId()]));
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function deleteAction($id)
+    {
+        $id     = $this->get('request')->get($this->admin->getIdParameter());
+        $object = $this->admin->getObject($id);
+
+        if (!$object) {
+            throw new NotFoundHttpException(sprintf('unable to find the object with id : %s', $id));
+        }
+
+        if ($object instanceof Categories) {
+            $disallowDelete = (bool)$object->getBasedProducts()->count();
+        } elseif($object instanceof Products) {
+            $disallowDelete = (bool)$object->getProductModels()->count();
+        } else {
+            $disallowDelete = false;
+        }
+
+        if($disallowDelete) {
+
+            $this->addFlash(
+                'sonata_flash_error',
+                $this->admin->trans('flash_delete_not_empty_error', [], 'AppAdminBundle')
+            );
+
+            return $this->redirectTo($object);
+        }
+
+        return parent::deleteAction($id);
+    }
 }
