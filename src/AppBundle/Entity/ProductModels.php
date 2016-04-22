@@ -513,6 +513,16 @@ class ProductModels
     }
 
     /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function isPublished()
+    {
+        return $this->published && $this->products->getActive() && $this->sizes->count();
+    }
+
+    /**
      * @return string
      */
     public function __toString()

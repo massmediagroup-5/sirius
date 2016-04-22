@@ -111,7 +111,7 @@ class PricesCalculator
             }
             return $this->getProductPrice($object->getProducts());
         }
-        if($object->getWholesalePrice()) {
+        if($object->getPrice()) {
             return $object->getPrice();
         }
         return $this->getProductPrice($object->getProducts());
@@ -142,7 +142,7 @@ class PricesCalculator
             }
             return $this->getProductModelPrice($object->getModel());
         }
-        if($object->getWholesalePrice()) {
+        if($object->getPrice()) {
             return $object->getPrice();
         }
         return $this->getProductModelPrice($object->getModel());

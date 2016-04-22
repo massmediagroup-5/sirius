@@ -3253,6 +3253,9 @@ input[type="checkbox"] {
 				top: 50%;
 				@include translate(0, -50%);
 			}
+			&.preorder_btn {
+				display: none;
+			}
 		}
 
 		.btn_tocart {
