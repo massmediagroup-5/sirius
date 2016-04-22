@@ -61,12 +61,9 @@ services:
 
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin
-        #arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:CategoriesAdmin]
-        arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:Categories]
+        arguments: [~, AppBundle\Entity\Categories, AppAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Категории"}
-        calls:
-            #- [ setTemplate, [base_edit_form_macro, AppAdminBundle:admin:base_edit_form_macro.html.twig]]
 
     app.admin.filters:
         class: AppAdminBundle\Admin\FiltersAdmin
@@ -81,6 +78,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Модели"}
         calls:
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
+            - [ setTranslationDomain, [AppAdminBundle]]
 
     app.admin.product_models:
         class: AppAdminBundle\Admin\ProductModelsAdmin
@@ -91,6 +89,7 @@ services:
             - [ addChild, [@app.admin.product_model_images] ]
             - [ setTemplate, [form, AppAdminBundle:admin:form_admin_fields.html.twig]]
             - [ setTemplate, [edit, AppAdminBundle:admin:product_models_edit.html.twig]]
+            - [ setTranslationDomain, [AppAdminBundle]]
 
     app.admin.product_model_images:
         class: AppAdminBundle\Admin\ProductModelImagesAdmin

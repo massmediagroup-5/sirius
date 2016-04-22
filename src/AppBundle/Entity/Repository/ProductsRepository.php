@@ -431,6 +431,8 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->addFiltersToQuery($builder, $filters);
 
+        $builder = $this->addActiveConditionsToQuery($builder);
+
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters);
 
@@ -495,6 +497,19 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             $colors = explode(',', $colors);
             $builder->andWhere($builder->expr()->in("$alias.productColors", $colors));
         }
+
+        return $builder;
+    }
+
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $builder
+     * @param string $modelAlias
+     * @param string $productAlias
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function addActiveConditionsToQuery($builder, $modelAlias = 'productModels', $productAlias = 'products')
+    {
+        $builder->andWhere("$modelAlias.published = 1 AND $productAlias.active = 1");
 
         return $builder;
     }
