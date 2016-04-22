@@ -180,7 +180,7 @@ class CRUDController extends BaseController
         }
 
         if ($object instanceof Categories) {
-            $disallowDelete = (bool)$object->getBasedProducts()->count();
+            $disallowDelete = (bool)($object->getBasedProducts()->count() + $object->getChildren()->count());
         } elseif($object instanceof Products) {
             $disallowDelete = (bool)$object->getProductModels()->count();
         } else {

@@ -119,6 +119,13 @@ AppBundle\Entity\Categories:
             mappedBy: baseCategory
             inversedBy: null
             orphanRemoval: false
+        children:
+            targetEntity: Categories
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: parrent
+            inversedBy: null
+            orphanRemoval: false
     manyToMany:
         characteristicValues:
             targetEntity: CharacteristicValues
