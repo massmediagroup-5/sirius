@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Orders
  */
@@ -508,9 +510,9 @@ class Orders
      */
     public function getQuantity()
     {
-        return array_sum(array_map(function (Cart $cartItem) {
+        return array_sum(array_map(function (OrderProductSize $cartItem) {
             return $cartItem->getQuantity();
-        }, $this->cart->toArray()));
+        }, $this->sizes->toArray()));
     }
 
     /**
@@ -684,11 +686,11 @@ class Orders
     /**
      * Get individualDiscount
      *
-     * @return string
+     * @return float
      */
     public function getIndividualDiscount()
     {
-        return $this->individualDiscount;
+        return (float)$this->individualDiscount;
     }
 
     /**

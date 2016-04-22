@@ -234,8 +234,8 @@ class OrdersAdmin extends Admin
             ])
             ->add('individualDiscount', null, [
                 'label' => 'Индивидуальная скидка',
-                'read_only' => true,
-                'disabled' => true,
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->end()
             ->end();

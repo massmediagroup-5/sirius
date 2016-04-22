@@ -1,3 +1,5 @@
+filter:
+  label_surname: Фамилия
 list:
   label_surname: Фамилия
   label_create_time: Создан
