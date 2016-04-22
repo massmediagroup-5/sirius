@@ -215,11 +215,9 @@ class Entities
     {
         $recently_viewed = $this->container->get('session')->get('recently_viewed');
         if (isset($recently_viewed)) {
-            foreach ($recently_viewed as $key => $model) {
-                $recently_viewed[$key] = $this->em->getRepository('AppBundle:ProductModels')->find($model);
-            }
+            return $this->em->getRepository('AppBundle:ProductModels')->getActiveModelsByIds($recently_viewed);
         }
-        return $recently_viewed;
+        return [];
     }
 
     /**

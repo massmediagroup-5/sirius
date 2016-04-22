@@ -552,4 +552,43 @@ class Categories implements CharacteristicableInterface
     {
         return $this->getName();
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $children;
+
+
+    /**
+     * Add child
+     *
+     * @param \AppBundle\Entity\Categories $child
+     *
+     * @return Categories
+     */
+    public function addChild(\AppBundle\Entity\Categories $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \AppBundle\Entity\Categories $child
+     */
+    public function removeChild(\AppBundle\Entity\Categories $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
 }

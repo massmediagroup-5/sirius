@@ -24,13 +24,33 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     public function getModelsByProductId($prodId, $productModelAlias = false)
     {
         $builder = $this
-            ->createQueryBuilder('prodMod')
-            ->where('prodMod.products = :prodId AND prodMod.active = 1')
+            ->createQueryBuilder('productModels')
+            ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->where('productModels.products = :prodId')
             ->setParameter('prodId', $prodId);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
 
         if ($productModelAlias) {
             $builder->andWhere('prodMod.alias != :alias')->setParameter('alias', $productModelAlias);
         }
+
+        return $builder->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $ids
+     * @return mixed
+     */
+    public function getActiveModelsByIds(array $ids)
+    {
+        $builder = $this
+            ->createQueryBuilder('productModels')
+            ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->where('productModels IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
 
         return $builder->getQuery()->getResult();
     }

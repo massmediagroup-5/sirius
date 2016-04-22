@@ -161,3 +161,14 @@ div[class="form-group"][id$="_images"] {
     padding: 0;
     height: 20px;
 }
+
+.login-block {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 460px;
+    margin: -100px 0 0 -250px;
+    box-shadow: 2px 2px 10px #ccc;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
