@@ -42,4 +42,7 @@ filter:
 show:
   label_id: ID
 
-flash_categories_delete_not_empty_error: 'Не возможно удалить категорию поскольку она не пуста'
+Products List: Модели
+Product Models List: Товары
+
+flash_delete_not_empty_error: 'Не возможно удалить запись поскольку она не пуста'
