@@ -8443,16 +8443,14 @@ input[type="checkbox"] {
 			width: 100%;
 
 			tr {
-				&:nth-child(1) {
-					td {
-						&:nth-child(2) {
-							font-size: 16px;
-							line-height: 24px;
-							font-family: $latoBold;
-						}
+				td {
+					&:nth-child(2) {
+						font-size: 16px;
+						line-height: 24px;
+						font-family: $latoBold;
 					}
 				}
-				&:nth-child(2) {
+				&.discount-row {
 					td {
 						color: #c53622;
 						&:nth-child(2) {
@@ -8462,7 +8460,7 @@ input[type="checkbox"] {
 						}
 					}
 				}
-				&:nth-child(3) {
+				&:last-child {
 					td {
 						padding-bottom: 0 !important;
 
