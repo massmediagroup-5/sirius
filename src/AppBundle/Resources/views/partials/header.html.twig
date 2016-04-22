@@ -1,7 +1,6 @@
 <header class="header">
     <div class="wrap">
         <div class="header__i">
-
             <a href="#" class="mobile-nav-btn">
                 <span></span>
                 <span></span>
@@ -15,13 +14,11 @@
                     <span>БРЕНД СПОРТИВНОЙ ЖЕНСКОЙ ОДЕЖДЫ</span>
                 </a>
             </div>
-
             <nav class="top-nav">
                 <div class="top-nav__i clearfix">
                     {{ knp_menu_render('AppBundle:Builder:categoriesMenu') }}
                 </div>
             </nav>
-
             <nav class="user-nav">
                 <div class="user-nav__i">
                     <ul>
@@ -30,93 +27,17 @@
                                 <i class="icon-search"></i>
                                 <i class="icon-search-hover hover"></i>
                             </a>
-
                             <div class="search-drop">
                                 <div class="search-drop__i">
-                                    <form method="post">
+                                    <form>
                                         <input type="search" name="search"  placeholder="Что-нибудь ищите?"/>
                                         <div class="search-f-btn">
                                             <input type="submit" value=""/>
                                         </div>
                                     </form>
-
                                     <div class="search-drop-results">
-                                        <div class="search-drop-results__i">
-
-                                            <h2>Товары</h2>
-
-                                            <div class="list">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <div class="item__i">
-                                                            <div class="img">
-                                                                <img src="/img/demo/search-drop.jpg" alt=""/>
-                                                            </div>
-                                                            <div class="text">
-                                                                <div class="text__i">
-                                                                    <h3>Befree</h3>
-                                                                    <p>Пуховик</p>
-                                                                    <p><strong>459 грн.</strong></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <div class="item__i">
-                                                            <div class="img">
-                                                                <img src="/img/demo/search-drop.jpg" alt=""/>
-                                                            </div>
-                                                            <div class="text">
-                                                                <div class="text__i">
-                                                                    <h3>Befree</h3>
-                                                                    <p>Пуховик</p>
-                                                                    <p><strong>459 грн.</strong></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <div class="item__i">
-                                                            <div class="img">
-                                                                <img src="/img/demo/search-drop.jpg" alt=""/>
-                                                            </div>
-                                                            <div class="text">
-                                                                <div class="text__i">
-                                                                    <h3>Befree</h3>
-                                                                    <p>Пуховик</p>
-                                                                    <p><strong>459 грн.</strong></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <div class="item__i">
-                                                            <div class="img">
-                                                                <img src="/img/demo/search-drop.jpg" alt=""/>
-                                                            </div>
-                                                            <div class="text">
-                                                                <div class="text__i">
-                                                                    <h3>Befree</h3>
-                                                                    <p>Пуховик</p>
-                                                                    <p><strong>459 грн.</strong></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <p class="more-results"><a href="#">Смотреть все результаты(254)</a></p>
-
-                                        </div>
+                                        {% include "AppBundle:partials/search_drop_results.html.twig" %}
                                     </div>
-
                                 </div>
                             </div>
                         </li>
@@ -132,10 +53,8 @@
                     </ul>
                 </div>
             </nav>
-
         </div>
     </div>
-
     <div class="header_sub-nav">
         <div class="wrap">
             <div class="sub-nav__i">
@@ -144,5 +63,4 @@
         </div>
     </div>
     <div class="search-shadow"></div>
-
 </header>

@@ -204,7 +204,7 @@ input[type="checkbox"] {
 //	clear: left;
 //	float: left;
 //	margin: 5px 33px 3px 0;
-//	background: url("../img/icons/radio.png");
+//	background: url("/img/icons/radio.png");
 //	background-repeat: no-repeat;
 //	cursor: default;
 //	overflow: hidden;
@@ -227,7 +227,7 @@ input[type="checkbox"] {
 //	clear: left;
 //	float: left;
 //	margin: 0 33px 3px 0;
-//	background: url("../img/icons/checkbox.png");
+//	background: url("/img/icons/checkbox.png");
 //	background-repeat: no-repeat;
 //	cursor: default;
 //	overflow: hidden;
@@ -482,7 +482,7 @@ input[type="checkbox"] {
 	}
 
 	&.out_404 {
-		background: url("../img/space.jpg") no-repeat;
+		background: url("/img/space.jpg") no-repeat;
 		background-size: cover;
 	}
 
@@ -627,7 +627,7 @@ input[type="checkbox"] {
 			left: 0;
 			right: 0;
 			display: block;
-			background: url("../img/search-shadow.png") repeat-x;
+			background: url("/img/search-shadow.png") repeat-x;
 			height: 565px;
 			z-index: 2;
 			top: 0;
@@ -5665,7 +5665,7 @@ input[type="checkbox"] {
 	//		color: #333333;
 	//		padding: 5px 0;
 	//		border: 2px dashed transparent;
-	//		background: url("../img/icons/sizechart-border.png") repeat-x;
+	//		background: url("/img/icons/sizechart-border.png") repeat-x;
 	//		background-position: 0 104%;
 	//		&.hover {
 	//			border-top: 2px solid $blue;
@@ -5686,7 +5686,7 @@ input[type="checkbox"] {
 	//
 	//		}
 	//		&:nth-child(odd) {
-	//			background: url("../img/icons/sizechart-border.png") repeat-x #eeeeee;
+	//			background: url("/img/icons/sizechart-border.png") repeat-x #eeeeee;
 	//
 	//			//&:hover {
 	//			//	background: $blue;
@@ -5694,7 +5694,7 @@ input[type="checkbox"] {
 	//			//}
 	//		}
 	//		&:nth-child(even) {
-	//			background: url("../img/icons/sizechart-border.png") repeat-x #e0e0e0;
+	//			background: url("/img/icons/sizechart-border.png") repeat-x #e0e0e0;
 	//			//&:hover {
 	//			//	background: $blue;
 	//			//	color: #fff;
@@ -5753,7 +5753,7 @@ input[type="checkbox"] {
 }
 
 .size-table td {
-	background: #e0e0e0 url("../img/icons/sizechart-border.png") repeat-x scroll 0 104%;
+	background: #e0e0e0 url("/img/icons/sizechart-border.png") repeat-x scroll 0 104%;
 }
 
 .size-table th {
@@ -5785,7 +5785,7 @@ input[type="checkbox"] {
 }
 
 .size-table tr td:nth-child(2n) {
-	background: #eee url("../img/icons/sizechart-border.png") repeat-x scroll 0 104%;
+	background: #eee url("/img/icons/sizechart-border.png") repeat-x scroll 0 104%;
 }
 
 .size-table tr:last-child td {

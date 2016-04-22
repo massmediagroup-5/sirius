@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6e1b5d7128b23e6ee16c72386bb51894",
+    "hash": "a2584cef7005be44d2aaa0f0a7b1bdfd",
     "content-hash": "a8dbb765e6fea6ae2a1238b7e522c6fc",
     "packages": [
         {
@@ -2567,16 +2567,16 @@
         },
         {
             "name": "knplabs/knp-paginator-bundle",
-            "version": "2.5.1",
+            "version": "2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpPaginatorBundle.git",
-                "reference": "5147740faff4d32e6f42acf64475314c35320fa4"
+                "reference": "c988761005504007c6c87d6a557641281194a0e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpPaginatorBundle/zipball/5147740faff4d32e6f42acf64475314c35320fa4",
-                "reference": "5147740faff4d32e6f42acf64475314c35320fa4",
+                "url": "https://api.github.com/repos/KnpLabs/KnpPaginatorBundle/zipball/c988761005504007c6c87d6a557641281194a0e5",
+                "reference": "c988761005504007c6c87d6a557641281194a0e5",
                 "shasum": ""
             },
             "require": {
@@ -2591,7 +2591,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4.x-dev"
+                    "dev-master": "2.5.x-dev"
                 }
             },
             "autoload": {
@@ -2624,7 +2624,7 @@
                 "pagination",
                 "paginator"
             ],
-            "time": "2015-11-23 17:51:40"
+            "time": "2016-04-20 11:40:30"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -2827,16 +2827,16 @@
         },
         {
             "name": "liuggio/ExcelBundle",
-            "version": "v2.0.4",
+            "version": "v2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/ExcelBundle.git",
-                "reference": "a6424eef60d5a9201146d6820de7d75bb2be79bc"
+                "reference": "728c2bf7a39ab38e73c8b58d0ac2088dcf0f8412"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/ExcelBundle/zipball/a6424eef60d5a9201146d6820de7d75bb2be79bc",
-                "reference": "a6424eef60d5a9201146d6820de7d75bb2be79bc",
+                "url": "https://api.github.com/repos/liuggio/ExcelBundle/zipball/728c2bf7a39ab38e73c8b58d0ac2088dcf0f8412",
+                "reference": "728c2bf7a39ab38e73c8b58d0ac2088dcf0f8412",
                 "shasum": ""
             },
             "require": {
@@ -2860,6 +2860,9 @@
                 }
             },
             "autoload": {
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ],
                 "psr-4": {
                     "Liuggio\\ExcelBundle\\": ""
                 }
@@ -2886,7 +2889,7 @@
                 "excel",
                 "xls"
             ],
-            "time": "2015-12-22 11:22:03"
+            "time": "2016-04-20 09:58:50"
         },
         {
             "name": "monolog/monolog",
@@ -4710,12 +4713,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataUserBundle.git",
-                "reference": "82e5769c8c1e98fcdb8298d6e0c2054da90d76b5"
+                "reference": "9f7df77921116127600deefa840346c6451a4eb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/82e5769c8c1e98fcdb8298d6e0c2054da90d76b5",
-                "reference": "82e5769c8c1e98fcdb8298d6e0c2054da90d76b5",
+                "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/9f7df77921116127600deefa840346c6451a4eb5",
+                "reference": "9f7df77921116127600deefa840346c6451a4eb5",
                 "shasum": ""
             },
             "require": {
@@ -4779,7 +4782,7 @@
                 "sonata",
                 "user"
             ],
-            "time": "2016-04-16 11:21:38"
+            "time": "2016-04-21 15:31:20"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
@@ -5951,27 +5954,27 @@
         },
         {
             "name": "zendframework/zend-code",
-            "version": "2.6.2",
+            "version": "2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-code.git",
-                "reference": "c4e8f976a772cfb14b47dabd69b5245a423082b4"
+                "reference": "95033f061b083e16cdee60530ec260d7d628b887"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/c4e8f976a772cfb14b47dabd69b5245a423082b4",
-                "reference": "c4e8f976a772cfb14b47dabd69b5245a423082b4",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/95033f061b083e16cdee60530ec260d7d628b887",
+                "reference": "95033f061b083e16cdee60530ec260d7d628b887",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
-                "zendframework/zend-eventmanager": "^2.6|^3.0"
+                "php": "^5.5 || 7.0.0 - 7.0.4 || ^7.0.6",
+                "zendframework/zend-eventmanager": "^2.6 || ^3.0"
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0",
-                "zendframework/zend-stdlib": "~2.7"
+                "phpunit/phpunit": "^4.8.21",
+                "zendframework/zend-stdlib": "^2.7 || ^3.0"
             },
             "suggest": {
                 "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
@@ -5999,7 +6002,7 @@
                 "code",
                 "zf2"
             ],
-            "time": "2016-01-05 05:58:37"
+            "time": "2016-04-20 17:26:42"
         },
         {
             "name": "zendframework/zend-config",
