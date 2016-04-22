@@ -2,6 +2,18 @@
 
 {% block out_class %} out_sub {% endblock %}
 
+{% block meta_tags %}
+    {#<meta property="og:url" content="{{ url('product', {'category': product.productsBaseCategories.categories.alias,'product': current_model.alias}) }}">#}
+    {#<meta property="og:title" content="{{ current_model.products.name }}">#}
+    {#<meta property="og:title" content="{{ current_model.seoTitle }}">#}
+    {#<meta property="og:description" content="{{ current_model.seoDescription }}">#}
+    {#{% if current_model.images.0.link is defined %}#}
+        {#<meta itemprop="image" content="{{ (current_model.images.0.link ? : param('no_image')) | imagine_filter('small') }}"/>#}
+        {#<link rel="image_src" href="{{ (current_model.images.0.link ? : param('no_image')) | imagine_filter('small') }}"/>#}
+        {#<meta property="og:image" content="{{ (current_model.images.0.link ? : param('no_image')) | imagine_filter('small') }}"/>#}
+    {#{% endif %}#}
+{% endblock %}
+
 {% block body %}
     <section class="content">
         <div class="wrap">

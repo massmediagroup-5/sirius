@@ -52,6 +52,70 @@ class AjaxController extends Controller
         }
     }
 
+
+    /**
+     * @Route("/ajax/search", name="ajax_search", options={"expose"=true})
+     * @Method("POST")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchAction(Request $request)
+    {
+        if ($request->get('search')) {
+            $slug = $request->get('search');
+
+            $finder = $this->get('fos_elastica.finder.app.products');
+
+            $boolQuery = new \Elastica\Query\BoolQuery();
+
+            $productQuery = new \Elastica\Query\Match();
+            $productQuery->setFieldQuery('name', $slug);
+            $productQuery->setFieldParam('name', 'boost', 3);
+            $productQuery->setFieldParam('name', 'type', 'phrase_prefix');
+            $boolQuery->addShould($productQuery);
+
+            $articleQuery = new \Elastica\Query\Match();
+            $articleQuery->setFieldQuery('article', $slug);
+            $articleQuery->setFieldParam('article', 'boost', 3);
+            $articleQuery->setFieldParam('article', 'type', 'phrase_prefix');
+            $boolQuery->addShould($articleQuery);
+
+            $baseCategoryQuery = new \Elastica\Query\Match();
+            $baseCategoryQuery->setFieldQuery('baseCategory.name', $slug);
+            $baseCategoryQuery->setFieldParam('baseCategory.name', 'boost', 3);
+            $baseCategoryQuery->setFieldParam('baseCategory.name', 'type', 'phrase_prefix');
+            $boolQuery->addShould($baseCategoryQuery);
+
+            $boolFilter = new \Elastica\Filter\Bool();
+
+            $boolFilter->addMust(
+                new \Elastica\Filter\Terms('active', array(1))
+            );
+
+            $boolFilter->addMust(
+                new \Elastica\Filter\Terms('productModels.published', array(1))
+            );
+
+            $filtered = new \Elastica\Query\Filtered($boolQuery, $boolFilter);
+            $query = \Elastica\Query::create($filtered);
+
+            $result = $finder->find($query,9999);
+
+            $this->result['html'] = $this->render('AppBundle:partials:search_drop_results.html.twig', array(
+                'result' => $result,
+                'slug' => $slug
+            ))->getContent();
+
+            $this->result['status'] = 'OK';
+            return new JsonResponse($this->result);
+        } else {
+            $this->result['message'] = 'Type another keyword';
+            $this->result['status'] = 'ERROR';
+            return new JsonResponse($this->result, 422);
+        }
+    }
+
+
     /**
      * @Route("/ajax/one_click_order", name="one_click_order", options={"expose"=true})
      */

@@ -1,8 +1,4 @@
 
-form:
-    path:     /form
-    defaults: { _controller: AppBundle:Search:form}
-
 search:
     path:     /search/{search}
     defaults: { _controller: AppBundle:Search:search }
