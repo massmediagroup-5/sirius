@@ -187,6 +187,11 @@ class AppExtension extends \Twig_Extension
                         ));
                     }
                 }
+            } elseif($model1 instanceof ProductModels && $model1->isPublished()) {
+                return $router->generate('product', [
+                    'category' => $model1->getProducts()->getBaseCategory()->getAlias(),
+                    'product' => $model1->getAlias()
+                ]);
             }
         }
 

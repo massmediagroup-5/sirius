@@ -46,7 +46,10 @@ class ProductModelsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('alias', null, ['label' => 'Ссылка'])
+            ->addIdentifier('alias', null, [
+                'label' => 'Ссылка',
+                'template' => 'AppAdminBundle:list:product_model_alias.html.twig'
+            ])
             ->add('products.article', null, ['label' => 'Артикул'])
             ->addIdentifier('products.name', null, ['label' => 'Модель'])
             ->add('productColors.name', null, ['label' => 'Цвет'])

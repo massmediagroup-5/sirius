@@ -11,11 +11,11 @@
 
     <div class="btn-row">
         <div class="btn-row__i">
-            <a href="#" class="btn btn_blue btn_buy">
-                    <span>
-                        <i class="icon icon-cart"></i>
-                        {{ (model.preOrderFlag ? 'Pre-order' : 'Buy')|trans }}
-                    </span>
+            <a href="#" class="btn btn_blue btn_buy preorder_btn js_preorder_btn">
+                <span>{{ 'Pre-order'|trans }}</span>
+            </a>
+            <a href="#" class="btn btn_blue btn_buy js_buy_btn">
+                <span>{{ 'Buy'|trans }}</span>
             </a>
             {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart btn_buy'}, 'label': model.preOrderFlag ? 'Pre-order' : 'Buy'}) }}
         </div>

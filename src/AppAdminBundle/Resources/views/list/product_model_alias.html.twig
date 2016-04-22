@@ -1,0 +1,10 @@
+<td>
+    {% block field%}
+        {% set link = url_to(object) %}
+        {% if link %}
+            <a href="{{ url_to(object) }}">{{ object.alias }}</a>
+        {% else %}
+            {{ object.alias }}
+        {% endif %}
+    {% endblock %}
+</td>
