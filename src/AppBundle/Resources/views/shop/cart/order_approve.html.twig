@@ -7,22 +7,21 @@
         <div class="darkness"></div>
         <div class="wrap">
             <div class="content__i">
-
                 <div class="order-approve">
                     <div class="order-approve__i">
                         <h2>Подтверждение заказа</h2>
-
-
-                        <p>Заказ №{{ order.id }} принят. Спасибо за покупку, в ближайшее время с Вами свяжется наш менеджер.</p>
+                        <p>
+                            Заказ №{{ order.id }} принят.
+                            {% if options.params.order_approve.value is defined and options.params.order_approve.active == true %}
+                            {{ options.params.order_approve.value }}
+                            {% endif %}
+                        </p>
                         <p><a href="{{ continueShopUrl }}" class="continue">Продолжить покупки</a></p>
                     </div>
                 </div>
-
                 {{ widget('products.recommended')|raw }}
-
             </div>
         </div>
     </section>
-
     <div class="push"></div>
 {% endblock %}
