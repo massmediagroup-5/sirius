@@ -187,6 +187,7 @@
     {{ parent() }}
     <script>
         var currentCategoryAlias = "{{ data.category.alias }}";
+        var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_FULLY') ? 'true' : 'false' }};
         {% if app.request.get('_route') == 'filter' %}
             var current_route = 'filter';
         {% endif %}
@@ -216,4 +217,5 @@
     {% if is_granted('ROLE_WHOLESALER') %}
         {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': data.products }) }}
     {% endif %}
+    {{ include('AppBundle:shop/product/preorder_warning_popup.html.twig') }}
 {% endblock %}
