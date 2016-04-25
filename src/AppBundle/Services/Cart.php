@@ -11,6 +11,7 @@ use AppBundle\Entity\Users as UsersEntity;
 use AppBundle\Event\OrderEvent;
 use AppBundle\Exception\CartEmptyException;
 use AppBundle\Model\CartItem;
+use AppBundle\Model\CartSize;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -227,11 +228,35 @@ class Cart
     /**
      * @return CartItem[]
      */
+    public function getPreOrderSizes()
+    {
+        return call_user_func_array('array_merge', array_map(function (CartItem $item) {
+            return array_filter($item->getSizes(), function (CartSize $size) {
+                return $size->getSize()->getPreOrderFlag();
+            });
+        }, $this->items));
+    }
+
+    /**
+     * @return CartItem[]
+     */
     public function getStandardItems()
     {
         return array_filter($this->items, function (CartItem $item) {
             return !$item->getProductModel()->hasPreOrderSize();
         });
+    }
+
+    /**
+     * @return CartItem[]
+     */
+    public function getStandardSizes()
+    {
+        return call_user_func_array('array_merge', array_map(function (CartItem $item) {
+            return array_filter($item->getSizes(), function (CartSize $size) {
+                return !$size->getSize()->getPreOrderFlag();
+            });
+        }, $this->items));
     }
 
     /**
