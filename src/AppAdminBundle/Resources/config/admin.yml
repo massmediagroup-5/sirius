@@ -203,6 +203,12 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Статусы заказов"}
 
+    app_admin.admin.order_status_pay:
+        class: AppAdminBundle\Admin\OrderStatusPayAdmin
+        arguments: [~, AppBundle\Entity\OrderStatusPay, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Статусы оплаты заказов"}
+
     app_admin.admin.price_list:
         pattern:  /admin/app/price-list
         class: AppAdminBundle\Admin\PriceListAdmin
