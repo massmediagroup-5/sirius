@@ -62,17 +62,18 @@ INSERT INTO `pages` (`id`, `title`, `alias`, `description`, `content`, `seo_titl
 --
 
 INSERT INTO `site_params` (`id`, `param_name`, `param_value`, `active`, `editor`) VALUES
-(1, 'email', 'sirius@mail.com', 1, 0),
-(2, 'phone1', '+38 065 325 65 32', 1, 0),
-(3, 'phone2', '+38 056 356 35 36', 1, 0),
-(4, 'phone3', '+38 099 000 39 88', 1, 0),
-(5, 'copyright', '&copy; 2016, Sirius - женская спортивная одежда', 1, 0),
-(6, 'fb_link', 'https://ru-ru.facebook.com/people/Sportwear-Sirius/100010135187519', 1, 0),
-(7, 'vk_link', 'http://vk.com/sirius_sport', 1, 0),
-(8, 'gp_link', 'https://plus.google.com/u/0/112198292170737630961/about', 1, 0),
-(9, 'delivery', '<ul>\n	<li>&mdash; Доставка на склад Новой Почты: <strong>35 грн.</strong><br />\n	Срок доставки 1-2 дня</li>\n	<li>&mdash; Доставка курьером: <strong>бесплатно</strong><br />\n	Срок доставки 1-2 дня</li>\n	<li>&mdash; Адресная доставка Новой Почтой: <strong>70 грн.</strong><br />\n	Срок доставки 1-2 дня</li>\n</ul>', 1, 1),
-(10, 'payment', '<ul>\r\n	<li>&mdash; наличными при получении товара</li>\r\n	<li>&mdash; безналичная оплата</li>\r\n	<li>&mdash; картой VISA</li>\r\n</ul>', 1, 1),
-(11, 'guarantee', '<p>Обмен или возврат в течение 14 дней.</p>', 1, 1);
+(9, 'email', 'Спасибо за покупку, в ближайшее время с Вами свяжется наш менеджер', 1, NULL),
+(10, 'phone1', '+38 065 325 65 32', 1, NULL),
+(11, 'phone2', '+38 056 356 35 36', 1, NULL),
+(12, 'phone3', '+38 099 000 39 88', 1, NULL),
+(13, 'copyright', '&copy; 2016, Sirius - женская спортивная одежда', 1, NULL),
+(14, 'fb_link', 'https://ru-ru.facebook.com/people/Sportwear-Sirius/100010135187519', 1, NULL),
+(15, 'vk_link', 'http://vk.com/sirius_sport', 1, NULL),
+(16, 'gp_link', 'https://plus.google.com/u/0/112198292170737630961/about', 1, NULL),
+(17, 'delivery', '<ul>\n	<li>&mdash; Доставка на склад Новой Почты: <strong>35 грн.</strong><br />\n	Срок доставки 1-2 дня</li>\n	<li>&mdash; Доставка курьером: <strong>бесплатно</strong><br />\n	Срок доставки 1-2 дня</li>\n	<li>&mdash; Адресная доставка Новой Почтой: <strong>70 грн.</strong><br />\n	Срок доставки 1-2 дня</li>\n</ul>', 1, 1),
+(18, 'payment', '<ul>\r\n	<li>&mdash; наличными при получении товара</li>\r\n	<li>&mdash; безналичная оплата</li>\r\n	<li>&mdash; картой VISA</li>\r\n</ul>', 1, 1),
+(19, 'guarantee', '<p>Обмен или возврат в течение 14 дней.</p>', 1, 1),
+(20, 'order_approve', 'Спасибо за покупку, в ближайшее время с Вами свяжется наш менеджер\n', 1, NULL);
 
 -- --------------------------------------------------------
 
