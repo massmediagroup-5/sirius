@@ -1,0 +1,47 @@
+AppBundle\Entity\OrderStatusPay:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        code:
+            type: string
+            length: 255
+            nullable: true
+        description:
+            type: string
+            length: 255
+            nullable: true
+        baseFlag:
+            type: boolean
+            column: base_flag
+        sendClient:
+            type: boolean
+            column: send_client
+        sendClientText:
+            type: string
+            length: 255
+            nullable: true
+        sendManager:
+            type: boolean
+            column: send_manager
+        sendManagerText:
+            type: string
+            length: 255
+            nullable: true
+        priority:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+        active:
+            type: boolean
+            nullable: true
+    lifecycleCallbacks: {  }
