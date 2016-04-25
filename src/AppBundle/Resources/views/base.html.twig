@@ -54,7 +54,9 @@
 {% endblock %}
 
 <div class="popups" style="display: none">
-    {% block popups %} {% endblock %}
+    {% block popups %}
+        {{ include('AppBundle:partials/msg_popup.html.twig') }}
+    {% endblock %}
 </div>
 
 </body>
