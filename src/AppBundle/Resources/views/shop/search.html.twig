@@ -1,0 +1,194 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block body %}
+    <section class="content">
+        <div class="darkness"></div>
+        <div class="wrap">
+            <div class="content__i">
+                {{ widget('breadcrumbs.render')|raw }}
+                <h2 class="catalog-title">
+                    По Вашему запросу «{{ slug }}» <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
+                </h2>
+                <div class="catalog">
+                    <div class="catalog__i">
+                        <div class="filter">
+                            <div class="filter__i">
+                                {% if filters.isShowFiltered(data) %}
+                                    <div class="filtered">
+                                        <div class="filtered__i">
+                                            <h2>ВЫ ИЩЕТЕ <a href="{{ url('search', {'search': slug}) }}" class="clear">Очистить все</a></h2>
+                                            <div class="filtered-list">
+                                                <div class="filtered-list__i">
+                                                    <ul>
+                                                        {% for filter_item in data.characteristics %}
+                                                            {% if app.request.get(filter_item.id) %}
+                                                                {% for param in filter_item.characteristicValues %}
+                                                                    {% set checked_array = app.request.get(filter_item.id)|split(',') %}
+                                                                    {% if param.id in checked_array %}
+                                                                        <li>
+                                                                            <a href="{{ filters.removeQueryParameter(filter_item.id, param.id) }}" class="remove"></a>
+                                                                            <strong>{{ filter_item.name }}:</strong> {{ param.name }}
+                                                                        </li>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% if data.filters.price_from != data.price_filter.min_price %}
+                                                            <li>
+                                                                <a href="{{ filters.replaceQueryParameter('price_from', data.price_filter.min_price|round) }}" class="remove"></a>
+                                                                <strong>Цена от:</strong>
+                                                                {{ app.request.get('price_from') ? app.request.get('price_from') : data.price_filter.min_price }}
+                                                            </li>
+                                                        {% endif %}
+                                                        {% if data.filters.price_to != data.price_filter.max_price %}
+                                                            <li>
+                                                                <a href="{{ filters.replaceQueryParameter('price_to', data.price_filter.max_price|round) }}" class="remove"></a>
+                                                                <strong>Цена до:</strong>
+                                                                {{ app.request.get('price_to') ? app.request.get('price_to') : data.price_filter.max_price }}
+                                                            </li>
+                                                        {% endif %}
+                                                        {% for color in filters.selectedColors(data) %}
+                                                            <li>
+                                                                <a href="{{ filters.removeQueryParameter('colors', color.id) }}" class="remove"></a><strong>Цвет:</strong> {{ color.name }}
+                                                                <span class="color" style="background: {{ color.hex }}"></span>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <form class="filters" id="filters">
+                                    <div class="filters__i">
+                                        <div class="price-slider">
+                                            <p>Цена (грн)</p>
+                                            <div class="price-slider__i">
+                                                <div class="values clearfix">
+                                                    <span class="from">От</span>
+                                                    <input type="text" id="min"
+                                                           data-value="{{ data.filters.price_from|round }}"
+                                                           data-min="{{ data.price_filter.min_price|round }}"/>
+                                                    <span class="to">до</span>
+                                                    <input type="text" id="max"
+                                                           data-value="{{ data.filters.price_to|round }}"
+                                                           data-max="{{ data.price_filter.max_price|round }}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="list">
+                                            {% for filter_item in data.characteristics %}
+                                                <div class="item{% if app.request.get(filter_item.id) %} active{% endif %}">
+                                                    <div class="item-name">
+                                                        <a href="#">{{ filter_item.name }} <span></span></a>
+                                                    </div>
+                                                    <div class="item-drop"{% if app.request.get(filter_item.id) %} style="display: block;"{% endif %}>
+                                                        <div class="item-drop__i">
+                                                            <ul class="check-fltr">
+                                                                {% for param in filter_item.characteristicValues %}
+                                                                    <li>
+                                                                        <label class="filter-check">
+                                                                            {# check if filter parameter checked #}
+                                                                            {% set check = "" %}
+                                                                            {% if app.request.get(filter_item.id) %}
+                                                                                {% set checked_array = app.request.get(filter_item.id)|split(',') %}
+                                                                                {% if param.id in checked_array %}
+                                                                                    {% set check = 'checked="checked"' %}
+                                                                                {% endif %}
+                                                                            {% endif %}
+                                                                            <input type="checkbox" class="checkbox" {{ check }} name="{{ filter_item.id }}" value="{{ param.id }}"/>
+                                                                            <span class="f-check"></span>
+                                                                            {{ param.name }}
+                                                                            <span>({{ data.characteristicValues[param.id] }})</span>
+                                                                        </label>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            <div class="item">
+                                                <div class="item-name">
+                                                    <a href="#" {% if filters.selectedColors(data)|length %} data-active="1" {% endif %}>ЦВЕТ<span></span></a>
+                                                </div>
+                                                <div class="item-drop">
+                                                    <div class="item-drop__i">
+                                                        <div class="color-filter">
+                                                            <ul>
+                                                                {% for color in data.colors %}
+                                                                    <li>
+                                                                        <label class="color-check">
+                                                                            <input type="checkbox" name="colors" value="{{ color.id }}" class="checkbox" {% if filters.isSelectedColor(color) %} checked {% endif %}/>
+                                                                                <span style="background-color: {{ color.hex }}"></span>
+                                                                        </label>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="single-item">
+                                                <label><input type="checkbox"/>РАСПРОДАЖА</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="main">
+                            {% if is_granted('ROLE_WHOLESALER') %}
+                                {{ include('AppBundle:shop/products_list_wholesale.html.twig', { 'items': data }) }}
+                            {% else %}
+                                {{ include('AppBundle:shop/products_list.html.twig', { 'items': data }) }}
+                            {% endif %}
+                            <div class="promo-text">
+                                <div class="promo-text__i">
+                                    {{ data.category.content|raw }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ widget('products.recentlyReviewed')|raw }}
+            </div>
+        </div>
+        </section>
+{% endblock %}
+
+{% block bottom_assets %}
+    {{ parent() }}
+    <script>
+        var currentCategoryAlias = "{{ data.category.alias }}";
+        {% if app.request.get('_route') == 'category' %}
+            var current_route = 'category';
+        {% else %}
+            var current_route = 'filter';
+        {% endif %}
+    </script>
+    {% javascripts '@AppBundle/Resources/public/js/filters.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% if is_granted('ROLE_WHOLESALER') %}
+        {% javascripts
+            '@AppBundle/Resources/public/js/wholesale.js'
+            '@AppBundle/Resources/public/js/catalog_wholesale.js'
+        %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% else %}
+        {% javascripts '@AppBundle/Resources/public/js/catalog.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endif %}
+{% endblock %}
+{% block popups %}
+    {{ parent() }}
+
+    {% if is_granted('ROLE_WHOLESALER') %}
+        {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': data.products }) }}
+    {% endif %}
+{% endblock %}
