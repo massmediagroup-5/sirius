@@ -6,7 +6,7 @@
 <div class="item-drop">
     <div class="item-drop__i">
         <div class="fast">
-            {{ form_start(form) }}
+            {{ form_start(form, {attr: {class: 'js_quick_order'}}) }}
             <div class="row">
                 <div class="col">
                     {{ form_widget(form.phone, {'attr': {'class': 'phone-inp', 'placeholder': 'Введите Ваш номер'}}) }}
