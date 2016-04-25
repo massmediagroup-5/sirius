@@ -1,0 +1,5 @@
+<td>
+    {% block field%}
+        <a href="{{ path('admin_app_productmodels_list', {filter: {products: {value: object.id}}}) }}">{{ object.productModels.count() }}</a>
+    {% endblock %}
+</td>
