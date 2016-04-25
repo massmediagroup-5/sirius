@@ -80,11 +80,17 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      * @param $category
      * @param $characteristicValues
      * @param $filters
+     * @param $ids
      * @return array
      */
-    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters)
+    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters, $ids = array())
     {
         $builder = $this->createQueryBuilderWithJoins();
+
+        if(!empty($ids)){
+            $builder->andWhere("products.id IN(:productsIds)")
+                ->setParameter('productsIds', array_values($ids));
+        }
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 

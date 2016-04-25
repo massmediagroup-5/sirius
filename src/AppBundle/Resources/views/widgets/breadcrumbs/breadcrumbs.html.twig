@@ -1,8 +1,10 @@
 <div class="breadcrumbs">
     <div class="breadcrumbs__i">
         <ul>
-            {% if breadcrumbs.0.name is defined and breadcrumbs.0.name != 'TM Sirius' %}
-            <li><a href="{{ url('category', {'category': 'all'}) }}">{% trans %}TM Sirius{% endtrans %}</a></li>
+            {% if breadcrumbs.0.name is defined and breadcrumbs.0.name == 'TM Sirius' %}
+                <li><a href="{{ url('category', {'category': 'all'}) }}">{% trans %}TM Sirius{% endtrans %}</a></li>
+            {% else %}
+                <li><a href="{{ url('homepage') }}">{% trans %}To homepage{% endtrans %}</a></li>
             {% endif %}
             {% for item in breadcrumbs %}
                 <li>

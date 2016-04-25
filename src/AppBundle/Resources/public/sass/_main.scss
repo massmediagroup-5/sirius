@@ -781,7 +781,7 @@ input[type="checkbox"] {
 					position: relative;
 					display: block;
 					padding: 20px 15px;
-					z-index: 11;
+					//z-index: 11;
 					@include transition(color, 250ms, ease);
 
 					.out_opt & {
