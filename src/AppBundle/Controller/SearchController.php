@@ -13,6 +13,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  */
 class SearchController extends Controller
 {
+    /**
+     * @var number of max items count on page.
+     */
+    private $items_on_page = 9;
 
     /**
      * searchAction
@@ -55,38 +59,74 @@ class SearchController extends Controller
      *
      * @return mixed
      */
-    public function searchAction($search)
+    public function searchAction($search, Request $request)
     {
-        $slug = base64_decode(urldecode($search));
-        $finder = $this->get('fos_elastica.finder.app.products');
+        $slug = urldecode($search);
 
         $boolQuery = new \Elastica\Query\BoolQuery();
 
-        $fieldQuery = new \Elastica\Query\Match();
-        $fieldQuery->setFieldQuery('title', 'I am a title string');
-        $fieldQuery->setFieldParam('title', 'analyzer', 'my_analyzer');
-        $boolQuery->addShould($fieldQuery);
+        $productQuery = new \Elastica\Query\Match();
+        $productQuery->setFieldQuery('products.name', $slug);
+        $productQuery->setFieldParam('products.name', 'boost', 3);
+        $productQuery->setFieldParam('products.name', 'type', 'phrase_prefix');
+        $boolQuery->addShould($productQuery);
 
-        $tagsQuery = new \Elastica\Query\Terms();
-        $tagsQuery->setTerms('tags', array('tag1', 'tag2'));
-        $boolQuery->addShould($tagsQuery);
+        $articleQuery = new \Elastica\Query\Match();
+        $articleQuery->setFieldQuery('products.article', $slug);
+        $articleQuery->setFieldParam('products.article', 'boost', 3);
+        $articleQuery->setFieldParam('products.article', 'type', 'phrase_prefix');
+        $boolQuery->addShould($articleQuery);
 
-        $categoryQuery = new \Elastica\Query\Terms();
-        $categoryQuery->setTerms('categoryIds', array('1', '2', '3'));
-        $boolQuery->addMust($categoryQuery);
+        $baseCategoryQuery = new \Elastica\Query\Match();
+        $baseCategoryQuery->setFieldQuery('products.baseCategory.name', $slug);
+        $baseCategoryQuery->setFieldParam('products.baseCategory.name', 'boost', 3);
+        $baseCategoryQuery->setFieldParam('products.baseCategory.name', 'type', 'phrase_prefix');
+        $boolQuery->addShould($baseCategoryQuery);
 
+        $boolFilter = new \Elastica\Filter\Bool();
+        $boolFilter->addMust(
+            new \Elastica\Filter\Terms('active', array(1))
+        );
+        $boolFilter->addMust(
+            new \Elastica\Filter\Terms('productModels.published', array(1))
+        );
 
-        $result = $finder->find($slug);
-//        $result = $this->get('search')->doSearch($slug);
-//        var_dump($result);exit;
-        return $this->render('AppBundle:Search:search.html.twig', array(
-            'data'              => $result,
-            'base_dir'          => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-            'params'            => $this->get('options')->getParams(),
-            'cart'              => $this->get('cart')->getHeaderBasketInfo(),
-            'compare'           => $this->get('compare')->getHeaderCompareInfo(),
-            'recently_reviewed' => $this->get('entities')->getRecentlyViewed(),
-        ));
+        $filtered = new \Elastica\Query\Filtered($boolQuery, $boolFilter);
+        $query = \Elastica\Query::create($filtered);
+        $client = new \Elastica\Client();
+
+        $resultSet = $client->getIndex('app')->search($query);
+//        $result = $this->get('fos_elastica.finder.app')->find($query,9999);
+        foreach($resultSet->getResults() as $res)
+        {
+            $ids[] = $res->getId();
+        }
+
+        $category = 'all';
+        $current_page = $request->get('page') ? $request->get('page') : 1;
+        $filters = $request->query->all();
+
+        try {
+            $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
+            $data = $this->get('entities')
+                ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page,
+                    $entityName, $ids);
+        } catch (\Doctrine\Orm\NoResultException $e) {
+            $data = null;
+        }
+        if ($data) {
+            $this->get('widgets.breadcrumbs')->push(['name' => 'Результаты поиска']);
+            return $this->render('AppBundle:shop:search.html.twig', array(
+                'data' => $data,
+                'slug' => $slug,
+                'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+                'params' => $this->get('options')->getParams(),
+                'maxPages' => ceil($data['products']->count() / $this->items_on_page),
+                'thisPage' => $current_page
+            ));
+        } else {
+            throw $this->createNotFoundException();
+        }
     }
 
 }
