@@ -2,7 +2,9 @@
 <html>
 <head lang="ru">
     <meta charset="UTF-8">
-    <title>Sirius || Main</title>
+    {% block meta %}
+        <title>Sirius || Main</title>
+    {% endblock %}
     {% block assets_top %}
         {% stylesheets
             '@AppBundle/Resources/public/sass/screen.scss' filter='compass' %}

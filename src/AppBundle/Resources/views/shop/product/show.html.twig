@@ -2,6 +2,20 @@
 
 {% block out_class %} out_sub {% endblock %}
 
+{% block meta %}
+    {% set image = (current_model.images is empty ? param('no_image') : current_model.images.0.link) | imagine_filter('medium') %}
+    <title>{{ current_model }}</title>
+    <meta name="description" content="{{ current_model.products.seoDescription }}" />
+    <meta name="keywords" content="{{ current_model.products.seoKeywords }}" />
+    <meta property="og:title" content="{{ current_model.products.seoTitle ? : current_model }}"/>
+    <meta property="og:description" content="{{ current_model.products.seoDescription }}"/>
+    <meta property="og:image" content="{{ image }}"/>
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="{{ url(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}"/>
+    <meta property="og:site_name" content="Интернет магазин Sirius-sport.com" />
+    <link rel="image_src" href="{{ image }}">
+{% endblock %}
+
 {% block body %}
     <section class="content">
         <div class="wrap">
@@ -253,10 +267,15 @@
     {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': [current_model] }) }}
 
     {{ include('AppBundle:shop/partials/sizes_popup.html.twig') }}
+
+    {{ include('AppBundle:shop/product/preorder_warning_popup.html.twig') }}
 {% endblock %}
 
 {% block bottom_assets %}
     {{ parent() }}
+    <script>
+        var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_FULLY') ? 'true' : 'false' }};
+    </script>
 
     {% javascripts '@AppBundle/Resources/public/js/product.js' %}
         <script src="{{ asset_url }}"></script>
