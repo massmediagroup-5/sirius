@@ -38,15 +38,18 @@ class UserController extends Controller
 
     /**
      * @Route("/user/wish_list", name="user_wish_list")
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param Request $request
      * @return mixed
      */
     public function wishListAction(Request $request)
     {
-        $wishList = $this->container->get('wishlist')->paginate($request->get('page', 1));
+        $wishList = $this->container->get('wishlist')->paginate($request->get('page', 1, $request->request->all()));
 
-        return $this->render('AppBundle:user/wish_list.html.twig', compact('wishList'));
+        if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->render('AppBundle:user/wish_list.html.twig', compact('wishList'));
+        } else {
+            return $this->render('AppBundle:user/logged_out_wish_list.html.twig', compact('wishList'));
+        }
     }
 
     /**

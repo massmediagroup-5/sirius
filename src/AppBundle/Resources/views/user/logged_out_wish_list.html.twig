@@ -1,0 +1,71 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block body %}
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+
+                {{ widget('breadcrumbs.render')|raw }}
+
+                <h2 class="catalog-title">
+                    Список желаний <span>({{ 'labels.products_count'|transchoice(wishList.count, {'%count%': wishList.count}) }})</span>
+                </h2>
+
+                <div class="catalog">
+                    <div class="catalog__i">
+                        {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': wishList }) }}
+
+                        <div class="product-list product-list_4-items">
+                            <div class="product-list__i">
+                                {% if is_granted('ROLE_WHOLESALER') %}
+                                    {% for item in wishList %}
+                                        {{ include('AppBundle:shop:product/list_item_wholesale.html.twig', { 'item': item }) }}
+                                    {% endfor %}
+                                {% else %}
+                                    {% for item in wishList %}
+                                        {{ include('AppBundle:shop:product/list_item.html.twig', { 'item': item.products, selectedModel: item}) }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': wishList }) }}
+                    </div>
+                </div>
+
+                {{ widget('products.recentlyReviewed')|raw }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block bottom_assets %}
+    {{ parent() }}
+
+    {% javascripts '@AppBundle/Resources/public/js/filters.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% if is_granted('ROLE_WHOLESALER') %}
+        {% javascripts
+        '@AppBundle/Resources/public/js/wholesale.js'
+        '@AppBundle/Resources/public/js/catalog_wholesale.js'
+        %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% else %}
+        {% javascripts '@AppBundle/Resources/public/js/catalog.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endif %}
+{% endblock %}
+
+{% block popups %}
+    {{ parent() }}
+
+    {% if is_granted('ROLE_WHOLESALER') %}
+        {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': item.products }) }}
+    {% endif %}
+{% endblock %}

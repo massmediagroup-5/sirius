@@ -197,7 +197,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function addSort($query, $sort, $productAlias = 'products', $modelAlias = 'productModels', $sizeAlias = 'sizes')
     {
-        $query->orderBy("$modelAlias.inStock", 'DESC');
+        $query->addOrderBy("$modelAlias.inStock", 'DESC');
         switch ($sort) {
             case false:
             case 'new':

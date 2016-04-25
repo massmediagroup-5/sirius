@@ -187,9 +187,7 @@
     {{ parent() }}
     <script>
         var currentCategoryAlias = "{{ data.category.alias }}";
-        {% if app.request.get('_route') == 'category' %}
-            var current_route = 'category';
-        {% else %}
+        {% if app.request.get('_route') == 'filter' %}
             var current_route = 'filter';
         {% endif %}
     </script>
