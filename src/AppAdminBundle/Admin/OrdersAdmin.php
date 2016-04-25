@@ -144,11 +144,12 @@ class OrdersAdmin extends Admin
                     'query_builder' => function (EntityRepository $er) {
                         $status = $this->getSubject()->getStatus();
                         return $er->createQueryBuilder('s')
-                            ->orderBy('s.priority', 'ASC')
+                            ->addOrderBy('FIELD(s.code, \'canceled\')', 'DESC')
+                            ->addOrderBy('s.priority', 'ASC')
                             ->where('s.priority >= :priority')
                             ->orWhere('s.code = :code')
                             ->setParameter('code', 'canceled')
-                            ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(2);
+                            ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(3);
                     }
                 ]
             )

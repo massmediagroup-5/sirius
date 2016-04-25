@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Form\Type\AddInCartType;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
@@ -223,11 +224,22 @@ class CartController extends BaseController
 
             $order = $this->get('cart')->flushCart($orderForm->getData(), $this->getUser());
 
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse([
+                    'redirect' => $this->container->get('router')->generate('cart_order_approve', ['id' => $order])
+                ]);
+            }
+
             return $this->render('AppBundle:shop:cart/order_approve.html.twig', [
                 'order' => $order,
                 'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
             ]);
         }
+
+        if($request->isXmlHttpRequest() && $orderForm->isSubmitted()) {
+            return new JsonResponse(['messages' => ['Ошибка валидации!'], 'errors' => $this->getErrorsAsArray($orderForm)], 422);
+        }
+
 
         $quickOrderForm = $this->createForm(QuickOrderType::class, null);
 
@@ -236,16 +248,40 @@ class CartController extends BaseController
 
             $order = $this->get('cart')->flushCart($quickOrderForm->getData(), $this->getUser(), true);
 
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse([
+                    'redirect' => $this->container->get('router')->generate('cart_order_approve', ['id' => $order])
+                ]);
+            }
+
             return $this->render('AppBundle:shop:cart/order_approve.html.twig', [
                 'order' => $order,
                 'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
             ]);
         }
 
+        if($request->isXmlHttpRequest() && $quickOrderForm->isSubmitted()) {
+            return new JsonResponse(['messages' => ['Ошибка валидации!'], 'errors' => $this->getErrorsAsArray($quickOrderForm)], 422);
+        }
+
         return $this->render('AppBundle:shop:cart/order.html.twig', [
             'quickOrderForm' => $quickOrderForm->createView(),
             'orderForm' => $orderForm->createView(),
             'orderFormSubmitFlag' => $orderForm->isSubmitted(),
+        ]);
+    }
+
+    /**
+     * @Route("/cart/order/{id}/approve", name="cart_order_approve", options={"expose"=true})
+     * @ParamConverter("model")
+     * @param Orders $order
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function orderApproveAction(Orders $order)
+    {
+        return $this->render('AppBundle:shop:cart/order_approve.html.twig', [
+            'order' => $order,
+            'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
         ]);
     }
 
@@ -305,6 +341,26 @@ class CartController extends BaseController
             'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
             'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
         ];
+    }
+
+    /**
+     * @param $form
+     * @return array
+     */
+    public function getErrorsAsArray($form)
+    {
+        $errors = array();
+        foreach ($form->getErrors() as $error) {
+            $errors[] = $error->getMessage();
+        }
+
+        foreach ($form->all() as $key => $child) {
+            if ($err = $this->getErrorsAsArray($child)) {
+                $errors[$key] = $err;
+            }
+        }
+
+        return $errors;
     }
 
 }
