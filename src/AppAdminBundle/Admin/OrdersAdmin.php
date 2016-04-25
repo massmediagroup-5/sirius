@@ -79,6 +79,7 @@ class OrdersAdmin extends Admin
     {
 
         $listMapper
+            ->add('id')
             ->addIdentifier('type', 'choice', [
                 'label' => 'Тип заказа',
                 'route' => ['name' => 'edit'],

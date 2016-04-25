@@ -20,23 +20,17 @@
     <section class="content">
         <div class="wrap">
             <div class="content__i">
-
                 {{ widget('breadcrumbs.render')|raw }}
-
                 <div class="product js_item">
                     <div class="product__i">
-
                         <div class="main">
                             <div class="main__i">
-
                                 <div class="product-img">
                                     <div class="list">
                                         <div class="item active">
                                             <div class="main-img">
                                                 {{ widget('products.flags', current_model)|raw }}
-
                                                 {{ widget('products.wishButton', current_model)|raw }}
-
                                                 <div class="main-img__i big-img_slider">
                                                     {% if current_model.images is empty %}
                                                         <a href="#"><img src="{{ param('no_image') | imagine_filter('medium') }}" alt="#"/></a>
@@ -47,7 +41,6 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-
                                             <div class="main-img-slider">
                                                 <div class="main-img-slider__i">
                                                     {% if current_model.images is empty %}
@@ -68,15 +61,10 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div class="product-info">
                                     <div class="product-info__i">
-
                                         <h3 class="type">{{ product.baseCategory.name }}</h3>
-
                                         <h2 class="name">{{ current_model.products.name }}</h2>
-
                                         <div class="price price_new">
                                             <p class="js_product_price" data-model-id="{{ current_model.id }}">
                                                 {{ widget('products.prices', current_model)|raw }}
@@ -87,11 +75,9 @@
                                                 </p>
                                             {% endfor %}
                                         </div>
-
                                         <div class="color-select">
                                             <div class="color-select__i">
                                                 <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ current_model.products.name }})</p>
-
                                                 <div class="list">
                                                     <ul>
                                                         {% for key, model in models %}
@@ -106,11 +92,9 @@
                                             </div>
                                         </div>
                                         <!--color-select end-->
-
                                         {{ form_start(form, {'attr': {'novalidate': true, 'class': 'js_model_form'}}) }}
                                             <div class="product-options">
                                                 <div class="product-options__i">
-
                                                     <ul>
                                                         <li>
                                                             {{ form_widget(form.size, {'attr': {'data-placeholder': 'Выберите размер', 'class': 'select js_cart_size'}}) }}
@@ -125,16 +109,13 @@
 
                                                 </div>
                                             </div>
-
                                             <div class="product-message">
                                                 {% if current_model.products.quantity < 10 %}
                                                     <p>Этот товар скоро закончится</p>
                                                 {% endif %}
                                             </div>
-
                                             <div class="buy-row">
                                                 <div class="buy-row__i">
-
                                                     <div class="col">
                                                         <div class="not-added-part">
                                                             <a href="#" class="btn btn_blue btn_buy preorder_btn js_preorder_btn">
@@ -149,7 +130,6 @@
                                                             </a>
                                                             {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn'}, 'label': current_model.preOrderFlag ? 'Pre-order' : 'Buy'}) }}
                                                         </div>
-
                                                         <div class="incart added-part">
                                                             <div class="incart__i">
                                                                 <p>Товар добавлен</p>
@@ -157,7 +137,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div class="col">
                                                         <div class="product-share">
                                                             <script type="text/javascript" src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
@@ -165,18 +144,13 @@
                                                             <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,gplus" data-counter=""></div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
-
                                         {{ form_end(form) }}
-
                                         <div class="fast-buy js_fast_buy">
                                             <div class="fast-buy__i">
                                                 <h2>Быстрый заказ</h2>
-
                                                 <p>Менеджер перезвонит Вам и уточнит детали</p>
-
                                                 {{ form_start(quickForm) }}
                                                     <div class="row">
                                                         <div class="col">
@@ -189,18 +163,14 @@
                                                 {{ form_end(quickForm) }}
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="side">
                             <div class="side__i">
-
                                 <div class="buyer-info">
                                     <div class="buyer-info__i">
-
                                         <div class="item">
                                             <div class="item__i">
                                                 <h2><i class="icon icon-delivery"></i>Доставка</h2>
@@ -208,7 +178,6 @@
                                             </div>
                                         </div>
                                         <!--item end-->
-
                                         <div class="item">
                                             <div class="item__i">
                                                 <h2><i class="icon icon-wallet"></i>Оплата</h2>
@@ -216,7 +185,6 @@
                                             </div>
                                         </div>
                                         <!--item end-->
-
                                         <div class="item">
                                             <div class="item__i">
                                                 <h2><i class="icon icon-warranty"></i>Гарантия</h2>
@@ -224,40 +192,39 @@
                                             </div>
                                         </div>
                                         <!--item end-->
-
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="product-description">
                     <div class="product-description__i">
                         <h1>{{ current_model.products.name }}</h1>
-
                         <div class="row">
+                            {% if current_model.products.content is not empty %}
                             <div class="col-md-4 col-lg-4">
                                 <h2>О модели</h2>
                                 {{ current_model.products.content|raw }}
                             </div>
+                            {% endif %}
+                            {% if current_model.products.characteristics is not empty %}
                             <div class="col-md-4 col-lg-4">
                                 <h2>Характеристики</h2>
                                 {{ current_model.products.characteristics|raw }}
                             </div>
+                            {% endif %}
+                            {% if current_model.products.features is not empty %}
                             <div class="col-md-4 col-lg-4">
                                 <h2>Особенности</h2>
                                 {{ current_model.products.features|raw }}
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-
                 {{ widget('products.recommended')|raw }}
-
                 {{ widget('products.recentlyReviewed')|raw }}
-
             </div>
         </div>
     </section>
@@ -276,7 +243,6 @@
     <script>
         var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_FULLY') ? 'true' : 'false' }};
     </script>
-
     {% javascripts '@AppBundle/Resources/public/js/product.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
