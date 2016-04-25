@@ -58,6 +58,7 @@ class Entities
      * @param int $perPage
      * @param int $currentPage
      * @param string $entity
+     * @param array $ids
      * @return array|bool
      */
     public function getCollectionsByCategoriesAlias(
@@ -65,7 +66,8 @@ class Entities
         $filters = null,
         $perPage = 9,
         $currentPage = 1,
-        $entity = 'Products'
+        $entity = 'Products',
+        $ids = array()
     ) {
 
         $category = $this->em
@@ -96,7 +98,7 @@ class Entities
         }
 
         $products = $this->em->getRepository("AppBundle:$entity")
-            ->getFilteredProductsToCategoryQuery($category, $characteristicsValuesIds, $filters);
+            ->getFilteredProductsToCategoryQuery($category, $characteristicsValuesIds, $filters, $ids);
 
         $colors = $this->em->getRepository('AppBundle:ProductColors')
             ->getColorsForFilteredProducts($category, $characteristicsValuesIds, $filters);

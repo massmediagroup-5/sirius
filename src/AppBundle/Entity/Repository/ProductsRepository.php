@@ -406,9 +406,10 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param $category
      * @param $characteristicValues
      * @param $filters
+     * @param $ids
      * @return array
      */
-    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters)
+    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters, $ids = array())
     {
         $builder = $this->createQueryBuilder('products')
             ->select('products');
@@ -424,6 +425,11 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
+
+        if(!empty($ids)){
+            $builder->andWhere("products.id IN(:productsIds)")
+                ->setParameter('productsIds', array_values($ids));
+        }
 
         $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
 
