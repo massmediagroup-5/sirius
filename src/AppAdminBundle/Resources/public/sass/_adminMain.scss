@@ -172,3 +172,10 @@ div[class="form-group"][id$="_images"] {
     border: 1px solid #ddd;
     border-radius: 6px;
 }
+
+.view_link, .edit_link , .delete_link, .clone_link{
+    font-size: 0px;
+    i {
+        font-size: 12px;
+    }
+}
