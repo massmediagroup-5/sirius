@@ -56,7 +56,7 @@ class UserController extends Controller
      */
     public function ordersAction()
     {
-        $orders = $this->container->get('cart')->getUserOrders($this->getUser());
+            $orders = $this->container->get('cart')->getUserOrders($this->getUser());
 
         return $this->render('AppBundle:user/orders_list.html.twig', compact('orders'));
     }
