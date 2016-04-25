@@ -70,12 +70,13 @@ class WishList
     /**
      * @param int $page
      * @param int $perPage
+     * @param array $filters
      * @return array|mixed
      */
-    public function paginate($page = 1, $perPage = 8)
+    public function paginate($page = 1, $perPage = 8, $filters = [])
     {
         if (count($this->getIds())) {
-            $models = $this->em->getRepository('AppBundle:ProductModels')->getWishListQuery($this->getIds());
+            $models = $this->em->getRepository('AppBundle:ProductModels')->getWishListQuery($this->getIds(), $filters);
         } else {
             $models = [];
         }

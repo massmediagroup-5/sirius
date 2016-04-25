@@ -144,11 +144,12 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param array $modelIds
+     * @param array $filters
      * @return \Doctrine\ORM\Query
      */
-    public function getWishListQuery(array $modelIds)
+    public function getWishListQuery(array $modelIds, $filters = [])
     {
-        return $this->createQueryBuilder('productModels')
+        $builder = $this->createQueryBuilder('productModels')
             ->innerJoin('productModels.products', 'products')->addselect('products')
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
@@ -157,7 +158,11 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->where('productModels.id IN (:ids)')
             ->setParameter('ids', $modelIds)
-            ->getQuery();
+            ->addOrderBy('FIELD(productModels.id, ' . implode(', ', $modelIds) . ')', 'DESC');
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
+
+        return $builder->getQuery();
     }
 
 }
