@@ -44,5 +44,6 @@ show:
 
 Products List: Модели
 Product Models List: Товары
+Action: Действия
 
 flash_delete_not_empty_error: 'Не возможно удалить запись поскольку она не пуста'
