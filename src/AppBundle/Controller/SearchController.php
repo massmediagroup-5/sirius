@@ -63,7 +63,7 @@ class SearchController extends Controller
     public function searchAction($search = null, Request $request)
     {
         if(!$search){
-            return $this->redirectToRoute('search', array('search' => $request->get('search')), 301);
+            return $this->redirectToRoute('search', array('search' => urlencode($request->get('search'))), 301);
         }
         $slug = urldecode($search);
 
