@@ -1,7 +1,9 @@
 
 search:
     path:     /search/{search}
-    defaults: { _controller: AppBundle:Search:search }
+    defaults:
+        _controller: AppBundle:Search:search
+        search: null
     options:
         expose: true
 
