@@ -12,7 +12,7 @@
         {% endstylesheets %}
     {% endblock %}
 </head>
-<body>
+<body class="loading">
 
 <div class="out {% block out_class %}{% endblock %}">
     {{ include('AppBundle:partials/header.html.twig') }}
@@ -29,9 +29,7 @@
 {% block bottom_assets %}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ url('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
-
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
     {% javascripts
         '@AppBundle/Resources/public/js/html5shiv.js'
         '@AppBundle/Resources/public/js/jquery-1.10.1.min.js'
@@ -46,11 +44,11 @@
         '@AppBundle/Resources/public/js/selectize.js'
         '@AppBundle/Resources/public/js/jquery.validate.js'
         '@AppBundle/Resources/public/js/slick.js'
+        '@AppBundle/Resources/public/js/imagesloaded.js'
         '@AppBundle/Resources/public/js/start.js'
         output='js/main.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
 {% endblock %}
 
 <div class="popups" style="display: none">
@@ -58,6 +56,10 @@
         {{ include('AppBundle:partials/msg_popup.html.twig') }}
     {% endblock %}
 </div>
-
+<div class="preloader">
+    {% image '@AppBundle/Resources/public/img/preloader.svg' %}
+    <img src="{{ asset_url }}" alt="" />
+    {% endimage %}
+</div>
 </body>
 </html>
