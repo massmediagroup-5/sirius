@@ -7,11 +7,24 @@
         <div class="darkness"></div>
         <div class="wrap">
             <div class="content__i">
-                {{ widget('breadcrumbs.render')|raw }}
-                <h2 class="catalog-title">
-                    По Вашему запросу «{{ slug }}» <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
-                </h2>
-                <div class="catalog">
+                {% if not data %}
+                    <div class="search-not-found">
+                        <div class="search-not-found__i">
+                            <h2>Мы не смогли ничего найти по Вашему запросу <span>«</span><strong>{{ slug }}</strong><span>»</span></h2>
+
+                            <ul>
+                                <li>Проверьте написание</li>
+                                <li>Перефразируйте поисковый запрос</li>
+                                <li>Или свяжитесь с нами, используя удобный Вам способ из раздела контакты</li>
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}
+                    {{ widget('breadcrumbs.render')|raw }}
+                    <h2 class="catalog-title">
+                        По Вашему запросу «{{ slug }}» <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
+                    </h2>
+                    <div class="catalog">
                     <div class="catalog__i">
                         <div class="filter">
                             <div class="filter__i">
@@ -153,6 +166,8 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
                 {{ widget('products.recentlyReviewed')|raw }}
             </div>
         </div>
@@ -161,26 +176,29 @@
 
 {% block bottom_assets %}
     {{ parent() }}
-    <script>
-        var currentCategoryAlias = "{{ slug|url_encode }}";
-        var current_route = 'search';
-    </script>
-    {% javascripts '@AppBundle/Resources/public/js/filters.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {% if is_granted('ROLE_WHOLESALER') %}
-        {% javascripts
-            '@AppBundle/Resources/public/js/wholesale.js'
-            '@AppBundle/Resources/public/js/catalog_wholesale.js'
-        %}
+    {% if data %}
+        <script>
+            var currentCategoryAlias = "{{ slug|url_encode }}";
+            var current_route = 'search';
+        </script>
+        {% javascripts '@AppBundle/Resources/public/js/filters.js' %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
-    {% else %}
-        {% javascripts '@AppBundle/Resources/public/js/catalog.js' %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+        {% if is_granted('ROLE_WHOLESALER') %}
+            {% javascripts
+                '@AppBundle/Resources/public/js/wholesale.js'
+                '@AppBundle/Resources/public/js/catalog_wholesale.js'
+            %}
+                <script src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% else %}
+            {% javascripts '@AppBundle/Resources/public/js/catalog.js' %}
+                <script src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endif %}
     {% endif %}
 {% endblock %}
+
 {% block popups %}
     {{ parent() }}
     {% if is_granted('ROLE_WHOLESALER') %}

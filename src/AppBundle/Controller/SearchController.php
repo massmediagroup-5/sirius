@@ -105,6 +105,10 @@ class SearchController extends Controller
             return $res->getId();
         }, $resultSet->getResults());
 
+        if (!$ids) {
+            return $this->render('AppBundle:shop:search.html.twig', ['data' => false, 'slug' => $slug]);
+        }
+
         $category = 'all';
         $current_page = $request->get('page') ? $request->get('page') : 1;
         $filters = $request->query->all();
