@@ -67,11 +67,12 @@ class ProductsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => 'Название модели',
-                'template' => 'AppAdminBundle:list:product_name.html.twig'
-            ])
+            ->addIdentifier('name', null, ['label' => 'Название модели'])
             ->add('article', null, ['label' => 'Артикул'])
+            ->add('productModels', null, [
+                'label' => 'Количество моделей',
+                'template' => 'AppAdminBundle:list:product_models_count.html.twig'
+            ])
             ->add('baseCategory.name', null, ['label' => 'Категория'])
             ->add('active', 'boolean', ['label' => 'Активный', 'editable' => true])
             ->add('createTime', null, ['label' => 'Дата создания'])
@@ -117,7 +118,7 @@ class ProductsAdmin extends Admin
             ->end()
             ->end()
             ->tab('Характеристики')
-            ->with('СharacteristicValues',
+            ->with('Характеристики модели',
                 [
                     'class' => 'col-md-12',
                 ])
