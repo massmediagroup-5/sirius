@@ -97,11 +97,10 @@ class SearchController extends Controller
         $client = new \Elastica\Client();
 
         $resultSet = $client->getIndex('app')->search($query);
-//        $result = $this->get('fos_elastica.finder.app')->find($query,9999);
-        foreach($resultSet->getResults() as $res)
-        {
-            $ids[] = $res->getId();
-        }
+
+        $ids = array_map(function ($res) {
+            return $res->getId();
+        }, $resultSet->getResults());
 
         $category = 'all';
         $current_page = $request->get('page') ? $request->get('page') : 1;
