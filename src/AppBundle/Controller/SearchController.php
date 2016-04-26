@@ -56,6 +56,7 @@ class SearchController extends Controller
      * searchAction
      *
      * @param mixed $search
+     * @param Request $request
      *
      * @return mixed
      */

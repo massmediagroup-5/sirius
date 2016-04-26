@@ -162,12 +162,8 @@
 {% block bottom_assets %}
     {{ parent() }}
     <script>
-        var currentCategoryAlias = "{{ data.category.alias }}";
-        {% if app.request.get('_route') == 'category' %}
-            var current_route = 'category';
-        {% else %}
-            var current_route = 'filter';
-        {% endif %}
+        var currentCategoryAlias = "{{ slug|url_encode }}";
+        var current_route = 'search';
     </script>
     {% javascripts '@AppBundle/Resources/public/js/filters.js' %}
         <script src="{{ asset_url }}"></script>
@@ -187,7 +183,6 @@
 {% endblock %}
 {% block popups %}
     {{ parent() }}
-
     {% if is_granted('ROLE_WHOLESALER') %}
         {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': data.products }) }}
     {% endif %}
