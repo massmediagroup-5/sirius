@@ -225,3 +225,8 @@ services:
         arguments: [@sonata.user.editable_role_builder, @translator]
         tags:
             - { name: form.type, alias: sonata_security_roles }
+
+    sonata.user.form.type.stores_list:
+        class:     AppAdminBundle\Form\Type\SonataStoresListType
+        tags:
+            - { name: form.type, alias: sonata_stores_list }

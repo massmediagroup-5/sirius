@@ -1,0 +1,41 @@
+{% block sonata_stores_list_widget %}
+    {% spaceless %}
+        {{ form_widget(form) }}
+
+
+        <script>
+            (function ($) {
+                var $storesInput = $('select[id$=stores]'), $citiesInput = $('select[id$=cities]');
+                function changeStoreValues() {
+                    var city_id = $citiesInput.val();
+                    $.ajax({
+                        url: '/ajax/get_stores_by_city',
+                        data: {
+                            city_id: city_id,
+                        },
+                        dataType: "json",
+                        type: "POST",
+                        success: function (data) {
+                            if (data.status == 'OK') {
+                                $storesInput.select2('data', null);
+                                console.log($storesInput.find('option').length);
+                                $.each(data.stores, function (key, value) {
+                                    $storesInput.append(new Option(value.name, value.id));
+                                });
+                                console.log($storesInput.find('option').length);
+                                return false;
+                            } else {
+                                console.log(data);
+                            }
+                        },
+                        error: function (message) {
+                            console.log(message.status + ' ' + message.statusText);
+                        },
+                    });
+                }
+                $citiesInput.on('change', changeStoreValues);
+//                changeStoreValues()
+            })(jQuery);
+        </script>
+    {% endspaceless %}
+{% endblock sonata_stores_list_widget %}

@@ -4,6 +4,7 @@ namespace AppAdminBundle\Admin;
 
 use AppBundle\Entity\Orders;
 use Doctrine\ORM\EntityRepository;
+use Illuminate\Support\Arr;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -182,21 +183,34 @@ class OrdersAdmin extends Admin
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
                 ]
             ])
-            ->add('cities', 'sonata_type_model_autocomplete', [
+            ->add('cities', 'entity', [
                 'attr' => ['class' => 'form-control'],
+                'class' => 'AppBundle:Cities',
                 'label' => 'Город',
-                'property' => 'name',
-                'minimum_input_length' => 1,
-                'read_only' => true,
-                'disabled' => true
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
+                'query_builder' => function (EntityRepository $er) {
+                    $carrier = $this->getSubject()->getCarriers();
+                    return $er->createQueryBuilder('s')
+                        ->where('s.carriers = :id')
+                        ->setParameter('id', $carrier ? $carrier->getId() : null);
+                }
             ])
-            ->add('stores', 'sonata_type_model_autocomplete', [
+            ->add('stores', 'sonata_stores_list', [
                 'attr' => ['class' => 'form-control'],
+                'class' => 'AppBundle:Stores',
                 'label' => 'Склад',
-                'property' => 'name',
-                'minimum_input_length' => 1,
-                'read_only' => true,
-                'disabled' => true,
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
+                'query_builder' => function (EntityRepository $er) {
+                    if(!$cityId = Arr::get($this->request->request->get($this->getUniqid()), 'cities')) {
+                        $city = $this->getSubject()->getCities();
+                        $cityId =$city ? $city->getId() : null;
+                    }
+                    return $er->createQueryBuilder('s')
+                        ->where('s.cities = :id')
+                        ->setParameter('id', $cityId);
+                }
             ])
             ->add('totalPrice', null, [
                 'label' => 'Сумма заказа',
@@ -308,7 +322,8 @@ class OrdersAdmin extends Admin
             ->with('Cart',
                 [
                     'class' => 'col-md-12',
-                ])->add('cart', 'sonata_type_collection', [
+                ])
+            ->add('cart', 'sonata_type_collection', [
                 'label' => 'Модель',
                 'required' => false,
                 'cascade_validation' => true,
@@ -318,4 +333,13 @@ class OrdersAdmin extends Admin
             ->end()
             ->end();
     }
+
+    /**
+     * @return array
+     */
+    public function getFormTheme()
+    {
+        return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_stores_list_edit.html.twig']);
+    }
+    
 }
