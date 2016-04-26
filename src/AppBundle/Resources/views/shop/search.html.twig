@@ -187,7 +187,6 @@
 {% endblock %}
 {% block popups %}
     {{ parent() }}
-
     {% if is_granted('ROLE_WHOLESALER') %}
         {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': data.products }) }}
     {% endif %}
