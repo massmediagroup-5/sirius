@@ -2,8 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * Orders
  */
@@ -135,12 +133,12 @@ class Orders
     private $email;
 
     /**
-     * @var string
+     * @var float
      */
     private $discountedTotalPrice = 0;
 
     /**
-     * @var string
+     * @var float
      */
     private $individualDiscount = 0;
 
@@ -148,6 +146,16 @@ class Orders
      * @var boolean
      */
     private $quickFlag = false;
+
+    /**
+     * @var string
+     */
+    private $additionalSolarDescription;
+
+    /**
+     * @var float
+     */
+    private $additionalSolar = 0;
 
     /**
      * Constructor
@@ -694,13 +702,13 @@ class Orders
     }
 
     /**
-     * Get individualDiscount
+     * Get individual discounted total price
      *
-     * @return string
+     * @return int
      */
     public function getIndividualDiscountedTotalPrice()
     {
-        return $this->getDiscountedTotalPrice() - $this->individualDiscount;
+        return $this->getDiscountedTotalPrice() - $this->individualDiscount + $this->additionalSolar;
     }
 
     /**
@@ -791,5 +799,53 @@ class Orders
     public function getCommentAdmin()
     {
         return $this->comment_admin;
+    }
+
+    /**
+     * Set additionalSolarDescription
+     *
+     * @param string $additionalSolarDescription
+     *
+     * @return Orders
+     */
+    public function setAdditionalSolarDescription($additionalSolarDescription)
+    {
+        $this->additionalSolarDescription = $additionalSolarDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get additionalSolarDescription
+     *
+     * @return string
+     */
+    public function getAdditionalSolarDescription()
+    {
+        return $this->additionalSolarDescription;
+    }
+
+    /**
+     * Set additionalSolar
+     *
+     * @param string $additionalSolar
+     *
+     * @return Orders
+     */
+    public function setAdditionalSolar($additionalSolar)
+    {
+        $this->additionalSolar = $additionalSolar;
+
+        return $this;
+    }
+
+    /**
+     * Get additionalSolar
+     *
+     * @return string
+     */
+    public function getAdditionalSolar()
+    {
+        return $this->additionalSolar;
     }
 }

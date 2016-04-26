@@ -41,6 +41,12 @@
                             <th>{{ form_widget(form.individualDiscount, {'attr': {'class': 'table-input'}}) }}</th>
                         </tr>
                         <tr>
+                            <td colspan="6" class="text-right">
+                                {{ form_widget(form.additionalSolarDescription, {'attr': {'class': 'table-input text-right'}}) }}
+                            </td>
+                            <th>{{ form_widget(form.additionalSolar, {'attr': {'class': 'table-input'}}) }}</th>
+                        </tr>
+                        <tr>
                             <td colspan="6" class="text-right">К оплате</td>
                             <th id="individualDiscountedTotalPrice">{{ object.individualDiscountedTotalPrice }}</th>
                         </tr>
