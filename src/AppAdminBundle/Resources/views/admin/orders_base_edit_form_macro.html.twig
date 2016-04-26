@@ -1,0 +1,48 @@
+{% macro render_groups(admin, form, groups, has_tab) %}
+    {% if has_tab %}<div class="row">{% endif %}
+    {% for code in groups %}
+        {% set form_group = admin.formgroups[code] %}
+        <div class="col-md-12 {{ form_group.class }}">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h4 class="box-title">
+                        {{ admin.trans(form_group.name, {}, form_group.translation_domain) }}
+                    </h4>
+                </div>
+                <div class="box-body">
+                    <div class="sonata-ba-collapsed-fields">
+                        {% if form_group.description != false %}
+                            <p>{{ form_group.description|raw }}</p>
+                        {% endif %}
+
+                        <div class="col-md-6">
+                            {{ form_row(form.type)}}
+                            {{ form_row(form.status)}}
+                            {{ form_row(form.fio)}}
+                            {{ form_row(form.phone)}}
+
+                            {{ form_row(form.clientSmsId)}}
+                            {{ form_row(form.clientSmsStatus)}}
+                        </div>
+
+                        <div class="col-md-6">
+                            {{ form_row(form.pay)}}
+                            {{ form_row(form.cities)}}
+                            {{ form_row(form.stores)}}
+                            {{ form_row(form.totalPrice)}}
+
+                            {{ form_row(form.managerSmsId)}}
+                            {{ form_row(form.managerSmsStatus)}}
+                        </div>
+
+                        <div class="col-md-12">
+                            {{ form_row(form.comment)}}
+                            {{ form_row(form.comment_admin)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% if has_tab %}</div>{% endif %}
+{% endmacro %}

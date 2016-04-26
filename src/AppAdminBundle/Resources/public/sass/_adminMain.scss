@@ -190,3 +190,9 @@ div[class="form-group"][id$="_images"] {
         }
     }
 }
+.form-group {
+    .select2-container .select2-choice {
+        height: 34px;
+        line-height: 34px;
+    }
+}
