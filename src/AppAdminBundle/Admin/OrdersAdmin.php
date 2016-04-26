@@ -251,6 +251,8 @@ class OrdersAdmin extends Admin
                 'read_only' => $this->disableEdit,
                 'disabled' => $this->disableEdit,
             ])
+            ->add('additionalSolarDescription', null)
+            ->add('additionalSolar', null)
             ->end()
             ->end();
 
@@ -339,5 +341,34 @@ class OrdersAdmin extends Admin
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_stores_list_edit.html.twig']);
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewInstance()
+    {
+        $object = parent::getNewInstance();
+        return $this->setDefaults($object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getObject($id)
+    {
+        $object = parent::getObject($id);
+        return $this->setDefaults($object);
+    }
+
+    /**
+     * @param $object
+     */
+    protected function setDefaults($object)
+    {
+        if(!$object->getAdditionalSolarDescription()) {
+            $object->setAdditionalSolarDescription('Доставка');
+        }
+
+        return $object;
+    }
 }
