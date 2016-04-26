@@ -331,34 +331,58 @@ liip_imagine:
             quality: 80
             filters:
                 thumbnail: { size: [60, 60], mode: outbound}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
         small:
             quality: 80
             filters:
                 thumbnail: { size: [56, 82], mode: outbound}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
         in_wholesale_cart:
             quality: 80
             filters:
                 thumbnail: { size: [90, 87], mode: outbound}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
         on_wholesale_cart_page:
             quality: 80
             filters:
                 thumbnail: { size: [68, 87], mode: outbound}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
         in_cart:
             quality: 80
             filters:
                 thumbnail: { size: [155, 176], mode: outbound}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
         medium:
             quality: 80
             filters:
                 thumbnail: { size: [360, 503], mode: outbound}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
         large:
             quality: 80
             filters:
                 thumbnail: { size: [680, 400], mode: inset}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
         main_slider:
             quality: 80
             filters:
                 thumbnail: { size: [843, 438], mode: inset}
+                interlace:
+                    # mode can be one of: 'none', 'line', 'plane' and 'partition'
+                    mode: plane
 
 # Social authentication
 hwi_oauth:
