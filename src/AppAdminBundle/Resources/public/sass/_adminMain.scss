@@ -179,3 +179,14 @@ div[class="form-group"][id$="_images"] {
         font-size: 12px;
     }
 }
+
+.filter_container {
+    .form-group {
+        width: 24%;
+        float: left;
+        margin-right: 1%;
+        label {
+            white-space: nowrap;
+        }
+    }
+}
