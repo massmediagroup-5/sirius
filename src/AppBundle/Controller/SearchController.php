@@ -60,8 +60,11 @@ class SearchController extends Controller
      *
      * @return mixed
      */
-    public function searchAction($search, Request $request)
+    public function searchAction($search = null, Request $request)
     {
+        if(!$search){
+            return $this->redirectToRoute('search', array('search' => $request->get('search')), 301);
+        }
         $slug = urldecode($search);
 
         $boolQuery = new \Elastica\Query\BoolQuery();
