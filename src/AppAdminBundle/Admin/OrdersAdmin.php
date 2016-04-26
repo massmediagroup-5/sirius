@@ -133,7 +133,7 @@ class OrdersAdmin extends Admin
 
         $formMapper
             ->tab('Заказ')
-            ->with('Orders',
+            ->with('Заказ',
                 [
                     'class' => 'col-md-12',
                 ])
@@ -184,7 +184,6 @@ class OrdersAdmin extends Admin
                 ]
             ])
             ->add('cities', 'entity', [
-                'attr' => ['class' => 'form-control'],
                 'class' => 'AppBundle:Cities',
                 'label' => 'Город',
                 'read_only' => $this->disableEdit,
@@ -197,7 +196,6 @@ class OrdersAdmin extends Admin
                 }
             ])
             ->add('stores', 'sonata_stores_list', [
-                'attr' => ['class' => 'form-control'],
                 'class' => 'AppBundle:Stores',
                 'label' => 'Склад',
                 'read_only' => $this->disableEdit,
