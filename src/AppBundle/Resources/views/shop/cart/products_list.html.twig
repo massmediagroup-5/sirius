@@ -11,17 +11,15 @@
 
             <div class="col floating-box-wr">
 
-                {% if not cart.standardItems is empty %}
+                {% if not cart.standardSizes is empty %}
                     <div class="main-cart-list">
                         <div class="title">
                             <h2>Основной заказ</h2>
                         </div>
                         <div class="main-cart-list__i">
 
-                            {% for item in cart.standardItems%}
-                                {% for sizeId, size in item.sizes%}
-                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'size': size}) }}
-                                {% endfor %}
+                            {% for size in cart.standardSizes%}
+                                {{ include('AppBundle:shop:product/cart_item.html.twig', {'size': size}) }}
                             {% endfor %}
 
                             <div class="main-cart-list-total">
@@ -32,17 +30,15 @@
                     </div>
                 {% endif %}
 
-                {% if not cart.preOrderItems is empty %}
+                {% if not cart.preOrderSizes is empty %}
                     <div class="preorder-cart-list">
                         <div class="title">
                             <h2>Предзаказ</h2>
                         </div>
                         <div class="preorder-cart-list__i">
 
-                            {% for item in cart.preOrderItems%}
-                                {% for sizeId, size in item.sizes%}
-                                    {{ include('AppBundle:shop:product/cart_item.html.twig', { 'item': item, 'size': size}) }}
-                                {% endfor %}
+                            {% for size in cart.preOrderSizes%}
+                                {{ include('AppBundle:shop:product/cart_item.html.twig', {'size': size}) }}
                             {% endfor %}
 
                             <div class="preorder-cart-list-total">

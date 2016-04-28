@@ -5,9 +5,9 @@
             <td>
                 <div class="prod-img">
                     <a href="#">
-                        {{ widget('products.flags', item.productModel)|raw }}
-                        {% if item.productModel.images.0 is defined %}
-                            <img src="{{ item.productModel.images.0.link | imagine_filter('in_cart') }}" />
+                        {{ widget('products.flags', size.size.model)|raw }}
+                        {% if size.size.model.images.0 is defined %}
+                            <img src="{{ size.size.model.images.0.link | imagine_filter('in_cart') }}" />
                         {% else %}
                             <img src="{{ param('no_image') | imagine_filter('in_cart') }}"/>
                         {% endif %}
@@ -16,16 +16,16 @@
             </td>
             <td>
                 <p class="name">
-                    <a href="#">{{ item.productModel.products.name }}</a>
+                    <a href="#">{{ size.size.model.products.name }}</a>
                 </p>
 
                 <p class="description">
-                    Цвет {{ item.productModel.productColors.name }} (Артикул: {{ item.productModel.products.article }})
+                    Цвет {{ size.size.model.productColors.name }} (Артикул: {{ size.size.model.products.article }})
                 </p>
 
                 <div class="price price_new">
                     <p>
-                        {{ widget('products.prices', item.productModel)|raw }}
+                        {{ widget('products.prices', size.size.model)|raw }}
                     </p>
                 </div>
 
@@ -47,7 +47,7 @@
                     <p class="name">Сумма</p>
 
                     <p class="total-price">
-                        <span class="js_item_price" data-id="{{ item.productModel.id }}">{{ item.price }}</span> грн.
+                        <span class="js_item_price" data-id="{{ size.size.model.id }}">{{ size.size.model.price }}</span> грн.
                     </p>
 
                     {{ widget('products.removeProductFromCart', size)|raw }}

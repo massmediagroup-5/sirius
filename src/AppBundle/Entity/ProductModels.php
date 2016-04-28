@@ -237,6 +237,16 @@ class ProductModels
     }
 
     /**
+     * @return integer
+     */
+    public function isAllSizesPreOrder()
+    {
+        return !(bool)$this->sizes->filter(function (ProductModelSpecificSize $size) {
+            return !$size->getPreOrderFlag();
+        });
+    }
+
+    /**
      * Set published
      *
      * @param boolean $published

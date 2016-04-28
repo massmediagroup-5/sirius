@@ -2,7 +2,6 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\CartProductSize;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
@@ -37,7 +36,7 @@ class Cart
      *
      * @var mixed
      */
-    private $container;
+    protected $container;
 
     /**
      * session
@@ -51,14 +50,14 @@ class Cart
      *
      * @var CartItem[]
      */
-    private $items = [];
+    protected $items = [];
 
     /**
      * Items objects list
      *
      * @var CartItem[]
      */
-    private $backup = null;
+    protected $backup = null;
 
     /**
      * @param EntityManager $em
@@ -264,9 +263,9 @@ class Cart
      */
     public function getStandardItemsPrice()
     {
-        return array_sum(array_map(function (CartItem $item) {
+        return array_sum(array_map(function (CartSize $item) {
             return $item->getPrice();
-        }, $this->getStandardItems()));
+        }, $this->getStandardSizes()));
     }
 
     /**
@@ -274,9 +273,9 @@ class Cart
      */
     public function getPreOrderItemsPrice()
     {
-        return array_sum(array_map(function (CartItem $item) {
+        return array_sum(array_map(function (CartSize $item) {
             return $item->getPrice();
-        }, $this->getPreOrderItems()));
+        }, $this->getStandardSizes()));
     }
 
     /**
@@ -347,66 +346,6 @@ class Cart
         return array_sum(array_map(function (CartItem $item) {
             return $item->getDiscountedPrice();
         }, $this->items));
-    }
-
-    /**
-     * @return int
-     */
-    public function getPackagesCount()
-    {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getPackagesQuantity();
-        }, $this->items));
-    }
-
-    /**
-     * @return int
-     */
-    public function getSingleItemsCount()
-    {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getSingleItemsQuantity();
-        }, $this->items));
-    }
-
-    /**
-     * @return int
-     */
-    public function getStandardPackagesCount()
-    {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getPackagesQuantity();
-        }, $this->getStandardItems()));
-    }
-
-    /**
-     * @return int
-     */
-    public function getStandardSingleItemsCount()
-    {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getSingleItemsQuantity();
-        }, $this->getStandardItems()));
-    }
-
-    /**
-     * @return int
-     */
-    public function getPreOrderPackagesCount()
-    {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getPackagesQuantity();
-        }, $this->getPreOrderItems()));
-    }
-
-    /**
-     * @return int
-     */
-    public function getPreOrderSingleItemsCount()
-    {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getSingleItemsQuantity();
-        }, $this->getPreOrderItems()));
     }
 
     /**
