@@ -106,10 +106,7 @@ class ProductsAdmin extends Admin
             ->add('characteristics', null, ['label' => 'Характеристики', 'attr' => ['class' => 'ckeditor']])
             ->add('features', null, ['label' => 'Особенности', 'attr' => ['class' => 'ckeditor']])
             ->add('active', null, ['label' => 'Активный'])
-            ->add('baseCategory', 'entity', [
-                'class' => 'AppBundle:Categories',
-                'property' => 'name',
-            ])
+            ->add('baseCategory', 'sonata_type_model_list')
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
