@@ -60,8 +60,11 @@ class CartItem
      */
     public function setSize(ProductModelSpecificSize $size, $quantity)
     {
-        $this->sizes[$size->getId()]->setQuantity($quantity);
-
+        if(isset($this->sizes[$size->getId()])) {
+            $this->sizes[$size->getId()]->setQuantity($quantity);
+        } else {
+            $this->addSize($size, $quantity);
+        }
         return $this;
     }
 

@@ -145,6 +145,10 @@ AppBundle\Entity\Orders:
             type: boolean
             options:
                 default: false
+        preOrderFlag:
+            type: boolean
+            options:
+                default: false
         createTime:
             type: datetime
             nullable: false
@@ -163,6 +167,13 @@ AppBundle\Entity\Orders:
             mappedBy: order
             inversedBy: null
     manyToOne:
+        relatedOrder:
+            targetEntity: Orders
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            orphanRemoval: false
         users:
             targetEntity: Users
             cascade: {  }

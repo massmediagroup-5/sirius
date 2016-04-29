@@ -25,7 +25,7 @@
 
                 <div class="price price_new">
                     <p>
-                        {{ widget('products.prices', size.size.model)|raw }}
+                        {{ widget('products.prices', size.size)|raw }}
                     </p>
                 </div>
 
@@ -47,7 +47,7 @@
                     <p class="name">Сумма</p>
 
                     <p class="total-price">
-                        <span class="js_item_price" data-id="{{ size.size.model.id }}">{{ size.size.model.price }}</span> грн.
+                        <span class="js_item_price" data-id="{{ size.size.id }}">{{ size.price }}</span> грн.
                     </p>
 
                     {{ widget('products.removeProductFromCart', size)|raw }}

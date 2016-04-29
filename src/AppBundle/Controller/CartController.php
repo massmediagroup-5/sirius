@@ -94,10 +94,9 @@ class CartController extends BaseController
                 $form->get('size')->getNormData()
             );
 
-            return new JsonResponse([
-                'totalCount' => $this->get('cart')->getTotalCount(),
-                'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice()
-            ]);
+            $cartInfo = $this->getGeneralCartInfo();
+            $cartInfo['currentPrice'] = $this->get('cart')->getSizePrice($form->get('size')->getNormData());
+            return new JsonResponse($cartInfo);
         }
 
         return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
@@ -122,7 +121,7 @@ class CartController extends BaseController
                 $form->get('quantity')->getNormData()
             );
             $cartInfo = $this->getGeneralCartInfo();
-            $cartInfo['currentPrice'] = $this->get('cart')->getItem($size->getModel())->getPrice();
+            $cartInfo['currentPrice'] = $this->get('cart')->getSizePrice($size);
             return new JsonResponse($cartInfo);
         }
 
@@ -222,7 +221,7 @@ class CartController extends BaseController
         $orderForm->handleRequest($request);
         if ($orderForm->isValid()) {
 
-            $order = $this->get('cart')->flushCart($orderForm->getData(), $this->getUser());
+            $order = $this->get('order')->orderFromCart($orderForm->getData(), $this->getUser());
 
             if ($request->isXmlHttpRequest()) {
                 return new JsonResponse([
@@ -246,7 +245,7 @@ class CartController extends BaseController
         $quickOrderForm->handleRequest($request);
         if ($quickOrderForm->isValid()) {
 
-            $order = $this->get('cart')->flushCart($quickOrderForm->getData(), $this->getUser(), true);
+            $order = $this->get('order')->orderFromCart($quickOrderForm->getData(), $this->getUser(), true);
 
             if ($request->isXmlHttpRequest()) {
                 return new JsonResponse([
@@ -302,7 +301,7 @@ class CartController extends BaseController
             $this->get('cart')->backupCart();
             $this->get('cart')->clear();
             $this->get('cart')->addItemToCard($size, 1);
-            $this->get('cart')->flushCart($quickOrderForm->getData(), $this->getUser(), true);
+            $this->get('order')->orderFromCart($quickOrderForm->getData(), $this->getUser(), true);
             $this->get('cart')->restoreCartFromBackup();
 
             return new JsonResponse();
@@ -319,8 +318,8 @@ class CartController extends BaseController
         return [
             // todo add discount, total oldPrice
             'totalPrice' => $this->get('cart')->getTotalPrice(),
-            'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
-            'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
+            'preOrderItemsPrice' => $this->get('cart')->getPreOrderPrice(),
+            'standardItemsPrice' => $this->get('cart')->getStandardPrice(),
             'totalCount' => $this->get('cart')->getTotalCount(),
             'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice()
         ];
@@ -338,8 +337,8 @@ class CartController extends BaseController
             'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
             'packagesCount' => $this->get('cart')->getPackagesCount(),
             'cartItems' => $this->get('cart')->toArrayWithExtraInfo(),
-            'preOrderItemsPrice' => $this->get('cart')->getPreOrderItemsPrice(),
-            'standardItemsPrice' => $this->get('cart')->getStandardItemsPrice(),
+            'preOrderItemsPrice' => $this->get('cart')->getPreOrderPrice(),
+            'standardItemsPrice' => $this->get('cart')->getStandardPrice(),
         ];
     }
 

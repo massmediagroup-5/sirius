@@ -11,7 +11,7 @@
                     <div class="order-approve__i">
                         <h2>Подтверждение заказа</h2>
                         <p>
-                            Заказ №{{ order.id }} принят.
+                            Заказ №{{ order.identifier }} принят.
                             {% if options.params.order_approve.value is defined and options.params.order_approve.active == true %}
                             {{ options.params.order_approve.value }}
                             {% endif %}
