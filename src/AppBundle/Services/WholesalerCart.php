@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Model\CartItem;
+use AppBundle\Model\CartSize;
 
 /**
  * Class WholesalerCart
@@ -89,6 +90,28 @@ class WholesalerCart extends Cart
         return array_filter($this->items, function (CartItem $item) {
             return $item->getProductModel()->isAllSizesPreOrder();
         });
+    }
+
+    /**
+     * @return CartItem[]
+     */
+    public function getPreOrderSizes()
+    {
+        $sizes = array_map(function (CartItem $item) {
+            return $item->getSizes();
+        }, $this->getPreOrderItems());
+        return $sizes ? call_user_func_array('array_merge', $sizes) : [];
+    }
+
+    /**
+     * @return CartItem[]
+     */
+    public function getStandardSizes()
+    {
+        $items = array_map(function (CartItem $item) {
+            return $item->getSizes();
+        }, $this->getStandardItems());
+        return $items ? call_user_func_array('array_merge', $items) : [];
     }
 
 }

@@ -18,6 +18,9 @@ services:
         class: AppBundle\Services\Cart
         factory: [@cart_factory, createCart]
         arguments: ["@doctrine.orm.entity_manager", "@session"]
+    order:
+        class: AppBundle\Services\Order
+        arguments: [@doctrine.orm.entity_manager, @service_container]
     filters:
         class: AppBundle\Services\Filters
         arguments: ["@service_container"]

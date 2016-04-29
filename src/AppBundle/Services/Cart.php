@@ -2,13 +2,8 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\OrderProductSize;
-use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
-use AppBundle\Entity\Users as UsersEntity;
-use AppBundle\Event\OrderEvent;
-use AppBundle\Exception\CartEmptyException;
 use AppBundle\Model\CartItem;
 use AppBundle\Model\CartSize;
 use Doctrine\ORM\EntityManager;
@@ -187,6 +182,20 @@ class Cart
     }
 
     /**
+     * @param ProductModelSpecificSize $size
+     * @return CartSize
+     */
+    public function getSizePrice(ProductModelSpecificSize $size)
+    {
+        $cartItem = $this->getItem($size->getModel());
+        if(!$cartItem) {
+            return 0;
+        }
+        $size = $cartItem->getSize($size);
+        return $size ? $size->getPrice() : 0;
+    }
+
+    /**
      * @param ProductModels $model
      * @return int
      */
@@ -229,11 +238,12 @@ class Cart
      */
     public function getPreOrderSizes()
     {
-        return call_user_func_array('array_merge', array_map(function (CartItem $item) {
+        $sizes = array_map(function (CartItem $item) {
             return array_filter($item->getSizes(), function (CartSize $size) {
                 return $size->getSize()->getPreOrderFlag();
             });
-        }, $this->items));
+        }, $this->items);
+        return $sizes ? call_user_func_array('array_merge', $sizes) : [];
     }
 
     /**
@@ -251,31 +261,12 @@ class Cart
      */
     public function getStandardSizes()
     {
-        return call_user_func_array('array_merge', array_map(function (CartItem $item) {
+        $items = array_map(function (CartItem $item) {
             return array_filter($item->getSizes(), function (CartSize $size) {
                 return !$size->getSize()->getPreOrderFlag();
             });
-        }, $this->items));
-    }
-
-    /**
-     * @return CartItem[]
-     */
-    public function getStandardItemsPrice()
-    {
-        return array_sum(array_map(function (CartSize $item) {
-            return $item->getPrice();
-        }, $this->getStandardSizes()));
-    }
-
-    /**
-     * @return CartItem[]
-     */
-    public function getPreOrderItemsPrice()
-    {
-        return array_sum(array_map(function (CartSize $item) {
-            return $item->getPrice();
-        }, $this->getStandardSizes()));
+        }, $this->items);
+        return $items ? call_user_func_array('array_merge', $items) : [];
     }
 
     /**
@@ -313,9 +304,9 @@ class Cart
      */
     public function getStandardPrice()
     {
-        return array_sum(array_map(function (CartItem $item) {
+        return array_sum(array_map(function (CartSize $item) {
             return $item->getPrice();
-        }, $this->getStandardItems()));
+        }, $this->getStandardSizes()));
     }
 
     /**
@@ -323,9 +314,9 @@ class Cart
      */
     public function getPreOrderPrice()
     {
-        return array_sum(array_map(function (CartItem $item) {
+        return array_sum(array_map(function (CartSize $item) {
             return $item->getPrice();
-        }, $this->getPreOrderItems()));
+        }, $this->getPreOrderSizes()));
     }
 
     /**
@@ -406,88 +397,6 @@ class Cart
     }
 
     /**
-     * @param $user
-     * @param $data
-     * @param $quickFlag
-     * @return $this
-     * @throws \Doctrine\ORM\ORMException
-     * @throws CartEmptyException
-     */
-    public function flushCart($data, $user, $quickFlag = false)
-    {
-        if (empty($this->items)) {
-            throw new CartEmptyException;
-        }
-
-        $order = new Orders();
-
-        if(!$quickFlag) {
-            if ($data['delivery_type'] == 'np') {
-                // Nova poshta
-                $prefix = 'np_';
-            } else {
-                // Delivery
-                $prefix = 'del_';
-            }
-            $cities = Arr::get($data, $prefix . 'delivery_city', null);
-            $stores = Arr::get($data, $prefix . 'delivery_store', null);
-
-            $order->setCities($cities);
-            $order->setStores($stores);
-            $order->setCarriers($cities->getCarriers());
-            $order->setComment(Arr::get($data, 'comment'));
-            $order->setPay(Arr::get($data, 'pay'));
-            $order->setFio(Arr::get($data, 'name') . ' ' . Arr::get($data, 'surname'));
-            $order->setTotalPrice($this->getTotalPrice());
-            $order->setDiscountedTotalPrice($this->getDiscountedTotalPrice());
-            $order->setType(Orders::TYPE_NORMAL);
-        }
-
-        $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
-        $order->setUsers($user ?: null);
-        $order->setQuickFlag($quickFlag);
-        $order->setPhone(Arr::get($data, 'phone'));
-
-        foreach ($this->items as $item) {
-            foreach ($item->getSizes() as $sizeId => $size) {
-                $orderSize = new OrderProductSize();
-                $orderSize->setOrder($order);
-                $orderSize->setQuantity($size->getQuantity());
-                $orderSize->setDiscountedTotalPrice($size->getDiscountedPrice());
-                $orderSize->setTotalPrice($size->getPrice());
-                $orderSize->setSize($size->getSize());
-                $order->addSize($orderSize);
-            }
-            $this->em->persist($order);
-        }
-
-        $this->em->persist($order);
-        $this->em->flush();
-
-        $this->clear();
-
-        $this->container->get('event_dispatcher')->dispatch('order.created', new OrderEvent($order));
-
-        return $order;
-    }
-
-    /**
-     * @param UsersEntity $user
-     * @return array
-     */
-    public function getUserOrders(UsersEntity $user)
-    {
-        return $this->em->getRepository('AppBundle:Orders')
-            ->createQueryBuilder('orders')
-            ->select('orders')
-            ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
-            ->where('orders.users = :user')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
      * @return void
      */
     protected function initCartFromSession()
@@ -509,14 +418,16 @@ class Cart
     /**
      *
      */
-    public function backupCart() {
+    public function backupCart()
+    {
         $this->backup = $this->items;
     }
 
     /**
      *
      */
-    public function restoreCartFromBackup() {
+    public function restoreCartFromBackup()
+    {
         $this->items = $this->backup;
         unset($this->backup);
         $this->saveInSession();

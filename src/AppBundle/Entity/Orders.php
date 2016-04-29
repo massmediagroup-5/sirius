@@ -65,7 +65,7 @@ class Orders
     /**
      * @var string
      */
-    private $totalPrice = '0.00';
+    private $totalPrice = 0;
 
     /**
      * @var string
@@ -156,6 +156,16 @@ class Orders
      * @var float
      */
     private $additionalSolar = 0;
+
+    /**
+     * @var boolean
+     */
+    private $preOrderFlag = false;
+
+    /**
+     * @var \AppBundle\Entity\Orders
+     */
+    private $relatedOrder;
 
     /**
      * Constructor
@@ -847,5 +857,64 @@ class Orders
     public function getAdditionalSolar()
     {
         return $this->additionalSolar;
+    }
+
+    /**
+     * Set preOrderFlag
+     *
+     * @param boolean $preOrderFlag
+     *
+     * @return Orders
+     */
+    public function setPreOrderFlag($preOrderFlag)
+    {
+        $this->preOrderFlag = $preOrderFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get preOrderFlag
+     *
+     * @return boolean
+     */
+    public function getPreOrderFlag()
+    {
+        return $this->preOrderFlag;
+    }
+
+    /**
+     * Set relatedOrder
+     *
+     * @param \AppBundle\Entity\Orders $relatedOrder
+     *
+     * @return Orders
+     */
+    public function setRelatedOrder(\AppBundle\Entity\Orders $relatedOrder = null)
+    {
+        $this->relatedOrder = $relatedOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get relatedOrder
+     *
+     * @return \AppBundle\Entity\Orders
+     */
+    public function getRelatedOrder()
+    {
+        return $this->relatedOrder;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdentifier()
+    {
+        if($this->preOrderFlag) {
+            return $this->relatedOrder ? $this->relatedOrder->id : $this->id;
+        }
+        return $this->id;
     }
 }
