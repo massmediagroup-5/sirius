@@ -22,6 +22,7 @@
                             </th>
                             <th>Цена</th>
                             <th>Цена со скидкой</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="sonata-ba-tbody">
@@ -39,37 +40,44 @@
                             </th>
                             <td class="control-group">{{ size.totalPrice }}</td>
                             <td class="control-group">{{ size.discountedTotalPrice }}</td>
+                            <td class="control-group">
+                                <button class="btn btn-danger btn-xs js_size_remove">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="6" class="text-right">Всего</td>
-                            <th id="discountedTotalPrice">{{ admin.subject.discountedTotalPrice }}</th>
+                            <td colspan="7" class="text-right">Всего</td>
+                            <th colspan="2" id="discountedTotalPrice">{{ admin.subject.discountedTotalPrice }}</th>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-right">Погасить</td>
-                            <th>
+                            <td colspan="7" class="text-right">Погасить</td>
+                            <th colspan="2">
                                 <input type="text" value="{{ admin.subject.individualDiscount }}"
                                        name="individualDiscount" class="table-input js_order_update"/>
                             </th>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-right">
+                            <td colspan="7" class="text-right">
                                 <input type="text" value="{{ admin.subject.additionalSolarDescription }}"
                                        name="additionalSolarDescription" class="table-input text-right js_order_update"/>
                             </td>
-                            <th>
+                            <th colspan="2">
                                 <input type="text" value="{{ admin.subject.additionalSolar }}" name="additionalSolar"
                                        class="table-input js_order_update"/>
                             </th>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-right">К оплате</td>
-                            <th id="individualDiscountedTotalPrice">{{ admin.subject.individualDiscountedTotalPrice }}</th>
+                            <td colspan="7" class="text-right">К оплате</td>
+                            <th colspan="2" id="individualDiscountedTotalPrice">{{ admin.subject.individualDiscountedTotalPrice }}</th>
                         </tr>
                     </tfoot>
                 </table>
+
+                <a class="btn btn-success btn-sm btn-outline sonata-ba-action js_order_add_size pull-right"><i class="fa fa-plus-circle"></i> Добавить размер</a>
             </div>
         </div>
     </div>

@@ -129,6 +129,28 @@ class PricesCalculator
     }
 
     /**
+     * @param ProductModels $object
+     * @return float
+     */
+    public function getProductModelMinDiscountedPrice(ProductModels $object)
+    {
+        return min(array_map(function ($size) {
+            return $this->getPrice($size);
+        }, $object->getSizes()->toArray()));
+    }
+
+    /**
+     * @param ProductModels $object
+     * @return float
+     */
+    public function getProductModelMaxDiscountedPrice(ProductModels $object)
+    {
+        return max(array_map(function ($size) {
+            return $this->getPrice($size);
+        }, $object->getSizes()->toArray()));
+    }
+
+    /**
      * Return self or parent price
      *
      * @param ProductModelSpecificSize $object

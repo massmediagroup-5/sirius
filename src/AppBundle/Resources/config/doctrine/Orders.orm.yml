@@ -173,6 +173,13 @@ AppBundle\Entity\Orders:
             mappedBy: orders
             inversedBy: null
             orphanRemoval: false
+        payStatus:
+            targetEntity: OrderStatusPay
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: orders
+            inversedBy: null
+            orphanRemoval: false
         carriers:
             targetEntity: Carriers
             cascade: {  }

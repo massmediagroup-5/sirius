@@ -99,6 +99,7 @@ class Order
         $relatedOrder = $order->getRelatedOrder();
         if ($size->getQuantity() > $quantity) {
             $size->setQuantity($size->getQuantity() - $quantity);
+            $this->em->persist($size);
         } else {
             $order->removeSize($size);
         }
@@ -107,7 +108,7 @@ class Order
             $relatedOrder = clone $order;
             $relatedOrder->setRelatedOrder($order);
             $order->setRelatedOrder($relatedOrder);
-            $relatedOrder->setPreOrderFlag($relatedOrder->getPreOrderFlag());
+            $relatedOrder->setPreOrderFlag(!$relatedOrder->getPreOrderFlag());
         }
         $relatedSizes = $relatedOrder->getSizes();
 
@@ -131,6 +132,67 @@ class Order
         $relatedOrder->setSizes($relatedSizes);
         $this->em->persist($order);
         $this->em->persist($relatedOrder);
+
+        $this->em->flush();
+
+        return $order;
+    }
+
+    /**
+     * @param Orders $order
+     * @return Orders
+     */
+    public function changePreOrderFlag(Orders $order)
+    {
+        if ($relatedOrder = $order->getRelatedOrder()) {
+            $this->mergeSizesToOrder($relatedOrder, $order->getSizes());
+            $relatedOrder->setRelatedOrder(null);
+            $this->em->persist($relatedOrder);
+            $this->em->remove($order);
+
+            $this->em->flush();
+            return $relatedOrder;
+        }
+
+        $order->setPreOrderFlag(!$order->getPreOrderFlag());
+        $this->em->persist($order);
+
+        $this->em->flush();
+
+        return $order;
+    }
+
+    /**
+     * @param $order
+     * @param $sizes
+     * @return Orders
+     * @throws CartEmptyException
+     */
+    public function addSizes(Orders $order, array $sizes)
+    {
+        $availableSizes = $order->getSizes();
+
+        foreach ($sizes as $size) {
+            list($size, $quantity) = $size;
+
+            foreach ($availableSizes as $key => $availableSize) {
+                if ($availableSize->getSize()->getId() == $size->getId()) {
+                    $availableSize->incrementQuantity($quantity);
+                    $availableSizes->set($key, $availableSize);
+                    continue 2;
+                }
+            }
+            $orderSize = new OrderProductSize();
+            $orderSize->setSize($size);
+            $orderSize->setQuantity($quantity);
+            $orderSize->setOrder($order);
+            $orderSize->setDiscountedTotalPricePerItem($this->container->get('prices_calculator')->getDiscountedPrice($size));
+            $orderSize->setTotalPricePerItem($this->container->get('prices_calculator')->getPrice($size));
+            $availableSizes->add($orderSize);
+        }
+        $order->setSizes($availableSizes);
+
+        $this->em->persist($order);
 
         $this->em->flush();
 
@@ -201,5 +263,27 @@ class Order
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param Orders $order
+     * @param $sizes
+     */
+    protected function mergeSizesToOrder(Orders $order, $sizes)
+    {
+        $availableSizes = $order->getSizes();
+
+        foreach ($sizes as $size) {
+            foreach ($availableSizes as $key => $availableSize) {
+                if ($availableSize->getSize()->getId() == $size->getSize()->getId()) {
+                    $availableSize->incrementQuantity($size->getQuantity());
+                    $availableSizes->set($key, $availableSize);
+                    continue 2;
+                }
+            }
+            $size->setOrder($order);
+            $availableSizes->add($size);
+        }
+        $order->setSizes($availableSizes);
     }
 }

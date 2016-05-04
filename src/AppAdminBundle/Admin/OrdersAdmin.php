@@ -26,6 +26,8 @@ class OrdersAdmin extends Admin
         // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
     ];
 
+    protected $sizesPerPage = 15;
+
     /**
      * @var string
      */
@@ -59,6 +61,18 @@ class OrdersAdmin extends Admin
                 'expose' => true
             ])
             ->add('ajax_update', $this->getRouterIdParameter() . '/ajax_update', [], [], [
+                'expose' => true
+            ])
+            ->add('get_sizes', $this->getRouterIdParameter() . '/get_sizes', [], [], [
+                'expose' => true
+            ])
+            ->add('add_sizes', $this->getRouterIdParameter() . '/add_sizes', [], [], [
+                'expose' => true
+            ])
+            ->add('remove_size', $this->getRouterIdParameter() . '/remove_size', [], [], [
+                'expose' => true
+            ])
+            ->add('change_pre_order_flag', $this->getRouterIdParameter() . '/change_pre_order_flag', [], [], [
                 'expose' => true
             ]);
     }
@@ -159,6 +173,14 @@ class OrdersAdmin extends Admin
                     }
                 ]
             )
+            ->add('payStatus', 'entity',
+                [
+                    'class' => 'AppBundle:OrderStatusPay',
+                    'property' => 'name',
+                    'label' => 'Сатус оплаты заказа',
+                    'empty_value' => 'Выберите статус оплаты',
+                ]
+            )
             ->add('type', 'choice', [
                 'label' => 'Тип заказа',
                 'read_only' => true,
@@ -240,7 +262,6 @@ class OrdersAdmin extends Admin
             ->add('comment_admin', null, [
                 'label' => 'Коментарий к заказу для администратора',
             ])
-            ->add('preOrderFlag', null, ['label' => 'Предзаказ'])
             ->end()
             ->end()
             ->tab('Список заказанных товаров', [
@@ -331,6 +352,38 @@ class OrdersAdmin extends Admin
     public function getFormTheme()
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_stores_list_edit.html.twig']);
+    }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    public function paginateModels($filters = [])
+    {
+        $container = $this->getConfigurationPool()->getContainer();
+        $models = $container->get('doctrine')
+            ->getRepository("AppBundle:ProductModels")
+            ->getAdminOrdersQuery($filters);
+
+        $models = $container->get('knp_paginator')->paginate(
+            $models,
+            Arr::get($filters, 'page', 1),
+            $this->sizesPerPage,
+            ['wrap-queries' => true]
+        );
+
+        return $models;
+    }
+
+    /**
+     * @param array $newFilters
+     * @return array
+     */
+    public function paramsToGetSizes($newFilters)
+    {
+        $parameters = array_merge($this->request->request->all(), $newFilters);
+
+        return json_encode($parameters);
     }
 
     /**

@@ -20,11 +20,10 @@
                             {{ form_row(form.status)}}
                             {{ form_row(form.fio)}}
                             {{ form_row(form.phone)}}
+                            {{ form_row(form.payStatus)}}
 
                             {{ form_row(form.clientSmsId)}}
                             {{ form_row(form.clientSmsStatus)}}
-
-                            {{ form_row(form.preOrderFlag)}}
                         </div>
 
                         <div class="col-md-6">
@@ -41,7 +40,6 @@
                                     <input type="text" disabled="disabled" readonly="readonly" class=" form-control" value="{{ admin.subject.totalPrice}}">
                                 </div>
                             </div>
-
 
                             {{ form_row(form.managerSmsId)}}
                             {{ form_row(form.managerSmsStatus)}}
