@@ -17,9 +17,6 @@ AppBundle\Entity\Orders:
         fk_orders_stores1_idx:
             columns:
                 - stores_id
-        total_price:
-            columns:
-                - total_price
     uniqueConstraints:
         id_UNIQUE:
             columns:
@@ -78,14 +75,6 @@ AppBundle\Entity\Orders:
             length: 255
             options:
                 fixed: false
-        discountedTotalPrice:
-            type: decimal
-            nullable: false
-            precision: 10
-            scale: 2
-            options:
-                default: 0.00
-            column: discounted_total_price
         additionalSolarDescription:
             type: string
             nullable: true
@@ -97,14 +86,6 @@ AppBundle\Entity\Orders:
             scale: 2
             options:
                 default: 0.00
-        totalPrice:
-            type: decimal
-            nullable: false
-            precision: 10
-            scale: 2
-            options:
-                default: 0.00
-            column: total_price
         individualDiscount:
             type: decimal
             nullable: false
@@ -166,6 +147,7 @@ AppBundle\Entity\Orders:
             fetch: LAZY
             mappedBy: order
             inversedBy: null
+            orphanRemoval: true
     manyToOne:
         relatedOrder:
             targetEntity: Orders

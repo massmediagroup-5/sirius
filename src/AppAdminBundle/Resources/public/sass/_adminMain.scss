@@ -162,6 +162,17 @@ div[class="form-group"][id$="_images"] {
     height: 20px;
 }
 
+.editable-cell {
+    input[type="number"] {
+        padding: 0 0 0 5px;
+    }
+    .fa {
+        float: right;
+        font-size: 24px;
+        cursor: pointer;
+    }
+}
+
 .login-block {
     position: absolute;
     left: 50%;

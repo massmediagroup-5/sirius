@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Orders
  */
@@ -61,11 +63,6 @@ class Orders
      * @var string
      */
     private $pay;
-
-    /**
-     * @var string
-     */
-    private $totalPrice = 0;
 
     /**
      * @var string
@@ -131,11 +128,6 @@ class Orders
      * @var string
      */
     private $email;
-
-    /**
-     * @var float
-     */
-    private $discountedTotalPrice = 0;
 
     /**
      * @var float
@@ -354,27 +346,15 @@ class Orders
     }
 
     /**
-     * Set totalPrice
-     *
-     * @param string $totalPrice
-     *
-     * @return Orders
-     */
-    public function setTotalPrice($totalPrice)
-    {
-        $this->totalPrice = $totalPrice;
-
-        return $this;
-    }
-
-    /**
      * Get totalPrice
      *
      * @return string
      */
     public function getTotalPrice()
     {
-        return $this->totalPrice;
+        return  array_sum($this->sizes->map(function (OrderProductSize $size) {
+            return $size->getTotalPrice();
+        })->toArray());
     }
 
     /**
@@ -654,27 +634,13 @@ class Orders
     }
 
     /**
-     * Set discountedTotalPrice
-     *
-     * @param string $discountedTotalPrice
-     *
-     * @return Orders
-     */
-    public function setDiscountedTotalPrice($discountedTotalPrice)
-    {
-        $this->discountedTotalPrice = $discountedTotalPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get discountedTotalPrice
-     *
-     * @return string
+     * @return float
      */
     public function getDiscountedTotalPrice()
     {
-        return $this->discountedTotalPrice;
+        return array_sum($this->sizes->map(function (OrderProductSize $size) {
+            return $size->getDiscountedTotalPrice();
+        })->toArray());
     }
 
     /**
@@ -684,7 +650,7 @@ class Orders
      */
     public function getDiscount()
     {
-        return $this->totalPrice - $this->discountedTotalPrice;
+        return $this->getTotalPrice() - $this->getDiscountedTotalPrice();
     }
 
     /**
@@ -708,7 +674,7 @@ class Orders
      */
     public function getIndividualDiscount()
     {
-        return (float)$this->individualDiscount;
+        return $this->individualDiscount;
     }
 
     /**
@@ -739,6 +705,20 @@ class Orders
     public function addSize(\AppBundle\Entity\OrderProductSize $size)
     {
         $this->sizes[] = $size;
+
+        return $this;
+    }
+
+    /**
+     * Set sizes
+     *
+     * @param \Doctrine\Common\Collections\Collection $sizes
+     *
+     * @return Orders
+     */
+    public function setSizes(\Doctrine\Common\Collections\Collection $sizes)
+    {
+        $this->sizes = $sizes;
 
         return $this;
     }
@@ -852,7 +832,7 @@ class Orders
     /**
      * Get additionalSolar
      *
-     * @return string
+     * @return float
      */
     public function getAdditionalSolar()
     {
@@ -908,13 +888,18 @@ class Orders
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getIdentifier()
     {
         if($this->preOrderFlag) {
-            return $this->relatedOrder ? $this->relatedOrder->id : $this->id;
+            return ($this->relatedOrder ? $this->relatedOrder->id : $this->id) . '/п';
         }
         return $this->id;
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
     }
 }

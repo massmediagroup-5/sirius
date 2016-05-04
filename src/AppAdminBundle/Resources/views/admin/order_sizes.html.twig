@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" id="orderSizes">
     <div class="col-md-12">
         <div class="box box-success">
             <div class="box-header">
@@ -13,19 +13,30 @@
                             <th>Цвет</th>
                             <th>Размер</th>
                             <th>Количество</th>
+                            <th>
+                                {% if admin.subject.preOrderFlag %}
+                                    В заказ
+                                {% else %}
+                                    В предзаказ
+                                {% endif %}
+                            </th>
                             <th>Цена</th>
                             <th>Цена со скидкой</th>
                         </tr>
                     </thead>
                     <tbody class="sonata-ba-tbody">
                     {% for size in admin.subject.sizes %}
-
-                        <tr>
+                        <tr data-size-id="{{ size.id }}">
                             <td class="control-group">{{ size.size.model.products.article }}</td>
                             <td class="control-group">{{ size.size.model.products.name }}</td>
                             <td class="control-group">{{ size.size.model.productColors.name }}</td>
                             <td class="control-group">{{ size.size }}</td>
                             <td class="control-group">{{ size.quantity }}</td>
+                            <th class="editable-cell">
+                                <input type="number" name="move_size" min="1" max="{{ size.quantity }}"
+                                       value="{{ size.quantity }}"/>
+                                <i class="fa fa-check-square js_submit_move_size"></i>
+                            </th>
                             <td class="control-group">{{ size.totalPrice }}</td>
                             <td class="control-group">{{ size.discountedTotalPrice }}</td>
                         </tr>
@@ -38,17 +49,24 @@
                         </tr>
                         <tr>
                             <td colspan="6" class="text-right">Погасить</td>
-                            <th>{{ form_widget(form.individualDiscount, {'attr': {'class': 'table-input'}}) }}</th>
+                            <th>
+                                <input type="text" value="{{ admin.subject.individualDiscount }}"
+                                       name="individualDiscount" class="table-input js_order_update"/>
+                            </th>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-right">
-                                {{ form_widget(form.additionalSolarDescription, {'attr': {'class': 'table-input text-right'}}) }}
+                                <input type="text" value="{{ admin.subject.additionalSolarDescription }}"
+                                       name="additionalSolarDescription" class="table-input text-right js_order_update"/>
                             </td>
-                            <th>{{ form_widget(form.additionalSolar, {'attr': {'class': 'table-input'}}) }}</th>
+                            <th>
+                                <input type="text" value="{{ admin.subject.additionalSolar }}" name="additionalSolar"
+                                       class="table-input js_order_update"/>
+                            </th>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-right">К оплате</td>
-                            <th id="individualDiscountedTotalPrice">{{ object.individualDiscountedTotalPrice }}</th>
+                            <th id="individualDiscountedTotalPrice">{{ admin.subject.individualDiscountedTotalPrice }}</th>
                         </tr>
                     </tfoot>
                 </table>
