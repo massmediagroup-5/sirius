@@ -14,7 +14,7 @@ AppBundle\Entity\OrderProductSize:
             options:
                 unsigned: false
                 default: '0'
-        discountedTotalPrice:
+        discountedTotalPricePerItem:
             type: decimal
             nullable: false
             precision: 10
@@ -22,7 +22,7 @@ AppBundle\Entity\OrderProductSize:
             options:
                 default: 0.00
             column: discounted_total_price
-        totalPrice:
+        totalPricePerItem:
             type: decimal
             nullable: false
             precision: 10

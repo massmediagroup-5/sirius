@@ -57,14 +57,16 @@ class Order
         }
 
         $order = null;
-        if($standardSizes = $cart->getStandardSizes()) {
+        if ($standardSizes = $cart->getStandardSizes()) {
             $order = $this->createOrder($standardSizes, $data, $user, $quickFlag);
         }
 
-        if($preOrderSizes = $cart->getPreOrderSizes()) {
+        if ($preOrderSizes = $cart->getPreOrderSizes()) {
             $preOrder = $this->createOrder($preOrderSizes, $data, $user, $quickFlag);
 
-            if($order) {
+            $order->setPreOrderFlag(true);
+
+            if ($order) {
                 $order->setRelatedOrder($preOrder);
                 $preOrder->setRelatedOrder($order);
             } else {
@@ -85,18 +87,69 @@ class Order
     }
 
     /**
+     * @param $order
+     * @param $size
+     * @param bool|false $quantity
+     * @return Orders
+     * @throws CartEmptyException
+     */
+    public function moveSize(Orders $order, OrderProductSize $size, $quantity = false)
+    {
+        $order->getSizes();
+        $relatedOrder = $order->getRelatedOrder();
+        if ($size->getQuantity() > $quantity) {
+            $size->setQuantity($size->getQuantity() - $quantity);
+        } else {
+            $order->removeSize($size);
+        }
+
+        if (!$relatedOrder) {
+            $relatedOrder = clone $order;
+            $relatedOrder->setRelatedOrder($order);
+            $order->setRelatedOrder($relatedOrder);
+            $relatedOrder->setPreOrderFlag($relatedOrder->getPreOrderFlag());
+        }
+        $relatedSizes = $relatedOrder->getSizes();
+
+        $foundedFlag = false;
+        // Update size or add new
+        foreach ($relatedSizes as $key => $relatedSize) {
+            if ($relatedSize->getId() == $size->getId()) {
+                $relatedSize->incrementQuantity($quantity);
+                $relatedSizes->set($key, $relatedSize);
+                $foundedFlag = true;
+                break;
+            }
+        }
+        if (!$foundedFlag) {
+            $clonedSize = clone $size;
+            $clonedSize->setOrder($relatedOrder);
+            $clonedSize->setQuantity($quantity);
+            $relatedSizes->add($clonedSize);
+        }
+
+        $relatedOrder->setSizes($relatedSizes);
+        $this->em->persist($order);
+        $this->em->persist($relatedOrder);
+
+        $this->em->flush();
+
+        return $order;
+    }
+
+    /**
      * @param \AppBundle\Model\CartSize[] $sizes
-     * @param $price
      * @param $data
      * @param $user
      * @param bool|false $quickFlag
      * @return Orders
      * @throws CartEmptyException
      */
-    protected function createOrder($sizes, $data, $user, $quickFlag = false) {
+    protected function createOrder($sizes, $data, $user, $quickFlag = false)
+    {
         $order = new Orders();
 
-        if(!$quickFlag) {
+        if (!$quickFlag) {
             if ($data['delivery_type'] == 'np') {
                 // Nova poshta
                 $prefix = 'np_';
@@ -125,8 +178,8 @@ class Order
             $orderSize = new OrderProductSize();
             $orderSize->setOrder($order);
             $orderSize->setQuantity($size->getQuantity());
-            $orderSize->setDiscountedTotalPrice($size->getDiscountedPrice());
-            $orderSize->setTotalPrice($size->getPrice());
+            $orderSize->setDiscountedTotalPricePerItem($size->getDiscountedPricePerItem());
+            $orderSize->setTotalPricePerItem($size->getPricePerItem());
             $orderSize->setSize($size->getSize());
             $order->addSize($orderSize);
         }

@@ -107,4 +107,20 @@ class CartSize
         return $this->pricesCalculator->getDiscountedPrice($this->size) * $this->quantity;
     }
 
+    /**
+     * @return float
+     */
+    public function getPricePerItem()
+    {
+        return $this->pricesCalculator->getPrice($this->size);
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountedPricePerItem()
+    {
+        return $this->pricesCalculator->getDiscountedPrice($this->size);
+    }
+
 }

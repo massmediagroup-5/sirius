@@ -51,10 +51,16 @@ class OrdersAdmin extends Admin
 
     protected function configureRoutes(RouteCollection $collection)
     {
+        parent::configureRoutes($collection);
         $collection
             ->remove('create')
-            ->remove('delete');
-
+            ->remove('delete')
+            ->add('move_size', $this->getRouterIdParameter() . '/move_sizes', [], [], [
+                'expose' => true
+            ])
+            ->add('ajax_update', $this->getRouterIdParameter() . '/ajax_update', [], [], [
+                'expose' => true
+            ]);
     }
 
     /**
@@ -68,7 +74,6 @@ class OrdersAdmin extends Admin
             ->add('fio', null, ['label' => 'Ф.И.О.'])
             ->add('phone', null, ['label' => 'Телефон'])
             ->add('pay', null, ['label' => 'Способ оплаты'])
-            ->add('totalPrice', null, ['label' => 'Способ оплаты'])
             ->add('createTime', null, ['label' => 'Время оформления'])
             ->add('updateTime', null, ['label' => 'Время последнего редактирования заказа']);
     }
@@ -80,7 +85,7 @@ class OrdersAdmin extends Admin
     {
 
         $listMapper
-            ->add('id')
+            ->add('identifier', null, ['label' => 'ID'])
             ->addIdentifier('type', 'choice', [
                 'label' => 'Тип заказа',
                 'route' => ['name' => 'edit'],
@@ -101,7 +106,6 @@ class OrdersAdmin extends Admin
             ->add('carriers.name', null, ['label' => 'Способ доставки'])
             ->add('cities.name', null, ['label' => 'Город'])
             ->add('stores.name', null, ['label' => 'Адрес склада'])
-            ->add('totalPrice', null, ['label' => 'Сумма заказа'])
             ->add('createTime', null, ['label' => 'Время оформления'])
             ->add('_action', 'actions', [
                 'actions' => [
@@ -201,19 +205,14 @@ class OrdersAdmin extends Admin
                 'read_only' => $this->disableEdit,
                 'disabled' => $this->disableEdit,
                 'query_builder' => function (EntityRepository $er) {
-                    if(!$cityId = Arr::get($this->request->request->get($this->getUniqid()), 'cities')) {
+                    if (!$cityId = Arr::get($this->request->request->get($this->getUniqid()), 'cities')) {
                         $city = $this->getSubject()->getCities();
-                        $cityId =$city ? $city->getId() : null;
+                        $cityId = $city ? $city->getId() : null;
                     }
                     return $er->createQueryBuilder('s')
                         ->where('s.cities = :id')
                         ->setParameter('id', $cityId);
                 }
-            ])
-            ->add('totalPrice', null, [
-                'label' => 'Сумма заказа',
-                'read_only' => true,
-                'disabled' => true,
             ])
             ->add('clientSmsId', null, [
                 'label' => 'Идентификатор смс клиента',
@@ -241,26 +240,19 @@ class OrdersAdmin extends Admin
             ->add('comment_admin', null, [
                 'label' => 'Коментарий к заказу для администратора',
             ])
+            ->add('preOrderFlag', null, ['label' => 'Предзаказ'])
             ->end()
             ->end()
             ->tab('Список заказанных товаров', [
                 'tab_template' => 'AppAdminBundle:admin:order_sizes.html.twig'
             ])
-            ->add('individualDiscount', null, [
-                'label' => 'Индивидуальная скидка',
-                'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
-            ])
-            ->add('additionalSolarDescription', null)
-            ->add('additionalSolar', null)
-            ->end()
             ->end();
 
-        if($otherSizes) {
+        if ($otherSizes) {
             $formMapper->tab('Другие заказы покупателя', [
-                    'tab_template' => 'AppAdminBundle:admin:order_other_sizes.html.twig',
-                    'otherSizes' => $otherSizes
-                ])
+                'tab_template' => 'AppAdminBundle:admin:order_other_sizes.html.twig',
+                'otherSizes' => $otherSizes
+            ])
                 ->end();
         }
     }
@@ -309,7 +301,6 @@ class OrdersAdmin extends Admin
             ->add('fio', null, ['label' => 'Ф.И.О.'])
             ->add('phone', null, ['label' => 'Телефон'])
             ->add('pay', null, ['label' => 'Способ оплаты'])
-            ->add('totalPrice', null, ['label' => 'Сумма заказа'])
             ->add('clientSmsId', null, ['label' => 'Идентификатор смс клиента'])
             ->add('clientSmsStatus', null, ['label' => 'Статус смс клиента'])
             ->add('managerSmsId', null, ['label' => 'Идентификатор смс менеджера'])
@@ -365,7 +356,7 @@ class OrdersAdmin extends Admin
      */
     protected function setDefaults($object)
     {
-        if(!$object->getAdditionalSolarDescription()) {
+        if (!$object->getAdditionalSolarDescription()) {
             $object->setAdditionalSolarDescription('Доставка');
         }
 

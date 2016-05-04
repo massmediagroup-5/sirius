@@ -18,16 +18,6 @@ class OrderProductSize
     private $status = '0';
 
     /**
-     * @var string
-     */
-    private $discountedTotalPrice = 0;
-
-    /**
-     * @var string
-     */
-    private $totalPrice = 0;
-
-    /**
      * @var \DateTime
      */
     private $createTime;
@@ -51,6 +41,16 @@ class OrderProductSize
      * @var \AppBundle\Entity\Orders
      */
     private $order;
+
+    /**
+     * @var string
+     */
+    private $discountedTotalPricePerItem = 0;
+
+    /**
+     * @var string
+     */
+    private $totalPricePerItem = 0;
 
 
     /**
@@ -88,41 +88,13 @@ class OrderProductSize
     }
 
     /**
-     * Set discountedTotalPrice
-     *
-     * @param string $discountedTotalPrice
-     *
-     * @return OrderProductSize
-     */
-    public function setDiscountedTotalPrice($discountedTotalPrice)
-    {
-        $this->discountedTotalPrice = $discountedTotalPrice;
-
-        return $this;
-    }
-
-    /**
      * Get discountedTotalPrice
      *
      * @return string
      */
     public function getDiscountedTotalPrice()
     {
-        return $this->discountedTotalPrice;
-    }
-
-    /**
-     * Set totalPrice
-     *
-     * @param string $totalPrice
-     *
-     * @return OrderProductSize
-     */
-    public function setTotalPrice($totalPrice)
-    {
-        $this->totalPrice = $totalPrice;
-
-        return $this;
+        return $this->discountedTotalPricePerItem * $this->quantity;
     }
 
     /**
@@ -132,7 +104,7 @@ class OrderProductSize
      */
     public function getTotalPrice()
     {
-        return $this->totalPrice;
+        return $this->totalPricePerItem * $this->quantity;
     }
 
     /**
@@ -198,6 +170,20 @@ class OrderProductSize
     }
 
     /**
+     * Increment quantity
+     *
+     * @param integer $quantity
+     *
+     * @return OrderProductSize
+     */
+    public function incrementQuantity($quantity)
+    {
+        $this->quantity += $quantity;
+
+        return $this;
+    }
+
+    /**
      * Get quantity
      *
      * @return integer
@@ -253,5 +239,58 @@ class OrderProductSize
     public function getOrder()
     {
         return $this->order;
+    }
+
+    /**
+     * Set discountedTotalPricePerItem
+     *
+     * @param string $discountedTotalPricePerItem
+     *
+     * @return OrderProductSize
+     */
+    public function setDiscountedTotalPricePerItem($discountedTotalPricePerItem)
+    {
+        $this->discountedTotalPricePerItem = $discountedTotalPricePerItem;
+
+        return $this;
+    }
+
+    /**
+     * Get discountedTotalPricePerItem
+     *
+     * @return string
+     */
+    public function getDiscountedTotalPricePerItem()
+    {
+        return $this->discountedTotalPricePerItem;
+    }
+
+    /**
+     * Set totalPricePerItem
+     *
+     * @param string $totalPricePerItem
+     *
+     * @return OrderProductSize
+     */
+    public function setTotalPricePerItem($totalPricePerItem)
+    {
+        $this->totalPricePerItem = $totalPricePerItem;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPricePerItem
+     *
+     * @return string
+     */
+    public function getTotalPricePerItem()
+    {
+        return $this->totalPricePerItem;
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
     }
 }
