@@ -30,7 +30,7 @@ class OrderStatusPay
     /**
      * @var boolean
      */
-    private $baseFlag;
+    private $baseFlag = 0;
 
     /**
      * @var boolean

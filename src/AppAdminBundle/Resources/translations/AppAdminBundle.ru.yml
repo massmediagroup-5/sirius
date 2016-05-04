@@ -47,3 +47,5 @@ Product Models List: Товары
 Action: Действия
 
 flash_delete_not_empty_error: 'Не возможно удалить запись поскольку она не пуста'
+link_to_pre_order: Переместить в предзаказ
+link_to_order: Переместить в заказ

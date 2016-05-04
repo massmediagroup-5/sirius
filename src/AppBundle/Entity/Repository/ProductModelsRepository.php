@@ -171,4 +171,41 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         return $builder->getQuery();
     }
 
+    /**
+     * @param $filters
+     * @return mixed
+     */
+    public function getAdminOrdersQuery($filters = [])
+    {
+        $builder = $this->createQueryBuilder('model')
+            ->innerJoin('model.sizes', 'specificSizes')->addselect('specificSizes')
+            ->innerJoin('specificSizes.size', 'size')->addselect('size')
+            ->innerJoin('model.products', 'product')->addselect('product')
+            ->innerJoin('model.productColors', 'color')->addselect('color')
+            ->innerJoin('product.baseCategory', 'category')
+            ->addselect('model');
+
+        if($categoryId = Arr::get($filters, 'category_id')) {
+            $builder->andWhere('category = :categoryId')->setParameter('categoryId', $categoryId);
+        }
+
+        if($size = Arr::get($filters, 'size')) {
+            $builder->andWhere('size.size LIKE :size')->setParameter('size', "%$size%");
+        }
+
+        if($article = Arr::get($filters, 'article')) {
+            $builder->andWhere('product.article LIKE :article')->setParameter('article', "%$article%");
+        }
+
+        if($color = Arr::get($filters, 'color')) {
+            $builder->andWhere('color.name LIKE :color')->setParameter('color', "%$color%");
+        }
+
+        if($model = Arr::get($filters, 'model')) {
+            $builder->andWhere('product.name LIKE :model')->setParameter('model', "%$model%");
+        }
+
+        return $builder->getQuery();
+    }
+
 }

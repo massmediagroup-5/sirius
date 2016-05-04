@@ -1,0 +1,78 @@
+<div class="list-group col-sm-3">
+    <a href="#" data-params="{{ admin.paramsToGetSizes({category_id: null}) }}"
+       class="list-group-item {% if not filters.category_id is defined %} active {% endif %}">Все</a>
+    {% for category in categories %}
+        <a href="#" data-params="{{ admin.paramsToGetSizes({category_id: category.id}) }}"
+           class="list-group-item {% if filters.category_id is defined and category.id == filters.category_id %} active {% endif %}">
+            {{ category.name }}
+        </a>
+    {% endfor %}
+</div>
+<div class="col-sm-9">
+    <div class="row sizes-filter">
+        <div class="col-sm-11 row">
+            <div class="form-group col-sm-3">
+                <input type="text" value="{{ filters.size is defined ? filters.size : '' }}" name="size"
+                       placeholder="Размер" class="js_filter form-control">
+            </div>
+            <div class="form-group col-sm-3">
+                <input type="text" value="{{ filters.article is defined ? filters.article : '' }}"
+                       name="article" placeholder="Артикул" class="js_filter form-control">
+            </div>
+            <div class="form-group col-sm-3">
+                <input type="text" name="color" value="{{ filters.color is defined ? filters.color : '' }}"
+                       placeholder="Цвет" class="js_filter form-control">
+            </div>
+            <div class="form-group col-sm-3">
+                <input type="text" name="model" value="{{ filters.model is defined ? filters.model : '' }}"
+                       placeholder="Модель" class="js_filter form-control">
+            </div>
+        </div>
+        <button class="btn btn-success js_submit_filters pull-right">
+            <i class="glyphicon glyphicon-ok"></i>
+        </button>
+
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Фото</th>
+                <th>Артикул</th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for model in models %}
+                <tr class="js_model_row model-row" data-model-id="{{ model.id }}">
+                    <td><i></i>{{ model.id }}</td>
+                    <td><img src="{{ (model.images.0 is defined ? model.images.0.link : param('no_image'))|imagine_filter('mini') }}" alt=""></td>
+                    <td>{{ model.products.article }}</td>
+                    <td>{{ model.products.name }} ({{ model.productColors.name }})</td>
+                    <td>
+                        От {{ prices.getProductModelMinDiscountedPrice(model)|format_price }}
+                        до {{ prices.getProductModelMaxDiscountedPrice(model)|format_price }}
+                    </td>
+                    <td class="size-count-cell"></td>
+                </tr>
+                {% for size in model.sizes %}
+                    <tr class="js_size_row size-row" data-model-id="{{ model.id }}">
+                        <td></td>
+                        <td></td>
+                        <td>{{ model.products.article }}</td>
+                        <td>{{ size.size }}</td>
+                        <td>{{ prices.getPrice(size)|format_price }}</td>
+                        <td class="size-count-cell">
+                            <input type="number" value="0" data-size-id="{{ size.id }}" class="js_size_count">
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row text-right">
+        {{ knp_pagination_render(models, 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig') }}
+    </div>
+</div>

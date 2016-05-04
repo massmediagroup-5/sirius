@@ -160,6 +160,11 @@ class Orders
     private $relatedOrder;
 
     /**
+     * @var \AppBundle\Entity\OrderStatusPay
+     */
+    private $payStatus;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -352,7 +357,7 @@ class Orders
      */
     public function getTotalPrice()
     {
-        return  array_sum($this->sizes->map(function (OrderProductSize $size) {
+        return array_sum($this->sizes->map(function (OrderProductSize $size) {
             return $size->getTotalPrice();
         })->toArray());
     }
@@ -892,7 +897,7 @@ class Orders
      */
     public function getIdentifier()
     {
-        if($this->preOrderFlag) {
+        if ($this->preOrderFlag) {
             return ($this->relatedOrder ? $this->relatedOrder->id : $this->id) . '/п';
         }
         return $this->id;
@@ -901,5 +906,30 @@ class Orders
     public function __clone()
     {
         $this->id = null;
+        $this->sizes = new ArrayCollection();
+    }
+
+    /**
+     * Set payStatus
+     *
+     * @param \AppBundle\Entity\OrderStatusPay $payStatus
+     *
+     * @return Orders
+     */
+    public function setPayStatus(\AppBundle\Entity\OrderStatusPay $payStatus = null)
+    {
+        $this->payStatus = $payStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get payStatus
+     *
+     * @return \AppBundle\Entity\OrderStatusPay
+     */
+    public function getPayStatus()
+    {
+        return $this->payStatus;
     }
 }
