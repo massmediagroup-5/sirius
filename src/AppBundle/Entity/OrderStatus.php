@@ -30,7 +30,7 @@ class OrderStatus
     /**
      * @var boolean
      */
-    private $baseFlag;
+    private $baseFlag = false;
 
     /**
      * @var boolean

@@ -70,7 +70,7 @@ class ProductsAdmin extends Admin
             ->addIdentifier('name', null, ['label' => 'Название модели'])
             ->add('article', null, ['label' => 'Артикул'])
             ->add('productModels', null, [
-                'label' => 'Количество моделей',
+                'label' => 'Количество товаров',
                 'template' => 'AppAdminBundle:list:product_models_count.html.twig'
             ])
             ->add('baseCategory.name', null, ['label' => 'Категория'])
