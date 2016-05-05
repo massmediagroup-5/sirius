@@ -2,10 +2,10 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\History;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\Users as UsersEntity;
-use AppBundle\Event\OrderEvent;
 use AppBundle\Exception\CartEmptyException;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -39,6 +39,7 @@ class Order
     {
         $this->container = $container;
         $this->em = $em;
+        $this->translator = $this->container->get('translator');
     }
 
     /**
@@ -81,8 +82,6 @@ class Order
 
         $cart->clear();
 
-        $this->container->get('event_dispatcher')->dispatch('order.created', new OrderEvent($order));
-
         return $order;
     }
 
@@ -104,18 +103,35 @@ class Order
             $order->removeSize($size);
         }
 
+        // Add history to order
+        $label = $order->getPreOrderFlag() ? 'size_moved_to_order' : 'size_moved_to_pre_order';
+        $this->addOrderHistoryItem($order, $this->translator->trans("history.$label", [
+            ':size' => $size->getSize(),
+            ':count' => $quantity,
+            ':user' => $this->getUser()->getUsername(),
+        ], 'AppAdminBundle'));
+
         if (!$relatedOrder) {
             $relatedOrder = clone $order;
             $relatedOrder->setRelatedOrder($order);
             $order->setRelatedOrder($relatedOrder);
             $relatedOrder->setPreOrderFlag(!$relatedOrder->getPreOrderFlag());
         }
+
+        // Add history to related
+        $label = $order->getPreOrderFlag() ? 'size_moved_from_pre_order' : 'size_moved_from_order';
+        $this->addOrderHistoryItem($relatedOrder, $this->translator->trans("history.$label", [
+            ':size' => $size->getSize(),
+            ':count' => $quantity,
+            ':user' => $this->getUser()->getUsername(),
+        ], 'AppAdminBundle'));
+
         $relatedSizes = $relatedOrder->getSizes();
 
         $foundedFlag = false;
         // Update size or add new
         foreach ($relatedSizes as $key => $relatedSize) {
-            if ($relatedSize->getId() == $size->getId()) {
+            if ($relatedSize->getSize()->getId() == $size->getSize()->getId()) {
                 $relatedSize->incrementQuantity($quantity);
                 $relatedSizes->set($key, $relatedSize);
                 $foundedFlag = true;
@@ -147,6 +163,17 @@ class Order
         if ($relatedOrder = $order->getRelatedOrder()) {
             $this->mergeSizesToOrder($relatedOrder, $order->getSizes());
             $relatedOrder->setRelatedOrder(null);
+            $order->setRelatedOrder(null);
+            foreach ($order->getHistory() as $history) {
+                $history->setOrder($relatedOrder);
+                $relatedOrder->addHistory($history);
+            }
+
+            $label = $relatedOrder->getPreOrderFlag() ? 'merged_with_pre_order' : 'merged_with_order';
+            $this->addOrderHistoryItem($relatedOrder, $this->translator->trans("history.$label", [
+                ':user' => $this->getUser()->getUsername(),
+            ], 'AppAdminBundle'));
+
             $this->em->persist($relatedOrder);
             $this->em->remove($order);
 
@@ -155,6 +182,12 @@ class Order
         }
 
         $order->setPreOrderFlag(!$order->getPreOrderFlag());
+
+        $label = $order->getPreOrderFlag() ? 'order_to_pre_order' : 'order_to_order';
+        $this->addOrderHistoryItem($order, $this->translator->trans("history.$label", [
+            ':user' => $this->getUser()->getUsername(),
+        ], 'AppAdminBundle'));
+
         $this->em->persist($order);
 
         $this->em->flush();
@@ -177,8 +210,19 @@ class Order
 
             foreach ($availableSizes as $key => $availableSize) {
                 if ($availableSize->getSize()->getId() == $size->getId()) {
+                    $beforeQuantity = $availableSize->getQuantity();
+
                     $availableSize->incrementQuantity($quantity);
                     $availableSizes->set($key, $availableSize);
+
+                    $afterQuantity = $availableSize->getQuantity();
+
+                    $this->addOrderHistoryItem($order, $this->translator->trans('history.order_update_size', [
+                        ':size' => $size->getSize(),
+                        ':before' => $beforeQuantity,
+                        ':after' => $afterQuantity,
+                        ':user' => $this->getUser()->getUsername(),
+                    ], 'AppAdminBundle'));
                     continue 2;
                 }
             }
@@ -189,6 +233,12 @@ class Order
             $orderSize->setDiscountedTotalPricePerItem($this->container->get('prices_calculator')->getDiscountedPrice($size));
             $orderSize->setTotalPricePerItem($this->container->get('prices_calculator')->getPrice($size));
             $availableSizes->add($orderSize);
+
+            $this->addOrderHistoryItem($order, $this->translator->trans('history.order_new_size', [
+                ':size' => $size->getSize(),
+                ':count' => $quantity,
+                ':user' => $this->getUser()->getUsername(),
+            ], 'AppAdminBundle'));
         }
         $order->setSizes($availableSizes);
 
@@ -197,6 +247,112 @@ class Order
         $this->em->flush();
 
         return $order;
+    }
+
+    /**
+     * @param $order
+     * @param $size
+     * @return Orders
+     * @throws CartEmptyException
+     */
+    public function removeSize(Orders $order, $size)
+    {
+        $this->em->remove($size);
+
+        $this->addOrderHistoryItem($order, $this->translator->trans("history.size_removed", [
+            ':size' => $size->getSize(),
+            ':user' => $this->getUser()->getUsername(),
+        ], 'AppAdminBundle'));
+
+        $this->em->persist($order);
+
+        $this->em->flush();
+
+        return $order;
+    }
+
+    /**
+     * @param Orders $order
+     * @return Orders
+     */
+    public function sendOrderEmail(Orders $order)
+    {
+        $body = $this->container->get('twig')->render('AppBundle:mails/order.html.twig', [
+                'order' => $order
+            ]
+        );
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Order from orders@sirius.com.ua')
+            ->setFrom('orders@sirius.com.ua')
+            ->addTo('r.slobodzyanmassmedia@gmail.com', 'r.slobodzyanmassmedia@gmail.com')
+            ->addTo('alisayatsyuk@gmail.com', 'alisayatsyuk@gmail.com')
+            ->setBody($body)
+            ->setContentType("text/html");
+        $this->container->get('mailer')->send($message);
+
+        return $order;
+    }
+
+    /**
+     * @param Orders $order
+     */
+    public function appendHistory(Orders $order)
+    {
+        $allowedFields = [
+            'fio',
+            'phone',
+            'email',
+            'payStatus',
+            'status',
+            'cities',
+            'stores',
+            'individualDiscount',
+            'additionalSolar'
+        ];
+
+        $uow = $this->em->getUnitOfWork();
+        if ($order->getId() === null) {
+            $this->addOrderHistoryItem($order, $this->translator->trans('history.order_created', [], 'AppAdminBundle'));
+        } else {
+            $orderChanges = $uow->getEntityChangeSet($order);
+            foreach ($orderChanges as $fieldName => $orderChange) {
+                if (in_array($fieldName, $allowedFields)) {
+                    $this->addOrderHistoryItem($order, $this->translator->trans(
+                        'history.field_changed_from_to_by_user',
+                        [
+                            ':field_changed' => $this->translator->trans("history.$fieldName", [], 'AppAdminBundle'),
+                            ':before' => $orderChange[0],
+                            ':after' => $orderChange[1],
+                            ':user' => $this->getUser()->getUsername()
+                        ],
+                        'AppAdminBundle'
+                    ));
+                }
+            }
+        }
+
+        $this->em->persist($order);
+    }
+
+    /**
+     * @param Orders $order
+     * @param $text
+     */
+    protected function addOrderHistoryItem(Orders $order, $text)
+    {
+        $historyItem = new History();
+        $historyItem->setOrder($order);
+        $historyItem->setText($text);
+        $order->addHistory($historyItem);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getUser()
+    {
+        return $this->container->get('security.token_storage')->getToken()->getUser();
     }
 
     /**

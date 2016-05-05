@@ -31,7 +31,7 @@ class OrderController extends BaseController
 
         $this->get('order')->moveSize($object, $size, $request->get('quantity'));
 
-        return $this->renderJson(['partial' => $this->renderSizesPartial()]);
+        return $this->renderJson($this->renderPartials());
     }
 
     /**
@@ -42,12 +42,12 @@ class OrderController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $size = $em->getRepository('AppBundle:OrderProductSize')->find($request->get('size'));
+        $this->get('order')->removeSize(
+            $this->admin->getSubject(),
+            $em->getRepository('AppBundle:OrderProductSize')->find($request->get('size'))
+        );
 
-        $em->remove($size);
-        $em->flush();
-
-        return $this->renderJson(['partial' => $this->renderSizesPartial()]);
+        return $this->renderJson($this->renderPartials());
     }
 
     /**
@@ -71,7 +71,7 @@ class OrderController extends BaseController
 
         $this->get('order')->addSizes($object, $sizes);
 
-        return $this->renderJson(['partial' => $this->renderSizesPartial()]);
+        return $this->renderJson($this->renderPartials());
     }
 
     /**
@@ -107,7 +107,11 @@ class OrderController extends BaseController
         $this->getDoctrine()->getManager()->persist($object);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->renderJson([]);
+        return $this->renderJson([
+            'history' => $this->renderView('AppAdminBundle:admin:order_history_items.html.twig', [
+                'admin' => $this->admin
+            ])
+        ]);
     }
 
     /**
@@ -133,7 +137,7 @@ class OrderController extends BaseController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function renderSizesPartial()
+    protected function renderPartials()
     {
         $parameters = [
             'admin' => isset($parameters['admin']) ? $parameters['admin'] : $this->admin,
@@ -142,6 +146,11 @@ class OrderController extends BaseController
             ]
         ];
 
-        return $this->renderView('AppAdminBundle:admin:order_sizes.html.twig', $parameters);
+        return [
+            'partial' => $this->renderView('AppAdminBundle:admin:order_sizes.html.twig', $parameters),
+            'history' => $this->renderView('AppAdminBundle:admin:order_history_items.html.twig', [
+                'admin' => $this->admin
+            ])
+        ];
     }
 }

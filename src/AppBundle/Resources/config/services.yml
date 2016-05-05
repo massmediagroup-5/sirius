@@ -61,7 +61,7 @@ services:
         class: AppBundle\Services\PricesCalculator
         arguments: ["@service_container"]
     request_listener:
-        class: AppBundle\Event\RequestListener
+        class: AppBundle\Listener\RequestListener
         arguments: ["@service_container"]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
@@ -71,10 +71,3 @@ services:
         tags:
             - { name: twig.extension }
         arguments: ["@service_container"]
-    contract_bundle.listener.contract:
-        class: AppBundle\Event\OrderListener
-        arguments:
-            templating: "@twig"
-            mailer: "@mailer"
-        tags:
-            - { name: kernel.event_listener, event: order.created, method: onOrderCreated }
