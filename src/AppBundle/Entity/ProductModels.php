@@ -93,12 +93,18 @@ class ProductModels
     private $images;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $recommended;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recommended = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -522,8 +528,44 @@ class ProductModels
         return $this->images;
     }
 
+
+
     /**
-     * Get images
+     * Add recommended
+     *
+     * @param \AppBundle\Entity\ProductModels $recommended
+     *
+     * @return ProductModels
+     */
+    public function addRecommended(\AppBundle\Entity\ProductModels $recommended)
+    {
+        $this->recommended[] = $recommended;
+
+        return $this;
+    }
+
+    /**
+     * Remove recommended
+     *
+     * @param \AppBundle\Entity\ProductModels $recommended
+     */
+    public function removeRecommended(\AppBundle\Entity\ProductModels $recommended)
+    {
+        $this->recommended->removeElement($recommended);
+    }
+
+    /**
+     * Get recommended
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecommended()
+    {
+        return $this->recommended;
+    }
+
+    /**
+     * Get published
      *
      * @return \Doctrine\Common\Collections\Collection
      */

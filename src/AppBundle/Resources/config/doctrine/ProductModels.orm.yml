@@ -136,6 +136,24 @@ AppBundle\Entity\ProductModels:
                 products_id:
                     referencedColumnName: id
             orphanRemoval: false
+    manyToMany:
+        recommended:
+            targetEntity: ProductModels
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinTable:
+                name: product_models_has_recommended
+                joinColumns:
+                    -
+                        name: model_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: recommended_model_id
+                        referencedColumnName: id
+            orderBy: null
     lifecycleCallbacks:
         prePersist: [ checkPrice, checkColor ]
         preUpdate:  [ checkPrice, checkColor ]

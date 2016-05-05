@@ -115,16 +115,26 @@ class ProductModelsAdmin extends Admin
             ->end()
             ->end()
             ->tab('Размеры')
-            ->with('Размеры', ['class' => 'col-md-12'])
-            ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
-                'admin_code' => 'app.admin.product_model_specific_size',
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                ]
-            )
+                ->with('Размеры', ['class' => 'col-md-12'])
+                    ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
+                        'admin_code' => 'app.admin.product_model_specific_size',
+                            'edit' => 'inline',
+                            'inline' => 'table',
+                        ]
+                    )
+                ->end()
             ->end()
+            ->tab('Рекомендуем')
+                ->with('Рекомендуем', ['class' => 'col-md-12'])
+                    ->add('recommended', 'sonata_type_model',
+                        array(
+                            'by_reference' => true,
+                            'multiple'=>true,
+                            'required' => false
+                        )
+                    )
+                ->end()
             ->end();
-
         if (!$this->hasParentFieldDescription()) {
             $formMapper->tab('Изображения товара')
                 ->with('Изображения товара', [
