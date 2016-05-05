@@ -18,15 +18,13 @@
                         success: function (data) {
                             if (data.status == 'OK') {
                                 $storesInput.select2('data', null);
-                                console.log($storesInput.find('option').length);
+                                $storesInput.find('option').remove();
+                                $storesInput.find("option:selected").prop("selected", false);
                                 $.each(data.stores, function (key, value) {
                                     $storesInput.append(new Option(value.name, value.id));
                                 });
-                                console.log($storesInput.find('option').length);
                                 return false;
-                            } else {
-                                console.log(data);
-                            }
+                            } else {}
                         },
                         error: function (message) {
                             console.log(message.status + ' ' + message.statusText);

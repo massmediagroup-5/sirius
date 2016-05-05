@@ -22,7 +22,13 @@ class ChangeProductSizeType extends AbstractType
                 'choices' => $options['size']->getModel()->getSizes(),
                 'required' => true,
                 'data' => $options['size'],
-                'constraints' => [new NotBlank]
+                'constraints' => [new NotBlank],
+                'choice_attr' => function ($val, $key, $index) {
+                    return [
+                        'data-preorderflag' => (int)$val->getPreOrderFlag(),
+                        'data-id' => $val->getId(),
+                    ];
+                },
             ])->add('old_size', HiddenType::class, [
                 'data' => $options['size']->getId(),
                 'constraints' => [new NotBlank]
