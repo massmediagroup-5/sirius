@@ -70,11 +70,7 @@ AppBundle\Entity\Orders:
             nullable: true
             length: 45м категорія
         pay:
-            type: string
-            nullable: true
-            length: 255
-            options:
-                fixed: false
+            type: integer
         additionalSolarDescription:
             type: string
             nullable: true
@@ -148,6 +144,14 @@ AppBundle\Entity\Orders:
             mappedBy: order
             inversedBy: null
             orphanRemoval: true
+        history:
+            targetEntity: History
+            cascade: [ all ]
+            fetch: LAZY
+            mappedBy: order
+            inversedBy: null
+            orphanRemoval: true
+            orderBy: {createTime: DESC}
     manyToOne:
         relatedOrder:
             targetEntity: Orders

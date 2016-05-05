@@ -49,3 +49,27 @@ Action: Действия
 flash_delete_not_empty_error: 'Не возможно удалить запись поскольку она не пуста'
 link_to_pre_order: Переместить в предзаказ
 link_to_order: Переместить в заказ
+
+history:
+  field_changed_from_to_by_user: :field_changed изменено с ":before" на ":after" пользователем :user
+  order_created: Заказ создан
+  order_new_size: Добавлен новый размер :size :count шт. пользователем :user.
+  order_update_size: Изменено количество размера :size с :before на :after шт. пользователем :user.
+  order_to_pre_order: Перемещено в предзаказ пользователем :user.
+  order_to_order: Перемещено в заказ пользователем :user.
+  merged_with_pre_order: Объеденено с предзаказом пользователем :user.
+  merged_with_order: Объеденено с заказом пользователем :user.
+  size_moved_to_pre_order: :count шт. размера :size перемещено в предзаказ пользователем :user.
+  size_moved_to_order: :count шт. размера :size перемещено в заказ пользователем :user.
+  size_moved_from_pre_order: :count шт. размера :size перемещено с предзаказа пользователем :user.
+  size_moved_from_order: :count шт. размера :size перемещено с заказа пользователем :user.
+  size_removed: Размер :size удален пользователем :user.
+  fio: ФИО
+  status: Статус
+  phone: Телефон
+  email: Емейл
+  payStatus: Статус оплпты
+  cities: Город доставки
+  stores: Склад доставки
+  individualDiscount: Индивидуальная скидка
+  additionalSolar: Дополнительные затраты

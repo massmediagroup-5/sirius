@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Event;
+namespace AppBundle\Listener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;

@@ -35,6 +35,9 @@ var requestMixin = {
         if (responce.partial) {
             $(document).trigger('sizes.new_partial', [responce.partial]);
         }
+        if (responce.history) {
+            $('#orderHistoryItems').replaceWith($(responce.history));
+        }
     }
 };
 
@@ -164,7 +167,7 @@ var OrderSizesDialog = (function () {
     OrderSizesDialog.prototype.modelRowClick = function (e) {
         var $this = $(e.target).closest('.js_model_row'),
             $sizes = $this.parent().find('.js_size_row[data-model-id=' + $this.data('model-id') + ']');
-        if($this.hasClass('active')) {
+        if ($this.hasClass('active')) {
             $this.removeClass('active');
             $sizes.hide();
         } else {

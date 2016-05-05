@@ -60,7 +60,7 @@ class Orders
     private $phone;
 
     /**
-     * @var string
+     * @var int
      */
     private $pay;
 
@@ -163,6 +163,11 @@ class Orders
      * @var \AppBundle\Entity\OrderStatusPay
      */
     private $payStatus;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $history;
 
     /**
      * Constructor
@@ -329,7 +334,7 @@ class Orders
     /**
      * Set pay
      *
-     * @param string $pay
+     * @param int $pay
      *
      * @return Orders
      */
@@ -343,7 +348,7 @@ class Orders
     /**
      * Get pay
      *
-     * @return string
+     * @return int
      */
     public function getPay()
     {
@@ -931,5 +936,39 @@ class Orders
     public function getPayStatus()
     {
         return $this->payStatus;
+    }
+
+    /**
+     * Add history
+     *
+     * @param \AppBundle\Entity\History $history
+     *
+     * @return Orders
+     */
+    public function addHistory(\AppBundle\Entity\History $history)
+    {
+        $this->history[] = $history;
+
+        return $this;
+    }
+
+    /**
+     * Remove history
+     *
+     * @param \AppBundle\Entity\History $history
+     */
+    public function removeHistory(\AppBundle\Entity\History $history)
+    {
+        $this->history->removeElement($history);
+    }
+
+    /**
+     * Get history
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistory()
+    {
+        return $this->history;
     }
 }

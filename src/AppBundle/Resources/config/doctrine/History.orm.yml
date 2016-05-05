@@ -1,0 +1,25 @@
+AppBundle\Entity\History:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        createTime:
+            type: datetime
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        text:
+            type: string
+            length: 255
+    manyToOne:
+        order:
+            targetEntity: Orders
+            cascade: [ all ]
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: history
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

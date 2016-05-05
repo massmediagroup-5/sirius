@@ -1,0 +1,14 @@
+<div class="col-sm-12" id="orderHistoryItems">
+    <div class="box box-success">
+        <div class="box-header">
+            <h4 class="box-title">История</h4>
+        </div>
+        <div class="box-body order-history">
+            <ul>
+                {% for historyItem in admin.subject.history %}
+                    <li>{{ historyItem.createTime.format('Y-m-d H:i') }} &nbsp; {{ historyItem.text }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

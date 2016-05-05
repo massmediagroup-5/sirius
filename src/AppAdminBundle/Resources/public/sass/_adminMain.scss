@@ -306,3 +306,11 @@ div[class="form-group"][id$="_images"] {
         padding: 10px 15px;
     }
 }
+
+.order-history {
+    overflow-y: scroll;
+    height: 100px;
+    ul {
+        width: 90%;
+    }
+}
