@@ -213,6 +213,10 @@ class CartController extends BaseController
      */
     public function showOrderAction(Request $request)
     {
+        if($this->get('cart')->isEmpty()) {
+            return $this->forward('AppBundle:Cart:showCart');
+        }
+
         $orderForm = $this->createForm(CreateOrderType::class, null, [
             'request' => $request->request,
             'user' => $this->getUser()

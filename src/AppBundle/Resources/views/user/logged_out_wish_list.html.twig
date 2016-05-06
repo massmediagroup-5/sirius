@@ -9,31 +9,38 @@
 
                 {{ widget('breadcrumbs.render')|raw }}
 
-                <h2 class="catalog-title">
-                    Список желаний <span>({{ 'labels.products_count'|transchoice(wishList.count, {'%count%': wishList.count}) }})</span>
-                </h2>
+                {% if wishList.count() %}
+                    <h2 class="catalog-title">
+                        Список желаний <span>({{ 'labels.products_count'|transchoice(wishList.count, {'%count%': wishList.count}) }})</span>
+                    </h2>
 
-                <div class="catalog">
-                    <div class="catalog__i">
-                        {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': wishList }) }}
+                    <div class="catalog">
+                        <div class="catalog__i">
+                            {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': wishList }) }}
 
-                        <div class="product-list product-list_4-items">
-                            <div class="product-list__i">
-                                {% if is_granted('ROLE_WHOLESALER') %}
-                                    {% for item in wishList %}
-                                        {{ include('AppBundle:shop:product/list_item_wholesale.html.twig', { 'item': item }) }}
-                                    {% endfor %}
-                                {% else %}
-                                    {% for item in wishList %}
-                                        {{ include('AppBundle:shop:product/list_item.html.twig', { 'item': item.products, selectedModel: item}) }}
-                                    {% endfor %}
-                                {% endif %}
+                            <div class="product-list product-list_4-items">
+                                <div class="product-list__i">
+                                    {% if is_granted('ROLE_WHOLESALER') %}
+                                        {% for item in wishList %}
+                                            {{ include('AppBundle:shop:product/list_item_wholesale.html.twig', { 'item': item }) }}
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for item in wishList %}
+                                            {{ include('AppBundle:shop:product/list_item.html.twig', { 'item': item.products, selectedModel: item}) }}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
 
-                        {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': wishList }) }}
+                            {{ include('AppBundle:shop/partials/sorting_and_pagination.html.twig', { 'items': wishList }) }}
+                        </div>
                     </div>
-                </div>
+
+                {% else %}
+                    <div class="filter-no-results lk-opt">
+                        <p>У Вас пока нет товаров в списке желаний</p>
+                    </div>
+                {% endif %}
 
                 {{ widget('products.recentlyReviewed')|raw }}
             </div>
