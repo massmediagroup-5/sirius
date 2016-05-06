@@ -163,6 +163,14 @@ class Cart
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return !count($this->items);
+    }
+
+    /**
      * @return CartItem[]
      */
     public function getModels()
