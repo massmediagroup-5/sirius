@@ -236,7 +236,7 @@ class CartController extends BaseController
         }
 
         if($request->isXmlHttpRequest() && $orderForm->isSubmitted()) {
-            return new JsonResponse(['messages' => ['Ошибка валидации!'], 'errors' => $this->getErrorsAsArray($orderForm)], 422);
+            return new JsonResponse(['messages' => ['Не все поля заполнены!'], 'errors' => $this->getErrorsAsArray($orderForm)], 422);
         }
 
 
@@ -260,7 +260,7 @@ class CartController extends BaseController
         }
 
         if($request->isXmlHttpRequest() && $quickOrderForm->isSubmitted()) {
-            return new JsonResponse(['messages' => ['Ошибка валидации!'], 'errors' => $this->getErrorsAsArray($quickOrderForm)], 422);
+            return new JsonResponse(['messages' => ['Не все поля заполнены!'], 'errors' => $this->getErrorsAsArray($quickOrderForm)], 422);
         }
 
         return $this->render('AppBundle:shop:cart/order.html.twig', [

@@ -51,7 +51,7 @@ class FiltersAdmin extends Admin
         $formMapper
             ->add('name', null, array('label' => 'Название фильтра'))
             ->end()
-            ->with('CharacteristicValues',
+            ->with('Значения характеристик',
                 array(
                     'class'       => 'col-md-12',
                     'collapsed' => true
