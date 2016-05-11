@@ -1,0 +1,56 @@
+<div class="row" id="shareGroups">
+    <div class="col-md-12">
+        <div class="box box-success">
+            <div class="box-header">
+                <h4 class="box-title">{{ form_tab.name }}</h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Скидка</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="sonata-ba-tbody">
+                        {% for sizesGroup in admin.subject.sizesGroups%}
+                            <tr data-group-id="{{ sizesGroup.id }}" class="js_group">
+                                <td class="control-group">{{ sizesGroup.id }}</td>
+                                <td class="control-group">
+                                    <input type="text" value="{{ sizesGroup.name }}"
+                                           name="name" class="table-input js_group_update"/>
+                                </td>
+                                <td class="control-group">
+                                    <input type="text" value="{{ sizesGroup.discount|format_price }}"
+                                           name="discount" class="table-input js_group_update"/>
+                                </td>
+                                <td class="control-group">
+                                    <button class="btn btn-success btn-xs js_group_add_size">
+                                        Добавить размеры
+                                    </button>
+                                    <button class="btn btn-danger btn-xs js_group_remove">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">Записей не найдено</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-success btn-sm btn-outline sonata-ba-action js_share_add_group pull-right">
+                            <i class="fa fa-plus-circle"></i> Добавить группу
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

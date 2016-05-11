@@ -1,0 +1,43 @@
+AppBundle\Entity\ShareSizesGroup:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        discount:
+            type: decimal
+
+    manyToOne:
+        share:
+            targetEntity: Share
+            cascade: {  }
+            fetch: EAGER
+            mappedBy: null
+            inversedBy: sizesGroups
+            orphanRemoval: false
+    manyToMany:
+        products:
+            targetEntity: Products
+            fetch: LAZY
+        models:
+            targetEntity: ProductModels
+            fetch: LAZY
+        modelSpecificSizes:
+            targetEntity: ProductModelSpecificSize
+            fetch: LAZY
+        sizes:
+            targetEntity: ProductModelSizes
+            fetch: LAZY
+        characteristicValues:
+            targetEntity: CharacteristicValues
+            fetch: LAZY
+        colors:
+            targetEntity: ProductColors
+            fetch: LAZY
+    lifecycleCallbacks: {  }

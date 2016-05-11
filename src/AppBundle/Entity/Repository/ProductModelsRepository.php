@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity\Repository;
 
+use AppBundle\Entity\ShareSizesGroup;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Illuminate\Support\Arr;
@@ -175,7 +176,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      * @param $filters
      * @return mixed
      */
-    public function getAdminOrdersQuery($filters = [])
+    public function getAdminSearchQuery($filters = [])
     {
         $builder = $this->createQueryBuilder('model')
             ->innerJoin('model.sizes', 'specificSizes')->addselect('specificSizes')
@@ -203,6 +204,37 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
         if($model = Arr::get($filters, 'model')) {
             $builder->andWhere('product.name LIKE :model')->setParameter('model', "%$model%");
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * @param ShareSizesGroup $group
+     * @return \Doctrine\ORM\Query
+     */
+    public function getAdminSharesQuery(ShareSizesGroup $group)
+    {
+        $builder = $this->createQueryBuilder('model')
+            ->innerJoin('model.sizes', 'specificSizes')->addselect('specificSizes')
+            ->innerJoin('specificSizes.size', 'size')->addselect('size')
+            ->innerJoin('model.products', 'product')->addselect('product')
+            ->innerJoin('model.productColors', 'color')->addselect('color')
+            ->innerJoin('product.characteristicValues', 'characteristicValues')
+            ->innerJoin('product.baseCategory', 'category')
+            ->addselect('model');
+
+        if($group->getSizes()->count()) {
+            $builder->andWhere('size.id IN (:sizesIds)')->setParameter('sizesIds', $group->getSizes());
+        }
+
+        if($group->getColors()->count()) {
+            $builder->andWhere('color.id IN (:colorsIds)')->setParameter('colorsIds', $group->getColors());
+        }
+
+        if($group->getCharacteristicValues()->count()) {
+            $builder->andWhere('characteristicValues.id IN (:characteristicValuesIds)')
+                ->setParameter('characteristicValuesIds', $group->getCharacteristicValues());
         }
 
         return $builder->getQuery();

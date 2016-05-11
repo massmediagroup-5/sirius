@@ -363,7 +363,7 @@ class OrdersAdmin extends Admin
         $container = $this->getConfigurationPool()->getContainer();
         $models = $container->get('doctrine')
             ->getRepository("AppBundle:ProductModels")
-            ->getAdminOrdersQuery($filters);
+            ->getAdminSearchQuery($filters);
 
         $models = $container->get('knp_paginator')->paginate(
             $models,

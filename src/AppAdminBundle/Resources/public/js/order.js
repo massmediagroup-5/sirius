@@ -1,43 +1,9 @@
-function mix(object) {
-    var mixins = Array.prototype.slice.call(arguments, 1);
-    for (var i = 0; i < mixins.length; ++i) {
-        for (var prop in mixins[i]) {
-            if (typeof object.prototype[prop] === "undefined") {
-                object.prototype[prop] = mixins[i][prop];
-            }
-        }
+requestMixin.successSubmit = function (responce) {
+    if (responce.partial) {
+        $(document).trigger('sizes.new_partial', [responce.partial]);
     }
-}
-
-var requestMixin = {
-    request: function (route, data, success) {
-        var params = {};
-        if (typeof success == 'undefined') {
-            // default success
-            params.success = this.successSubmit.bind(this);
-        } else {
-            if (success) {
-                params.success = success;
-            }
-        }
-        $.ajax($.extend({
-            url: Routing.generate(baseRouteName + '_' + route, {id: orderId}),
-            data: data,
-            dataType: "json",
-            type: "POST",
-            error: this.errorSubmit.bind(this)
-        }, params));
-    },
-    errorSubmit: function (responce) {
-        alert(responce.status + ' ' + responce.statusText);
-    },
-    successSubmit: function (responce) {
-        if (responce.partial) {
-            $(document).trigger('sizes.new_partial', [responce.partial]);
-        }
-        if (responce.history) {
-            $('#orderHistoryItems').replaceWith($(responce.history));
-        }
+    if (responce.history) {
+        $('#orderHistoryItems').replaceWith($(responce.history));
     }
 };
 
@@ -109,7 +75,7 @@ var OrderSizesDialog = (function () {
 
         $.extend(this.lastParams, data);
 
-        this.request('get_sizes', this.lastParams, this.contentLoaded.bind(this));
+        this.request('get_sizes', this.lastParams, {}, this.contentLoaded.bind(this));
     };
 
     OrderSizesDialog.prototype.onSelected = function () {

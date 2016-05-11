@@ -1,0 +1,45 @@
+{% form_theme filtersForm with  'AppAdminBundle:admin:form_admin_fields.html.twig' %}
+
+<div class="list-group col-sm-3 popup-filters">
+    {{ form_start(filtersForm, {attr: {class: 'js_filters_form'}}) }}
+    <div class="form-group">
+        {{ form_label(filtersForm.sizes) }}
+        <div class="form-group-content">
+            {{ form_widget(filtersForm.sizes) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(filtersForm.colors) }}
+        <div class="form-group-content">
+            {{ form_widget(filtersForm.colors) }}
+        </div>
+    </div>
+
+    {{ form_row(filtersForm.characteristicValues, {attr: {class: ' form-control', size: 10}}) }}
+    {{ form_widget(filtersForm.filter, {attr: {class: 'btn btn-default col-sm-12'}}) }}
+    {{ form_widget(filtersForm.save, {attr: {class: 'btn btn-default col-sm-12'}}) }}
+    {{ form_end(filtersForm) }}
+</div>
+<div class="col-sm-9">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Фото</th>
+            <th>Артикул</th>
+            <th>Название</th>
+            <th>Цена</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for model in models %}
+            {% include 'AppAdminBundle:admin/models/item.html.twig' %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="row text-right">
+        {{ knp_pagination_render(models, 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig') }}
+    </div>
+</div>
