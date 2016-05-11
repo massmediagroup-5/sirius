@@ -248,6 +248,7 @@ div[class="form-group"][id$="_images"] {
 
 .order-size-popup {
     font-size: 14px;
+    display: none;
     .table {
         td {
             vertical-align: middle;
@@ -315,5 +316,33 @@ div[class="form-group"][id$="_images"] {
     height: 100px;
     ul {
         width: 90%;
+    }
+}
+
+.share-size-popup {
+    @extend .order-size-popup;
+    .tab-pane {
+        position: relative;
+        height: 100%;
+    }
+}
+.share-sizes-select-content {
+    padding-top: 15px;
+    height: 100%;
+}
+
+.popup-filters {
+    padding-top: 8px;
+    .form-group-content {
+        max-height: 250px;
+        overflow-y: auto;
+    }
+    .form-group {
+        width: 99.9%;
+    }
+    .list-unstyled {
+        label {
+            font-weight: 400;
+        }
     }
 }

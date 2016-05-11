@@ -43,7 +43,7 @@ services:
 
     app.admin.done_orders:
         class: AppAdminBundle\Admin\CanceledOrdersAdmin
-        arguments: [~, AppBundle\Entity\Done, SonataAdminBundle:CRUD]
+        arguments: [~, AppBundle\Entity\Done, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Исполненые заказы"}
 
@@ -58,6 +58,12 @@ services:
         arguments: [~, AppBundle\Entity\Cart, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
+
+    app.admin.share:
+        class: AppAdminBundle\Admin\ShareAdmin
+        arguments: [~, AppBundle\Entity\Share, AppAdminBundle:Share]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Акции"}
 
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin

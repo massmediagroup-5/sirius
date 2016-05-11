@@ -1,0 +1,21 @@
+{% extends 'AppAdminBundle:admin/models/sizes_select_template.html.twig' %}
+
+{% block sizes_select_content_table %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Фото</th>
+            <th>Артикул</th>
+            <th>Название</th>
+            <th>Цена</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for model in models %}
+            {% include 'AppAdminBundle:admin/models/share_item.html.twig' %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock sizes_select_content_table %}

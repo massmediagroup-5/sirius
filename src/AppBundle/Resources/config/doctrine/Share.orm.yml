@@ -1,0 +1,30 @@
+AppBundle\Entity\Share:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        description:
+            type: text
+        createTime:
+            type: datetime
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        priority:
+            type: integer
+    oneToMany:
+        sizesGroups:
+            targetEntity: ShareSizesGroup
+            cascade: ["all"]
+            fetch: LAZY
+            mappedBy: share
+            inversedBy: null
+            orphanRemoval: true
+    lifecycleCallbacks: {  }
+

@@ -38,9 +38,10 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        var orderId = {{admin.subject.id}};
+        var baseRouteParams = {{ {id: admin.subject.id}|json_encode()|raw }};
         var baseRouteName = '{{admin.baseRouteName}}';
     </script>
+    <script src="{{ asset('bundles/appadmin/js/functions.js') }}"></script>
     <script src="{{ asset('bundles/appadmin/js/order.js') }}"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ url('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
