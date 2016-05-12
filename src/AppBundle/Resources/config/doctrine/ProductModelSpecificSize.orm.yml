@@ -32,6 +32,11 @@ AppBundle\Entity\ProductModelSpecificSize:
             mappedBy: null
             inversedBy: sizes
             orphanRemoval: false
+        shareGroup:
+            targetEntity: ShareSizesGroup
+            inversedBy: modelSpecificSizes
+            joinColumn:
+                onDelete: SET NULL
     oneToMany:
         orderedSizes:
             targetEntity: OrderProductSize

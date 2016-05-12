@@ -11,14 +11,16 @@ var OrderSizesDialog = (function () {
         this.loading = 0;
         this.filtersSelect = new DialogFiltersSelect(this.$selectSizeDialog.find('#selectFilters'));
         this.sizesSelect = new DialogSizesSelect(this.$selectSizeDialog.find('#selectSizes'));
+        this.conflictSizes = new DialogConflictSizesSelect(this.$selectSizeDialog.find('#selectConflictSizes'));
     }
 
     OrderSizesDialog.prototype.openAddSizeDialog = function (sizesGroupId) {
         this.$selectSizeDialog.dialog("open");
+        $('a[href="#selectFilters"]').click();
         this.filtersSelect.setSizesGroupId(sizesGroupId);
         this.filtersSelect.loadContent();
         this.sizesSelect.setSizesGroupId(sizesGroupId);
-        this.sizesSelect.loadContent();
+        this.conflictSizes.setSizesGroupId(sizesGroupId);
     };
 
     mix(OrderSizesDialog, requestMixin);
@@ -26,6 +28,9 @@ var OrderSizesDialog = (function () {
     return OrderSizesDialog;
 })();
 
+/**
+ * Abstract class LoadableContent
+ */
 var LoadableContent = (function () {
     function LoadableContent($holder) {
         this.$holder = $holder;
@@ -81,24 +86,33 @@ var modelsListMixin = {
     }
 };
 
+/**
+ * Dialog filters select control
+ */
 var DialogFiltersSelect = (function (superClass) {
     extend(DialogFiltersSelect, superClass);
 
     function DialogFiltersSelect($holder) {
+        var self = this;
         DialogFiltersSelect.__super__.constructor.call(this, $holder);
+        $('a[href="#' + this.$holder.attr('id') + '"]').on('show.bs.tab', function () {
+            self.loadContent();
+        });
     }
 
     DialogFiltersSelect.prototype.setSizesGroupId = function (sizesGroupId) {
         this.sizesGroupId = sizesGroupId;
     };
 
-    DialogFiltersSelect.prototype.loadContent = function ($sizeSelect) {
-        DialogFiltersSelect.__super__.loadContent.call(this, $sizeSelect);
-        this.request('get_filters_sizes', this.lastParams, {sizes_group_id: this.sizesGroupId}, this.contentLoaded.bind(this));
+    DialogFiltersSelect.prototype.loadContent = function (data) {
+        this.lastParams = {};
+        DialogFiltersSelect.__super__.loadContent.call(this, data);
 
+        this.request('get_filters_sizes', this.lastParams, {sizes_group_id: this.sizesGroupId}, this.contentLoaded.bind(this));
     };
 
     DialogFiltersSelect.prototype.contentLoaded = function (response) {
+        var self = this;
         this.$holder.children().not(this.$loading).remove();
         this.$holder.append(response.sizes);
         this.$holder.find('input').iCheck({
@@ -113,6 +127,12 @@ var DialogFiltersSelect = (function (superClass) {
             $(this).attr("clicked", "true");
         });
         this.$holder.find('.js_model_row').on('click', this.modelRowClick.bind(this));
+        this.$holder.find('.js_model_row').each(function () {
+            new DialogSelectableModelItem($(this), self.sizesGroupId);
+        });
+        this.$holder.find('.js_size_row').each(function () {
+            new DialogSelectableSizeItem($(this), self.sizesGroupId);
+        });
         this.hideLoading();
     };
 
@@ -138,11 +158,19 @@ var DialogFiltersSelect = (function (superClass) {
 
 })(LoadableContent);
 
+/**
+ * Dialog sizes select control
+ */
 var DialogSizesSelect = (function (superClass) {
     extend(DialogSizesSelect, superClass);
 
     function DialogSizesSelect($holder) {
+        var self = this;
         DialogSizesSelect.__super__.constructor.call(this, $holder);
+        // Reload content when tab activated
+        $('a[href="#' + this.$holder.attr('id') + '"]').on('show.bs.tab', function () {
+            self.loadContent();
+        });
     }
 
     DialogSizesSelect.prototype.setSizesGroupId = function (sizesGroupId) {
@@ -157,7 +185,8 @@ var DialogSizesSelect = (function (superClass) {
 
     DialogSizesSelect.prototype.contentLoaded = function (response) {
         var self = this;
-        this.$holder.html(response.sizes);
+        this.$holder.children().not(this.$loading).remove();
+        this.$holder.append(response.sizes);
         this.$holder.find('a').on('click', this.contentLinkClick.bind(this));
         this.$holder.find('.js_model_row').on('click', this.modelRowClick.bind(this));
         this.$holder.find('.js_submit_filters').on('click', this.submitFilters.bind(this));
@@ -166,11 +195,10 @@ var DialogSizesSelect = (function (superClass) {
             radioClass: 'iradio_minimal'
         });
         this.$holder.find('.js_model_row').each(function () {
-            new DialogSizesModelItem($(this), self.sizesGroupId);
+            new DialogSelectableModelItem($(this), self.sizesGroupId);
         });
         this.$holder.find('.js_size_row').each(function () {
-            new DialogSizesSizeItem($(this), self.sizesGroupId);
-
+            new DialogSelectableSizeItem($(this), self.sizesGroupId);
         });
         this.hideLoading();
     };
@@ -200,41 +228,70 @@ var DialogSizesSelect = (function (superClass) {
 
 })(LoadableContent);
 
-var DialogSizesModelItem = (function () {
-    function DialogSizesModelItem($content, sizesGroupId) {
+var DialogSelectableModelItem = (function () {
+    function DialogSelectableModelItem($content, sizesGroupId) {
         this.$content = $content;
         this.sizesGroupId = sizesGroupId;
         this.modelId = this.$content.data('model-id');
         this.$content.find('.js_check_model').on('ifChanged', this.modelCheckToggle.bind(this));
     }
 
-    DialogSizesModelItem.prototype.modelCheckToggle = function (e) {
+    DialogSelectableModelItem.prototype.modelCheckToggle = function (e) {
         e.stopPropagation();
         this.request('toggle_group_model', {}, {sizes_group_id: this.sizesGroupId, model_id: this.modelId});
+        $(document).trigger('shares.model_toggle_' + this.$content.data('model-id'), [e.currentTarget.checked])
     };
 
-    mix(DialogSizesModelItem, requestMixin);
+    mix(DialogSelectableModelItem, requestMixin);
 
-    return DialogSizesModelItem;
+    return DialogSelectableModelItem;
 })();
 
-var DialogSizesSizeItem = (function () {
-    function DialogSizesSizeItem($content, sizesGroupId) {
+var DialogSelectableSizeItem = (function () {
+    function DialogSelectableSizeItem($content, sizesGroupId) {
         this.$content = $content;
         this.sizesGroupId = sizesGroupId;
         this.sizeId = this.$content.data('size-id');
         this.$content.find('.js_check_size').on('ifChanged', this.sizeCheckToggle.bind(this));
+        $(document).on('shares.model_toggle_' + this.$content.data('model-id'), this.sizeCheckToggleToListener.bind(this))
     }
 
-    DialogSizesSizeItem.prototype.sizeCheckToggle = function (e) {
+    DialogSelectableSizeItem.prototype.sizeCheckToggle = function (e) {
         this.request('toggle_group_size', {}, {sizes_group_id: this.sizesGroupId, size_id: this.sizeId});
     };
 
-    mix(DialogSizesSizeItem, requestMixin);
+    DialogSelectableSizeItem.prototype.sizeCheckToggleToListener = function (e, flag) {
+        if(flag) {
+            this.$content.find('.js_check_size').iCheck('check');
+        } else {
+            this.$content.find('.js_check_size').iCheck('uncheck');
+        }
+    };
 
-    return DialogSizesSizeItem;
+    mix(DialogSelectableSizeItem, requestMixin);
+
+    return DialogSelectableSizeItem;
 })();
 
+/**
+ * Dialog sizes select control
+ * Do the same as DialogSizesSelect, but with only conflict sizes
+ */
+var DialogConflictSizesSelect = (function (superClass) {
+    extend(DialogConflictSizesSelect, superClass);
+
+    function DialogConflictSizesSelect($holder) {
+        DialogConflictSizesSelect.__super__.constructor.call(this, $holder);
+    }
+
+    DialogConflictSizesSelect.prototype.loadContent = function ($sizeSelect) {
+        DialogConflictSizesSelect.__super__.__proto__.loadContent.call(this, $sizeSelect);
+        this.request('get_conflict_sizes', this.lastParams, {sizes_group_id: this.sizesGroupId}, this.contentLoaded.bind(this));
+
+    };
+
+    return DialogConflictSizesSelect;
+})(DialogSizesSelect);
 
 /**
  * Order size control

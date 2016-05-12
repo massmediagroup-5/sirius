@@ -9,7 +9,7 @@
     </td>
     <td>
         <label>
-            <input type="checkbox" class="js_check_model" {% if group.models.contains(model) %} checked {% endif %} />
+            <input type="checkbox" class="js_check_model" {% if model.inShareGroup(group) %} checked {% endif %} />
         </label>
     </td>
 </tr>
@@ -22,7 +22,7 @@
         <td>{{ prices.getPrice(size)|format_price }}</td>
         <td>
             <label>
-                <input type="checkbox" class="js_check_size" {% if group.modelSpecificSizes.contains(size) %} checked {% endif %} />
+                <input type="checkbox" class="js_check_size" {% if size.inShareGroup(group) %} checked {% endif %} />
             </label>
         </td>
     </tr>

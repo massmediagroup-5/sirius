@@ -100,7 +100,7 @@ class ShareController extends BaseController
 
         return $this->renderJson([
             'sizes' => $this->render('AppAdminBundle:admin/shares/sizes_select_filters.html.twig',
-                compact('models', 'filters', 'admin', 'filtersForm', 'categories'))->getContent()
+                compact('models', 'filters', 'admin', 'filtersForm', 'categories', 'group'))->getContent()
         ]);
     }
 
@@ -127,6 +127,32 @@ class ShareController extends BaseController
     }
 
     /**
+     * @param Request $request
+     * @param ShareSizesGroup $group
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @ParamConverter("group", options={"id" = "sizes_group_id"})
+     */
+    public function getConflictSizesAction(Request $request, ShareSizesGroup $group)
+    {
+        $admin = $this->admin;
+
+        $filters = $request->request->all();
+        $filters['conflicts'] = true;
+        $filters['group'] = $group;
+
+        $models = $this->admin->paginateModelsToSelect($filters);
+
+        $categories = $this->getDoctrine()->getRepository('AppBundle:Categories')->findAll();
+
+        $filters = $request->request->all();
+
+        return $this->renderJson([
+            'sizes' => $this->render('AppAdminBundle:admin/shares/sizes_select_items.html.twig',
+                compact('models', 'filters', 'admin', 'group', 'categories'))->getContent()
+        ]);
+    }
+
+    /**
      * @param ShareSizesGroup $group
      * @param ProductModels $model
      * @return \Symfony\Component\HttpFoundation\Response
@@ -135,16 +161,7 @@ class ShareController extends BaseController
      */
     public function toggleGroupModelAction(ShareSizesGroup $group, ProductModels $model)
     {
-        if ($group->getModels()->contains($model)) {
-            $group->removeModel($model);
-        } else {
-            $group->addModel($model);
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($group);
-        $em->flush();
+        $this->get('share')->toggleGroupModel($group, $model);
 
         return $this->renderJson([]);
     }
@@ -158,16 +175,7 @@ class ShareController extends BaseController
      */
     public function toggleGroupSizeAction(ShareSizesGroup $group, ProductModelSpecificSize $specificSize)
     {
-        if ($group->getModelSpecificSizes()->contains($specificSize)) {
-            $group->removeModelSpecificSize($specificSize);
-        } else {
-            $group->addModelSpecificSize($specificSize);
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($group);
-        $em->flush();
+        $this->get('share')->toggleGroupSize($group, $specificSize);
 
         return $this->renderJson([]);
     }

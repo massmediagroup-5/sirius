@@ -471,13 +471,13 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     public function addCharacteristicsCondition(
         $builder,
         $characteristicValues,
-        $productsAlias = 'products',
+        $productsAlias = 'productModels',
         $characteristicValuesAlias = 'characteristicValues',
         $characteristicsAlias = 'characteristics'
     ) {
         if ($characteristicValues) {
             $builder->andWhere($builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues))
-                ->groupBy("productModels.id")
+                ->groupBy("$productsAlias.id")
                 ->having('COUNT(DISTINCT ' . $characteristicsAlias . '.id) >=
                 (
                     SELECT COUNT( DISTINCT incchar.id )

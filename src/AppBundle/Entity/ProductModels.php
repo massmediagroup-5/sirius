@@ -98,6 +98,11 @@ class ProductModels
     private $recommended;
 
     /**
+     * @var \AppBundle\Entity\ShareSizesGroup
+     */
+    private $shareGroup;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -105,6 +110,7 @@ class ProductModels
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->images = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recommended = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->shareGroup = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -597,5 +603,45 @@ class ProductModels
         }
         $this->sizes = $sizes;
         $this->alias .= '-clone-' . uniqid();
+    }
+
+    /**
+     * Set shareGroup
+     *
+     * @param \AppBundle\Entity\ShareSizesGroup $shareGroup
+     *
+     * @return ProductModels
+     */
+    public function setShareGroup(\AppBundle\Entity\ShareSizesGroup $shareGroup = null)
+    {
+        $this->shareGroup = $shareGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get shareGroup
+     *
+     * @return \AppBundle\Entity\ShareSizesGroup
+     */
+    public function getShareGroup()
+    {
+        return $this->shareGroup;
+    }
+
+    /**
+     * @param ShareSizesGroup $shareGroup
+     * @return boolean
+     */
+    public function inShareGroup(ShareSizesGroup $shareGroup)
+    {
+        $result = array_unique(array_map(function ($size) use ($shareGroup) {
+            return $size->inShareGroup($shareGroup);
+        }, $this->sizes->toArray()));
+
+        if(count($result) == 1) {
+            return $result[0];
+        }
+        return false;
     }
 }

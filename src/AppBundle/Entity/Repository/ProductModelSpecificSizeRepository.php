@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity\Repository;
 
+use AppBundle\Entity\ShareSizesGroup;
+
 /**
  * CategoriesRepository
  *
@@ -44,6 +46,30 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('ids', $ids)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param ShareSizesGroup $group
+     * @return \Doctrine\ORM\Query
+     */
+    public function getShareGroupSizes(ShareSizesGroup $group)
+    {
+        $builder = $this->createQueryBuilder('specificSizes')
+            ->innerJoin('specificSizes.model', 'model')->addselect('model')
+            ->innerJoin('specificSizes.size', 'size')->addselect('size')
+            ->innerJoin('model.products', 'product')->addselect('product')
+            ->innerJoin('model.productColors', 'color')->addselect('color')
+            ->innerJoin('product.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
+            ->innerJoin('characteristicValues.characteristics', 'characteristics')
+            ->innerJoin('product.baseCategory', 'category')
+            ->addselect('specificSizes');
+
+        $shareRepo = $this->_em->getRepository('AppBundle:Share');
+
+        $shareRepo->addHasGroupCondition($builder, $group);
+        $shareRepo->addNotHasGroupExceptGivenCondition($builder, $group);
+
+        return $builder->getQuery()->getResult();
     }
 
 }

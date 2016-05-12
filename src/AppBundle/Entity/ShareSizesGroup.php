@@ -59,6 +59,16 @@ class ShareSizesGroup
      */
     private $colors;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $exceptModels;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $exceptModelSpecificSizes;
+
 
     /**
      * Constructor
@@ -71,6 +81,8 @@ class ShareSizesGroup
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
         $this->colors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->exceptModels = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->exceptModelSpecificSizes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -266,7 +278,7 @@ class ShareSizesGroup
      */
     public function setSizes($sizes)
     {
-        if($sizes instanceof \Doctrine\Common\Collections\Collection) {
+        if ($sizes instanceof \Doctrine\Common\Collections\Collection) {
             $this->sizes = $sizes;
         } else {
             $this->sizes = new ArrayCollection($sizes);
@@ -284,7 +296,7 @@ class ShareSizesGroup
      */
     public function setColors($colors)
     {
-        if($colors instanceof \Doctrine\Common\Collections\Collection) {
+        if ($colors instanceof \Doctrine\Common\Collections\Collection) {
             $this->colors = $colors;
         } else {
             $this->colors = new ArrayCollection($colors);
@@ -302,7 +314,7 @@ class ShareSizesGroup
      */
     public function setCharacteristicValues($characteristicValues)
     {
-        if($characteristicValues instanceof \Doctrine\Common\Collections\Collection) {
+        if ($characteristicValues instanceof \Doctrine\Common\Collections\Collection) {
             $this->characteristicValues = $characteristicValues;
         } else {
             $this->characteristicValues = new ArrayCollection($characteristicValues);
@@ -411,5 +423,73 @@ class ShareSizesGroup
     public function getColors()
     {
         return $this->colors;
+    }
+
+    /**
+     * Add exceptModel
+     *
+     * @param \AppBundle\Entity\ProductModels $exceptModel
+     *
+     * @return ShareSizesGroup
+     */
+    public function addExceptModel(\AppBundle\Entity\ProductModels $exceptModel)
+    {
+        $this->exceptModels[] = $exceptModel;
+
+        return $this;
+    }
+
+    /**
+     * Remove exceptModel
+     *
+     * @param \AppBundle\Entity\ProductModels $exceptModel
+     */
+    public function removeExceptModel(\AppBundle\Entity\ProductModels $exceptModel)
+    {
+        $this->exceptModels->removeElement($exceptModel);
+    }
+
+    /**
+     * Get exceptModels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExceptModels()
+    {
+        return $this->exceptModels;
+    }
+
+    /**
+     * Add exceptModelSpecificSize
+     *
+     * @param \AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize
+     *
+     * @return ShareSizesGroup
+     */
+    public function addExceptModelSpecificSize(\AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize)
+    {
+        $this->exceptModelSpecificSizes[] = $exceptModelSpecificSize;
+
+        return $this;
+    }
+
+    /**
+     * Remove exceptModelSpecificSize
+     *
+     * @param \AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize
+     */
+    public function removeExceptModelSpecificSize(\AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize)
+    {
+        $this->exceptModelSpecificSizes->removeElement($exceptModelSpecificSize);
+    }
+
+    /**
+     * Get exceptModelSpecificSizes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExceptModelSpecificSizes()
+    {
+        return $this->exceptModelSpecificSizes;
     }
 }

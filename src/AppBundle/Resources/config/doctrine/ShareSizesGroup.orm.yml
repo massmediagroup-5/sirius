@@ -21,16 +21,16 @@ AppBundle\Entity\ShareSizesGroup:
             mappedBy: null
             inversedBy: sizesGroups
             orphanRemoval: false
-    manyToMany:
-        products:
-            targetEntity: Products
-            fetch: LAZY
+    oneToMany:
         models:
             targetEntity: ProductModels
             fetch: LAZY
+            mappedBy: shareGroup
         modelSpecificSizes:
             targetEntity: ProductModelSpecificSize
+            mappedBy: shareGroup
             fetch: LAZY
+    manyToMany:
         sizes:
             targetEntity: ProductModelSizes
             fetch: LAZY

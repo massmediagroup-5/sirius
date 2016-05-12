@@ -108,7 +108,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     {
         $builder = $this->createQueryBuilderWithJoins();
 
-        if(!empty($ids)){
+        if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")
                 ->setParameter('productsIds', array_values($ids));
         }
@@ -161,7 +161,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.categories', 'categories')
-            ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
+            ->innerJoin('productModels.productColors', 'producDoctrine\ORMtColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->where('productModels.id IN (:ids)')
             ->setParameter('ids', $modelIds)
@@ -183,27 +183,38 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('specificSizes.size', 'size')->addselect('size')
             ->innerJoin('model.products', 'product')->addselect('product')
             ->innerJoin('model.productColors', 'color')->addselect('color')
+            ->innerJoin('model.products', 'products')->addselect('products')
+            ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
+            ->innerJoin('characteristicValues.characteristics', 'characteristics')
             ->innerJoin('product.baseCategory', 'category')
             ->addselect('model');
 
-        if($categoryId = Arr::get($filters, 'category_id')) {
+        if ($categoryId = Arr::get($filters, 'category_id')) {
             $builder->andWhere('category = :categoryId')->setParameter('categoryId', $categoryId);
         }
 
-        if($size = Arr::get($filters, 'size')) {
+        if ($size = Arr::get($filters, 'size')) {
             $builder->andWhere('size.size LIKE :size')->setParameter('size', "%$size%");
         }
 
-        if($article = Arr::get($filters, 'article')) {
+        if ($article = Arr::get($filters, 'article')) {
             $builder->andWhere('product.article LIKE :article')->setParameter('article', "%$article%");
         }
 
-        if($color = Arr::get($filters, 'color')) {
+        if ($color = Arr::get($filters, 'color')) {
             $builder->andWhere('color.name LIKE :color')->setParameter('color', "%$color%");
         }
 
-        if($model = Arr::get($filters, 'model')) {
+        if ($model = Arr::get($filters, 'model')) {
             $builder->andWhere('product.name LIKE :model')->setParameter('model', "%$model%");
+        }
+
+        if ($model = Arr::get($filters, 'conflicts')) {
+            if (!$group = Arr::get($filters, 'group')) {
+                throw new \InvalidArgumentException('Provide "group" in filters array');
+            }
+            $this->_em->getRepository('AppBundle:Share')->addHasGroupCondition($builder, $group);
+            $this->_em->getRepository('AppBundle:Share')->addHasGroupExceptGivenCondition($builder, $group);
         }
 
         return $builder->getQuery();
@@ -220,22 +231,12 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('specificSizes.size', 'size')->addselect('size')
             ->innerJoin('model.products', 'product')->addselect('product')
             ->innerJoin('model.productColors', 'color')->addselect('color')
-            ->innerJoin('product.characteristicValues', 'characteristicValues')
+            ->innerJoin('product.characteristicValues', 'characteristicValues')->addselect('characteristicValues')
+            ->innerJoin('characteristicValues.characteristics', 'characteristics')
             ->innerJoin('product.baseCategory', 'category')
             ->addselect('model');
 
-        if($group->getSizes()->count()) {
-            $builder->andWhere('size.id IN (:sizesIds)')->setParameter('sizesIds', $group->getSizes());
-        }
-
-        if($group->getColors()->count()) {
-            $builder->andWhere('color.id IN (:colorsIds)')->setParameter('colorsIds', $group->getColors());
-        }
-
-        if($group->getCharacteristicValues()->count()) {
-            $builder->andWhere('characteristicValues.id IN (:characteristicValuesIds)')
-                ->setParameter('characteristicValuesIds', $group->getCharacteristicValues());
-        }
+        $this->_em->getRepository('AppBundle:Share')->addHasGroupCondition($builder, $group);
 
         return $builder->getQuery();
     }
