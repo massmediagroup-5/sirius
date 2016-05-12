@@ -1,6 +1,7 @@
 AppBundle\Entity\Share:
     type: entity
     table: null
+    repositoryClass: AppBundle\Entity\Repository\ShareRepository
     id:
         id:
             type: integer

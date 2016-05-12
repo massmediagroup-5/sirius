@@ -4,6 +4,7 @@ namespace AppAdminBundle\Admin;
 
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ShareSizesGroup;
+use AppBundle\Event\ShareGroupFiltersUpdated;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Arr;
 use Sonata\AdminBundle\Admin\Admin;
@@ -46,6 +47,9 @@ class ShareAdmin extends Admin
             ->add('get_sizes', $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/get_sizes', [], [], [
                 'expose' => true
             ])
+            ->add('get_conflict_sizes',
+                $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/get_conflict_sizes',
+                [], [], ['expose' => true])
             ->add('get_filters_sizes',
                 $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/get_filters_sizes', [], [], [
                     'expose' => true
@@ -57,7 +61,13 @@ class ShareAdmin extends Admin
             ->add('toggle_group_size',
                 $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/toggle_group_size/{size_id}', [], [], [
                     'expose' => true
-                ]);
+                ])
+            ->add('toggle_group_except_model',
+                $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/toggle_group_except_model/{model_id}',
+                [], [], ['expose' => true])
+            ->add('toggle_group_except_size',
+                $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/toggle_group_except_size/{size_id}', [],
+                [], ['expose' => true]);
     }
 
     /**
@@ -81,7 +91,7 @@ class ShareAdmin extends Admin
         $listMapper
             ->addIdentifier('id', null, ['label' => 'ID'])
             ->add('name', null, ['label' => 'Имя', 'route' => ['name' => 'edit']])
-            ->add('create_time', null, ['label' => 'Время создания'])
+            ->add('createTime', null, ['label' => 'Время создания'])
             ->add('_action', 'actions', [
                 'actions' => [
                     'show' => [],
@@ -186,6 +196,8 @@ class ShareAdmin extends Admin
         if ($save) {
             $em->persist($sizesGroup);
             $em->flush();
+            $container->get('event_dispatcher')->dispatch('app.share_group_filters_updated',
+                new ShareGroupFiltersUpdated($sizesGroup));
         }
     }
 

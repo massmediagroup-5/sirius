@@ -21,6 +21,14 @@ services:
     order:
         class: AppBundle\Services\Order
         arguments: [@doctrine.orm.entity_manager, @service_container]
+    share:
+        class: AppBundle\Services\Share
+        arguments: [@service_container, @doctrine.orm.entity_manager]
+    share_group_listener:
+        class: AppBundle\Listener\ShareGroupListener
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_subscriber }
     filters:
         class: AppBundle\Services\Filters
         arguments: ["@service_container"]

@@ -43,6 +43,11 @@ class ProductModelSpecificSize
     private $size;
 
     /**
+     * @var \AppBundle\Entity\ShareSizesGroup
+     */
+    private $shareGroup;
+
+    /**
      * Get id
      *
      * @return integer
@@ -259,4 +264,38 @@ class ProductModelSpecificSize
     {
         $this->id = null;
     }
+
+    /**
+     * Set shareGroup
+     *
+     * @param \AppBundle\Entity\ShareSizesGroup $shareGroup
+     *
+     * @return ProductModelSpecificSize
+     */
+    public function setShareGroup(\AppBundle\Entity\ShareSizesGroup $shareGroup = null)
+    {
+        $this->shareGroup = $shareGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get shareGroup
+     *
+     * @return \AppBundle\Entity\ShareSizesGroup
+     */
+    public function getShareGroup()
+    {
+        return $this->shareGroup;
+    }
+
+    /**
+     * @param ShareSizesGroup $shareGroup
+     * @return boolean
+     */
+    public function inShareGroup(ShareSizesGroup $shareGroup)
+    {
+        return $this->shareGroup && $this->shareGroup->getId() == $shareGroup->getId();
+    }
+
 }
