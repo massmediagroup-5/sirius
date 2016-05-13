@@ -291,13 +291,13 @@ class PricesCalculator
 
             if (count(array_filter($otherSizesInShare)) == $share->getSizesGroups()->count()) {
 
-                $minSizesCount = min(function (CartSize $cartSize) {
+                $minSizesCount = min(array_map(function (CartSize $cartSize) {
                     return $cartSize->getQuantity();
-                }, $otherSizesInShare);
+                }, $otherSizesInShare));
 
                 $pricePerItem = $this->getDiscountedPrice($object->getSize());
 
-                $price = $shareGroup->getDiscount() * $pricePerItem * $minSizesCount
+                $price = ($pricePerItem - ceil($shareGroup->getDiscount() * $pricePerItem) * 0.01) * $minSizesCount
                     + $pricePerItem * ($object->getQuantity() - $minSizesCount);
 
                 return $price;
