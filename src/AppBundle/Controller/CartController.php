@@ -95,7 +95,7 @@ class CartController extends BaseController
             );
 
             $cartInfo = $this->getGeneralCartInfo();
-            $cartInfo['currentPrice'] = $this->get('cart')->getSizePrice($form->get('size')->getNormData());
+            $cartInfo['currentPrice'] = $this->get('cart')->getSizeDiscountedPrice($form->get('size')->getNormData());
             return new JsonResponse($cartInfo);
         }
 
@@ -121,7 +121,7 @@ class CartController extends BaseController
                 $form->get('quantity')->getNormData()
             );
             $cartInfo = $this->getGeneralCartInfo();
-            $cartInfo['currentPrice'] = $this->get('cart')->getSizePrice($size);
+            $cartInfo['currentPrice'] = $this->get('cart')->getSizeDiscountedPrice($size);
             return new JsonResponse($cartInfo);
         }
 
@@ -322,8 +322,8 @@ class CartController extends BaseController
         return [
             // todo add discount, total oldPrice
             'totalPrice' => $this->get('cart')->getTotalPrice(),
-            'preOrderItemsPrice' => $this->get('cart')->getPreOrderPrice(),
-            'standardItemsPrice' => $this->get('cart')->getStandardPrice(),
+            'preOrderItemsPrice' => $this->get('cart')->getPreOrderDiscountedPrice(),
+            'standardItemsPrice' => $this->get('cart')->getStandardDiscountedPrice(),
             'totalCount' => $this->get('cart')->getTotalCount(),
             'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice()
         ];
@@ -341,8 +341,8 @@ class CartController extends BaseController
             'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
             'packagesCount' => $this->get('cart')->getPackagesCount(),
             'cartItems' => $this->get('cart')->toArrayWithExtraInfo(),
-            'preOrderItemsPrice' => $this->get('cart')->getPreOrderPrice(),
-            'standardItemsPrice' => $this->get('cart')->getStandardPrice(),
+            'preOrderItemsPrice' => $this->get('cart')->getPreOrderDiscountedPrice(),
+            'standardItemsPrice' => $this->get('cart')->getStandardDiscountedPrice(),
         ];
     }
 

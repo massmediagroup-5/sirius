@@ -47,7 +47,7 @@
                     <p class="name">Сумма</p>
 
                     <p class="total-price">
-                        <span class="js_item_price" data-id="{{ size.size.id }}">{{ size.price }}</span> грн.
+                        <span class="js_item_price" data-id="{{ size.size.id }}">{{ size.discountedPrice }}</span> грн.
                     </p>
 
                     {{ widget('products.removeProductFromCart', size)|raw }}

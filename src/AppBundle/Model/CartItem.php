@@ -114,6 +114,18 @@ class CartItem
     }
 
     /**
+     * @return ProductModelSpecificSize[]
+     */
+    public function getSizesEntities()
+    {
+        $sizes = [];
+        foreach($this->sizes as $size) {
+            $sizes[] = $size->getSize();
+        }
+        return $sizes;
+    }
+
+    /**
      * @param ProductModelSpecificSize $oldSize
      * @param ProductModelSpecificSize $newSize
      * @return $this

@@ -137,11 +137,14 @@ class Products
      * @param $model
      * @return mixed
      */
-    public function flags($model)
+    public function flags(ProductModels $model)
     {
-        // todo add actions and other flags
-
-        $flag = $flagText = false;
+        if($discount = $this->container->get('share')->getSingleDiscount($model)) {
+            $flag = 'discount';
+            $flagText = $discount . '%';
+        } else {
+            $flag = $flagText = false;
+        }
 
         return $this->templating->render('AppBundle:widgets/product/flags.html.twig',
             compact('model', 'flag', 'flagText'));
@@ -200,7 +203,7 @@ class Products
         ])->createView();
 
         return $this->templating->render('AppBundle:widgets/product/change_product_size_count.html.twig', [
-                'model' => $selectedSize->getSize()->getModel(),
+                'size' => $selectedSize->getSize(),
                 'form' => $form,
             ]
         );

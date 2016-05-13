@@ -6,6 +6,8 @@ use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
+use AppBundle\Model\CartSize;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,6 +25,11 @@ class PricesCalculator
     private $container;
 
     /**
+     * @var EntityManager
+     */
+    private $em;
+
+    /**
      * @var \Symfony\Component\Security\Core\Authorization\AuthorizationChecker
      */
     private $authorizationChecker;
@@ -31,10 +38,12 @@ class PricesCalculator
      * __construct
      *
      * @param ContainerInterface $container
+     * @param EntityManager $em
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, EntityManager $em)
     {
         $this->container = $container;
+        $this->em = $em;
         $this->authorizationChecker = $this->container->get('security.authorization_checker');
     }
 
@@ -80,7 +89,7 @@ class PricesCalculator
      */
     public function getProductPrice(Products $object)
     {
-        if($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
             return $object->getWholesalePrice() ?: $object->getPrice();
         }
         return $object->getPrice();
@@ -105,13 +114,13 @@ class PricesCalculator
      */
     public function getProductModelPrice(ProductModels $object)
     {
-        if($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            if($object->getWholesalePrice()) {
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            if ($object->getWholesalePrice()) {
                 return $object->getWholesalePrice();
             }
             return $this->getProductPrice($object->getProducts());
         }
-        if($object->getPrice()) {
+        if ($object->getPrice()) {
             return $object->getPrice();
         }
         return $this->getProductPrice($object->getProducts());
@@ -158,13 +167,13 @@ class PricesCalculator
      */
     public function getProductModelSpecificSizePrice(ProductModelSpecificSize $object)
     {
-        if($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            if($object->getWholesalePrice()) {
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            if ($object->getWholesalePrice()) {
                 return $object->getWholesalePrice();
             }
             return $this->getProductModelPrice($object->getModel());
         }
-        if($object->getPrice()) {
+        if ($object->getPrice()) {
             return $object->getPrice();
         }
         return $this->getProductModelPrice($object->getModel());
@@ -176,7 +185,13 @@ class PricesCalculator
      */
     public function getProductModelSpecificSizeDiscountedPrice(ProductModelSpecificSize $object)
     {
-        return $this->getProductModelSpecificSizePrice($object);
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            return $this->getProductModelSpecificSizePrice($object);
+        }
+        $discount = $this->container->get('share')->getSingleDiscount($object);
+        $price = $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
+
+        return $discount ? $price - ceil($price * $discount) / 100 : $price;
     }
 
     /**
@@ -215,6 +230,81 @@ class PricesCalculator
         return count($sizes) ? array_sum(array_map(function ($item) {
             return $this->getProductModelSpecificSizeDiscountedPrice($item);
         }, $object->getSizes()->toArray())) : 0;
+    }
+
+    /**
+     * @param CartSize $object
+     * @return float
+     */
+    public function getProductModelSpecificSizeInCartDiscountedPrice(CartSize $object)
+    {
+        /** @var $cart Cart */
+        $cart = $this->container->get('cart');
+        /*
+         * 1 выбор акции
+         * если груп в акции больше 1,
+         * выбор товара с каждой с групп который имеет максимальное количество и находится в корзине
+         * выбор товара с минимаьным количеством
+         * проставка скидки только на данное количество товаров
+         */
+        $shareGroup = $object->getSize()->getShareGroup();
+        $share = $shareGroup ? $shareGroup->getShare() : false;
+        if ($share && $share->getSizesGroups()->count() > 1) {
+            $otherSizesInShare = [];
+            foreach ($share->getSizesGroups() as $group) {
+                $sizesIds = array_map(function ($size) {
+                    return $size->getId();
+                }, $cart->getSizesEntities());
+
+                // TODO create event when cart updated and clear query cache
+                $sizesInGroup = $this->em
+                    ->getRepository('AppBundle:ProductModelSpecificSize')
+                    ->createQueryBuilder('specificSize')
+                    ->andWhere('specificSize.shareGroup = :group')
+                    ->andWhere('specificSize.id IN (:specificSizesIds)')
+                    ->setParameter('group', $group)
+                    ->setParameter('specificSizesIds', $sizesIds)
+                    ->getQuery()
+                    ->useQueryCache(true)
+                    ->useResultCache(true)
+                    ->getResult();
+
+                // Select max count of product sizes in action
+                $sizeInGroupIds = array_map(function ($sizeInGroup) {
+                    return $sizeInGroup->getId();
+                }, $sizesInGroup);
+
+                $cartSizesInGroup = array_filter($cart->getSizes(),
+                    function (CartSize $cartSize) use ($sizeInGroupIds) {
+                        return in_array($cartSize->getSize()->getId(), $sizeInGroupIds);
+                    });
+
+                $sizeWithMaxQuantity = array_first($cartSizesInGroup);
+                foreach ($cartSizesInGroup as $cartSize) {
+                    if ($cartSize->getQuantity() > $sizeWithMaxQuantity->getQuantity()) {
+                        $sizeWithMaxQuantity = $cartSize;
+                    }
+                }
+
+                $otherSizesInShare[$group->getId()] = $sizeWithMaxQuantity;
+            }
+
+            if (count(array_filter($otherSizesInShare)) == $share->getSizesGroups()->count()) {
+
+                $minSizesCount = min(function (CartSize $cartSize) {
+                    return $cartSize->getQuantity();
+                }, $otherSizesInShare);
+
+                $pricePerItem = $this->getDiscountedPrice($object->getSize());
+
+                $price = $shareGroup->getDiscount() * $pricePerItem * $minSizesCount
+                    + $pricePerItem * ($object->getQuantity() - $minSizesCount);
+
+                return $price;
+            }
+        }
+
+        return $this->getDiscountedPrice($object->getSize()) * $object->getQuantity();
     }
 
 }

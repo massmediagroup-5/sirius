@@ -195,8 +195,13 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param string $sizeAlias
      * @return mixed
      */
-    public function addSort($query, $sort, $productAlias = 'products', $modelAlias = 'productModels', $sizeAlias = 'sizes')
-    {
+    public function addSort(
+        $query,
+        $sort,
+        $productAlias = 'products',
+        $modelAlias = 'productModels',
+        $sizeAlias = 'sizes'
+    ) {
         $query->addOrderBy("$modelAlias.inStock", 'DESC');
         switch ($sort) {
             case false:
@@ -245,7 +250,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     {
         $this->query_obj
             ->addSelect('COUNT(DISTINCT characteristics.id) as chcount')
-            ->groupBy('products.id')
+            ->groupBy('specificSizes.id')
             //->having('chcount >= :count')->setParameter('count', $count)
 
             ->having('chcount >=
@@ -426,7 +431,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
 
-        if(!empty($ids)){
+        if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")
                 ->setParameter('productsIds', array_values($ids));
         }
