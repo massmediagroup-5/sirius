@@ -51,7 +51,7 @@ class Share
     {
         $newShareGroup = $model->inShareGroup($group) ? null : $group;
 
-        foreach($model->getSizes() as $size) {
+        foreach ($model->getSizes() as $size) {
             $size->setShareGroup($newShareGroup);
             $this->em->persist($size);
         }
@@ -65,7 +65,7 @@ class Share
      */
     public function toggleGroupSize(ShareSizesGroup $group, ProductModelSpecificSize $size)
     {
-        if($size->getShareGroup() && $size->getShareGroup()->getId() == $group->getId()) {
+        if ($size->getShareGroup() && $size->getShareGroup()->getId() == $group->getId()) {
             $size->setShareGroup(null);
         } else {
             $size->setShareGroup($group);
@@ -101,12 +101,34 @@ class Share
 
         $sizes = $this->em->getRepository('AppBundle:ProductModelSpecificSize')->getShareGroupSizes($group);
 
-        foreach($sizes as $size) {
+        foreach ($sizes as $size) {
             $size->setShareGroup($group);
             $this->em->persist($size);
         }
 
         $this->em->flush();
+    }
+
+    /**
+     * Single discount only for share with one group
+     * @param $entity
+     * @return int|string
+     */
+    public function getSingleDiscount($entity)
+    {
+        $shareGroup = false;
+
+        if ($entity instanceof ProductModels) {
+            $shareGroup = $entity->getSizesShareGroup();
+        } elseif ($entity instanceof ProductModelSpecificSize) {
+            $shareGroup = $entity->getShareGroup();
+        }
+
+        if ($shareGroup && $shareGroup->getShare()->getSizesGroups()->count() == 1) {
+            return $shareGroup->getDiscount();
+        }
+
+        return 0;
     }
 
 }

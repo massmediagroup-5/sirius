@@ -112,7 +112,7 @@ class ShareSizesGroup
     /**
      * Get discount
      *
-     * @return string
+     * @return float
      */
     public function getDiscount()
     {

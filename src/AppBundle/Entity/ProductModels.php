@@ -644,4 +644,31 @@ class ProductModels
         }
         return false;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isAllSizesHasOneShare()
+    {
+        // Result will contain grouped sizes ids or null
+        $result = array_unique(array_map(function ($size) {
+            return $size->getShareGroup() ? $size->getShareGroup()->getId() : null;
+        }, $this->sizes->toArray()));
+
+        if(count($result) == 1) {
+            return (bool)$result[0];
+        }
+        return false;
+    }
+
+    /**
+     * @return ShareSizesGroup|null
+     */
+    public function getSizesShareGroup()
+    {
+        if($this->isAllSizesHasOneShare()) {
+            return $this->sizes->first()->getShareGroup();
+        }
+        return null;
+    }
 }

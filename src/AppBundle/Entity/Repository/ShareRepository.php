@@ -64,7 +64,7 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
                     )
                 )
             )
-            ->groupBy('model.id')
+            ->groupBy('specificSizes.id')
             ->having('COUNT(DISTINCT characteristics.id) >=
                     (
                         SELECT COUNT( DISTINCT incchar.id )

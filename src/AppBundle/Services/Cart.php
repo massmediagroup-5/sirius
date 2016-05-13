@@ -163,6 +163,31 @@ class Cart
     }
 
     /**
+     * @return ProductModelSpecificSize[]
+     */
+    public function getSizesEntities()
+    {
+        $sizes = [];
+        foreach ($this->items as $item) {
+            $sizes = array_merge($sizes, $item->getSizesEntities());
+        }
+
+        return $sizes;
+    }
+
+    /**
+     * @return CartSize[]
+     */
+    public function getSizes()
+    {
+        $sizes = array_map(function (CartItem $item) {
+            return $item->getSizes();
+        }, $this->items);
+
+        return $sizes ? call_user_func_array('array_merge', $sizes) : [];
+    }
+
+    /**
      * @return bool
      */
     public function isEmpty()
@@ -193,14 +218,14 @@ class Cart
      * @param ProductModelSpecificSize $size
      * @return CartSize
      */
-    public function getSizePrice(ProductModelSpecificSize $size)
+    public function getSizeDiscountedPrice(ProductModelSpecificSize $size)
     {
         $cartItem = $this->getItem($size->getModel());
-        if(!$cartItem) {
+        if (!$cartItem) {
             return 0;
         }
         $size = $cartItem->getSize($size);
-        return $size ? $size->getPrice() : 0;
+        return $size ? $size->getDiscountedPrice() : 0;
     }
 
     /**
@@ -320,10 +345,30 @@ class Cart
     /**
      * @return int
      */
+    public function getStandardDiscountedPrice()
+    {
+        return array_sum(array_map(function (CartSize $item) {
+            return $item->getDiscountedPrice();
+        }, $this->getStandardSizes()));
+    }
+
+    /**
+     * @return int
+     */
     public function getPreOrderPrice()
     {
         return array_sum(array_map(function (CartSize $item) {
             return $item->getPrice();
+        }, $this->getPreOrderSizes()));
+    }
+
+    /**
+     * @return int
+     */
+    public function getPreOrderDiscountedPrice()
+    {
+        return array_sum(array_map(function (CartSize $item) {
+            return $item->getDiscountedPrice();
         }, $this->getPreOrderSizes()));
     }
 
@@ -345,6 +390,14 @@ class Cart
         return array_sum(array_map(function (CartItem $item) {
             return $item->getDiscountedPrice();
         }, $this->items));
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->getDiscountedTotalPrice() - $this->getTotalPrice();
     }
 
     /**

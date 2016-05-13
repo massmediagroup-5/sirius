@@ -67,7 +67,7 @@ services:
         arguments: ["@service_container"]
     prices_calculator:
         class: AppBundle\Services\PricesCalculator
-        arguments: ["@service_container"]
+        arguments: [@service_container, @doctrine.orm.entity_manager]
     request_listener:
         class: AppBundle\Listener\RequestListener
         arguments: ["@service_container"]
