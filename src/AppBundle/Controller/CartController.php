@@ -325,6 +325,7 @@ class CartController extends BaseController
             'preOrderItemsPrice' => $this->get('cart')->getPreOrderDiscountedPrice(),
             'standardItemsPrice' => $this->get('cart')->getStandardDiscountedPrice(),
             'totalCount' => $this->get('cart')->getTotalCount(),
+            'totalDiscount' => $this->get('cart')->getDiscount(),
             'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice()
         ];
     }
@@ -337,6 +338,7 @@ class CartController extends BaseController
         return [
             'totalCount' => $this->get('cart')->getTotalCount(),
             'totalPrice' => $this->get('cart')->getTotalPrice(),
+            'totalDiscount' => $this->get('cart')->getDiscount(),
             'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice(),
             'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
             'packagesCount' => $this->get('cart')->getPackagesCount(),
