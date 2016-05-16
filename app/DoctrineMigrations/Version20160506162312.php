@@ -40,6 +40,7 @@ class Version20160506162312 extends AbstractMigration
         $this->addSql('ALTER TABLE share_product_colors ADD CONSTRAINT FK_5DF2A6012AE63FDB FOREIGN KEY (share_id) REFERENCES share (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE share_product_colors ADD CONSTRAINT FK_5DF2A60132A096B4 FOREIGN KEY (product_colors_id) REFERENCES product_colors (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE users CHANGE create_time create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, CHANGE update_time update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+        $this->addSql('ALTER TABLE history DROP FOREIGN KEY FK_27BA704BA76ED395;');
         $this->addSql('ALTER TABLE history DROP user_id, CHANGE create_time create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
         $this->addSql('ALTER TABLE product_models CHANGE create_time create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, CHANGE update_time update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
         $this->addSql('ALTER TABLE product_colors CHANGE create_time create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, CHANGE update_time update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
