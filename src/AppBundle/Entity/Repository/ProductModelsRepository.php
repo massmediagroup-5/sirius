@@ -236,7 +236,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('product.baseCategory', 'category')
             ->addselect('model');
 
-        $this->_em->getRepository('AppBundle:Share')->addHasGroupCondition($builder, $group);
+        $this->_em->getRepository('AppBundle:Share')->addHasGroupCondition($builder, $group, true);
 
         return $builder->getQuery();
     }

@@ -16,56 +16,85 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
      * Add condition to select only models which related to given group by filters
      *
      * @param QueryBuilder $builder
-     * @param $group
-     * @param $groupAlias
+     * @param \AppBundle\Entity\ShareSizesGroup $group
+     * @param boolean $dirtyGroupFlag
      */
-    public function addHasGroupCondition(QueryBuilder $builder, $group, $groupAlias = 'model')
+    public function addHasGroupCondition(QueryBuilder $builder, $group, $dirtyGroupFlag = false)
     {
-        $builder
-            ->andWhere(
-                $builder->expr()->orX(
-                    $builder->expr()->not($builder->expr()->exists(
-                        'SELECT c_characteristic_value_1.id FROM \AppBundle\Entity\ShareSizesGroup c_group_1
+        if ($dirtyGroupFlag) {
+            if ($group->getCharacteristicValues()->count()) {
+                $builder->andWhere('characteristicValues.id IN (:characteristicValues)')
+                    ->groupBy('specificSizes.id')
+                    ->having('COUNT(DISTINCT characteristics.id) >=
+                    (
+                        SELECT COUNT( DISTINCT incchar.id )
+                        FROM \AppBundle\Entity\Characteristics as incchar
+                        JOIN incchar.characteristicValues as inccharval
+                        WHERE inccharval.id IN (:characteristicValues)
+                    )'
+                    )
+                    ->setParameter('characteristicValues', $group->getCharacteristicValues()->map(function ($item) {
+                        return $item->getId();
+                    })->toArray());
+            }
+            if ($group->getSizes()->count()) {
+                $builder->andWhere('size.id IN (:sizes)')
+                    ->setParameter('sizes', $group->getSizes()->map(function ($item) {
+                        return $item->getId();
+                    })->toArray());
+            }
+            if ($group->getColors()->count()) {
+                $builder->andWhere('color.id IN (:colors)')
+                    ->setParameter('colors', $group->getColors()->map(function ($item) {
+                        return $item->getId();
+                    })->toArray());
+            }
+        } else {
+            $builder
+                ->andWhere(
+                    $builder->expr()->orX(
+                        $builder->expr()->not($builder->expr()->exists(
+                            'SELECT c_characteristic_value_1.id FROM \AppBundle\Entity\ShareSizesGroup c_group_1
                         JOIN c_group_1.characteristicValues c_characteristic_value_1
                         WHERE c_group_1 = :groupEntity'
-                    )),
-                    $builder->expr()->in('characteristicValues.id',
-                        'SELECT c_characteristic_value_1_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_1_2
+                        )),
+                        $builder->expr()->in('characteristicValues.id',
+                            'SELECT c_characteristic_value_1_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_1_2
                         JOIN c_group_1_2.characteristicValues c_characteristic_value_1_2
                         WHERE c_group_1_2 = :groupEntity'
+                        )
                     )
                 )
-            )
-            ->andWhere(
-                $builder->expr()->orX(
-                    $builder->expr()->not($builder->expr()->exists(
-                        'SELECT c_size_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_2
+                ->andWhere(
+                    $builder->expr()->orX(
+                        $builder->expr()->not($builder->expr()->exists(
+                            'SELECT c_size_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_2
                         JOIN c_group_2.sizes c_size_2
                         WHERE c_group_2 = :groupEntity'
-                    )),
-                    $builder->expr()->in('size.id',
-                        'SELECT c_size_2_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_2_2
+                        )),
+                        $builder->expr()->in('size.id',
+                            'SELECT c_size_2_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_2_2
                         JOIN c_group_2_2.sizes c_size_2_2
                         WHERE c_group_2_2 = :groupEntity'
+                        )
                     )
                 )
-            )
-            ->andWhere(
-                $builder->expr()->orX(
-                    $builder->expr()->not($builder->expr()->exists(
-                        'SELECT c_color_3.id FROM \AppBundle\Entity\ShareSizesGroup c_group_3
+                ->andWhere(
+                    $builder->expr()->orX(
+                        $builder->expr()->not($builder->expr()->exists(
+                            'SELECT c_color_3.id FROM \AppBundle\Entity\ShareSizesGroup c_group_3
                         JOIN c_group_3.colors c_color_3
                         WHERE c_group_3 = :groupEntity'
-                    )),
-                    $builder->expr()->in('color.id',
-                        'SELECT c_color_3_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_3_2
+                        )),
+                        $builder->expr()->in('color.id',
+                            'SELECT c_color_3_2.id FROM \AppBundle\Entity\ShareSizesGroup c_group_3_2
                         JOIN c_group_3_2.colors c_color_3_2
                         WHERE c_group_3_2 = :groupEntity'
+                        )
                     )
                 )
-            )
-            ->groupBy('specificSizes.id')
-            ->having('COUNT(DISTINCT characteristics.id) >=
+                ->groupBy('specificSizes.id')
+                ->having('COUNT(DISTINCT characteristics.id) >=
                     (
                         SELECT COUNT( DISTINCT incchar.id )
                         FROM \AppBundle\Entity\Characteristics as incchar
@@ -76,8 +105,9 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
                             WHERE c_group = :groupEntity
                         )
                     )'
-            )
-            ->setParameter('groupEntity', $group);
+                )
+                ->setParameter('groupEntity', $group);
+        }
     }
 
     /**
