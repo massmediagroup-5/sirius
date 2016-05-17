@@ -79,6 +79,8 @@ class ShareAdmin extends Admin
             ->add('id')
             ->add('name', null, ['label' => 'Имя'])
             ->add('createTime', null, ['label' => 'Время оформления'])
+            ->add('startTime', null, ['label' => 'Время начала'])
+            ->add('endTime', null, ['label' => 'Время окончания'])
             ->add('priority', null, ['label' => 'Приоритет']);
     }
 
@@ -92,6 +94,9 @@ class ShareAdmin extends Admin
             ->addIdentifier('id', null, ['label' => 'ID'])
             ->add('name', null, ['label' => 'Имя', 'route' => ['name' => 'edit']])
             ->add('createTime', null, ['label' => 'Время создания'])
+            ->add('startTime', null, ['label' => 'Время начала'])
+            ->add('endTime', null, ['label' => 'Время окончания'])
+            ->add('status', null, ['editable' => true])
             ->add('_action', 'actions', [
                 'actions' => [
                     'show' => [],
@@ -110,6 +115,9 @@ class ShareAdmin extends Admin
             ->with('Акция', ['class' => 'col-md-12'])
             ->add('name', null, ['label' => 'Имя'])
             ->add('description', null, ['label' => 'Описание'])
+            ->add('startTime', null, ['label' => 'Время начала'])
+            ->add('endTime', null, ['label' => 'Время окончания'])
+            ->add('status', null, ['label' => 'Статус', 'required' => false])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->end()
             ->end();

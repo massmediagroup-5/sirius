@@ -126,6 +126,17 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param QueryBuilder $builder
+     */
+    public function joinActiveShare(QueryBuilder $builder)
+    {
+        $builder->leftJoin('sizes.shareGroup', 'shareGroup')->select('shareGroup')
+            ->leftJoin('shareGroup.share', 'share', 'WITH',
+                'share.status = 1 AND share.startTime < :today AND share.endTime > :today')->select('share')
+            ->setParameter('today', new \DateTime());
+    }
+
+    /**
+     * @param QueryBuilder $builder
      * @param $group
      */
     public function addHasGroupExceptGivenCondition(QueryBuilder $builder, $group)

@@ -427,9 +427,12 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->leftJoin('sizes.shareGroup', 'shareGroup')->addselect('shareGroup')
+            ->leftJoin('shareGroup.share', 'share')->addselect('share')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics');
+            ->innerJoin('characteristicValues.characteristics', 'characteristics')
+        ;
 
         if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")

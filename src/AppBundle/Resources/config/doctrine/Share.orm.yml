@@ -19,6 +19,14 @@ AppBundle\Entity\Share:
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         priority:
             type: integer
+        status:
+            type: boolean
+        startTime:
+            type: datetime
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        endTime:
+            type: datetime
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     oneToMany:
         sizesGroups:
             targetEntity: ShareSizesGroup
@@ -28,4 +36,3 @@ AppBundle\Entity\Share:
             inversedBy: null
             orphanRemoval: true
     lifecycleCallbacks: {  }
-
