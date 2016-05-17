@@ -37,6 +37,21 @@ class Share
      */
     private $sizesGroups;
 
+    /**
+     * @var boolean
+     */
+    private $status = 0;
+
+    /**
+     * @var \DateTime
+     */
+    private $startTime;
+
+    /**
+     * @var \DateTime
+     */
+    private $endTime;
+
 
     /**
      * Constructor
@@ -186,4 +201,87 @@ class Share
         return $this->sizesGroups;
     }
 
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     *
+     * @return Share
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set startTime
+     *
+     * @param \DateTime $startTime
+     *
+     * @return Share
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    /**
+     * Get startTime
+     *
+     * @return \DateTime
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
+    /**
+     * Set endTime
+     *
+     * @param \DateTime $endTime
+     *
+     * @return Share
+     */
+    public function setEndTime($endTime)
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    /**
+     * Get endTime
+     *
+     * @return \DateTime
+     */
+    public function getEndTime()
+    {
+        return $this->endTime;
+    }
+
+    /**
+     * Check active
+     *
+     * @return \DateTime
+     */
+    public function isActive()
+    {
+        $now = new \DateTime();
+
+        return $this->status && $this->startTime < $now && $this->endTime > $now;
+    }
 }

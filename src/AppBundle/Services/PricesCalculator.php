@@ -240,16 +240,10 @@ class PricesCalculator
     {
         /** @var $cart Cart */
         $cart = $this->container->get('cart');
-        /*
-         * 1 выбор акции
-         * если груп в акции больше 1,
-         * выбор товара с каждой с групп который имеет максимальное количество и находится в корзине
-         * выбор товара с минимаьным количеством
-         * проставка скидки только на данное количество товаров
-         */
+
         $shareGroup = $object->getSize()->getShareGroup();
         $share = $shareGroup ? $shareGroup->getShare() : false;
-        if ($share && $share->getSizesGroups()->count() > 1) {
+        if ($share && $share->isActive() && $share->getSizesGroups()->count() > 1) {
             $otherSizesInShare = [];
             foreach ($share->getSizesGroups() as $group) {
                 $sizesIds = array_map(function ($size) {

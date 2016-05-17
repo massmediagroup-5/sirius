@@ -124,7 +124,7 @@ class Share
             $shareGroup = $entity->getShareGroup();
         }
 
-        if ($shareGroup && $shareGroup->getShare()->getSizesGroups()->count() == 1) {
+        if ($shareGroup && $shareGroup->getShare()->isActive() && $shareGroup->getShare()->getSizesGroups()->count() == 1) {
             return $shareGroup->getDiscount();
         }
 
