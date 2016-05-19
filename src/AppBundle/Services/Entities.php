@@ -67,7 +67,7 @@ class Entities
         $perPage = 9,
         $currentPage = 1,
         $entity = 'Products',
-        $ids = array()
+        $ids = []
     ) {
 
         $category = $this->em

@@ -7,6 +7,7 @@ use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\ShareSizesGroup;
 use Doctrine\ORM\EntityManager;
+use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
@@ -30,6 +31,14 @@ class Share
      * @var EntityManager
      */
     private $em;
+
+    /**
+     * @var array
+     */
+    private $classNames = [
+        'item_left_b',
+        'item_center'
+    ];
 
     /**
      * __construct
@@ -129,6 +138,29 @@ class Share
         }
 
         return 0;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function paginateShares($params = [])
+    {
+        $shares = $this->em->getRepository('AppBundle:Share')->getActiveSharesQuery();
+
+        return $this->container->get('knp_paginator')->paginate(
+            $shares,
+            Arr::get($params, 'current_page', 1),
+            Arr::get($params, 'per_page', 7),
+            ['wrap-queries' => true]
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getNamedClassNames()
+    {
+        return array_combine($this->classNames, $this->classNames);
     }
 
 }

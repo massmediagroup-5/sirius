@@ -39,15 +39,19 @@ class Upload
      */
     public function upload($path, $file)
     {
-        $pathInfo = pathinfo($file['name']);
+        if($file instanceof UploadedFile) {
+            $extension = $file->getClientOriginalExtension();
+        } else {
+            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $file = new File($file['tmp_name']);
+        }
 
-        $fileName = $this->fileUniqueName() . '.' . $pathInfo['extension'];
+        $fileName = $this->fileUniqueName() . '.' . $extension;
         $subFolder = $this->generateFolderName();
         $folderPath = "{$this->container->getParameter('web_dir')}/$path/$subFolder";
         $relPathName = "/$path/$subFolder/$fileName";
 
-        $e = new File($file['tmp_name']);
-        $e->move($folderPath, $fileName);
+        $file->move($folderPath, $fileName);
 
         return $relPathName;
     }

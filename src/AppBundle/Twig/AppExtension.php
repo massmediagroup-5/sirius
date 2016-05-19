@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Entity\Categories;
 use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\Share;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
@@ -191,6 +192,11 @@ class AppExtension extends \Twig_Extension
                 return $router->generate('product', [
                     'category' => $model1->getProducts()->getBaseCategory()->getAlias(),
                     'product' => $model1->getAlias()
+                ]);
+            } elseif($model1 instanceof Share) {
+                return $router->generate('category', [
+                    'category' => 'all',
+                    'share' => $model1->getId()
                 ]);
             }
         }

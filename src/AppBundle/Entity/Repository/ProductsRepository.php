@@ -431,8 +431,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('shareGroup.share', 'share')->addselect('share')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics')
-        ;
+            ->innerJoin('characteristicValues.characteristics', 'characteristics');
 
         if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")
@@ -510,6 +509,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         if ($colors = Arr::get($filters, 'colors')) {
             $colors = explode(',', $colors);
             $builder->andWhere($builder->expr()->in("$alias.productColors", $colors));
+        }
+        if ($shareId = Arr::get($filters, 'share')) {
+            $builder->andWhere('share.id = :shareId')->setParameter('shareId', $shareId);
         }
 
         return $builder;

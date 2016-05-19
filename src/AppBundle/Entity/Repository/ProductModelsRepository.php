@@ -145,6 +145,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->leftJoin('sizes.shareGroup', 'shareGroup')->addselect('shareGroup')
+            ->leftJoin('shareGroup.share', 'share')->addselect('share')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
     }
