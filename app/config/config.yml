@@ -23,6 +23,7 @@ parameters:
     watermark_path:                                     %kernel.root_dir%/../web/img/watermark.png
     no_image:                                           img/no-image.png
     upload_img_directory:                               img/products
+    upload_shares_img_directory:                        img/shares
     sonata.user.admin.user.entity:                      AppBundle\Entity\Users
     sonata.user.admin.user.class:                       AppAdminBundle\Admin\UsersAdmin
 

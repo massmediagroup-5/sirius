@@ -2,10 +2,8 @@
 
 namespace AppAdminBundle\Admin;
 
-use AppBundle\Entity\Orders;
 use AppBundle\Entity\ShareSizesGroup;
 use AppBundle\Event\ShareGroupFiltersUpdated;
-use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Arr;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -110,14 +108,27 @@ class ShareAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $classNames = $this->getConfigurationPool()->getContainer()->get('share')->getNamedClassNames();
+        $image = $this->getSubject()->getImage();
+
         $formMapper
             ->tab('Акция')
             ->with('Акция', ['class' => 'col-md-12'])
             ->add('name', null, ['label' => 'Имя'])
-            ->add('description', null, ['label' => 'Описание'])
+            ->add('description', null, ['label' => 'Описание', 'attr' => ['class' => 'ckeditor']])
             ->add('startTime', null, ['label' => 'Время начала'])
             ->add('endTime', null, ['label' => 'Время окончания'])
+            ->add('image', 'file', [
+                'label' => 'Картинка',
+                'data_class' => null,
+                'help' => $image ? "<img src='{$image}' class='admin-preview' />" : null
+            ])
             ->add('status', null, ['label' => 'Статус', 'required' => false])
+            ->add('className', 'choice', [
+                'label' => 'Имя класса',
+                'choices' => $classNames,
+                'required' => false
+            ])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->end()
             ->end();
@@ -234,6 +245,29 @@ class ShareAdmin extends Admin
         $parameters = array_merge($this->request->request->all(), $newFilters);
 
         return json_encode($parameters);
+    }
+
+    public function prePersist($object)
+    {
+        $this->uploadImage($object);
+    }
+
+    public function preUpdate($object)
+    {
+        $this->uploadImage($object);
+    }
+
+    /**
+     * @param $object
+     */
+    protected function uploadImage($object)
+    {
+        $container = $this->getConfigurationPool()->getContainer();
+
+        $imagePath = $container->get('uploader')->upload($container->getParameter('upload_shares_img_directory'),
+            $object->getImage());
+
+        $object->setImage($imagePath);
     }
 
 }

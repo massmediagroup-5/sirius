@@ -14,6 +14,11 @@ AppBundle\Entity\Share:
             length: 255
         description:
             type: text
+        class_name:
+            type: string
+            nullable: true
+        image:
+            type: string
         createTime:
             type: datetime
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

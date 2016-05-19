@@ -125,14 +125,14 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * @param QueryBuilder $builder
+     * @return QueryBuilder
      */
-    public function joinActiveShare(QueryBuilder $builder)
+    public function getActiveSharesQuery()
     {
-        $builder->leftJoin('sizes.shareGroup', 'shareGroup')->select('shareGroup')
-            ->leftJoin('shareGroup.share', 'share', 'WITH',
-                'share.status = 1 AND share.startTime < :today AND share.endTime > :today')->select('share')
-            ->setParameter('today', new \DateTime());
+        return $this->createQueryBuilder('share')
+            ->where('share.status = 1 AND share.startTime < :today AND share.endTime > :today')
+            ->setParameter('today', new \DateTime())
+            ->getQuery();
     }
 
     /**

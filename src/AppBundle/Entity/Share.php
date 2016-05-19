@@ -52,6 +52,16 @@ class Share
      */
     private $endTime;
 
+    /**
+     * @var string
+     */
+    private $class_name;
+
+    /**
+     * @var string
+     */
+    private $image;
+
 
     /**
      * Constructor
@@ -283,5 +293,53 @@ class Share
         $now = new \DateTime();
 
         return $this->status && $this->startTime < $now && $this->endTime > $now;
+    }
+
+    /**
+     * Set className
+     *
+     * @param string $className
+     *
+     * @return Share
+     */
+    public function setClassName($className)
+    {
+        $this->class_name = $className;
+
+        return $this;
+    }
+
+    /**
+     * Get className
+     *
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->class_name;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return Share
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

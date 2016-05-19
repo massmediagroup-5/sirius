@@ -1,0 +1,104 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block out_class %} out_sub {% endblock %}
+
+{% block body %}
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs__i">
+                        <ul>
+                            <li><a href="#">На главную</a></li>
+                            <li>Акции</li>
+                        </ul>
+                    </div>
+                </div>
+                <!--breadcrumbs end-->
+
+                <h2 class="page-title">
+                    Акции
+                </h2>
+
+                <div class="action-list">
+                    <div class="action-list__i">
+                        {% if shares.pageCount > 1 %}
+                            <div class="pager">
+                                <div class="pager__i">
+                                    {{ knp_pagination_render(shares) }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="item-list">
+                            {% for share in shares %}
+                                <div class="item item_center">
+                                    <a href="#">
+                                        <div class="item__i" style="background-image: url('{{ share.image }}')">
+
+                                            <div class="flag flag_discount">
+                                                <div class="flag__i">
+                                                    <p>
+                                                        {% if share.sizesGroups.count() == 1 %}
+                                                            {{ share.sizesGroups.first.discount }}%
+                                                        {% else %}
+                                                            Акция
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="title">
+                                                <div class="title__i">{{ share.description|raw }}</div>
+                                            </div>
+
+                                            <div class="counter-wrap">
+                                                <h2>До конца акции осталось:</h2>
+                                                <div id="countdown" class="counter clearfix"
+                                                     data-count-end="{{ share.endTime.format('Y-m-d H:i:s') }}">
+                                                    <div>
+                                                        <p class="days">00</p>
+                                                        <p class="timeRefDays">Дней</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="hours">00</p>
+                                                        <p class="timeRefHours">Часов</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="minutes">00</p>
+                                                        <p class="timeRefMinutes">Минут</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="seconds">00</p>
+                                                        <p class="timeRefSeconds">Секунд</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="btn-wrap">
+                                                <a href="{{ url_to(share) }}" class="btn btn_black_transparent">узнать больше</a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div><!--item end-->
+                            {% endfor %}
+                        </div>
+
+                        {% if shares.pageCount > 1 %}
+                            <div class="pager">
+                                <div class="pager__i">
+                                    {{ knp_pagination_render(shares) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--action-list end-->
+
+                {{ widget('products.recentlyReviewed')|raw }}
+
+            </div>
+        </div>
+    </section>
+{% endblock %}
