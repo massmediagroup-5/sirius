@@ -230,3 +230,9 @@ services:
         class:     AppAdminBundle\Form\Type\SonataStoresListType
         tags:
             - { name: form.type, alias: sonata_stores_list }
+
+    app_admin.admin.unisender:
+        class: AppAdminBundle\Admin\UnisenderAdmin
+        arguments: [~, AppBundle\Entity\Unisender, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: UniSender}
