@@ -20,7 +20,7 @@ class CategoriesAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
+//            ->add('id')
             ->add('name', null, ['label' => 'Название категории'])
             ->add('alias', null, ['label' => 'Ссылка'])
             ->add('priority', null, ['label' => 'Приоритет'])
