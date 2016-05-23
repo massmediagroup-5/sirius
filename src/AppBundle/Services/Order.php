@@ -5,6 +5,7 @@ namespace AppBundle\Services;
 use AppBundle\Entity\History;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
+use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
 use AppBundle\Exception\CartEmptyException;
 use Illuminate\Support\Arr;
@@ -292,6 +293,118 @@ class Order
         $this->container->get('mailer')->send($message);
 
         return $order;
+    }
+
+    /**
+     * @param Orders $order
+     */
+    public function sendStatusInfo(Orders $order)
+    {
+        $allowedFields = [
+            'payStatus',
+            'status'
+        ];
+        $orderChanges = $this->em->getUnitOfWork()->getEntityChangeSet($order);
+        foreach ($orderChanges as $fieldName => $orderChange) {
+            if ( in_array( $fieldName, $allowedFields ) ) {
+                $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy([ 'active' => '1' ]);
+                if($uniSender){
+                    switch ($fieldName)
+                    {
+                        case "status":
+                            $orderStatus =  $order->getStatus();
+                            break;
+                        case "payStatus":
+                            $orderStatus =  $order->getPayStatus();
+                            break;
+                    }
+                    if( ( $orderStatus->getSendClient() ) && ( !empty($orderStatus->getSendClientText() ) ) ){
+                        $client_sms_status = $this->sendSmsRequest(
+                            $uniSender,
+                            $order->getPhone(),
+                            $order->getId(),
+                            $orderStatus->getSendClientText()
+                        );
+                        if($client_sms_status['error'] == false){
+                            // если без ошибок то сохраняем идентификатор смс
+                            $order->setClientSmsId($client_sms_status['sms_id']);
+                        }else{
+                            // если ошибка то сохраняем текст ошибки
+                            $order->setClientSmsStatus($client_sms_status['error']);
+                        }
+                    }
+                    if( ( $orderStatus->getSendManager() ) && ( !empty( $orderStatus->getSendManagerText() ) ) ){
+                        $phones = explode( ',', $uniSender->getPhones() );
+                        foreach( $phones as $phone ){
+                            $this->sendSmsRequest(
+                                $uniSender,
+                                $phone,
+                                $order->getId() ? $order->getId() : date('G:i:s d-m-Y',time()),
+                                $orderStatus->getSendManagerText()
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->em->persist($order);
+    }
+
+    /**
+     * sendSmsRequest
+     *
+     * @param Unisender $uniSender
+     * @param mixed $phone
+     * @param string $dynamic_text
+     * @param string $sms_text
+     *
+     * return mixed
+     */
+    public function sendSmsRequest($uniSender, $phone, $dynamic_text, $sms_text = null)
+    {
+        if( $curl = curl_init() ) {
+            $sms_body = sprintf(
+                $sms_text,
+                $dynamic_text // %s
+            );
+            // массив передаваемых параметров
+            $parameters_array = array (
+                'api_key'   => $uniSender->getApiKey(),
+                'phone'     => preg_replace("/[^0-9]/", '', strip_tags($phone)),
+                'sender'    => $uniSender->getSenderName(),
+                'text'      => $sms_body
+            );
+
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters_array);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+            curl_setopt($curl, CURLOPT_URL, 'http://api.unisender.com/ru/api/sendSms?format=json');
+            $response = curl_exec($curl);
+
+            if ($response) {
+                // Раскодируем ответ API-сервера
+                $jsonObj = json_decode($response);
+                if(null===$jsonObj) {
+                    // Ошибка в полученном ответе
+                    $result['error'] = "Invalid JSON";
+                }
+                elseif(!empty($jsonObj->result->error)) {
+                    // Ошибка отправки сообщения
+                    $result['error'] = "An error occured: " . $jsonObj->result->error . "(code: " . $jsonObj->result->code . ")";
+                } else {
+                    // Сообщение успешно отправлено
+                    $result['sms_id'] = $jsonObj->result->sms_id;
+                    $result['error'] = false;
+                }
+            } else {
+                // Ошибка соединения с API-сервером
+                $result['error'] = "API access error";
+            }
+            curl_close($curl);
+            return $result;
+        }
     }
 
     /**

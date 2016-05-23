@@ -55,6 +55,7 @@ class EntityBeforeSaveSubscriber implements EventSubscriber
 
         foreach ($updatedAndToInsert as $entity) {
             if ($entity instanceof Orders) {
+                $this->container->get('order')->sendStatusInfo($entity);
                 $this->container->get('order')->appendHistory($entity);
             }
         }

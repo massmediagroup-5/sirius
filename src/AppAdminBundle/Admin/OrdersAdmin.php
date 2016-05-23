@@ -246,16 +246,16 @@ class OrdersAdmin extends Admin
                 'read_only' => true,
                 'disabled' => true,
             ])
-            ->add('managerSmsId', null, [
-                'label' => 'Идентификатор смс менеджера',
-                'read_only' => true,
-                'disabled' => true,
-            ])
-            ->add('managerSmsStatus', null, [
-                'label' => 'Статус смс менеджера',
-                'read_only' => true,
-                'disabled' => true,
-            ])
+//            ->add('managerSmsId', null, [
+//                'label' => 'Идентификатор смс менеджера',
+//                'read_only' => true,
+//                'disabled' => true,
+//            ])
+//            ->add('managerSmsStatus', null, [
+//                'label' => 'Статус смс менеджера',
+//                'read_only' => true,
+//                'disabled' => true,
+//            ])
             ->add('comment', null, [
                 'label' => 'Коментарий к заказу',
             ])
