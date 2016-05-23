@@ -62,9 +62,15 @@ class OrderStatusAdmin extends Admin
 //            ->add('baseFlag', null, array('label' => 'Базовый'))
             ->add('priority', null, array('label' => 'Приоритет'))
             ->add('sendClient', null, array('label' => 'Отправлять клиенту смс'))
-            ->add('sendClientText', null, array('label' => 'Текст смс клиенту'))
+            ->add('sendClientText', null, array(
+                'label' => 'Текст смс клиенту',
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение %s'
+            ))
             ->add('sendManager', null, array('label' => 'Отправлять менеджеру смс'))
-            ->add('sendManagerText', null, array('label' => 'Текст смс менеджеру'))
+            ->add('sendManagerText', null, array(
+                'label' => 'Текст смс менеджеру',
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s". Для нового заказа подставляется время заказа'
+            ))
             ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
         ;
     }
