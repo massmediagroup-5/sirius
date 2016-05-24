@@ -32,7 +32,10 @@ class ProductColorsAdmin extends Admin
         $listMapper
 //            ->add('id')
             ->add('name', null, array('label' => 'Название цвета'))
-            ->add('hex', null, array('label' => 'HEX код цвета'))
+            ->add('hex', null, array(
+                'label' => 'Цвет и HEX код',
+                'template' => 'AppAdminBundle:list:list.template.modelcolor.html.twig'
+            ))
             ->add('createTime')
             ->add('updateTime')
             ->add('_action', 'actions', array(
@@ -50,9 +53,15 @@ class ProductColorsAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $color = $this->getSubject();
+        $hexFieldOptions = ['label' => 'HEX код цвета'];
+
+        if ($color && ($hex = $color->getHex())) {
+            $hexFieldOptions['help'] = '<div style="width: 50px;height: 50px;background-color: '. $hex .'">&nbsp;</div>';
+        }
         $formMapper
             ->add('name', null, array('label' => 'Название цвета'))
-            ->add('hex', null, array('label' => 'HEX код цвета'))
+            ->add('hex', null, $hexFieldOptions)
         ;
     }
 
