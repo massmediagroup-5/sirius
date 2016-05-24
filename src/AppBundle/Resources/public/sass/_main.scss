@@ -421,7 +421,45 @@ input[type="checkbox"] {
 .icon-attention {
 	@include sized-sprite($icons, alert2);
 }
+//footer socials start
+.icon-behance {
+  @include sized-sprite($icons, behance);
+}
+.icon-vimeo {
+  @include sized-sprite($icons, vimeo);
+}
 
+.icon-yt {
+  @include sized-sprite($icons, yt);
+}
+.icon-telegram {
+  @include sized-sprite($icons, telegram);
+}
+.icon-dribble {
+  @include sized-sprite($icons, dribble);
+}
+.icon-pin {
+  @include sized-sprite($icons, pin);
+}
+.icon-tw {
+  @include sized-sprite($icons, tw);
+}
+.icon-insta{
+  @include sized-sprite($icons, insta);
+}
+.icon-ok {
+  @include sized-sprite($icons, ok);
+}
+.icon-tripadv {
+  @include sized-sprite($icons, tripadv);
+}
+.icon-linkedin{
+  @include sized-sprite($icons, linkedin);
+}
+.icon-tmblr {
+  @include sized-sprite($icons, tmblr);
+}
+//footer socials end
 .out {
 	min-width: 1140px;
   	transition: opacity, 750ms, ease;
