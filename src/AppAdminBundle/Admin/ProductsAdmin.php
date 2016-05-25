@@ -166,7 +166,7 @@ class ProductsAdmin extends Admin
      */
     public function postPersist($product)
     {
-        $this->postUpdate($product);
+//        $this->postUpdate($product);
     }
 
     /**
@@ -175,7 +175,7 @@ class ProductsAdmin extends Admin
      */
     public function postUpdate($product)
     {
-        $this->container->get('proc')->runUpdateRelationship();
+//        $this->container->get('proc')->runUpdateRelationship();
     }
 
     protected function configureRoutes(RouteCollection $collection)
