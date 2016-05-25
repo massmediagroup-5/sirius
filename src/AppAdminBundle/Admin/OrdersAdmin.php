@@ -104,6 +104,7 @@ class OrdersAdmin extends Admin
                 'label' => 'Тип заказа',
                 'route' => ['name' => 'edit'],
                 'choices' => [
+                    '' => 'ГЛЮК',
                     (string)Orders::TYPE_NORMAL => 'Обычный',
                     (string)Orders::TYPE_QUICK => 'Быстрый',
                 ]

@@ -68,7 +68,7 @@ history:
   status: Статус
   phone: Телефон
   email: Емейл
-  payStatus: Статус оплпты
+  payStatus: Статус оплаты
   cities: Город доставки
   stores: Склад доставки
   individualDiscount: Индивидуальная скидка
