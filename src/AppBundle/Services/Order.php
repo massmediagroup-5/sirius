@@ -326,10 +326,10 @@ class Order
                             $orderStatus->getSendClientText()
                         );
                         if($client_sms_status['error'] == false){
-                            // если без ошибок то сохраняем идентификатор смс
+                            // РµСЃР»Рё Р±РµР· РѕС€РёР±РѕРє С‚Рѕ СЃРѕС…СЂР°РЅСЏРµРј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРјСЃ
                             $order->setClientSmsId($client_sms_status['sms_id']);
                         }else{
-                            // если ошибка то сохраняем текст ошибки
+                            // РµСЃР»Рё РѕС€РёР±РєР° С‚Рѕ СЃРѕС…СЂР°РЅСЏРµРј С‚РµРєСЃС‚ РѕС€РёР±РєРё
                             $order->setClientSmsStatus($client_sms_status['error']);
                         }
                     }
@@ -368,7 +368,7 @@ class Order
                 $sms_text,
                 $dynamic_text // %s
             );
-            // массив передаваемых параметров
+            // РјР°СЃСЃРёРІ РїРµСЂРµРґР°РІР°РµРјС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ
             $parameters_array = array (
                 'api_key'   => $uniSender->getApiKey(),
                 'phone'     => preg_replace("/[^0-9]/", '', strip_tags($phone)),
@@ -384,22 +384,22 @@ class Order
             $response = curl_exec($curl);
 
             if ($response) {
-                // Раскодируем ответ API-сервера
+                // Р Р°СЃРєРѕРґРёСЂСѓРµРј РѕС‚РІРµС‚ API-СЃРµСЂРІРµСЂР°
                 $jsonObj = json_decode($response);
                 if(null===$jsonObj) {
-                    // Ошибка в полученном ответе
+                    // РћС€РёР±РєР° РІ РїРѕР»СѓС‡РµРЅРЅРѕРј РѕС‚РІРµС‚Рµ
                     $result['error'] = "Invalid JSON";
                 }
                 elseif(!empty($jsonObj->result->error)) {
-                    // Ошибка отправки сообщения
+                    // РћС€РёР±РєР° РѕС‚РїСЂР°РІРєРё СЃРѕРѕР±С‰РµРЅРёСЏ
                     $result['error'] = "An error occured: " . $jsonObj->result->error . "(code: " . $jsonObj->result->code . ")";
                 } else {
-                    // Сообщение успешно отправлено
+                    // РЎРѕРѕР±С‰РµРЅРёРµ СѓСЃРїРµС€РЅРѕ РѕС‚РїСЂР°РІР»РµРЅРѕ
                     $result['sms_id'] = $jsonObj->result->sms_id;
                     $result['error'] = false;
                 }
             } else {
-                // Ошибка соединения с API-сервером
+                // РћС€РёР±РєР° СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ API-СЃРµСЂРІРµСЂРѕРј
                 $result['error'] = "API access error";
             }
             curl_close($curl);
