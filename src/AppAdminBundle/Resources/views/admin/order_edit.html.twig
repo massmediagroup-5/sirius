@@ -105,6 +105,7 @@
                 {{ (object.preOrderFlag ? 'link_to_order' : 'link_to_pre_order')|trans({}, 'AppAdminBundle') }}
             </a>
         {% endif %}
+        <a class="btn btn-info" href="{{ admin.generateUrl('list') }}"><i class="fa fa-users"></i> Вернуться</a>
     </div>
 {% endblock formactions %}
 

@@ -1,3 +1,5 @@
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
+
 {% block form %}
     {{ sonata_block_render_event('sonata.admin.edit.form.top', { 'admin': admin, 'object': object }) }}
 
@@ -9,12 +11,12 @@
         </div>
     {% else %}
         <form
-              {% if admin_pool.getOption('form_type') == 'horizontal' %}class="form-horizontal"{% endif %}
-              role="form"
-              action="{{ admin.generateUrl(url, {'id': admin.id(object), 'uniqid': admin.uniqid, 'subclass': app.request.get('subclass')}) }}" {{ form_enctype(form) }}
-              method="POST"
-              {% if not admin_pool.getOption('html5_validate') %}novalidate="novalidate"{% endif %}
-              >
+                {% if admin_pool.getOption('form_type') == 'horizontal' %}class="form-horizontal"{% endif %}
+                role="form"
+                action="{{ admin.generateUrl(url, {'id': admin.id(object), 'uniqid': admin.uniqid, 'subclass': app.request.get('subclass')}) }}" {{ form_enctype(form) }}
+                method="POST"
+                {% if not admin_pool.getOption('html5_validate') %}novalidate="novalidate"{% endif %}
+                >
             {% if form.vars.errors|length > 0 %}
                 <div class="sonata-ba-form-error">
                     {{ form_errors(form) }}
@@ -22,44 +24,44 @@
             {% endif %}
 
             {% block sonata_pre_fieldsets %}
-                <div class="row">
-            {% endblock %}
+            <div class="row">
+                {% endblock %}
 
-            {% block sonata_tab_content %}
-                {% set has_tab = ((admin.formtabs|length == 1 and admin.formtabs|keys[0] != 'default') or admin.formtabs|length > 1 ) %}
+                {% block sonata_tab_content %}
+                    {% set has_tab = ((admin.formtabs|length == 1 and admin.formtabs|keys[0] != 'default') or admin.formtabs|length > 1 ) %}
 
-                <div class="col-md-12">
-                    {% if has_tab %}
-                        <div class="nav-tabs-custom">
-                            <ul class="nav nav-tabs" role="tablist">
-                                {% for name, form_tab in admin.formtabs %}
-                                    <li{% if loop.index == 1 %} class="active"{% endif %}><a href="#tab_{{ loop.index }}" data-toggle="tab"><span class="glyphicon glyphicon-exclamation-sign has-errors hide"></span> {{ admin.trans(name, {}, form_tab.translation_domain) }}</a></li>
-                                {% endfor %}
-                            </ul>
-                            <div class="tab-content">
-                                {% for code, form_tab in admin.formtabs %}
-                                    <div class="tab-pane fade{% if loop.first %} in active{% endif %}" id="tab_{{ loop.index }}">
-                                        <div class="box-body  container-fluid">
-                                            <div class="sonata-ba-collapsed-fields">
-                                                {% if form_tab.description != false %}
-                                                    <p>{{ form_tab.description|raw }}</p>
-                                                {% endif %}
+                    <div class="col-md-12">
+                        {% if has_tab %}
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {% for name, form_tab in admin.formtabs %}
+                                        <li{% if loop.index == 1 %} class="active"{% endif %}><a href="#tab_{{ loop.index }}" data-toggle="tab"><span class="glyphicon glyphicon-exclamation-sign has-errors hide"></span> {{ admin.trans(name, {}, form_tab.translation_domain) }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% for code, form_tab in admin.formtabs %}
+                                        <div class="tab-pane fade{% if loop.first %} in active{% endif %}" id="tab_{{ loop.index }}">
+                                            <div class="box-body  container-fluid">
+                                                <div class="sonata-ba-collapsed-fields">
+                                                    {% if form_tab.description != false %}
+                                                        <p>{{ form_tab.description|raw }}</p>
+                                                    {% endif %}
 
-                                                {{ form_helper.render_groups(admin, form, form_tab['groups'], has_tab) }}
+                                                    {{ form_helper.render_groups(admin, form, form_tab['groups'], has_tab) }}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                    {% else %}
-                        {{ form_helper.render_groups(admin, form, admin.formtabs['default'].groups, has_tab) }}
-                    {% endif %}
-                </div>
-            {% endblock %}
+                        {% else %}
+                            {{ form_helper.render_groups(admin, form, admin.formtabs['default'].groups, has_tab) }}
+                        {% endif %}
+                    </div>
+                {% endblock %}
 
-            {% block sonata_post_fieldsets %}
-                </div>
+                {% block sonata_post_fieldsets %}
+            </div>
             {% endblock %}
 
             {{ form_rest(form) }}

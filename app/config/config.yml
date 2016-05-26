@@ -221,8 +221,8 @@ sonata_admin:
     title:      Admin
     title_logo: bundles/app/img/logo.png
     templates:
-        layout:  AppAdminBundle:sonata_base_layout.html.twig
-        #filter:           AppBundle:admin:filter_admin_fields.html.twig
+        layout: AppAdminBundle:sonata_base_layout.html.twig
+        edit:   AppAdminBundle:edit.html.twig
     dashboard:
         blocks:
             - { position: left, type: sonata.admin.block.admin_list }
