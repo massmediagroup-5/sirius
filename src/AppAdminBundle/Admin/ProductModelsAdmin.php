@@ -58,6 +58,13 @@ class ProductModelsAdmin extends Admin
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('published', null, ['editable' => true, 'label' => 'Опубликованно'])
+            ->add('sizes', 'string',
+                [
+                    'label' => 'Доступные размеры',
+                    'template' => 'AppAdminBundle:list:list.template.modelsizes.html.twig',
+                    'admin_code' => 'app.admin.product_model_specific_size'
+                ]
+            )
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [

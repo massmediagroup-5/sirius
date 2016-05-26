@@ -378,9 +378,9 @@ liip_imagine:
                     # mode can be one of: 'none', 'line', 'plane' and 'partition'
                     mode: plane
         main_slider:
-            quality: 80
+            quality: 100
             filters:
-                thumbnail: { size: [843, 438], mode: inset}
+                thumbnail: { size: [1920, 770 ], mode: inset}
                 interlace:
                     # mode can be one of: 'none', 'line', 'plane' and 'partition'
                     mode: plane

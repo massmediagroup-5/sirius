@@ -28,6 +28,10 @@
     '../fonts/MuseoSansBold.ttf')
 );
 
+img {
+    max-width: 100% !important;
+}
+
 label.error {
     color: red;
     line-height: 25px;

@@ -6,6 +6,12 @@ use Symfony\Component\Config\ConfigCache;
 
 class AppKernel extends Kernel
 {
+    public function __construct($environment, $debug)
+    {
+        date_default_timezone_set( 'Europe/Kiev' );
+        parent::__construct($environment, $debug);
+    }
+
     public function registerBundles()
     {
         $bundles = array(
