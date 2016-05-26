@@ -7,13 +7,10 @@
         <div class="darkness"></div>
         <div class="wrap">
             <div class="content__i">
-
                 {{ widget('breadcrumbs.render')|raw }}
-
                 <h2 class="catalog-title">
                     {{ data.category.name }} <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
                 </h2>
-
                 <div class="catalog">
                     <div class="catalog__i">
 
@@ -23,10 +20,8 @@
                                     <div class="filtered">
                                         <div class="filtered__i">
                                             <h2>ВЫ ИЩЕТЕ <a href="{{ url('category', {'category': data.category.alias}) }}" class="clear">Очистить все</a></h2>
-
                                             <div class="filtered-list">
                                                 <div class="filtered-list__i">
-
                                                     <ul>
                                                         {% for filter_item in data.characteristics %}
                                                             {% if app.request.get(filter_item.id) %}
@@ -63,11 +58,8 @@
                                                             </li>
                                                         {% endfor %}
                                                     </ul>
-
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 {% endif %}
@@ -76,7 +68,6 @@
                                     <div class="filters__i">
                                         <div class="price-slider">
                                             <p>Цена (грн)</p>
-
                                             <div class="price-slider__i">
                                                 <div class="values clearfix">
                                                     <span class="from">От</span>
@@ -89,8 +80,6 @@
                                                            data-max="{{ data.price_filter.max_price|round }}"/>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                         <div class="list">
 
@@ -152,7 +141,6 @@
                                                 {#<label><input type="checkbox"/>РАСПРОДАЖА</label>#}
                                             {#</div>#}
                                         </div>
-
                                         <button class="submit-btn btn btn_blue">Найти</button>
                                     </div>
                                 </form>
@@ -162,7 +150,6 @@
 
 
                         <div class="main">
-
                             {% if is_granted('ROLE_WHOLESALER') %}
                                 {{ include('AppBundle:shop/products_list_wholesale.html.twig', { 'items': data }) }}
                             {% else %}
@@ -174,10 +161,8 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
                 {{ widget('products.recentlyReviewed')|raw }}
             </div>
         </div>
