@@ -138,7 +138,7 @@
                                                                     <li>
                                                                         <label class="color-check">
                                                                             <input type="checkbox" name="colors" value="{{ color.id }}" class="checkbox" {% if filters.isSelectedColor(color) %} checked {% endif %}/>
-                                                                                <span style="background-color: {{ color.hex }}"></span>
+                                                                                <span style="background-color: {{ color.hex }};border: 1px solid #656565;"></span>
                                                                         </label>
                                                                     </li>
                                                                 {% endfor %}
