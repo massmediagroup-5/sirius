@@ -236,3 +236,15 @@ services:
         arguments: [~, AppBundle\Entity\Unisender, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: UniSender}
+
+    app_admin.admin.users_wholesalers:
+        class: AppAdminBundle\Admin\UsersWholesalersAdmin
+        arguments: [~, AppBundle\Entity\Users, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Пользователи", label: "Оптовики"}
+
+    app_admin.admin.users_managers:
+        class: AppAdminBundle\Admin\UsersManagersAdmin
+        arguments: [~, AppBundle\Entity\Users, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Пользователи", label: "Менеджеры"}

@@ -15,6 +15,21 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class UsersAdmin extends BaseUserAdmin
 {
+
+    protected $userRole = 'a:0:{}';
+//    protected $userRole = '';
+
+    /**
+     * @param string $context
+     * @return \Sonata\AdminBundle\Datagrid\ProxyQueryInterface
+     */
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+        $query->andWhere('o.roles LIKE :role')->setParameter('role', '%'.$this->userRole.'%');
+        return $query;
+    }
+
     /**
      * {@inheritdoc}
      */

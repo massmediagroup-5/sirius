@@ -1,0 +1,37 @@
+{% extends 'AppBundle:base.html.twig' %}
+
+{% block title %}404{% endblock %}
+
+{% block out_class %}out_404{% endblock %}
+
+{% block body %}
+    <div class="not-found">
+        <div class="wrap">
+            <div class="not-found__i">
+                <img src="{{ asset('bundles/app/img/astro.png') }}" alt=""/>
+
+                <div class="bubble-1">
+                    <p>Хьюстон,</p>
+                    <p>у нас</p>
+                    <p>проблема!</p>
+                </div>
+                <div class="bubble-2">
+                    <p>Страница не найдена</p>
+                </div>
+                <div class="bubble-3">
+                    <ul>
+                        <li>Скорее всего, неправильно набран адрес или товара уже нет</li>
+                        <li>Используйте главное горизонтальное меню</li>
+                        <li>Воспользуйтесь поиском</li>
+                    </ul>
+                    <div class="row">
+                        <form action="{{ path('search') }}">
+                            <input type="text" name="search" placeholder="Что-нибудь ищите?"/>
+                            <button type="submit"><i></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
