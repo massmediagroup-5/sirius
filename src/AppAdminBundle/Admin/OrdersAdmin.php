@@ -118,6 +118,13 @@ class OrdersAdmin extends Admin
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
                 ]
             ])
+//            ->add('users.roles', null, ['label' => 'Тип пользователя'])
+            ->add('users.roles', null,
+                [
+                    'label' => 'Тип пользователя',
+                    'template' => 'AppAdminBundle:list:list.template.roles.html.twig'
+                ]
+            )
             ->add('carriers.name', null, ['label' => 'Способ доставки'])
             ->add('cities.name', null, ['label' => 'Город'])
             ->add('stores.name', null, ['label' => 'Адрес склада'])

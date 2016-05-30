@@ -1,6 +1,13 @@
+ROLE USER: Пользователь
+ROLE_USER: Пользователь
 ROLE ADMIN: Администратор
+ROLE_ADMIN: Администратор
 ROLE WHOLESALER: Оптовый покупатель
-ROLE SUPER ADMIN: Суперадминистратор
+ROLE_WHOLESALER: Оптовый покупатель
+ROLE_SUPER_ADMIN: Суперадминистратор
+ROLE_SUPER_ADMIN: Суперадминистратор
+ROLE_SONATA_ADMIN: Суперадминистратор
+ROLE SONATA ADMIN: Суперадминистратор
 orders: Заказы
 main slider: Главный слайдер
 slider: Слайдер

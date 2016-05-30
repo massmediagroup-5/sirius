@@ -63,7 +63,7 @@ ewz_recaptcha:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-    exception_controller:  AppBundle:Exception:index
+#    exception_controller:  AppBundle:Exception:index
     globals:
         options: @options
         cart: @cart
