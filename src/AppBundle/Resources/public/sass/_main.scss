@@ -2133,6 +2133,7 @@ input[type="checkbox"] {
 	.wrap {
 		@extend .clearfix;
 	}
+
 	table {
 		width: 100%;
 	}
@@ -2141,23 +2142,20 @@ input[type="checkbox"] {
 		  	@extend .clearfix;
 			li {
 				float: left;
-				padding-left: 30px;
+				padding-left: 40px;
 				position: relative;
 				color: #fff;
 				font-size: 22px;
 				line-height: 24px;
 				font-weight: 400;
 				list-style: none;
+				margin-bottom: 5px;
 				@include respond-to(tablet) {
 					font-size: 15px;
-				}
-				&:first-child {
-					padding-left: 35px;
 				}
 
 				&.email {
 					//margin-left: 30px;
-					//padding-left: 35px;
 				}
 
 				a {

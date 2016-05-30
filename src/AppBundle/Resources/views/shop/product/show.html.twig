@@ -199,34 +199,34 @@
                     </div>
                 </div>
 
-                {% if current_model.products.content is not empty and current_model.products.characteristics
-                    is not empty and current_model.products.features is not empty %}
-                    <div class="product-description">
-                        <div class="product-description__i">
-                            <h1>{{ current_model.products.name }}</h1>
-                            <div class="row">
-                                {% if current_model.products.content is not empty %}
-                                <div class="col-md-4 col-lg-4">
-                                    <h2>О модели</h2>
-                                    {{ current_model.products.content|raw }}
-                                </div>
-                                {% endif %}
-                                {% if current_model.products.characteristics is not empty %}
-                                <div class="col-md-4 col-lg-4">
-                                    <h2>Характеристики</h2>
-                                    {{ current_model.products.characteristics|raw }}
-                                </div>
-                                {% endif %}
-                                {% if current_model.products.features is not empty %}
-                                <div class="col-md-4 col-lg-4">
-                                    <h2>Особенности</h2>
-                                    {{ current_model.products.features|raw }}
-                                </div>
-                                {% endif %}
+                {#{% if current_model.products.content is not empty and current_model.products.characteristics#}
+                    {#is not empty and current_model.products.features is not empty %}#}
+                <div class="product-description">
+                    <div class="product-description__i">
+                        <h1>{{ current_model.products.name }}</h1>
+                        <div class="row">
+                            {% if current_model.products.content is not empty %}
+                            <div class="col-md-4 col-lg-4">
+                                <h2>О модели</h2>
+                                {{ current_model.products.content|raw }}
                             </div>
+                            {% endif %}
+                            {% if current_model.products.characteristics is not empty %}
+                            <div class="col-md-4 col-lg-4">
+                                <h2>Характеристики</h2>
+                                {{ current_model.products.characteristics|raw }}
+                            </div>
+                            {% endif %}
+                            {% if current_model.products.features is not empty %}
+                            <div class="col-md-4 col-lg-4">
+                                <h2>Особенности</h2>
+                                {{ current_model.products.features|raw }}
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                {% endif %}
+                </div>
+                {#{% endif %}#}
 
                 {{ widget('products.recommended')|raw }}
                 {{ widget('products.recentlyReviewed')|raw }}
