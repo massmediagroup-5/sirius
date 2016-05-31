@@ -262,7 +262,7 @@ class Cart
     public function getPreOrderItems()
     {
         return array_filter($this->items, function (CartItem $item) {
-            return $item->getProductModel()->hasPreOrderSize();
+            return $item->hasPreOrderSize();
         });
     }
 
@@ -285,7 +285,7 @@ class Cart
     public function getStandardItems()
     {
         return array_filter($this->items, function (CartItem $item) {
-            return !$item->getProductModel()->hasPreOrderSize();
+            return !$item->hasPreOrderSize();
         });
     }
 
