@@ -333,4 +333,25 @@ class CartItem
         }, $sizes));
     }
 
+    /**
+     * @return integer
+     */
+    public function hasPreOrderSize()
+    {
+
+        return (bool)array_filter($this->sizes, function (CartSize $size) {
+            return $size->getSize()->getPreOrderFlag();
+        });
+    }
+
+    /**
+     * @return integer
+     */
+    public function isAllSizesPreOrder()
+    {
+        return !(bool)array_filter($this->sizes, function (CartSize $size) {
+            return !$size->getSize()->getPreOrderFlag();
+        });
+    }
+
 }
