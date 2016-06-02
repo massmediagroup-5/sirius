@@ -10,6 +10,14 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class CallBackAdmin extends Admin
 {
+    protected $datagridValues = [
+        '_page' => 1,            // display the first page (default = 1)
+        '_sort_order' => 'DESC', // reverse order (default = 'ASC')
+        '_sort_by' => 'createTime'  // name of the ordered field
+
+        // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
+    ];
+
     /**
      * @param DatagridMapper $datagridMapper
      */
