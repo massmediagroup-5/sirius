@@ -110,7 +110,6 @@ class ProductModels
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->images = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recommended = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->shareGroup = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
