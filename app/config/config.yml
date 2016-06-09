@@ -239,6 +239,15 @@ sonata_translation:
     #phpcr:
     #    enabled: true
 
+sonata_intl:
+    timezone:
+        # default timezone used as fallback
+        default: Europe/Kiev
+
+        # locale specific overrides
+        locales:
+            fr: Europe/Kiev
+
 sonata_doctrine_orm_admin:
     templates:
         form: [ AppAdminBundle:admin:orm_form_admin_fields.html.twig ]
