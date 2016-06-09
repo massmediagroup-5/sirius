@@ -70,21 +70,21 @@ class SearchController extends Controller
         $boolQuery = new \Elastica\Query\BoolQuery();
 
         $productQuery = new \Elastica\Query\Match();
-        $productQuery->setFieldQuery('products.name', $slug);
-        $productQuery->setFieldParam('products.name', 'boost', 3);
-        $productQuery->setFieldParam('products.name', 'type', 'phrase_prefix');
+        $productQuery->setFieldQuery('name', $slug);
+        $productQuery->setFieldParam('name', 'boost', 3);
+        $productQuery->setFieldParam('name', 'type', 'phrase_prefix');
         $boolQuery->addShould($productQuery);
 
         $articleQuery = new \Elastica\Query\Match();
-        $articleQuery->setFieldQuery('products.article', $slug);
-        $articleQuery->setFieldParam('products.article', 'boost', 3);
-        $articleQuery->setFieldParam('products.article', 'type', 'phrase_prefix');
+        $articleQuery->setFieldQuery('article', $slug);
+        $articleQuery->setFieldParam('article', 'boost', 3);
+        $articleQuery->setFieldParam('article', 'type', 'phrase_prefix');
         $boolQuery->addShould($articleQuery);
 
         $baseCategoryQuery = new \Elastica\Query\Match();
-        $baseCategoryQuery->setFieldQuery('products.baseCategory.name', $slug);
-        $baseCategoryQuery->setFieldParam('products.baseCategory.name', 'boost', 3);
-        $baseCategoryQuery->setFieldParam('products.baseCategory.name', 'type', 'phrase_prefix');
+        $baseCategoryQuery->setFieldQuery('baseCategory.name', $slug);
+        $baseCategoryQuery->setFieldParam('baseCategory.name', 'boost', 3);
+        $baseCategoryQuery->setFieldParam('baseCategory.name', 'type', 'phrase_prefix');
         $boolQuery->addShould($baseCategoryQuery);
 
         $boolFilter = new \Elastica\Filter\Bool();
