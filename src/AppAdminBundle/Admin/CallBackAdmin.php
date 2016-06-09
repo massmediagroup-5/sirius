@@ -17,7 +17,16 @@ class CallBackAdmin extends Admin
     {
         $datagridMapper
             ->add('phone', null, array('label' => 'Номер телефона'))
-            ->add('status', null, array('label' => 'Статус'))
+            ->add('status', 'doctrine_orm_choice', array('label' => 'Статус'),
+                'choice',
+                array(
+                    'choices' => array(
+                        '0' => 'Ожидает',
+                        '1' => 'Принят',
+                        '2' => 'Отклонен'
+                    )
+                )
+            )
         ;
     }
 
@@ -28,7 +37,14 @@ class CallBackAdmin extends Admin
     {
         $listMapper
             ->add('phone', null, array('label' => 'Номер телефона'))
-            ->add('status', null, array('label' => 'Статус'))
+            ->add('status', 'choice', array(
+                'label' => 'Статус',
+                'choices' => array(
+                    '0' => 'Ожидает',
+                    '1' => 'Принят',
+                    '2' => 'Отклонен'
+                )
+            ))
             ->add('createTime', null, array('label' => 'Время получения'))
             ->add('updateTime', null, array('label' => 'Время последнего обновления'))
             ->add('_action', 'actions', array(

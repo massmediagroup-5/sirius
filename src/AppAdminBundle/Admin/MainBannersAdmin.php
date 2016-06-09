@@ -73,7 +73,7 @@ class MainBannersAdmin extends Admin
             ->add('titleButton',null,array('label'=>'Название1'))
             ->add('alias',null,array('label'=>'Ссылка'))
             ->add('file', 'file',$fileFieldOptions)
-            ->add('priority',null,array('label'=>'Приоритет'))
+            ->add('priority',null,array('label'=>'Приоритет','attr'=>['style'=>'width:120px;']))
             ->add('wide',null,array('label'=>'Широкий(да/нет)'))
             ->add('active',null,array('label'=>'Активность(вкл/выкл)'))
         ;

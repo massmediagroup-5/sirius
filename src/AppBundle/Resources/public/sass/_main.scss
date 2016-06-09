@@ -778,7 +778,7 @@ input[type="checkbox"] {
 				@media (min-width: 1041px) {
 					&:nth-child(4) {
 						.sub-nav {
-							text-align: center;
+							//text-align: center;
 							li {
 								display: inline-block;
 							}
@@ -786,7 +786,7 @@ input[type="checkbox"] {
 					}
 					&:nth-child(5) {
 						.sub-nav {
-							text-align: right;
+							//text-align: right;
 							li {
 								display: inline-block;
 							}
@@ -794,7 +794,7 @@ input[type="checkbox"] {
 					}
 					&:nth-child(6) {
 						.sub-nav {
-							text-align: right;
+							//text-align: right;
 							li {
 								display: inline-block;
 							}
@@ -803,7 +803,7 @@ input[type="checkbox"] {
 					&:nth-child(7) {
 						.sub-nav {
 
-								text-align: right;
+								//text-align: right;
 
 								li {
 									display: inline-block;
@@ -1582,7 +1582,7 @@ input[type="checkbox"] {
 	position: absolute;
 	right: -20px;
 	top: 100%;
-	margin-top: 41px;
+	margin-top: 43px;
 
 	&:hover {
 		@include box-shadow(0 1px 13px 0 rgba(0, 0, 0, 0.75));
@@ -1613,6 +1613,7 @@ input[type="checkbox"] {
 	z-index: 2;
 	background: #fff;
 	position: relative;
+  	border-top: 0;
 
 	.col {
 		float: left;
