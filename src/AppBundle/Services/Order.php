@@ -66,7 +66,7 @@ class Order
         if ($preOrderSizes = $cart->getPreOrderSizes()) {
             $preOrder = $this->createOrder($preOrderSizes, $data, $user, $quickFlag);
 
-            $order->setPreOrderFlag(true);
+            $preOrder->setPreOrderFlag(true);
 
             if ($order) {
                 $order->setRelatedOrder($preOrder);
