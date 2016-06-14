@@ -121,7 +121,8 @@ class ShareAdmin extends Admin
             ->add('image', 'file', [
                 'label' => 'Картинка',
                 'data_class' => null,
-                'help' => $image ? "<img src='{$image}' class='admin-preview' />" : false
+                'help' => $image ? "<img src='{$image}' class='admin-preview' />" : false,
+                'required' => false
             ])
             ->add('status', null, ['label' => 'Статус', 'required' => false])
             ->add('className', 'choice', [
