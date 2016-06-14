@@ -106,11 +106,6 @@
                                     </div>
 
                                     <div class="item">
-                                        <p>Доставка</p>
-                                        <p><strong>{{ order.carriers.name }}</strong></p>
-                                    </div>
-
-                                    <div class="item">
                                         <p>Имя и фамилия</p>
                                         <p><strong>{{ order.fio }}</strong></p>
                                     </div>
@@ -128,6 +123,17 @@
                                     <div class="item">
                                         <p>E-mail:</p>
                                         <p><strong>{{ order.email }}</strong></p>
+                                    </div>
+
+                                    <div class="item">
+                                        <p>История:</p>
+                                        <div class="item-history">
+                                            <ul>
+                                                {% for historyItem in order.history %}
+                                                    <li>{{ historyItem.createTime.format('Y-m-d H:i') }} &nbsp; {{ historyItem.text }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

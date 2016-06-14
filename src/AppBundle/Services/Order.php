@@ -499,6 +499,9 @@ class Order
             $order->setPay(Arr::get($data, 'pay'));
             $order->setFio(Arr::get($data, 'name') . ' ' . Arr::get($data, 'surname'));
             $order->setType(Orders::TYPE_NORMAL);
+        } else {
+            // todo temporary, 1 - Nova poshta
+            $order->setCarriers($this->em->getRepository('AppBundle:Carriers')->findOneById(1));
         }
 
         $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
