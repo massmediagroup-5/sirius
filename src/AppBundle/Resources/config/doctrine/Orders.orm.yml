@@ -85,7 +85,7 @@ AppBundle\Entity\Orders:
         individualDiscount:
             type: decimal
             nullable: false
-            precision: 5
+            precision: 10
             scale: 2
             options:
                 default: 0.00
