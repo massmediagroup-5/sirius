@@ -8490,6 +8490,23 @@ input[type="checkbox"] {
 				line-height: 16px;
 			}
 		}
+		.item-history {
+			max-height: 200px;
+			overflow-y: scroll;
+			li {
+				font-weight: 400;
+				font-size: 14px;
+				color: #050505;
+				line-height: 16px;
+				margin-bottom: 10px;
+				list-style-type: none;
+				&:before {
+					display: inline-block;
+					content: '⚫';
+					padding-right: 5px;
+				}
+			}
+		}
 	}
 }
 
