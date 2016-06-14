@@ -176,6 +176,7 @@ class Order
             ], 'AppAdminBundle'));
 
             $this->em->persist($relatedOrder);
+
             $this->em->remove($order);
 
             $this->em->flush();

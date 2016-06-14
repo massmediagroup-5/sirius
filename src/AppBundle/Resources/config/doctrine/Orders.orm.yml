@@ -139,18 +139,16 @@ AppBundle\Entity\Orders:
     oneToMany:
         sizes:
             targetEntity: OrderProductSize
-            cascade: [ persist ]
+            cascade: [ all ]
             fetch: LAZY
             mappedBy: order
             inversedBy: null
-            orphanRemoval: true
         history:
             targetEntity: History
             cascade: [ all ]
             fetch: LAZY
             mappedBy: order
             inversedBy: null
-            orphanRemoval: true
             orderBy: {createTime: DESC}
     manyToOne:
         relatedOrder:
