@@ -40,7 +40,7 @@ class Share
     /**
      * @var boolean
      */
-    private $status = 0;
+    private $status = false;
 
     /**
      * @var \DateTime
