@@ -98,14 +98,15 @@ class Products
     }
 
     /**
-     * Render recently reviewed
+     * render model recommended
      *
+     * @param ProductModels $productModels
      * @return mixed
      */
-    public function recommended()
+    public function recommended(ProductModels $productModels)
     {
         return $this->templating->render('AppBundle:widgets/product/recommended.html.twig', [
-                // todo select render recently reviewed from database
+                'recommended' => $productModels->getRecommended()
             ]
         );
     }
