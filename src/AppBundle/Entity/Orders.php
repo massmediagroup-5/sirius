@@ -30,9 +30,9 @@ class Orders
     private $id;
 
     /**
-     * @var string
+     * @var int
      */
-    private $type;
+    private $type = 0;
 
     /**
      * @var string
