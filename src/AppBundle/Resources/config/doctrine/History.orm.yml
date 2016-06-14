@@ -17,7 +17,7 @@ AppBundle\Entity\History:
     manyToOne:
         order:
             targetEntity: Orders
-            cascade: [ all ]
+            cascade: { }
             fetch: LAZY
             mappedBy: null
             inversedBy: history
