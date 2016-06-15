@@ -25,6 +25,21 @@ AppBundle\Entity\Cities:
             length: 255
             options:
                 fixed: false
+        ref:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        fullJson:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+        active:
+            type: boolean
+            nullable: true
     manyToOne:
         carriers:
             targetEntity: Carriers

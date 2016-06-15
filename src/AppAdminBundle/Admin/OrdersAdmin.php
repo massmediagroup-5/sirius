@@ -12,6 +12,14 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
+use NovaPoshta\Config;
+use NovaPoshta\ApiModels\Address;
+use NovaPoshta\MethodParameters\Address_getStreet;
+use NovaPoshta\MethodParameters\Address_getWarehouses;
+use NovaPoshta\MethodParameters\Address_getCities;
+use NovaPoshta\MethodParameters\Address_getAreas;
+use NovaPoshta\ApiModels\InternetDocument;
+
 /**
  * Class OrdersAdmin
  * @package AppAdminBundle\Admin
@@ -75,6 +83,18 @@ class OrdersAdmin extends Admin
             ->add('change_pre_order_flag', $this->getRouterIdParameter() . '/change_pre_order_flag', [], [], [
                 'expose' => true
             ]);
+        if($this->statusName == 'waiting_for_departure')
+        {
+            $collection->add('ajax_create_waybill', $this->getRouterIdParameter() . '/ajax_create_waybill', [], [], [
+                'expose' => true
+            ])
+            ->add('ajax_print_waybill', $this->getRouterIdParameter() . '/ajax_print_waybill', [], [], [
+                'expose' => true
+            ])
+            ->add('ajax_delete_waybill', $this->getRouterIdParameter() . '/ajax_delete_waybill', [], [], [
+                'expose' => true
+            ]);
+        }
     }
 
     /**
@@ -142,6 +162,10 @@ class OrdersAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $api = $this->modelManager->getEntityManager('AppBundle:Novaposhta')->getRepository('AppBundle:Novaposhta')->findOneBy(['active'=>1]);
+        Config::setApiKey($api->getApiKey());
+        Config::setFormat(Config::FORMAT_JSONRPC2);
+        Config::setLanguage(Config::LANGUAGE_RU);
         if ($user = $this->subject->getUsers()) {
             $otherSizes = $this->modelManager->getEntityManager('AppBundle:OrderProductSize')
                 ->getRepository('AppBundle:OrderProductSize')
@@ -157,6 +181,34 @@ class OrdersAdmin extends Admin
             $otherSizes = [];
         }
 
+//        $data = new \NovaPoshta\MethodParameters\InternetDocument_documentsTracking();
+//        $data->setDocuments([$this->subject->getTtn()]);
+//        dump($result->data[0]);exit;
+//        dump(InternetDocument::getDocument($data));exit;
+        if($this->statusName == 'waiting_for_departure')
+        {
+            if($this->subject->getTtn()){
+                $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocument();
+                $data->setRef($this->subject->getTtn());
+                $ttn = InternetDocument::getDocument($data)->data[0];
+
+                $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocumentDeliveryDate();
+                $data->setDateTime($ttn->DateTime);
+                $data->setCitySender($ttn->CitySenderRef);
+                $data->setCityRecipient($ttn->CityRecipientRef);
+                $data->setServiceType($ttn->ServiceTypeRef);
+                $date = InternetDocument::getDocumentDeliveryDate($data)->data[0]->DeliveryDate;
+            }else {
+                $ttn = '';
+                $date = '';
+            }
+            $formMapper->tab('ТТН', [
+                'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
+                'object' => $this->getSubject(),
+                'ttn' => $ttn,
+                'date' => $date
+            ])->end();
+        }
         $formMapper
             ->tab('Заказ')
             ->with('Заказ',

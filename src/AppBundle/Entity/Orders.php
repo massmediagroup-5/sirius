@@ -57,6 +57,11 @@ class Orders
     /**
      * @var string
      */
+    private $ttn;
+
+    /**
+     * @var string
+     */
     private $phone;
 
     /**
@@ -305,6 +310,30 @@ class Orders
     public function getFio()
     {
         return $this->fio;
+    }
+
+    /**
+     * Set ttn
+     *
+     * @param string $ttn
+     *
+     * @return Orders
+     */
+    public function setTtn($ttn)
+    {
+        $this->ttn = $ttn;
+
+        return $this;
+    }
+
+    /**
+     * Get ttn
+     *
+     * @return string
+     */
+    public function getTtn()
+    {
+        return $this->ttn;
     }
 
     /**
