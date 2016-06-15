@@ -708,7 +708,7 @@ class Orders
     /**
      * Add size
      *
-     * @param \AppBundle\Entity\OrderProductSize $size
+         * @param \AppBundle\Entity\OrderProductSize $size
      *
      * @return Orders
      */
