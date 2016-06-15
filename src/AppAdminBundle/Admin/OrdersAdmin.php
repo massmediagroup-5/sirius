@@ -221,16 +221,7 @@ class OrdersAdmin extends Admin
                     'property' => 'name',
                     'label' => 'Сатус заказа',
                     'empty_value' => 'Выберите статус заказа',
-                    'query_builder' => function (EntityRepository $er) {
-                        $status = $this->getSubject()->getStatus();
-                        return $er->createQueryBuilder('s')
-                            ->addOrderBy('FIELD(s.code, \'canceled\')', 'DESC')
-                            ->addOrderBy('s.priority', 'ASC')
-                            ->where('s.priority >= :priority')
-                            ->orWhere('s.code = :code')
-                            ->setParameter('code', 'canceled')
-                            ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(3);
-                    }
+                    'query_builder' => $this->getStatusQuery()
                 ]
             )
             ->add('payStatus', 'entity',
@@ -474,5 +465,22 @@ class OrdersAdmin extends Admin
         }
 
         return $object;
+    }
+
+    /**
+     * @return \Closure
+     */
+    protected function getStatusQuery()
+    {
+        return function (EntityRepository $er) {
+            $status = $this->getSubject()->getStatus();
+            return $er->createQueryBuilder('s')
+                ->addOrderBy('FIELD(s.code, \'canceled\')', 'DESC')
+                ->addOrderBy('s.priority', 'ASC')
+                ->where('s.priority >= :priority')
+                ->orWhere('s.code = :code')
+                ->setParameter('code', 'canceled')
+                ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(3);
+        };
     }
 }

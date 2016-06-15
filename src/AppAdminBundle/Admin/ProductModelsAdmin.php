@@ -134,11 +134,12 @@ class ProductModelsAdmin extends Admin
             ->tab('Рекомендуем')
                 ->with('Рекомендуем', ['class' => 'col-md-12'])
                     ->add('recommended', 'sonata_type_model',
-                        array(
+                        [
                             'by_reference' => true,
-                            'multiple'=>true,
-                            'required' => false
-                        )
+                            'multiple' => true,
+                            'required' => false,
+                            'btn_add' => false
+                        ]
                     )
                 ->end()
             ->end();

@@ -30,9 +30,9 @@ class Orders
     private $id;
 
     /**
-     * @var string
+     * @var int
      */
-    private $type;
+    private $type = 0;
 
     /**
      * @var string
@@ -737,7 +737,7 @@ class Orders
     /**
      * Add size
      *
-     * @param \AppBundle\Entity\OrderProductSize $size
+         * @param \AppBundle\Entity\OrderProductSize $size
      *
      * @return Orders
      */

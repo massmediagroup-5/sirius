@@ -122,5 +122,6 @@ INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priori
 INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (6,'Отправлено','sent',NULL,1,6,0,0,NULL,NULL,NULL);
 INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (8,'Исполнено','done','',1,7,0,0,NULL,NULL,NULL);
 INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (7,'Отменено','canceled',NULL,1,8,0,0,NULL,NULL,NULL);
+INSERT INTO `order_status` (`id`,`name`,`code`,`description`,`base_flag`,`priority`,`send_client`,`send_manager`,`active`,`send_client_text`,`send_manager_text`) VALUES (9,'Возврат','return',NULL,1,9,0,0,NULL,NULL,NULL);
 
 -- --------------------------------------------------------

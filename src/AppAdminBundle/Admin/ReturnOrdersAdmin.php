@@ -15,13 +15,13 @@ use Sonata\AdminBundle\Route\RouteCollection;
  * Class NewOrdersAdmin
  * @package AppAdminBundle\Admin
  */
-class FormedOrdersAdmin extends OrdersAdmin
+class ReturnOrdersAdmin extends OrdersAdmin
 {
-    protected $baseRouteName = 'formed_orders';
+    protected $baseRouteName = 'return_orders';
 
-    protected $baseRoutePattern = '/app/formed-orders';
+    protected $baseRoutePattern = '/app/return-orders';
 
-    protected $statusName = 'formed';
+    protected $statusName = 'return';
 
     /**
      * @inheritdoc
@@ -31,7 +31,7 @@ class FormedOrdersAdmin extends OrdersAdmin
         return function (EntityRepository $er) {
             return $er->createQueryBuilder('s')
                 ->where('s.code IN (:codes)')
-                ->setParameter('codes', ['waiting_for_departure', 'formed', 'canceled']);
+                ->setParameter('codes', ['waiting_for_departure', 'formed', 'sent', 'canceled', 'return']);
         };
     }
 }

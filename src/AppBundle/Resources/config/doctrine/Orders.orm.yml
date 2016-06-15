@@ -91,7 +91,7 @@ AppBundle\Entity\Orders:
         individualDiscount:
             type: decimal
             nullable: false
-            precision: 5
+            precision: 10
             scale: 2
             options:
                 default: 0.00
@@ -145,18 +145,16 @@ AppBundle\Entity\Orders:
     oneToMany:
         sizes:
             targetEntity: OrderProductSize
-            cascade: [ persist ]
+            cascade: [ all ]
             fetch: LAZY
             mappedBy: order
             inversedBy: null
-            orphanRemoval: true
         history:
             targetEntity: History
             cascade: [ all ]
             fetch: LAZY
             mappedBy: order
             inversedBy: null
-            orphanRemoval: true
             orderBy: {createTime: DESC}
     manyToOne:
         relatedOrder:

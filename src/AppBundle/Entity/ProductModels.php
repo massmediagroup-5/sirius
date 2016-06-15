@@ -670,4 +670,16 @@ class ProductModels
         }
         return null;
     }
+
+    /**
+     * Return Share when all sizes has share
+     * @return ShareSizesGroup|null
+     */
+    public function getShare()
+    {
+        if($this->isAllSizesHasOneShare()) {
+            return $this->sizes->first()->getShareGroup()->getShare();
+        }
+        return null;
+    }
 }
