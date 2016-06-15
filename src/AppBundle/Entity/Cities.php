@@ -22,6 +22,21 @@ class Cities
      */
     private $carriers;
 
+    /**
+     * @var string
+     */
+    private $ref;
+
+    /**
+     * @var string
+     */
+    private $fullJson;
+
+    /**
+     * @var boolean
+     */
+    private $active;
+
 
     /**
      * Get id
@@ -79,6 +94,78 @@ class Cities
     public function getCarriers()
     {
         return $this->carriers;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     *
+     * @return Cities
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+
+    /**
+     * Set fullJson
+     *
+     * @param string $fullJson
+     *
+     * @return Cities
+     */
+    public function setFullJson($fullJson)
+    {
+        $this->fullJson = $fullJson;
+
+        return $this;
+    }
+
+    /**
+     * Get fullJson
+     *
+     * @return string
+     */
+    public function getFullJson()
+    {
+        return $this->fullJson;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Cities
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**

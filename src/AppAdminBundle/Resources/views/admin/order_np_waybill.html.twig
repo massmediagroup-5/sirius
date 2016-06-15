@@ -1,0 +1,184 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-success">
+            <div class="box-header">
+                <h4 class="box-title">{{ form_tab.name }}</h4>
+            </div>
+            <div class="box-body">
+                <table id="create_waybill" class="table table-bordered">
+                    <tbody class="sonata-ba-tbody">
+                    {% if form_tab.ttn == '' %}
+                    {#<tr>#}
+                        {#<td width="15%">&nbsp;</td>#}
+                        {#<td width="85%">#}
+                            {#{{ dump(form_tab.ttn) }}#}
+                            {#{{ dump(form_tab.object) }}#}
+                            {#{{ dump(form_tab.object.users.Surname) }}#}
+                        {#</td>#}
+                    {#</tr>#}
+                    <tr>
+                        <td>Количество мест:</td>
+                        <td><input type="text" name="np_seats_amount" id="np_seats_amount" /></td>
+                    </tr>
+                    <tr>
+                        <td>Фактический вес(кг):</td>
+                        <td><input type="text" name="np_weight" id="np_weight" /></td>
+                    </tr>
+                    <tr>
+                        <td>Д/Ш/В, см:</td>
+                        <td>
+                            <input type="text" name="np_volumetric_width" id="np_volumetric_width" />
+                            <input type="text" name="np_volumetric_height" id="np_volumetric_height" />
+                            <input type="text" name="np_volumetric_length" id="np_volumetric_length" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Обратная доставка:</td>
+                        <td><input type="text" name="np_backward_delivery_cost" id="np_backward_delivery_cost" /> грн</td>
+                    </tr>
+                    <tr>
+                        <td>Дата отправления:</td>
+                        <td><input type="text" name="np_date" id="np_date" /> <span class="notice">пример - 09.05.1945</span></td>
+                    </tr>
+                    <tr>
+                        <td>Платильщик доставки:</td>
+                        <td>
+                            <input type="radio" name="np_delivery_payer" value="Recipient"> получатеть<br>
+                            <input type="radio" name="np_delivery_payer" value="Sender"> отправитель
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Платильщик обратной доставки:</td>
+                        <td>
+                            <input type="radio" name="np_backward_delivery_payer" value="Recipient"> получатеть<br>
+                            <input type="radio" name="np_backward_delivery_payer" value="Sender"> отправитель
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Вид рассчета:</td>
+                        <td>
+                            <input type="radio" name="np_payment_method" value="Cash"> наличный<br>
+                            <input type="radio" name="np_payment_method" value="NonCash"> безналичный
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Оглашенна ценность:</td>
+                        <td><input type="text" name="np_cost" id="np_cost" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="button" id="submit_ttn" name="submit" class="btn btn-success" value="Создать" /></td>
+                    </tr>
+                    {% else %}
+                        {#<tr>#}
+                            {#<td width="15%">&nbsp;</td>#}
+                            {#<td width="85%">#}
+                                {#{{ dump(form_tab) }}#}
+                                {#{{ dump(form_tab.ttn) }}#}
+                                {#{{ dump(form_tab.object) }}#}
+                            {#</td>#}
+                        {#</tr>#}
+                        <tr>
+                            <td width="15%">Номер ТТН</td>
+                            <td width="85%">
+                                {{ form_tab.ttn.Number }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Дата отправления:</td>
+                            <td>
+                                {{ form_tab.ttn.DateTime|date("d.m.Y") }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Приблизительная дата доставки:</td>
+                            <td>
+                                {{ form_tab.date.date|date("d.m.Y") }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="button" id="print_ttn" name="submit" class="btn btn-info" value="Печать" />
+                                <input type="button" id="delete_ttn" name="submit" class="btn btn-danger" value="Удалить ТТН" />
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).on('click', '#submit_ttn', function(e) {
+        e.stopPropagation();
+        var form = $('#create_waybill :input').serialize();
+        $.ajax({
+            url: Routing.generate('waiting_for_departure_orders_ajax_create_waybill', {'id': '{{ form_tab.object.id }}' }),
+            data: form,
+            dataType: "json",
+            type: "POST",
+            success: function (data) {
+                if(data.status =='OK'){
+                    location.reload();
+                }else{
+                    console.log(data);
+                    return false;
+                }
+            },
+            error: function (message) {
+                console.log(message.status + ' ' + message.statusText);
+                return false;
+            },
+        });
+        return false;
+    });
+
+    $(document).on('click', '#print_ttn', function(e) {
+        e.stopPropagation();
+        $.ajax({
+            url: Routing.generate('waiting_for_departure_orders_ajax_print_waybill', {'id': '{{ form_tab.object.id }}' }),
+            data: {},
+            dataType: "json",
+            type: "POST",
+            success: function (data) {
+                if(data.status =='OK'){
+                    window.open(data.link,'_blank');
+                }else{
+                    console.log(data);
+                    return false;
+                }
+            },
+            error: function (message) {
+                console.log(message.status + ' ' + message.statusText);
+                return false;
+            },
+        });
+        return false;
+    });
+
+    $(document).on('click', '#delete_ttn', function(e) {
+        e.stopPropagation();
+        $.ajax({
+            url: Routing.generate('waiting_for_departure_orders_ajax_delete_waybill', {'id': '{{ form_tab.object.id }}' }),
+            data: {},
+            dataType: "json",
+            type: "POST",
+            success: function (data) {
+                if(data.status =='OK'){
+//                    console.log(data);
+                    location.reload();
+                }else{
+                    console.log(data);
+                    return false;
+                }
+            },
+            error: function (message) {
+                console.log(message.status + ' ' + message.statusText);
+                return false;
+            },
+        });
+        return false;
+    });
+
+</script>

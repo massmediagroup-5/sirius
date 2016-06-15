@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "54fee0037c788892cf5fcc8bf99adabf",
-    "content-hash": "ca91e013fdb0a88bda8d010923035f97",
+    "hash": "1c5aed762e9d6ba97725bf936a8c3340",
+    "content-hash": "48b9507f15001852e4c9dca347e69200",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -667,16 +667,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.6.2",
+            "version": "1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "e9c2ccf573b59b7cea566390f34254fed3c20ed9"
+                "reference": "fd51907c6c76acaa8a5234822a4f901c1500afc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/e9c2ccf573b59b7cea566390f34254fed3c20ed9",
-                "reference": "e9c2ccf573b59b7cea566390f34254fed3c20ed9",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/fd51907c6c76acaa8a5234822a4f901c1500afc1",
+                "reference": "fd51907c6c76acaa8a5234822a4f901c1500afc1",
                 "shasum": ""
             },
             "require": {
@@ -693,13 +693,14 @@
                 "phpunit/phpunit": "~4",
                 "satooshi/php-coveralls": "~0.6.1",
                 "symfony/phpunit-bridge": "~2.7|~3.0",
+                "symfony/property-info": "~2.8|~3.0",
                 "symfony/validator": "~2.2|~3.0",
                 "symfony/yaml": "~2.2|~3.0",
                 "twig/twig": "~1.10"
             },
             "suggest": {
                 "doctrine/orm": "The Doctrine ORM integration is optional in the bundle.",
-                "symfony/web-profiler-bundle": "to use the data collector"
+                "symfony/web-profiler-bundle": "To use the data collector."
             },
             "type": "symfony-bundle",
             "extra": {
@@ -742,7 +743,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2016-01-10 17:21:44"
+            "time": "2016-04-21 19:55:56"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -1925,16 +1926,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.2.32",
+            "version": "v5.2.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "411b851962c211078ade7664a6976e77a78cd2a5"
+                "reference": "f4f44d7c6d20404da8dfc655bd3d6dd788dfdce5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/411b851962c211078ade7664a6976e77a78cd2a5",
-                "reference": "411b851962c211078ade7664a6976e77a78cd2a5",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/f4f44d7c6d20404da8dfc655bd3d6dd788dfdce5",
+                "reference": "f4f44d7c6d20404da8dfc655bd3d6dd788dfdce5",
                 "shasum": ""
             },
             "require": {
@@ -1963,20 +1964,20 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "http://laravel.com",
-            "time": "2016-03-07 20:37:17"
+            "time": "2016-05-31 21:36:13"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.2.32",
+            "version": "v5.2.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "61329ea409362fdae167fdca1125f46c997ce689"
+                "reference": "6e86ac2b4e3d0c42c2dc846dbac3e74d378a812b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/61329ea409362fdae167fdca1125f46c997ce689",
-                "reference": "61329ea409362fdae167fdca1125f46c997ce689",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/6e86ac2b4e3d0c42c2dc846dbac3e74d378a812b",
+                "reference": "6e86ac2b4e3d0c42c2dc846dbac3e74d378a812b",
                 "shasum": ""
             },
             "require": {
@@ -2019,7 +2020,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2016-05-14 16:24:10"
+            "time": "2016-05-30 02:40:53"
         },
         {
             "name": "imagine/imagine",
@@ -3243,17 +3244,17 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "2.12.0",
+            "version": "2.13.0",
             "target-dir": "Nelmio/ApiDocBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "6793b701570f5f426678309910b2440c8f5d1d9e"
+                "reference": "a3a9bb3b700f3ebaed95390292dad23f8141afa0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/6793b701570f5f426678309910b2440c8f5d1d9e",
-                "reference": "6793b701570f5f426678309910b2440c8f5d1d9e",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/a3a9bb3b700f3ebaed95390292dad23f8141afa0",
+                "reference": "a3a9bb3b700f3ebaed95390292dad23f8141afa0",
                 "shasum": ""
             },
             "require": {
@@ -3295,7 +3296,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.12-dev"
+                    "dev-master": "2.13-dev"
                 }
             },
             "autoload": {
@@ -3324,7 +3325,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2016-03-21 11:19:12"
+            "time": "2016-06-13 09:12:09"
         },
         {
             "name": "nikic/php-parser",
@@ -4307,6 +4308,51 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2015-11-07 08:07:40"
+        },
+        {
+            "name": "serj1chen/nova-poshta-sdk-php",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/serj1chen/nova-poshta-sdk-php.git",
+                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/serj1chen/nova-poshta-sdk-php/zipball/978ff3c99e729f547ab8ba3f696f19977838a5fb",
+                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/NovaPoshta/bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chenakal Sergii",
+                    "email": "s.chenakal@gmail.com",
+                    "homepage": "https://github.com/serj1chen"
+                }
+            ],
+            "description": "SDK для Новой Почты",
+            "keywords": [
+                "api",
+                "novaposhta",
+                "php",
+                "sdk"
+            ],
+            "time": "2016-02-28 09:30:14"
         },
         {
             "name": "sonata-project/admin-bundle",
@@ -6580,16 +6626,16 @@
         },
         {
             "name": "zendframework/zend-i18n",
-            "version": "2.7.2",
+            "version": "2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-i18n.git",
-                "reference": "d5ce2dca77a3e66777458f84acae06ce468bd6b7"
+                "reference": "b2db0d8246a865c659f93199f90f5fc2cd2f3cd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/d5ce2dca77a3e66777458f84acae06ce468bd6b7",
-                "reference": "d5ce2dca77a3e66777458f84acae06ce468bd6b7",
+                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/b2db0d8246a865c659f93199f90f5fc2cd2f3cd8",
+                "reference": "b2db0d8246a865c659f93199f90f5fc2cd2f3cd8",
                 "shasum": ""
             },
             "require": {
@@ -6643,7 +6689,7 @@
                 "i18n",
                 "zf2"
             ],
-            "time": "2016-04-18 18:25:10"
+            "time": "2016-06-07 21:08:30"
         },
         {
             "name": "zendframework/zend-json",
@@ -7288,7 +7334,7 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.8.6",
+            "version": "v2.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",

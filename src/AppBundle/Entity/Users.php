@@ -33,9 +33,19 @@ class Users extends BaseUser
 
     /**
      * @var string
+     */
+    private $middlename;
+
+    /**
+     * @var string
      * @Assert/NotBlank()
      */
     protected $phone;
+
+    /**
+     * @var string
+     */
+    protected $counterpartyRef;
 
     /**
      * @var \DateTime
@@ -266,6 +276,54 @@ class Users extends BaseUser
     public function getSurname()
     {
         return $this->surname;
+    }
+
+    /**
+     * Set middlename
+     *
+     * @param string $middlename
+     *
+     * @return Users
+     */
+    public function setMiddlename($middlename)
+    {
+        $this->middlename = $middlename;
+
+        return $this;
+    }
+
+    /**
+     * Get middlename
+     *
+     * @return string
+     */
+    public function getMiddlename()
+    {
+        return $this->middlename;
+    }
+
+    /**
+     * Set counterpartyRef
+     *
+     * @param string $counterpartyRef
+     *
+     * @return Users
+     */
+    public function setCounterpartyRef($counterpartyRef)
+    {
+        $this->counterpartyRef = $counterpartyRef;
+
+        return $this;
+    }
+
+    /**
+     * Get counterpartyRef
+     *
+     * @return string
+     */
+    public function getCounterpartyRef()
+    {
+        return $this->counterpartyRef;
     }
 
     /**

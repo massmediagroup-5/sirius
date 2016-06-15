@@ -248,3 +248,9 @@ services:
         arguments: [~, AppBundle\Entity\Users, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Пользователи", label: "Менеджеры"}
+
+    app_admin.admin.novaposhta:
+        class: AppAdminBundle\Admin\NovaposhtaAdmin
+        arguments: [~, AppBundle\Entity\Novaposhta, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Нова Пошта"}
