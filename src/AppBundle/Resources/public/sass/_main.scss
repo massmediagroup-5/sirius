@@ -4158,6 +4158,24 @@ input[type="checkbox"] {
 	}
 }
 
+.product-info-share {
+	position: relative;
+	.share-counter-wrap {
+		right: 0;
+		top: 38px;
+	}
+}
+.product-info-share-title {
+	float: right;
+	width: 200px;
+	text-align: center;
+	margin-top: 18px;
+	color: #050505;
+	font-weight: 400;
+	font-family: "LatoWeb", sans-serif;
+	font-size: 16px;
+}
+
 .product-info-size-price{
 	display: none;
 }
@@ -7087,52 +7105,6 @@ input[type="checkbox"] {
 		position: absolute;
 	}
 
-	.counter-wrap {
-		right: 20px;
-		top: 20px;
-		position: absolute;
-
-		h2 {
-			color: #050505;
-			font-weight: 400;
-			font-family: $lato;
-			font-size: 16px;
-			line-height: 18px;
-			padding-bottom: 5px;
-			text-align: center;
-		}
-	}
-
-	.counter {
-		> div {
-			float: left;
-			width: 46px;
-			margin-left: 5px;
-			&:first-child {
-				margin-left: 0;
-			}
-
-			p {
-				text-align: center;
-				font-size: 12px;
-				line-height: 14px;
-				color: #050505;
-				text-transform: lowercase;
-				&:first-child {
-					background: #fff;
-					width: 44px;
-					height: 44px;
-					line-height: 44px;
-					@include border-radius(50%);
-					border: 2px solid #050505;
-					margin-bottom: 5px;
-					font-size: 18px;
-					font-family: $lato;
-				}
-			}
-		}
-	}
-
 	.flag {
 		top: 20px;
 		&:after {
@@ -7144,6 +7116,52 @@ input[type="checkbox"] {
 		p {
 			font-size: 22px;
 			line-height: 24px;
+		}
+	}
+}
+
+.share-counter-wrap {
+	right: 20px;
+	top: 20px;
+	position: absolute;
+
+	h2 {
+		color: #050505;
+		font-weight: 400;
+		font-family: $lato;
+		font-size: 16px;
+		line-height: 18px;
+		padding-bottom: 5px;
+		text-align: center;
+	}
+}
+
+.share-counter {
+	> div {
+		float: left;
+		width: 46px;
+		margin-left: 5px;
+		&:first-child {
+			margin-left: 0;
+		}
+
+		p {
+			text-align: center;
+			font-size: 12px;
+			line-height: 14px;
+			color: #050505;
+			text-transform: lowercase;
+			&:first-child {
+				background: #fff;
+				width: 44px;
+				height: 44px;
+				line-height: 44px;
+				@include border-radius(50%);
+				border: 2px solid #050505;
+				margin-bottom: 5px;
+				font-size: 18px;
+				font-family: $lato;
+			}
 		}
 	}
 }
@@ -8470,6 +8488,23 @@ input[type="checkbox"] {
 				font-size: 14px;
 				color: #050505;
 				line-height: 16px;
+			}
+		}
+		.item-history {
+			max-height: 200px;
+			overflow-y: scroll;
+			li {
+				font-weight: 400;
+				font-size: 14px;
+				color: #050505;
+				line-height: 16px;
+				margin-bottom: 10px;
+				list-style-type: none;
+				&:before {
+					display: inline-block;
+					content: '⚫';
+					padding-right: 5px;
+				}
 			}
 		}
 	}

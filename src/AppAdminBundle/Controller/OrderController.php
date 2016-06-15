@@ -103,7 +103,7 @@ class OrderController extends BaseController
 
         $object = $this->get('order')->changePreOrderFlag($object);
 
-        return $this->redirectTo($object);;
+        return $this->redirectTo($object);
     }
 
     /**

@@ -53,28 +53,7 @@
                                                 <div class="title__i">{{ share.description|raw }}</div>
                                             </div>
 
-                                            <div class="counter-wrap">
-                                                <h2>До конца акции осталось:</h2>
-                                                <div id="countdown" class="counter clearfix"
-                                                     data-count-end="{{ share.endTime.format('Y-m-d H:i:s') }}">
-                                                    <div>
-                                                        <p class="days">00</p>
-                                                        <p class="timeRefDays">Дней</p>
-                                                    </div>
-                                                    <div>
-                                                        <p class="hours">00</p>
-                                                        <p class="timeRefHours">Часов</p>
-                                                    </div>
-                                                    <div>
-                                                        <p class="minutes">00</p>
-                                                        <p class="timeRefMinutes">Минут</p>
-                                                    </div>
-                                                    <div>
-                                                        <p class="seconds">00</p>
-                                                        <p class="timeRefSeconds">Секунд</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            {{ include('AppBundle:share/counter.html.twig', {share: share}) }}
 
                                             <div class="btn-wrap">
                                                 <a href="{{ url_to(share) }}" class="btn btn_black_transparent">узнать больше</a>

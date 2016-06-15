@@ -98,14 +98,15 @@ class Products
     }
 
     /**
-     * Render recently reviewed
+     * render model recommended
      *
+     * @param ProductModels $productModels
      * @return mixed
      */
-    public function recommended()
+    public function recommended(ProductModels $productModels)
     {
         return $this->templating->render('AppBundle:widgets/product/recommended.html.twig', [
-                // todo select render recently reviewed from database
+                'recommended' => $productModels->getRecommended()
             ]
         );
     }
@@ -121,6 +122,10 @@ class Products
         if ($object instanceof ProductModels) {
             $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizePrice($object);
             $discountedPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($object);
+        } elseif ($object instanceof CartSize) {
+            // CartSize instance contain right calculated prices
+            $price = $object->getPrice();
+            $discountedPrice = $object->getDiscountedPrice();
         } else {
             $price = $this->container->get('prices_calculator')->getPrice($object);
             $discountedPrice = $this->container->get('prices_calculator')->getDiscountedPrice($object);

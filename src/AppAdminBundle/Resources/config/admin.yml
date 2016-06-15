@@ -42,10 +42,16 @@ services:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Исполненые заказы"}
 
     app.admin.canceled_orders:
-            class: AppAdminBundle\Admin\CanceledOrdersAdmin
-            arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
-            tags:
-                - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отмененые заказы"}
+        class: AppAdminBundle\Admin\CanceledOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отмененые заказы"}
+
+    app.admin.return_orders:
+        class: AppAdminBundle\Admin\ReturnOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Возвращенные заказы"}
 
     app.admin.order_product_size:
         class: AppAdminBundle\Admin\OrderProductSizeAdmin
@@ -68,8 +74,6 @@ services:
     app.admin.filters:
         class: AppAdminBundle\Admin\FiltersAdmin
         arguments: [~, AppBundle\Entity\Filters, SonataAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Фильтры"}
 
     app.admin.products:
         class: AppAdminBundle\Admin\ProductsAdmin

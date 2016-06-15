@@ -51,7 +51,6 @@ class OrderProductSizeAdmin extends Admin
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
-                    'edit' => array(),
                     'delete' => array(),
                 )
             ));
@@ -65,13 +64,13 @@ class OrderProductSizeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('size.model.products.article', null, ['label' => 'Размер'])
-            ->add('size.model.products.name', null, ['label' => 'Размер'])
-            ->add('size.model.productColors.name', null, ['label' => 'Размер'])
-            ->add('size.size', null, ['label' => 'Размер'])
-            ->add('quantity', null, ['label' => 'Количество'])
-            ->add('totalPrice', null, ['label' => 'Цена', 'required' => true])
-            ->add('discountedTotalPrice', null, ['label' => 'Цена со скидкой']);
+            ->add('size.model.products.article', null, ['label' => 'Размер', 'disabled' => true])
+            ->add('size.model.products.name', null, ['label' => 'Размер', 'disabled' => true])
+            ->add('size.model.productColors.name', null, ['label' => 'Размер', 'disabled' => true])
+            ->add('size.size', null, ['label' => 'Размер', 'disabled' => true])
+            ->add('quantity', null, ['label' => 'Количество', 'disabled' => true])
+            ->add('totalPrice', 'text', ['label' => 'Цена', 'disabled' => true])
+            ->add('discountedTotalPrice', 'text', ['label' => 'Цена со скидкой', 'disabled' => true]);
     }
 
     /**

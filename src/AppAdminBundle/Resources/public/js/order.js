@@ -107,6 +107,10 @@ var OrderSizesDialog = (function () {
         $content.find('a').on('click', this.contentLinkClick.bind(this));
         $content.find('.js_model_row').on('click', this.modelRowClick.bind(this));
         $content.find('.js_submit_filters').on('click', this.submitFilters.bind(this));
+        $content.find('.js_size_count').on('change', function() {
+           var $this = $(this);
+            $this.val(Math.abs(parseInt($this.val())));
+        });
 
         this.hideLoading();
     };
