@@ -3,6 +3,7 @@
 namespace AppAdminBundle\Admin;
 
 use AppBundle\Entity\Orders;
+use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -21,5 +22,17 @@ class SentOrdersAdmin extends OrdersAdmin
     protected $baseRoutePattern = '/app/sent-orders';
 
     protected $statusName = 'sent';
+
+    /**
+     * @inheritdoc
+     */
+    protected function getStatusQuery()
+    {
+        return function (EntityRepository $er) {
+            return $er->createQueryBuilder('s')
+                ->where('s.code IN (:codes)')
+                ->setParameter('codes', ['sent', 'done', 'return']);
+        };
+    }
 
 }
