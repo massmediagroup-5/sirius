@@ -8,14 +8,6 @@
                 <table id="create_waybill" class="table table-bordered">
                     <tbody class="sonata-ba-tbody">
                     {% if form_tab.ttn == '' %}
-                    {#<tr>#}
-                        {#<td width="15%">&nbsp;</td>#}
-                        {#<td width="85%">#}
-                            {#{{ dump(form_tab.ttn) }}#}
-                            {#{{ dump(form_tab.object) }}#}
-                            {#{{ dump(form_tab.object.users.Surname) }}#}
-                        {#</td>#}
-                    {#</tr>#}
                     <tr>
                         <td>Количество мест:</td>
                         <td><input type="text" name="np_seats_amount" id="np_seats_amount" /></td>
@@ -69,14 +61,6 @@
                         <td colspan="2"><input type="button" id="submit_ttn" name="submit" class="btn btn-success" value="Создать" /></td>
                     </tr>
                     {% else %}
-                        {#<tr>#}
-                            {#<td width="15%">&nbsp;</td>#}
-                            {#<td width="85%">#}
-                                {#{{ dump(form_tab) }}#}
-                                {#{{ dump(form_tab.ttn) }}#}
-                                {#{{ dump(form_tab.object) }}#}
-                            {#</td>#}
-                        {#</tr>#}
                         <tr>
                             <td width="15%">Номер ТТН</td>
                             <td width="85%">
