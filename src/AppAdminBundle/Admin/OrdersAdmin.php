@@ -13,11 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
 use NovaPoshta\Config;
-use NovaPoshta\ApiModels\Address;
-use NovaPoshta\MethodParameters\Address_getStreet;
-use NovaPoshta\MethodParameters\Address_getWarehouses;
-use NovaPoshta\MethodParameters\Address_getCities;
-use NovaPoshta\MethodParameters\Address_getAreas;
 use NovaPoshta\ApiModels\InternetDocument;
 
 /**
@@ -162,10 +157,6 @@ class OrdersAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $api = $this->modelManager->getEntityManager('AppBundle:Novaposhta')->getRepository('AppBundle:Novaposhta')->findOneBy(['active'=>1]);
-        Config::setApiKey($api->getApiKey());
-        Config::setFormat(Config::FORMAT_JSONRPC2);
-        Config::setLanguage(Config::LANGUAGE_RU);
         if ($user = $this->subject->getUsers()) {
             $otherSizes = $this->modelManager->getEntityManager('AppBundle:OrderProductSize')
                 ->getRepository('AppBundle:OrderProductSize')
@@ -181,13 +172,17 @@ class OrdersAdmin extends Admin
             $otherSizes = [];
         }
 
-//        $data = new \NovaPoshta\MethodParameters\InternetDocument_documentsTracking();
-//        $data->setDocuments([$this->subject->getTtn()]);
-//        dump($result->data[0]);exit;
-//        dump(InternetDocument::getDocument($data));exit;
         if($this->statusName == 'waiting_for_departure')
         {
             if($this->subject->getTtn()){
+                $api = $this->modelManager
+                    ->getEntityManager('AppBundle:Novaposhta')
+                    ->getRepository('AppBundle:Novaposhta')
+                    ->findOneBy(['active'=>1]);
+                Config::setApiKey($api->getApiKey());
+                Config::setFormat(Config::FORMAT_JSONRPC2);
+                Config::setLanguage(Config::LANGUAGE_RU);
+
                 $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocument();
                 $data->setRef($this->subject->getTtn());
                 $ttn = InternetDocument::getDocument($data)->data[0];
