@@ -45,7 +45,9 @@ show:
 Products List: Модели
 Product Models List: Товары
 Action: Действия
+Share List: Акции
 
+search_placeholder: "Информация по ТТН"
 flash_delete_not_empty_error: 'Не возможно удалить запись поскольку она не пуста'
 link_to_pre_order: Переместить в предзаказ
 link_to_order: Переместить в заказ

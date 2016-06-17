@@ -218,7 +218,7 @@ sonata_block:
         app.admin.block.import:
 
 sonata_admin:
-    title:      Admin
+    title:      Sirius-sport
     title_logo: bundles/app/img/logo.png
     templates:
         layout: AppAdminBundle:sonata_base_layout.html.twig
@@ -234,8 +234,8 @@ sonata_translation:
     locales: [ru]
     default_locale: ru
     # here enable the types you need
-#    gedmo:
-#        enabled: true
+    gedmo:
+        enabled: true
     #phpcr:
     #    enabled: true
 

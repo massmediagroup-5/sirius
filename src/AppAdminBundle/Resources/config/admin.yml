@@ -253,10 +253,16 @@ services:
         class: AppAdminBundle\Admin\UsersWholesalersAdmin
         arguments: [~, AppBundle\Entity\Users, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Пользователи", label: "Оптовики"}
+            - {name: sonata.admin, manager_type: orm, group: sonata_user, label: "Оптовики"}
 
     app_admin.admin.users_managers:
         class: AppAdminBundle\Admin\UsersManagersAdmin
         arguments: [~, AppBundle\Entity\Users, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Пользователи", label: "Менеджеры"}
+            - {name: sonata.admin, manager_type: orm, group: sonata_user, label: "Менеджеры"}
+
+    app_admin.admin.novaposhta:
+        class: AppAdminBundle\Admin\NovaposhtaAdmin
+        arguments: [~, AppBundle\Entity\Novaposhta, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Нова Пошта"}

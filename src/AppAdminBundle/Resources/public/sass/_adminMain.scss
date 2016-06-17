@@ -42,6 +42,12 @@ label {
     text-align: left;
 }
 
+.logo {
+    img {
+        max-width: 60px !important;
+    }
+}
+
 .charackteristic-category {
     border: 1px solid #ccc;
     margin-bottom: 20px;

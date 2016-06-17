@@ -48,12 +48,26 @@ AppBundle\Entity\Users:
             length: 45
             options:
                 fixed: false
+        middlename:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+            column: middle_name
         phone:
             type: string
             nullable: true
             length: 45
             options:
                 fixed: false
+        counterpartyRef:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: counterparty_ref
         createTime:
             type: datetime
             nullable: false

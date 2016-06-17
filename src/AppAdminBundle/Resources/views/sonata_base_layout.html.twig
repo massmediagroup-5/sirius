@@ -15,6 +15,69 @@
 </script>
 {% endblock %}
 
+{% block navbar_title %}
+    {{ parent() }}
+    {{ 'Admin'|trans({}, 'SonataAdminBundle') }}
+
+    {% if _title is not empty %}
+        {{ _title|raw }}
+    {% else %}
+        {% if action is defined %}
+            -
+            {% for menu in admin.breadcrumbs(action) %}
+                {% if not loop.first %}
+                    {%  if loop.index != 2 %}
+                        &gt;
+                    {% endif %}
+
+                    {{ menu.label|trans({}, 'AppAdminBundle') }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif%}
+{% endblock %}
+
+{% block sonata_breadcrumb %}
+    {% if _breadcrumb is not empty or action is defined %}
+        <ol class="nav navbar-top-links breadcrumb">
+            {% if _breadcrumb is empty %}
+                {% if action is defined %}
+                    {% for menu in admin.breadcrumbs(action) %}
+                        {% if not loop.last  %}
+                            <li>
+                                {% if menu.uri is not empty %}
+                                    <a href="{{ menu.uri }}">{{ menu.label|raw|trans({}, 'AppAdminBundle') }}</a>
+                                {% else %}
+                                    {{ menu.label|trans({}, 'AppAdminBundle') }}
+                                {% endif %}
+                            </li>
+                        {% else %}
+                            <li class="active"><span>{{ menu.label|trans({}, 'AppAdminBundle') }}</span></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                {{ _breadcrumb|raw|trans({}, 'AppAdminBundle') }}
+            {% endif %}
+        </ol>
+    {% endif %}
+{% endblock sonata_breadcrumb %}
+
+{% block sonata_sidebar_search %}
+    {% if app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
+        <form action="{{ path('search_by_ttn') }}" method="GET" class="sidebar-form" role="search">
+            <div class="input-group custom-search-form">
+                <input type="text" name="ttn" value="{{ app.request.get('ttn') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'AppAdminBundle') }}">
+                <span class="input-group-btn">
+                    <button class="btn btn-flat" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+    {% endif %}
+{% endblock sonata_sidebar_search %}
+
 {% block sonata_admin_content %}
 
     {% if _list_table is not empty or _list_filters is not empty %}
