@@ -16,6 +16,12 @@
 </script>#}
 {% endblock %}
 
+{% block sonata_header %}
+    {% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false} %}
+    {{ parent() }}
+
+{% endblock sonata_header %}
+
 {% block navbar_title %}
     {{ parent() }}
     {{ 'Admin'|trans({}, 'SonataAdminBundle') }}

@@ -46,7 +46,8 @@
         "excelwebzone/recaptcha-bundle": "^1.4",
         "jakeasmith/http_build_url": "^1",
         "beberlei/DoctrineExtensions": "^1.0",
-        "serj1chen/nova-poshta-sdk-php": "^2.0"
+        "serj1chen/nova-poshta-sdk-php": "^2.0",
+        "comur/image-bundle": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

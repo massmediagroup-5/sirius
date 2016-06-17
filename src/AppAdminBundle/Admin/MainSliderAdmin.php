@@ -56,7 +56,34 @@ class MainSliderAdmin extends Admin
             ->add('buttonText',null,array('label'=>'Текст кнопки'))
             ->add('alias',null,array('label'=>'Ссылка'))
             ->add('description',null,array('label'=>'Описание','attr' => array('class' => 'ckeditor')))
-            ->add('file', 'file',$fileFieldOptions)
+//            ->add('file', 'file',$fileFieldOptions)
+            ->add('picture', 'comur_image', array(
+                'uploadConfig' => array(
+                    'uploadRoute' => 'comur_api_upload',        //optional
+                    'uploadUrl' => $image->getUploadRootDir(),       // required - see explanation below (you can also put just a dir path)
+                    'webDir' => $image->getUploadDir(),              // required - see explanation below (you can also put just a dir path)
+                    'fileExt' => '*.jpg;*.gif;*.png;*.jpeg',    //optional
+                    'libraryDir' => null,                       //optional
+                    'libraryRoute' => 'comur_api_image_library', //optional
+                    'showLibrary' => true,                      //optional
+//                    'saveOriginal' => 'originalImage',          //optional
+                    'generateFilename' => true          //optional
+                ),
+//                'cropConfig' => array(
+//                    'minWidth' => 588,
+//                    'minHeight' => 300,
+//                    'aspectRatio' => true,              //optional
+//                    'cropRoute' => 'comur_api_crop',    //optional
+//                    'forceResize' => false,             //optional
+//                    'thumbs' => array(                  //optional
+//                        array(
+//                            'maxWidth' => 180,
+//                            'maxHeight' => 400,
+//                            'useAsFieldImage' => true  //optional
+//                        )
+//                    )
+//                )
+            ))
             ->add('priority',null,array('label'=>'Сортировка'))
             ->add('active',null,array('label'=>'Активность(вкл/выкл)'))
         ;
