@@ -22,6 +22,11 @@ class MainSlider
     /**
      * @var string
      */
+    private $buttonText;
+
+    /**
+     * @var string
+     */
     private $alias;
 
     /**
@@ -33,6 +38,11 @@ class MainSlider
      * @var string
      */
     private $picture;
+
+    /**
+     * @var integer
+     */
+    private $priority;
 
     /**
      * @var boolean
@@ -88,6 +98,30 @@ class MainSlider
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set buttonText
+     *
+     * @param string $buttonText
+     *
+     * @return MainSlider
+     */
+    public function setButtonText($buttonText)
+    {
+        $this->buttonText = $buttonText;
+
+        return $this;
+    }
+
+    /**
+     * Get buttonText
+     *
+     * @return string
+     */
+    public function getButtonText()
+    {
+        return $this->buttonText;
     }
 
     /**
@@ -160,6 +194,30 @@ class MainSlider
     public function getPicture()
     {
         return $this->picture;
+    }
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     *
+     * @return MainSlider
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 
     /**
@@ -282,7 +340,7 @@ class MainSlider
         $this->setFile(null);
     }
 
-    # ��������� ���������� ���
+    // generate name for new file
     private function fileUniqueName()
     {
         return sha1(uniqid(mt_rand(), true));
@@ -295,26 +353,38 @@ class MainSlider
      *
      * @return string
      */
-    protected function getUploadRootDir()
+    public function getUploadRootDir()
     {
+//        dump(realpath(__DIR__.'/../../../web/'.$this->getUploadDir()));exit;
+        // absolute path to your directory where images must be saved
         return __DIR__.'/../../../web/'.$this->getUploadDir();
     }
 
     /**
      * getUploadDir
      * get rid of the __DIR__ so it doesn't screw up
-     * when displaying uploaded /img/products in the view.
+     * when displaying uploaded /img/slider in the view.
      *
      * @return string
      * /img/products
      */
-    protected function getUploadDir()
+    public function getUploadDir()
     {
-        return '/img/slider/';
+        return 'img/slider';
     }
 
-    public function getWebPath(){
-        return $this->getUploadDir().$this->getPicture();
+//    public function getWebPath(){
+//        return $this->getUploadDir().$this->getPicture();
+//    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->getPicture() ? null : $this->getUploadRootDir().'/'.$this->getPicture();
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->getPicture() ? null : '/'.$this->getUploadDir().'/'.$this->getPicture();
     }
 
     /**

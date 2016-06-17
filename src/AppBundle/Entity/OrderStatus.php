@@ -45,6 +45,16 @@ class OrderStatus
     /**
      * @var boolean
      */
+    private $sendClientEmail;
+
+    /**
+     * @var string
+     */
+    private $sendClientEmailText;
+
+    /**
+     * @var boolean
+     */
     private $sendManager;
 
     /**
@@ -215,6 +225,54 @@ class OrderStatus
     public function getSendClientText()
     {
         return $this->sendClientText;
+    }
+
+    /**
+     * Set sendClientEmail
+     *
+     * @param boolean $sendClientEmail
+     *
+     * @return OrderStatus
+     */
+    public function setSendClientEmail($sendClientEmail)
+    {
+        $this->sendClientEmail = $sendClientEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get sendClientEmail
+     *
+     * @return boolean
+     */
+    public function getSendClientEmail()
+    {
+        return $this->sendClientEmail;
+    }
+
+    /**
+     * Set sendClientEmailText
+     *
+     * @param string $sendClientEmailText
+     *
+     * @return OrderStatus
+     */
+    public function setSendClientEmailText($sendClientEmailText)
+    {
+        $this->sendClientEmailText = $sendClientEmailText;
+
+        return $this;
+    }
+
+    /**
+     * Get sendClientEmailText
+     *
+     * @return string
+     */
+    public function getSendClientEmailText()
+    {
+        return $this->sendClientEmailText;
     }
 
     /**
