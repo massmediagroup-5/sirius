@@ -35,6 +35,11 @@ class MainSlider
     private $picture;
 
     /**
+     * @var integer
+     */
+    private $priority;
+
+    /**
      * @var boolean
      */
     private $active;
@@ -160,6 +165,30 @@ class MainSlider
     public function getPicture()
     {
         return $this->picture;
+    }
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     *
+     * @return MainSlider
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 
     /**

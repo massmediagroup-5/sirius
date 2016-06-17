@@ -56,7 +56,8 @@ class Sliders
     public function home()
     {
         $slides = $this->em->getRepository('AppBundle:MainSlider')->findBy(
-            array('active'=>1)
+            array('active'=>1),
+            array('priority'=>'ASC')
         );
 
         return $this->templating->render('AppBundle:widgets/sliders/home.html.twig', array(
