@@ -68,6 +68,11 @@ AppBundle\Entity\Users:
             options:
                 fixed: false
             column: counterparty_ref
+        bonuses:
+            type: integer
+            options:
+                unsigned: true
+                default: 0
         createTime:
             type: datetime
             nullable: false

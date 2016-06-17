@@ -40,10 +40,11 @@ class Options
      *
      * @return array
      */
-    public function getParams() {
+    public function getParams()
+    {
         if (empty($this->params)) {
             $params = $this->em->getRepository('AppBundle:SiteParams')->findAll();
-            foreach($params as $value){
+            foreach ($params as $value) {
                 $this->params[$value->getParamName()] = array(
                     'value' => $value->getParamValue(),
                     'active' => $value->getActive()
@@ -51,6 +52,16 @@ class Options
             }
         }
         return $this->params;
+    }
+
+    /**
+     * @param $name
+     * @param bool $default
+     * @return mixed
+     */
+    public function getParamValue($name, $default = false)
+    {
+        return isset($this->params[$name]['value']) ? $this->params[$name] : $default;
     }
 
 }

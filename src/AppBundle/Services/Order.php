@@ -5,6 +5,7 @@ namespace AppBundle\Services;
 use AppBundle\Entity\History;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
+use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
 use AppBundle\Exception\CartEmptyException;
@@ -307,40 +308,39 @@ class Order
         ];
         $orderChanges = $this->em->getUnitOfWork()->getEntityChangeSet($order);
         foreach ($orderChanges as $fieldName => $orderChange) {
-            if ( in_array( $fieldName, $allowedFields ) ) {
-                $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy([ 'active' => '1' ]);
-                if($uniSender){
-                    switch ($fieldName)
-                    {
+            if (in_array($fieldName, $allowedFields)) {
+                $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
+                if ($uniSender) {
+                    switch ($fieldName) {
                         case "status":
-                            $orderStatus =  $order->getStatus();
+                            $orderStatus = $order->getStatus();
                             break;
                         case "payStatus":
-                            $orderStatus =  $order->getPayStatus();
+                            $orderStatus = $order->getPayStatus();
                             break;
                     }
-                    if( ( $orderStatus->getSendClient() ) && ( !empty($orderStatus->getSendClientText() ) ) ){
+                    if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
                         $client_sms_status = $this->sendSmsRequest(
                             $uniSender,
                             $order->getPhone(),
                             $order->getId(),
                             $orderStatus->getSendClientText()
                         );
-                        if($client_sms_status['error'] == false){
+                        if ($client_sms_status['error'] == false) {
                             // если без ошибок то сохраняем идентификатор смс
                             $order->setClientSmsId($client_sms_status['sms_id']);
-                        }else{
+                        } else {
                             // если ошибка то сохраняем текст ошибки
                             $order->setClientSmsStatus($client_sms_status['error']);
                         }
                     }
-                    if( ( $orderStatus->getSendManager() ) && ( !empty( $orderStatus->getSendManagerText() ) ) ){
-                        $phones = explode( ',', $uniSender->getPhones() );
-                        foreach( $phones as $phone ){
+                    if (($orderStatus->getSendManager()) && (!empty($orderStatus->getSendManagerText()))) {
+                        $phones = explode(',', $uniSender->getPhones());
+                        foreach ($phones as $phone) {
                             $this->sendSmsRequest(
                                 $uniSender,
                                 $phone,
-                                $order->getId() ? $order->getId() : date('G:i:s d-m-Y',time()),
+                                $order->getId() ? $order->getId() : date('G:i:s d-m-Y', time()),
                                 $orderStatus->getSendManagerText()
                             );
                         }
@@ -364,17 +364,17 @@ class Order
      */
     public function sendSmsRequest($uniSender, $phone, $dynamic_text, $sms_text = null)
     {
-        if( $curl = curl_init() ) {
+        if ($curl = curl_init()) {
             $sms_body = sprintf(
                 $sms_text,
                 $dynamic_text // %s
             );
             // массив передаваемых параметров
-            $parameters_array = array (
-                'api_key'   => $uniSender->getApiKey(),
-                'phone'     => preg_replace("/[^0-9]/", '', strip_tags($phone)),
-                'sender'    => $uniSender->getSenderName(),
-                'text'      => $sms_body
+            $parameters_array = array(
+                'api_key' => $uniSender->getApiKey(),
+                'phone' => preg_replace("/[^0-9]/", '', strip_tags($phone)),
+                'sender' => $uniSender->getSenderName(),
+                'text' => $sms_body
             );
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -387,11 +387,10 @@ class Order
             if ($response) {
                 // Раскодируем ответ API-сервера
                 $jsonObj = json_decode($response);
-                if(null===$jsonObj) {
+                if (null === $jsonObj) {
                     // Ошибка в полученном ответе
                     $result['error'] = "Invalid JSON";
-                }
-                elseif(!empty($jsonObj->result->error)) {
+                } elseif (!empty($jsonObj->result->error)) {
                     // Ошибка отправки сообщения
                     $result['error'] = "An error occured: " . $jsonObj->result->error . "(code: " . $jsonObj->result->code . ")";
                 } else {
@@ -411,7 +410,7 @@ class Order
     /**
      * @param Orders $order
      */
-    public function appendHistory(Orders $order)
+    public function processOrderChanges(Orders $order)
     {
         $allowedFields = [
             'fio',
@@ -443,10 +442,27 @@ class Order
                         'AppAdminBundle'
                     ));
                 }
+                if ($fieldName == 'payStatus') {
+                    $this->appendBonuses($order);
+                }
             }
         }
 
         $this->em->persist($order);
+    }
+
+    /**
+     * @param Orders $order
+     */
+    protected function appendBonuses(Orders $order)
+    {
+        if ($user = $order->getUsers()) {
+            $sum = $order->getDiscountedTotalPrice();
+            $sign = $order->getPayStatus()->getCode() == 'paid' ? 1 : -1;
+            $user->incrementBonuses($sign * $this->container->get('prices_calculator')->getBonusesToSum($sum));
+
+            $this->em->persist($user);
+        }
     }
 
     /**

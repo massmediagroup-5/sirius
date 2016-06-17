@@ -48,6 +48,11 @@ class Users extends BaseUser
     protected $counterpartyRef;
 
     /**
+     * @var integer
+     */
+    protected $bonuses;
+
+    /**
      * @var \DateTime
      */
     private $createTime;
@@ -372,5 +377,43 @@ class Users extends BaseUser
     public function getVkontakteAccessToken()
     {
         return $this->vkontakte_access_token;
+    }
+
+    /**
+     * Set bonuses
+     *
+     * @param integer $bonuses
+     *
+     * @return Users
+     */
+    public function setBonuses($bonuses)
+    {
+        $this->bonuses = $bonuses;
+
+        return $this;
+    }
+
+    /**
+     * Increment bonuses
+     *
+     * @param integer $bonuses
+     *
+     * @return Users
+     */
+    public function incrementBonuses($bonuses)
+    {
+        $this->bonuses += $bonuses;
+
+        return $this;
+    }
+
+    /**
+     * Get bonuses
+     *
+     * @return integer
+     */
+    public function getBonuses()
+    {
+        return $this->bonuses;
     }
 }
