@@ -2,6 +2,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\LoyaltyProgram;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
@@ -299,6 +300,31 @@ class PricesCalculator
         }
 
         return $this->getDiscountedPrice($object->getSize()) * $object->getQuantity();
+    }
+
+    /**
+     * Subtract loyalty discount from sum when customer is not a wholesaler
+     *
+     * @param $sum
+     * @return number
+     */
+    public function getLoyaltyDiscounted($sum)
+    {
+        $isWholesaler = $this->authorizationChecker->isGranted('ROLE_WHOLESALER');
+
+        if (!$isWholesaler && $loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
+            return $sum - ceil($loyaltyProgram->getDiscount() / 100 * $sum);
+        }
+        return $sum;
+    }
+
+    /**
+     * @param $sum
+     * @return LoyaltyProgram|null
+     */
+    public function getLoyaltyProgramBySum($sum)
+    {
+        return $this->em->getRepository('AppBundle:LoyaltyProgram')->firstBySum($sum);
     }
 
 }

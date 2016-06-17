@@ -387,6 +387,16 @@ class Cart
      */
     public function getDiscountedTotalPrice()
     {
+        return $this->container->get('prices_calculator')->getLoyaltyDiscounted($this->getDiscountedIntermediatePrice());
+    }
+
+    /**
+     * Return discounted price without loyalty discount
+     * 
+     * @return int
+     */
+    public function getDiscountedIntermediatePrice()
+    {
         return array_sum(array_map(function (CartItem $item) {
             return $item->getDiscountedPrice();
         }, $this->items));
