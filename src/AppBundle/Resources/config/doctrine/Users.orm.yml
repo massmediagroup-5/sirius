@@ -69,10 +69,16 @@ AppBundle\Entity\Users:
                 fixed: false
             column: counterparty_ref
         bonuses:
-            type: integer
+            type: decimal
+            precision: 10
+            scale: 2
             options:
                 unsigned: true
                 default: 0
+        grayListFlag:
+            type: boolean
+            options:
+                default: false
         createTime:
             type: datetime
             nullable: false

@@ -2,16 +2,12 @@
 
 namespace AppAdminBundle\Admin;
 
-use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
 
+use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-
-use FOS\UserBundle\Model\UserManagerInterface;
-use Sonata\AdminBundle\Route\RouteCollection;
-
 
 class UsersAdmin extends BaseUserAdmin
 {
@@ -72,9 +68,8 @@ class UsersAdmin extends BaseUserAdmin
                     'required' => false
                 ))
                 ->add('locked', null, array('required' => false))
-                ->add('expired', null, array('required' => false))
+                ->add('grayListFlag', null, array('required' => false))
                 ->add('enabled', null, array('required' => false))
-                ->add('credentialsExpired', null, array('required' => false))
                 ->end()
             ;
         }
