@@ -340,7 +340,7 @@ class MainSlider
         $this->setFile(null);
     }
 
-    # ��������� ���������� ���
+    // generate name for new file
     private function fileUniqueName()
     {
         return sha1(uniqid(mt_rand(), true));
@@ -353,26 +353,38 @@ class MainSlider
      *
      * @return string
      */
-    protected function getUploadRootDir()
+    public function getUploadRootDir()
     {
+//        dump(realpath(__DIR__.'/../../../web/'.$this->getUploadDir()));exit;
+        // absolute path to your directory where images must be saved
         return __DIR__.'/../../../web/'.$this->getUploadDir();
     }
 
     /**
      * getUploadDir
      * get rid of the __DIR__ so it doesn't screw up
-     * when displaying uploaded /img/products in the view.
+     * when displaying uploaded /img/slider in the view.
      *
      * @return string
      * /img/products
      */
-    protected function getUploadDir()
+    public function getUploadDir()
     {
-        return '/img/slider/';
+        return 'img/slider';
     }
 
-    public function getWebPath(){
-        return $this->getUploadDir().$this->getPicture();
+//    public function getWebPath(){
+//        return $this->getUploadDir().$this->getPicture();
+//    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->getPicture() ? null : $this->getUploadRootDir().'/'.$this->getPicture();
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->getPicture() ? null : '/'.$this->getUploadDir().'/'.$this->getPicture();
     }
 
     /**
