@@ -327,4 +327,13 @@ class PricesCalculator
         return $this->em->getRepository('AppBundle:LoyaltyProgram')->firstBySum($sum);
     }
 
+    /**
+     * @param $sum
+     * @return int
+     */
+    public function getBonusesToSum($sum)
+    {
+        return floor($sum / 100);
+    }
+
 }

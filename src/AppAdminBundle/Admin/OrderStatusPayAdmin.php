@@ -17,7 +17,7 @@ class OrderStatusPayAdmin extends Admin
     {
         $datagridMapper
             ->add('name', null, array('label' => 'Название статуса оплаты'))
-//            ->add('code', null, array('label' => 'Код'))
+            ->add('code', null, array('label' => 'Код'))
             ->add('description', null, array('label' => 'Описание статуса оплаты'))
             ->add('baseFlag', null, array('label' => 'Базовый'))
             ->add('priority', null, array('label' => 'Приоритет'))
@@ -33,7 +33,7 @@ class OrderStatusPayAdmin extends Admin
     {
         $listMapper
             ->add('name', null, array('label' => 'Название статуса оплаты'))
-//            ->add('code', null, array('label' => 'Код'))
+            ->add('code', null, array('label' => 'Код'))
             ->add('description', null, array('label' => 'Описание статуса оплаты'))
             ->add('baseFlag', null, array('label' => 'Базовый'))
             ->add('priority', null, array('editable' => true, 'label' => 'Приоритет'))
@@ -57,7 +57,7 @@ class OrderStatusPayAdmin extends Admin
     {
         $formMapper
             ->add('name', null, array('label' => 'Название статуса оплаты'))
-//            ->add('code', null, array('label' => 'Код'))
+            ->add('code', null, array('label' => 'Код'))
             ->add('description', null, array('label' => 'Описание статуса оплаты'))
 //            ->add('baseFlag', null, array('label' => 'Базовый'))
             ->add('priority', null, array('label' => 'Приоритет'))
