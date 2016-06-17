@@ -18,6 +18,21 @@ class Stores
     private $name;
 
     /**
+     * @var string
+     */
+    private $ref;
+
+    /**
+     * @var string
+     */
+    private $fullJson;
+
+    /**
+     * @var boolean
+     */
+    private $active;
+
+    /**
      * @var \AppBundle\Entity\Cities
      */
     private $cities;
@@ -79,6 +94,78 @@ class Stores
     public function getCities()
     {
         return $this->cities;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     *
+     * @return Stores
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+
+    /**
+     * Set fullJson
+     *
+     * @param string $fullJson
+     *
+     * @return Stores
+     */
+    public function setFullJson($fullJson)
+    {
+        $this->fullJson = $fullJson;
+
+        return $this;
+    }
+
+    /**
+     * Get fullJson
+     *
+     * @return string
+     */
+    public function getFullJson()
+    {
+        return $this->fullJson;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Stores
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**

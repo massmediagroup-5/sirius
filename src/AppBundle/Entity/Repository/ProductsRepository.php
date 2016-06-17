@@ -202,7 +202,6 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $modelAlias = 'productModels',
         $sizeAlias = 'sizes'
     ) {
-        $query->addOrderBy("$modelAlias.inStock", 'DESC');
         switch ($sort) {
             case false:
             case 'new':
@@ -215,7 +214,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 $query->addOrderBy("$productAlias.name", 'DESC');
                 break;
             case 'cheap':
-                // todo replace with sql COALESCE
+                // TODO: replace with sql COALESCE
                 $query->addOrderBy("$sizeAlias.price", 'ASC');
                 break;
             case 'expensive':
@@ -230,7 +229,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             default:
                 break;
         }
-
+        $query->addOrderBy("$modelAlias.inStock", 'DESC');
         $query->addOrderBy("$modelAlias.createTime", 'DESC');
         $query->addOrderBy("$modelAlias.id", 'DESC');
 

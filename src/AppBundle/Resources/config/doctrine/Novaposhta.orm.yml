@@ -1,0 +1,37 @@
+AppBundle\Entity\Novaposhta:
+    type: entity
+    table: novaposhta
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        apiKey:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: api_key
+        warehouseRef:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: warehouse_ref
+        phone:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+        active:
+            type: boolean
+            nullable: true
+    lifecycleCallbacks: {  }

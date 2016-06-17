@@ -5,6 +5,12 @@ upload_file:
     options:
         expose: true
 
+search_by_ttn:
+    path:     /admin/app/search-by-ttn
+    defaults: { _controller: AppAdminBundle:NovaPoshta:getWaybillInfo }
+    options:
+        expose: true
+
 img_sorting:
     path:     /img-sorting
     defaults: { _controller: AppAdminBundle:Upload:sortProductModelsImages}

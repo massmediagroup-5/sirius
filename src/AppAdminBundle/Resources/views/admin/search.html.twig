@@ -1,0 +1,97 @@
+{% extends 'AppAdminBundle::sonata_base_layout.html.twig' %}
+
+{% block content %}
+    <h1 class="center">
+        Результаты запроса информации о ТТН:
+    </h1>
+    <table class="table table-hover">
+        <tbody>
+        {% if track_info.success == true and track_info.data.0 is defined %}
+        {% set track_info = track_info.data.0 %}
+            <tr>
+                <td colspan="2">
+                    Трекинговая(общедоступная) информация:
+                </td>
+            </tr>
+            <tr>
+                <td width="25%">
+                    ТТН
+                </td>
+                <td>
+                    {{ track_info.Barcode }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Статус:
+                </td>
+                <td>
+                    {{ track_info.StateName }}
+                </td>
+            </tr>
+            {% if track_info.DateReceived != '' %}
+            <tr>
+                <td>
+                    Дата(получения):
+                </td>
+                <td>
+                    {{ track_info.DateReceived }}
+                </td>
+            </tr>
+            {% endif %}
+            {% if track_info.RecipientFullName != '' %}
+            <tr>
+                <td>
+                    ФИО получателя:
+                </td>
+                <td>
+                    {{ track_info.RecipientFullName }}
+                </td>
+            </tr>
+            {% endif %}
+            {% if track_info.RedeliveryCargoDescriptionMoney != '' %}
+            <tr>
+                <td>
+                    Статус:
+                </td>
+                <td>
+                    {{ track_info.RedeliveryCargoDescriptionMoney }}
+                </td>
+            </tr>
+            {% endif %}
+        {% endif %}
+        {% if ttn_info.success == true and ttn_info.data.0 is defined %}
+            {% set ttn_info = ttn_info.data.0 %}
+            <tr>
+                <td colspan="2">
+                    Информация по ТТН(создана под текущим ключем API):
+                </td>
+            </tr>
+            <tr>
+                <td width="25%">
+                    Дата создания ТТН:
+                </td>
+                <td>
+                    {{ ttn_info.CreateTime }}
+                </td>
+            </tr>
+            <tr>
+                <td width="25%">
+                    Заявленная дата отправки:
+                </td>
+                <td>
+                    {{ ttn_info.DateTime|date("d.m.Y") }}
+                </td>
+            </tr>
+            <tr>
+                <td width="25%">
+                    Примерная дата доставки:
+                </td>
+                <td>
+                    {{ ttn_info.EstimatedDeliveryDate|date("d.m.Y") }}
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

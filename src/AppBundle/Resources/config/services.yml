@@ -79,3 +79,6 @@ services:
         tags:
             - { name: twig.extension }
         arguments: ["@service_container"]
+    novaposhta:
+        class: AppBundle\Services\NovaPoshta
+        arguments: ["@doctrine.orm.entity_manager"]

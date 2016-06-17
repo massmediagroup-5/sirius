@@ -8,8 +8,19 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class UnisenderAdmin extends Admin
+class NovaposhtaAdmin extends Admin
 {
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('id')
+            ->add('apiKey', null, ['label' => 'Ключ API', 'editable'=>true])
+            ->add('active', null, ['label' => 'Активность(вкл/выкл)', 'editable'=>true])
+        ;
+    }
 
     /**
      * @param ListMapper $listMapper
@@ -17,15 +28,13 @@ class UnisenderAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('phones', null, ['label' => 'Номера телефонов'])
-            ->add('apiKey', null, ['label' => 'Ключ API'])
-            ->add('senderName', null, ['label' => 'Имя отправителя'])
+            ->add('id')
+            ->add('apiKey', null, ['label' => 'Ключ API', 'editable'=>true])
             ->add('active', null, ['label' => 'Активность(вкл/выкл)', 'editable'=>true])
             ->add('_action', 'actions', array(
                 'actions' => array(
-//                    'show' => array(),
                     'edit' => array(),
-//                    'delete' => array(),
+                    'delete' => array(),
                 )
             ))
         ;
@@ -37,9 +46,7 @@ class UnisenderAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('phones', null, ['label' => 'Номера телефонов(через запятую, без пробелов)'])
             ->add('apiKey', null, ['label' => 'Ключ API'])
-            ->add('senderName', null, ['label' => 'Имя отправителя'])
             ->add('active', null, ['label' => 'Активность(вкл/выкл)'])
         ;
     }
@@ -48,4 +55,5 @@ class UnisenderAdmin extends Admin
     {
         return array();
     }
+
 }
