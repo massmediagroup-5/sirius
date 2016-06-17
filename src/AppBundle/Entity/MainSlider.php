@@ -22,6 +22,11 @@ class MainSlider
     /**
      * @var string
      */
+    private $buttonText;
+
+    /**
+     * @var string
+     */
     private $alias;
 
     /**
@@ -93,6 +98,30 @@ class MainSlider
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set buttonText
+     *
+     * @param string $buttonText
+     *
+     * @return MainSlider
+     */
+    public function setButtonText($buttonText)
+    {
+        $this->buttonText = $buttonText;
+
+        return $this;
+    }
+
+    /**
+     * Get buttonText
+     *
+     * @return string
+     */
+    public function getButtonText()
+    {
+        return $this->buttonText;
     }
 
     /**

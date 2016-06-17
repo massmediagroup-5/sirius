@@ -53,6 +53,7 @@ class MainSliderAdmin extends Admin
 
         $formMapper
             ->add('title',null,array('label'=>'Название'))
+            ->add('buttonText',null,array('label'=>'Текст кнопки'))
             ->add('alias',null,array('label'=>'Ссылка'))
             ->add('description',null,array('label'=>'Описание','attr' => array('class' => 'ckeditor')))
             ->add('file', 'file',$fileFieldOptions)
