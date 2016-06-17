@@ -38,6 +38,7 @@ class OrderStatusAdmin extends Admin
             ->add('baseFlag', null, array('label' => 'Базовый'))
             ->add('priority', null, array('editable' => true, 'label' => 'Приоритет'))
             ->add('sendClient', null, array('editable' => true, 'label' => 'Отправлять клиенту смс'))
+            ->add('sendClientEmail', null, array('editable' => true, 'label' => 'Отправлять клиенту Email'))
             ->add('sendManager', null, array('editable' => true, 'label' => 'Отправлять менеджеру смс'))
             ->add('active', null, array('editable' => true, 'label' => 'Активность(вкл/выкл)'))
             ->add('_action', 'actions', array(
@@ -64,7 +65,12 @@ class OrderStatusAdmin extends Admin
             ->add('sendClient', null, array('label' => 'Отправлять клиенту смс'))
             ->add('sendClientText', null, array(
                 'label' => 'Текст смс клиенту',
-                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение %s'
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
+            ))
+            ->add('sendClientEmail', null, array('label' => 'Отправлять клиенту Email'))
+            ->add('sendClientEmailText', null, array(
+                'label' => 'Текст Email клиенту',
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
             ))
             ->add('sendManager', null, array('label' => 'Отправлять менеджеру смс'))
             ->add('sendManagerText', null, array(

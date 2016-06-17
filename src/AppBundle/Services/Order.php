@@ -334,6 +334,19 @@ class Order
                             $order->setClientSmsStatus($client_sms_status['error']);
                         }
                     }
+                    if( ( $orderStatus->getSendClientEmail() ) && ( !empty($orderStatus->getSendClientEmailText() ) ) ){
+                        $body = sprintf(
+                            $orderStatus->getSendClientEmailText(),
+                            $orderStatus->getId() // %s
+                        );
+                        $message = \Swift_Message::newInstance()
+                                                 ->setSubject('Order from orders@sirius.com.ua')
+                                                 ->setFrom('orders@sirius.com.ua')
+                                                 ->addTo($orderStatus->getUsers()->getEmail())
+                                                 ->setBody($body)
+                                                 ->setContentType("text/html");
+                        $this->container->get('mailer')->send($message);
+                    }
                     if( ( $orderStatus->getSendManager() ) && ( !empty( $orderStatus->getSendManagerText() ) ) ){
                         $phones = explode( ',', $uniSender->getPhones() );
                         foreach( $phones as $phone ){

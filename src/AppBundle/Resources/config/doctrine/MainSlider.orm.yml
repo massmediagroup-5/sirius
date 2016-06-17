@@ -57,6 +57,11 @@ AppBundle\Entity\MainSlider:
             length: 255
             options:
                 fixed: false
+        priority:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
         active:
             type: boolean
             nullable: true

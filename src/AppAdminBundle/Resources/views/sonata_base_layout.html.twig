@@ -9,10 +9,11 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+    <script src="{{ asset('bundles/appadmin/ckeditor/ckeditor.js') }}"></script>
+{#<script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 <script type="text/javascript">
     CKEDITOR.config.allowedContent = true;
-</script>
+</script>#}
 {% endblock %}
 
 {% block navbar_title %}

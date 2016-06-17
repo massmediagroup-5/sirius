@@ -19,6 +19,7 @@ class MainSliderAdmin extends Admin
         $listMapper
             ->addIdentifier('title', null, array('label' => 'Название'))
             ->addIdentifier('alias', null, array('label' => 'Ссылка'))
+            ->add('priority', null, array('label' => 'Сортировка', 'editable' => true))
             ->add('active', null, array('label' => 'Активность(вкл/выкл)', 'editable' => true))
             ->add('createTime', null, array('label' => 'Время создания'))
             ->add('updateTime', null, array('label' => 'Время последнего обновления'))
@@ -55,6 +56,7 @@ class MainSliderAdmin extends Admin
             ->add('alias',null,array('label'=>'Ссылка'))
             ->add('description',null,array('label'=>'Описание','attr' => array('class' => 'ckeditor')))
             ->add('file', 'file',$fileFieldOptions)
+            ->add('priority',null,array('label'=>'Сортировка'))
             ->add('active',null,array('label'=>'Активность(вкл/выкл)'))
         ;
     }
