@@ -39,6 +39,8 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
+            new JMS\TranslationBundle\JMSTranslationBundle(),
+            new Comur\ImageBundle\ComurImageBundle(),
             new AppBundle\AppBundle(),
             new UserBundle\UserBundle(),
             new AppImportBundle\AppImportBundle(),

@@ -45,6 +45,12 @@ AppBundle\Entity\MainSlider:
             length: 255
             options:
                 fixed: false
+        buttonText:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
         description:
             type: text
             nullable: true
@@ -57,6 +63,11 @@ AppBundle\Entity\MainSlider:
             length: 255
             options:
                 fixed: false
+        priority:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
         active:
             type: boolean
             nullable: true

@@ -29,6 +29,13 @@ AppBundle\Entity\OrderStatus:
             type: string
             length: 255
             nullable: true
+        sendClientEmail:
+            type: boolean
+            column: send_client_email
+        sendClientEmailText:
+            type: string
+            length: 255
+            nullable: true
         sendManager:
             type: boolean
             column: send_manager
