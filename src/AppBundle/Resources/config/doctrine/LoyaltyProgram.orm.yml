@@ -1,0 +1,20 @@
+AppBundle\Entity\LoyaltyProgram:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Entity\Repository\LoyaltyProgram
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        sumFrom:
+            type: decimal
+            column: sum_from
+        sumTo:
+            type: decimal
+            column: sum_to
+        discount:
+            type: decimal
+    lifecycleCallbacks: {  }
