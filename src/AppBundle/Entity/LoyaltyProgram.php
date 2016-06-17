@@ -110,4 +110,3 @@ class LoyaltyProgram
         return $this->discount;
     }
 }
-

@@ -8,7 +8,9 @@ use AppBundle\Entity\Orders;
 use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
+use AppBundle\Entity\Users;
 use AppBundle\Exception\CartEmptyException;
+use AppBundle\Exception\UserInGrayListException;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
@@ -50,9 +52,14 @@ class Order
      * @param bool|false $quickFlag
      * @return Orders
      * @throws CartEmptyException
+     * @throws UserInGrayListException
      */
-    public function orderFromCart($data, $user, $quickFlag = false)
+    public function orderFromCart($data, Users $user, $quickFlag = false)
     {
+        if($user->getGrayListFlag()) {
+            throw new UserInGrayListException;
+        }
+
         $cart = $this->container->get('cart');
 
         if (!$cart->getItems()) {

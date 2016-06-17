@@ -46,9 +46,9 @@
                         {% if not loop.last  %}
                             <li>
                                 {% if menu.uri is not empty %}
-                                    <a href="{{ menu.uri }}">{{ menu.label|raw|trans({}, 'AppAdminBundle') }}</a>
+                                    <a href="{{ menu.uri }}">{{ menu.label|trans({}, 'AppAdminBundle')|raw }}</a>
                                 {% else %}
-                                    {{ menu.label|trans({}, 'AppAdminBundle') }}
+                                    {{ menu.label|trans({}, 'AppAdminBundle')|raw }}
                                 {% endif %}
                             </li>
                         {% else %}
