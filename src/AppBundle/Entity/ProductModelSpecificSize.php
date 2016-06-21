@@ -98,7 +98,7 @@ class ProductModelSpecificSize
     /**
      * Get wholesalePrice
      *
-     * @return string
+     * @return float
      */
     public function getWholesalePrice()
     {

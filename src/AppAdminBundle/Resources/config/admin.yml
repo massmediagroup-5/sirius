@@ -257,9 +257,7 @@ services:
               manager_type: orm
               group: %sonata.user.admin.groupname%
               label: "Оптовики"
-              label_catalogue: %sonata.user.admin.label_catalogue%
               label_translator_strategy: sonata.admin.label.strategy.underscore
-              icon: %sonata.user.admin.groupicon%
         calls:
             - [ setUserManager, [ @fos_user.user_manager ] ]
             - [ setTranslationDomain, [ %sonata.user.admin.user.translation_domain% ] ]
@@ -272,9 +270,7 @@ services:
               manager_type: orm
               group: %sonata.user.admin.groupname%
               label: "Менеджеры"
-              label_catalogue: %sonata.user.admin.label_catalogue%
               label_translator_strategy: sonata.admin.label.strategy.underscore
-              icon: %sonata.user.admin.groupicon%
         calls:
             - [ setUserManager, [ @fos_user.user_manager ] ]
             - [ setTranslationDomain, [ %sonata.user.admin.user.translation_domain% ] ]

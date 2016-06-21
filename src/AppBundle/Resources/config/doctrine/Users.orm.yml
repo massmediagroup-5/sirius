@@ -89,4 +89,10 @@ AppBundle\Entity\Users:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
+    oneToMany:
+        orders:
+            targetEntity: Orders
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: users
     lifecycleCallbacks: {  }
