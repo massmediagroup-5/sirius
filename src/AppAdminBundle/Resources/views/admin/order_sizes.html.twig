@@ -51,7 +51,15 @@
                     <tfoot>
                         <tr>
                             <td colspan="7" class="text-right">Всего</td>
+                            <th colspan="2" id="totalPrice">{{ admin.subject.totalPrice }}</th>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="text-right">Цена со скидкой</td>
                             <th colspan="2" id="discountedTotalPrice">{{ admin.subject.discountedTotalPrice }}</th>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="text-right">Оплачено бонусами</td>
+                            <th colspan="2" id="bonuses">{{ admin.subject.bonuses }}</th>
                         </tr>
                         <tr>
                             <td colspan="7" class="text-right">Погасить</td>

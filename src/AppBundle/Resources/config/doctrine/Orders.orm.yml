@@ -96,6 +96,11 @@ AppBundle\Entity\Orders:
             options:
                 default: 0.00
             column: individual_discount
+        bonuses:
+            type: integer
+            nullable: false
+            options:
+                default: 0
         clientSmsId:
             type: string
             nullable: true

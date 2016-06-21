@@ -6350,19 +6350,7 @@ input[type="checkbox"] {
 		float: left;
 	}
 	input {
-		border: 1px solid #c8cbcc;
-		font-size: 16px;
-		line-height: 18px;
-		display: block;
-		@include border-box();
-		padding: 11px 15px;
-		width: 100%;
-		&:focus {
-			border-color: $blue;
-		}
-		&.error {
-			border-color: #f24841;
-		}
+		@extend %main_input;
 	}
 	.inp {
 		width: 457px;
@@ -9108,5 +9096,26 @@ body {
 	&.disable {
 		opacity: 0;
 		visibility: hidden;
+	}
+}
+
+.order-bonuses {
+	input {
+		@extend %main_input;
+		width: 120px;
+		float: right;
+	}
+	table {
+		tr {
+			td {
+				vertical-align: middle;
+				&:first-child {
+					width: auto;
+				}
+				&:last-child {
+					width: 120px;
+				}
+			}
+		}
 	}
 }

@@ -212,3 +212,19 @@ html, body {
 .hide {
 	display: none;
 }
+
+%main_input {
+	border: 1px solid #c8cbcc;
+	font-size: 16px;
+	line-height: 18px;
+	display: block;
+	@include border-box();
+	padding: 11px 15px;
+	width: 100%;
+	&:focus {
+		border-color: $blue;
+	}
+	&.error {
+		border-color: #f24841;
+	}
+}

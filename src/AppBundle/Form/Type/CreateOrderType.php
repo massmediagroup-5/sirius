@@ -2,20 +2,38 @@
 namespace AppBundle\Form\Type;
 
 use AppBundle\Entity\Orders;
+use AppBundle\Services\PricesCalculator;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Arr;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CreateOrderType extends AbstractType
 {
+    /**
+     * @var PricesCalculator
+     */
+    protected $pricesCalculator;
+    
+    /**
+     * CreateOrderType constructor.
+     * @param PricesCalculator $pricesCalculator
+     */
+    public function __construct(PricesCalculator $pricesCalculator)
+    {
+        $this->pricesCalculator = $pricesCalculator;
+    }
 
     /**
      * {@inheritdoc}
@@ -25,8 +43,8 @@ class CreateOrderType extends AbstractType
         $request = isset($options['request']) ? $options['request'] : false;
         $delivery = $request ? $request->get('create_order')['delivery_type'] : false;
         $city = false;
-        if($delivery) {
-            if($delivery == 'np') {
+        if ($delivery) {
+            if ($delivery == 'np') {
                 $city = $request->get('create_order')['np_delivery_city'];
             }
         }
@@ -68,7 +86,7 @@ class CreateOrderType extends AbstractType
                 'class' => 'AppBundle:Stores',
                 'required' => true,
                 'constraints' => $delivery == 'np' ? [new NotBlank] : [],
-                'query_builder'  => function (EntityRepository $er) use($city) {
+                'query_builder' => function (EntityRepository $er) use ($city) {
                     return $er->createQueryBuilder('s')->orderBy('s.name', 'ASC')->where('s.cities = :city')
                         ->setParameter('city', $city);
                 },
@@ -87,6 +105,13 @@ class CreateOrderType extends AbstractType
                 'required' => true,
                 'data' => Orders::PAY_TYPE_BANK_CARD,
                 'expanded' => true,
+            ])
+            ->add('bonuses', HiddenType::class, [
+                'constraints' => [
+                    new GreaterThanOrEqual(0),
+                    new LessThanOrEqual($this->pricesCalculator->getMaxAllowedBonuses())
+                ],
+                'data' => 0
             ])
             ->add('submit', SubmitType::class);
 

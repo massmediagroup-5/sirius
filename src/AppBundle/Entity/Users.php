@@ -429,6 +429,20 @@ class Users extends BaseUser
     }
 
     /**
+     * Decrement bonuses
+     *
+     * @param integer $bonuses
+     *
+     * @return Users
+     */
+    public function decrementBonuses($bonuses)
+    {
+        $this->bonuses -= $bonuses;
+
+        return $this;
+    }
+
+    /**
      * Get bonuses
      *
      * @return integer

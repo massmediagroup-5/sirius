@@ -82,3 +82,9 @@ services:
     novaposhta:
         class: AppBundle\Services\NovaPoshta
         arguments: ["@doctrine.orm.entity_manager"]
+
+    app.form.create_order:
+        class: AppBundle\Form\Type\CreateOrderType
+        arguments: ['@prices_calculator']
+        tags:
+            - { name: form.type }
