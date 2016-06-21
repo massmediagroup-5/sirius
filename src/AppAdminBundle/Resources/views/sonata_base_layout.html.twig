@@ -10,6 +10,8 @@
 {% block javascripts %}
 {{ parent() }}
     <script src="{{ asset('bundles/appadmin/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 {#<script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 <script type="text/javascript">
     CKEDITOR.config.allowedContent = true;
@@ -17,7 +19,7 @@
 {% endblock %}
 
 {% block sonata_header %}
-    {% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false} %}
+    {% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false, 'include_bootstrap': false} %}
     {{ parent() }}
 
 {% endblock sonata_header %}
