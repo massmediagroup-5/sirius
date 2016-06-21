@@ -40,16 +40,16 @@ class MainSliderAdmin extends Admin
         $image = $this->getSubject();
 
         // use $fileFieldOptions so we can add other options to the field
-        $fileFieldOptions = array('label'=>'Файл','required' => false);
-        $webPath = $image->getWebPath();
-        if ($image && ($webPath != '/img/slider/')) {
-            // get the container so the full path to the image can be set
-            $container = $this->getConfigurationPool()->getContainer();
-            $fullPath = $container->get('request')->getBasePath().$webPath;
-
-            // add a 'help' option containing the preview's img tag
-            $fileFieldOptions['help'] = '<img src="'.$fullPath.'" class="admin-preview" />';
-        }
+//        $fileFieldOptions = array('label'=>'Файл','required' => false);
+//        $webPath = $image->getWebPath();
+//        if ($image && ($webPath != '/img/slider/')) {
+//            // get the container so the full path to the image can be set
+//            $container = $this->getConfigurationPool()->getContainer();
+//            $fullPath = $container->get('request')->getBasePath().$webPath;
+//
+//            // add a 'help' option containing the preview's img tag
+//            $fileFieldOptions['help'] = '<img src="'.$fullPath.'" class="admin-preview" />';
+//        }
 
         $formMapper
             ->add('title',null,array('label'=>'Название'))
@@ -69,38 +69,38 @@ class MainSliderAdmin extends Admin
 //                    'saveOriginal' => 'originalImage',          //optional
                     'generateFilename' => true          //optional
                 ),
-//                'cropConfig' => array(
-//                    'minWidth' => 588,
-//                    'minHeight' => 300,
-//                    'aspectRatio' => true,              //optional
-//                    'cropRoute' => 'comur_api_crop',    //optional
-//                    'forceResize' => false,             //optional
-//                    'thumbs' => array(                  //optional
-//                        array(
-//                            'maxWidth' => 180,
-//                            'maxHeight' => 400,
+                'cropConfig' => array(
+                    'minWidth' => 1920,
+                    'minHeight' => 770,
+                    'aspectRatio' => true,              //optional
+                    'cropRoute' => 'comur_api_crop',    //optional
+                    'forceResize' => false,             //optional
+                    'thumbs' => array(                  //optional
+                        array(
+                            'maxWidth' => 192,
+                            'maxHeight' => 77,
 //                            'useAsFieldImage' => true  //optional
-//                        )
-//                    )
-//                )
+                        )
+                    )
+                )
             ))
             ->add('priority',null,array('label'=>'Сортировка'))
             ->add('active',null,array('label'=>'Активность(вкл/выкл)'))
         ;
     }
 
-    public function prePersist($image)
-    {
-        $this->manageFileUpload($image);
-    }
+//    public function prePersist($image)
+//    {
+//        $this->manageFileUpload($image);
+//    }
+//
+//    public function preUpdate($image)
+//    {
+//        $this->manageFileUpload($image);
+//    }
 
-    public function preUpdate($image)
-    {
-        $this->manageFileUpload($image);
-    }
-
-    private function manageFileUpload($image)
-    {
-        $image->setUpdateTime(new \DateTime());
-    }
+//    private function manageFileUpload($image)
+//    {
+//        $image->setUpdateTime(new \DateTime());
+//    }
 }
