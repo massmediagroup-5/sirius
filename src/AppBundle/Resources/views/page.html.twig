@@ -1,6 +1,14 @@
 {% extends 'AppBundle:base.html.twig' %}
 {% block out_class %}out_sub{% endblock %}
+{% block meta %}
+<title>Sirius || {{ page.title }}</title>
+    <meta name="title" content="{{ page.title }}" />
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="{{ page.seoDescription }}" />
+    <meta name="keywords" content="{{ page.seoKeywords }}" />
+{% endblock %}
 {% block body %}
+    {#{{ dump(page) }}#}
     <section class="content">
         <div class="wrap">
             <div class="content__i">
