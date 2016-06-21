@@ -48,6 +48,7 @@ labels:
   products_count: '%count% товар|%count% товара|%count% товаров'
   cart_products_packages: 'упаковка|упаковки|упаковок'
   user_bonuses_count: '%count% балл|%count% балла|%count% баллов'
+  user_bonuses: 'балл|балла|баллов'
   cart_products: 'товар|товара|товаров'
 
 messages:

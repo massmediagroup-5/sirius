@@ -1,0 +1,19 @@
+<div class="my-discount">
+    <h2>Мои скидки</h2>
+
+    <div class="my-discount-info">
+        <p>Состояние на: <strong>{{ 'now'|date('d.m.Y') }}</strong></p>
+
+        <div class="discount-size">
+            <table>
+                <tbody>
+                <tr>
+                    <td>Ваш бонусный счет</td>
+                    <td><span>{{ app.user.bonuses }}
+                            <strong>{{ 'labels.user_bonuses'|transchoice(app.user.bonuses) }}</strong></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

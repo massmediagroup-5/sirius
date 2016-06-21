@@ -53,6 +53,15 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/user/loyal", name="user_loyal")
+     * @return mixed
+     */
+    public function loyalAction()
+    {
+        return $this->render('AppBundle:user/loyal.html.twig');
+    }
+
+    /**
      * @Route("/user/orders", name="user_orders")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @return mixed
