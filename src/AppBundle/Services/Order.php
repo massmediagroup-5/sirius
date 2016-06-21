@@ -85,6 +85,11 @@ class Order
 
             $this->em->persist($preOrder);
         }
+
+        $user->decrementBonuses(Arr::get($data, 'bonuses', 0));
+
+        $this->em->persist($user);
+
         $this->em->persist($order);
 
         $this->em->flush();
@@ -527,11 +532,13 @@ class Order
             }
             $cities = Arr::get($data, $prefix . 'delivery_city', null);
             $stores = Arr::get($data, $prefix . 'delivery_store', null);
-
+            $bonuses = Arr::get($data, 'bonuses', 0);
+            
             $order->setCities($cities);
             $order->setStores($stores);
             $order->setCarriers($cities->getCarriers());
             $order->setComment(Arr::get($data, 'comment'));
+            $order->setBonuses($bonuses);
             $order->setPay(Arr::get($data, 'pay'));
             $order->setFio(Arr::get($data, 'name') . ' ' . Arr::get($data, 'surname'));
             $order->setType(Orders::TYPE_NORMAL);

@@ -174,8 +174,9 @@ var OrderSizes = (function () {
         $('input[name=individualDiscount], input[name=additionalSolar]').on('keyup change', function () {
             var $discountedPrice = $('#individualDiscountedTotalPrice'),
                 $price = $('#discountedTotalPrice'),
+                $bonuses = $('#bonuses'),
                 price = $price.text() - parseFloat($('input[name=individualDiscount]').val())
-                    + parseFloat($('input[name=additionalSolar]').val());
+                    + parseFloat($('input[name=additionalSolar]').val()) - $bonuses.text();
             price = parseFloat(price);
             if (isNaN(price)) {
                 price = $price.text();

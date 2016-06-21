@@ -22,7 +22,7 @@
                 {% else %}
                     {{ widget('breadcrumbs.render')|raw }}
                     <h2 class="catalog-title">
-                        По Вашему запросу «{{ slug }}» <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
+                        По Вашему запросу «{{ slug }}» <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount%count% ) }})</span>
                     </h2>
                     <div class="catalog">
                     <div class="catalog__i">

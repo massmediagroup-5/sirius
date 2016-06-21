@@ -175,6 +175,12 @@ class Orders
     private $history;
 
     /**
+     * @var integer
+     */
+    private $bonuses = 0;
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -723,7 +729,7 @@ class Orders
      */
     public function getIndividualDiscountedTotalPrice()
     {
-        return $this->getDiscountedTotalPrice() - $this->individualDiscount + $this->additionalSolar;
+        return $this->getDiscountedTotalPrice() - $this->individualDiscount + $this->additionalSolar - $this->getBonuses();
     }
 
     /**
@@ -999,5 +1005,29 @@ class Orders
     public function getHistory()
     {
         return $this->history;
+    }
+
+    /**
+     * Set bonuses
+     *
+     * @param integer $bonuses
+     *
+     * @return Orders
+     */
+    public function setBonuses($bonuses)
+    {
+        $this->bonuses = $bonuses;
+
+        return $this;
+    }
+
+    /**
+     * Get bonuses
+     *
+     * @return integer
+     */
+    public function getBonuses()
+    {
+        return $this->bonuses;
     }
 }

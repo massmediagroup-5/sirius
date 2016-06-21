@@ -61,7 +61,7 @@ class Options
      */
     public function getParamValue($name, $default = false)
     {
-        return isset($this->params[$name]['value']) ? $this->params[$name] : $default;
+        return isset($this->getParams()[$name]['value']) ? $this->params[$name]['value'] : $default;
     }
 
 }

@@ -89,6 +89,25 @@
                                         </table>
                                     </div>
                                 {% endif %}
+
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') and not is_granted('ROLE_WHOLESALER') %}
+                                    <div class="mid order-bonuses">
+                                        <h2>
+                                            Бонусный счет
+                                            <span>{{ 'labels.user_bonuses_count'|transchoice(app.user.bonuses, {'%count%': app.user.bonuses}) }}</span>
+                                        </h2>
+                                        <table>
+                                            <tr>
+                                                <td>Использовать баллов</td>
+                                                <td>
+                                                    <input type="number" class="js_user_bonuses_count" value="0" min="0"
+                                                           max="{{ prices.maxAllowedBonuses }}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                {% endif %}
+
                                 <div class="bottom">
                                     <h2>Всего</h2>
                                     <table>
@@ -102,7 +121,10 @@
                                         </tr>
                                         <tr class="pay-row">
                                             <td>Сумма к оплате</td>
-                                            <td>{{ cart.discountedTotalPrice }} грн.</td>
+                                            <td>
+                                                <span class="js_total_discounted_price">{{ cart.discountedTotalPrice }}</span>
+                                                грн.
+                                            </td>
                                         </tr>
                                     </table>
 
