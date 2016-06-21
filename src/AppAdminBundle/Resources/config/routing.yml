@@ -24,3 +24,7 @@ admin_app_import_index:
 admin_app_import_start:
     pattern:  /admin/app/import/start
     defaults: { _controller: AppAdminBundle:Import:start}
+
+comur_image:
+    resource: "@ComurImageBundle/Resources/config/routing.yml"
+    prefix:   /

@@ -95,7 +95,3 @@ app_category:
 app_product:
     resource: "@AppBundle/Controller/ProductController.php"
     type:     annotation
-
-comur_image:
-    resource: "@ComurImageBundle/Resources/config/routing.yml"
-    prefix:   /
