@@ -13,13 +13,13 @@ class PageAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('title', 'text', array('label' => 'Заглавие'))
+            ->add('title', 'text', array('label' => 'Название страницы'))
             ->add('alias', 'text', array('label' => 'Ссылка'))
             ->add('description', 'text', array('label' => 'Описание страницы'))
-            ->add('seo_title', 'text', array('label' => 'СЕО заглавие'))
-            ->add('seo_description', 'text', array('label' => 'СЕО описание'))
-            ->add('seo_keywords', 'text', array('label' => 'СЕО кейворды'))
-            ->add('content', 'textarea', array('label' => 'Контент','attr' => array('class' => 'ckeditor'))) //if no type is specified, SonataAdminBundle tries to guess it
+            ->add('content', 'textarea', array('label' => 'Контент','attr' => array('class' => 'ckeditor')))
+            ->add('seo_title', 'text', array('label' => 'META title'))
+            ->add('seo_description', 'text', array('label' => 'META description'))
+            ->add('seo_keywords', 'text', array('label' => 'META keywords'))
         ;
     }
 

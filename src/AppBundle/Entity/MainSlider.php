@@ -357,7 +357,9 @@ class MainSlider
     {
 //        dump(realpath(__DIR__.'/../../../web/'.$this->getUploadDir()));exit;
         // absolute path to your directory where images must be saved
-        return __DIR__.'/../../../web/'.$this->getUploadDir();
+        $path=__DIR__.'/../../../web/'.$this->getUploadDir();
+        $path = str_replace('\\','/',$path);
+        return $path;
     }
 
     /**
