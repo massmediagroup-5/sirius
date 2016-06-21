@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "87ccad25fec47965937c06568e760254",
-    "content-hash": "4ea9da1f6e571b765e9e0274eec3ed74",
+    "hash": "a502706aad2094bd75857ea788dab875",
+    "content-hash": "79815dd6ebb5ec2a5573ea79f5fc148f",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -292,17 +292,17 @@
         },
         {
             "name": "comur/image-bundle",
-            "version": "1.1.0",
+            "version": "dev-master",
             "target-dir": "Comur/ImageBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/comur/ComurImageBundle.git",
-                "reference": "c8c4957e9114a664476143880d42058fdfcd7e55"
+                "reference": "cc90461fb48c247a9c1ccaa1063f480b36bd89df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/comur/ComurImageBundle/zipball/c8c4957e9114a664476143880d42058fdfcd7e55",
-                "reference": "c8c4957e9114a664476143880d42058fdfcd7e55",
+                "url": "https://api.github.com/repos/comur/ComurImageBundle/zipball/cc90461fb48c247a9c1ccaa1063f480b36bd89df",
+                "reference": "cc90461fb48c247a9c1ccaa1063f480b36bd89df",
                 "shasum": ""
             },
             "require": {
@@ -352,7 +352,7 @@
                 "jquery upload",
                 "upload"
             ],
-            "time": "2015-04-01 09:21:30"
+            "time": "2016-04-07 08:52:35"
         },
         {
             "name": "container-interop/container-interop",
@@ -7526,6 +7526,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/user-bundle": 20,
+        "comur/image-bundle": 20,
         "hautelook/alice-bundle": 20
     },
     "prefer-stable": false,

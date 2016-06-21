@@ -90,20 +90,21 @@ class PricesCalculator
      */
     public function getProductPrice(Products $object)
     {
-        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            return $object->getWholesalePrice() ?: $object->getPrice();
-        }
+        // Note - no wholesale price, wholesale price used only for discounted prices
+
         return $object->getPrice();
     }
 
     /**
-     * Todo Currently return price without discounts, add actions, discounts
-     *
      * @param Products $object
      * @return float
      */
     public function getProductDiscountedPrice(Products $object)
     {
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            return $object->getWholesalePrice() ?: $object->getPrice();
+        }
+
         return $this->getProductPrice($object);
     }
 
@@ -115,12 +116,8 @@ class PricesCalculator
      */
     public function getProductModelPrice(ProductModels $object)
     {
-        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            if ($object->getWholesalePrice()) {
-                return $object->getWholesalePrice();
-            }
-            return $this->getProductPrice($object->getProducts());
-        }
+        // Note - no wholesale price, wholesale price used only for discounted prices
+
         if ($object->getPrice()) {
             return $object->getPrice();
         }
@@ -128,13 +125,20 @@ class PricesCalculator
     }
 
     /**
-     * Todo Currently return price without discounts, add actions, discounts
+     * Note: we not buy ProductModel, we buy size. ProductModel used to store common data.
      *
      * @param ProductModels $object
      * @return float
      */
     public function getProductModelDiscountedPrice(ProductModels $object)
     {
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            if ($object->getWholesalePrice()) {
+                return $object->getWholesalePrice();
+            }
+            return $this->getProductPrice($object->getProducts());
+        }
+
         return $this->getProductModelPrice($object);
     }
 
@@ -168,12 +172,8 @@ class PricesCalculator
      */
     public function getProductModelSpecificSizePrice(ProductModelSpecificSize $object)
     {
-        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            if ($object->getWholesalePrice()) {
-                return $object->getWholesalePrice();
-            }
-            return $this->getProductModelPrice($object->getModel());
-        }
+        // Note - no wholesale price, wholesale price used only for discounted prices
+
         if ($object->getPrice()) {
             return $object->getPrice();
         }
@@ -181,16 +181,39 @@ class PricesCalculator
     }
 
     /**
+     * Calculate discounted price for model size
+     *
      * @param ProductModelSpecificSize $object
      * @return float
      */
     public function getProductModelSpecificSizeDiscountedPrice(ProductModelSpecificSize $object)
     {
         if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            return $this->getProductModelSpecificSizePrice($object);
+            $user = $this->container->get('security.context')->getToken()->getUser();
+
+            $price = $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
+            $wholesalePrice = $object->getWholesalePrice() ?: $this->getProductModelDiscountedPrice($object->getModel());
+
+            $cart = $this->container->get('cart');
+            $totalPriceWithNewSize = $cart->getTotalPrice() + $price;
+            if ($user->getOrders()->count() > 1) {
+                if ($totalPriceWithNewSize > 500) {
+                    $price = $wholesalePrice;
+                }
+            } else {
+                if ($totalPriceWithNewSize > 2500) {
+                    $price = $wholesalePrice;
+                } elseif ($price > 500) {
+                    $price = $price - ceil($price * 10);
+                }
+            }
+            return $price;
         }
-        $discount = $this->container->get('share')->getSingleDiscount($object);
+
         $price = $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
+
+        // Subtract share discount
+        $discount = $this->container->get('share')->getSingleDiscount($object);
 
         return $discount ? $price - ceil($price * $discount) / 100 : $price;
     }

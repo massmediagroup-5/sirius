@@ -87,6 +87,22 @@ class Users extends BaseUser
     protected $grayListFlag = false;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $orders;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -119,7 +135,7 @@ class Users extends BaseUser
     {
         return $this->uid;
     }
-    
+
     /**
      * Set phone
      *
@@ -444,5 +460,39 @@ class Users extends BaseUser
     public function getGrayListFlag()
     {
         return $this->grayListFlag;
+    }
+
+    /**
+     * Add order
+     *
+     * @param \AppBundle\Entity\Orders $order
+     *
+     * @return Users
+     */
+    public function addOrder(\AppBundle\Entity\Orders $order)
+    {
+        $this->orders[] = $order;
+
+        return $this;
+    }
+
+    /**
+     * Remove order
+     *
+     * @param \AppBundle\Entity\Orders $order
+     */
+    public function removeOrder(\AppBundle\Entity\Orders $order)
+    {
+        $this->orders->removeElement($order);
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 }

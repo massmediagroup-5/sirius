@@ -411,6 +411,17 @@ class Cart
     }
 
     /**
+     * @return float
+     */
+    public function getDiscountPercentages()
+    {
+        $discount = $this->getDiscount();
+        $totalPrice = $this->getTotalPrice();
+
+        return $totalPrice ? round($discount * 100 / $this->getTotalPrice()) : 0;
+    }
+
+    /**
      * @return void
      */
     public function saveInSession()
