@@ -8,7 +8,6 @@ use AppBundle\Entity\Orders;
 use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
-use AppBundle\Entity\Users;
 use AppBundle\Exception\CartEmptyException;
 use AppBundle\Exception\UserInGrayListException;
 use Illuminate\Support\Arr;
@@ -54,9 +53,9 @@ class Order
      * @throws CartEmptyException
      * @throws UserInGrayListException
      */
-    public function orderFromCart($data, Users $user, $quickFlag = false)
+    public function orderFromCart($data, $user, $quickFlag = false)
     {
-        if($user->getGrayListFlag()) {
+        if(($user)&&($user->getGrayListFlag())) {
             throw new UserInGrayListException;
         }
 
@@ -86,9 +85,11 @@ class Order
             $this->em->persist($preOrder);
         }
 
-        $user->decrementBonuses(Arr::get($data, 'bonuses', 0));
+        if($user){
+            $user->decrementBonuses(Arr::get($data, 'bonuses', 0));
 
-        $this->em->persist($user);
+            $this->em->persist($user);
+        }
 
         $this->em->persist($order);
 

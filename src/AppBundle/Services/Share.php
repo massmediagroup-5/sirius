@@ -163,4 +163,22 @@ class Share
         return array_combine($this->classNames, $this->classNames);
     }
 
+    /**
+     * @param ProductModels $object
+     * @return boolean
+     */
+    public function checkSharesActuality(ProductModels $object)
+    {
+        if($share = $object->getShare()){
+
+            $now = strtotime(strtotime((date('Y-m-d h:i:s'))));
+            $startTime = strtotime($share->getStartTime()->format('Y-m-d h:i:s'));
+            $endTime = strtotime($share->getEndTime()->format('Y-m-d h:i:s'));
+
+            return (($now > $startTime )&&($now < $endTime)) ? true : false;
+        }else{
+            return false;
+        }
+    }
+
 }

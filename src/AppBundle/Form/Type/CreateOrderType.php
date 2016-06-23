@@ -18,9 +18,17 @@ use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CreateOrderType extends AbstractType
 {
+    /**
+     * container
+     *
+     * @var mixed
+     */
+    private $container;
+
     /**
      * @var PricesCalculator
      */
@@ -29,10 +37,12 @@ class CreateOrderType extends AbstractType
     /**
      * CreateOrderType constructor.
      * @param PricesCalculator $pricesCalculator
+     * @param ContainerInterface $container
      */
-    public function __construct(PricesCalculator $pricesCalculator)
+    public function __construct(PricesCalculator $pricesCalculator, ContainerInterface $container)
     {
         $this->pricesCalculator = $pricesCalculator;
+        $this->container = $container;
     }
 
     /**
@@ -49,6 +59,8 @@ class CreateOrderType extends AbstractType
             }
         }
         $user = Arr::get($options, 'user');
+        $authenticated = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY');
+//        dump($authenticated);exit;
 
         $paymentTypes = [
             Orders::PAY_TYPE_BANK_CARD,
@@ -109,7 +121,7 @@ class CreateOrderType extends AbstractType
             ->add('bonuses', HiddenType::class, [
                 'constraints' => [
                     new GreaterThanOrEqual(0),
-                    new LessThanOrEqual($this->pricesCalculator->getMaxAllowedBonuses())
+                    new LessThanOrEqual($authenticated ? 0 : $this->pricesCalculator->getMaxAllowedBonuses())
                 ],
                 'data' => 0
             ])

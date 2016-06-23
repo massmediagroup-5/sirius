@@ -85,6 +85,6 @@ services:
 
     app.form.create_order:
         class: AppBundle\Form\Type\CreateOrderType
-        arguments: ['@prices_calculator']
+        arguments: ['@prices_calculator', '@service_container']
         tags:
             - { name: form.type }

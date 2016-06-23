@@ -102,7 +102,12 @@
                                                                                     {% set check = 'checked="checked"' %}
                                                                                 {% endif %}
                                                                             {% endif %}
-                                                                            <input type="checkbox" class="checkbox" {{ check }} name="{{ filter_item.id }}" value="{{ param.id }}"/>
+                                                                            {% if data.characteristicValues[param.id] == 0 %}
+                                                                                {% set disabled = "disabled" %}
+                                                                            {% else %}
+                                                                                {% set disabled = "" %}
+                                                                            {% endif %}
+                                                                            <input type="checkbox" class="checkbox" {{ check }} {{ disabled }} name="{{ filter_item.id }}" value="{{ param.id }}"/>
                                                                             <span class="f-check"></span>
                                                                             {{ param.name }}
                                                                             <span>({{ data.characteristicValues[param.id] }})</span>
