@@ -43,7 +43,7 @@ class ShopController extends Controller
     /**
      * categoryAction
      *
-     * @Route("/{category}", name="category", options={"expose"=true})
+     * @Route("/{category}/", name="category", options={"expose"=true})
      *
      * @param mixed $category
      * @param Request $request
