@@ -71,6 +71,7 @@ twig:
         prices: @prices_calculator
         fos_csrf_provider: "@form.csrf_provider"
         filters: @filters
+        share: @share
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
@@ -173,17 +174,6 @@ doctrine:
                 naming_strategy: doctrine.orm.naming_strategy.underscore
 
 # Swiftmailer Configuration
-#swiftmailer:
-    #transport: gmail
-    ##encryption: ssl
-    ##auth_mode: login
-    ##host:      smtp.gmail.com
-    ##port:      465 or 587
-    #username:  "mmyttexx@gmail.com"
-    #password:  "Mytex-1000"
-    #spool:
-        #type: file
-        #path: "%kernel.root_dir%/spool"
 swiftmailer:
     transport: gmail
     username:  "mytex.com.ua@gmail.com"
@@ -191,18 +181,6 @@ swiftmailer:
     spool:
         type: file
         path: "%kernel.root_dir%/spool"
-#swiftmailer:
-    #transport: smtp
-    #encryption: ssl
-    #auth_mode: login
-    #host:      smtp.googlemail.com
-    #port:      465
-    #username:  "33secundy@gmail.com"
-    #password:  "zkp82d_ac"
-    #spool:
-        #type: file
-        #path: "%kernel.root_dir%/spool"
-
 
 sonata_block:
     default_contexts: [cms]
