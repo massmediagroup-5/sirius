@@ -8,12 +8,16 @@
                 <div class="item__i">
                     <div class="wrap">
                         <div class="text">
+                            {% if slide.description is not empty %}
                             <div class="text__i">
                                 {{ slide.description|raw }}
                             </div>
+                            {% endif %}
+                            {% if slide.buttonText is not empty %}
                             <div class="btn-row">
                                 <a href="{{ slide.alias }}" class="btn btn_black">{{ slide.buttonText }}</a>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
