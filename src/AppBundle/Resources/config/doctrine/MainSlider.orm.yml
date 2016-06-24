@@ -10,9 +10,6 @@ AppBundle\Entity\MainSlider:
             columns:
                 - title
                 - alias
-        active:
-            columns:
-                - active
         picture:
             columns:
                 - picture
@@ -20,9 +17,6 @@ AppBundle\Entity\MainSlider:
         id_UNIQUE:
             columns:
                 - id
-        alias_UNIQUE:
-            columns:
-                - alias
     id:
         id:
             type: integer
