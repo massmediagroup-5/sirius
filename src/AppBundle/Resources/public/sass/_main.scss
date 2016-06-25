@@ -755,7 +755,8 @@ input[type="checkbox"] {
 
 	.top-nav__i {
 		> ul {
-			width: 100%;
+			width: 100%;    
+			
 
 			> li {
 				float: left;
@@ -840,6 +841,12 @@ input[type="checkbox"] {
 							height: 4px;
 
 						}
+					}
+				}
+				>ul {				
+					@media (min-width: 1041px) {
+						overflow: hidden;
+						height: 56px;
 					}
 				}
 			}
