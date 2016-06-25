@@ -755,7 +755,8 @@ input[type="checkbox"] {
 
 	.top-nav__i {
 		> ul {
-			width: 100%;
+			width: 100%;    
+			
 
 			> li {
 				float: left;
@@ -768,9 +769,9 @@ input[type="checkbox"] {
 							color: #000;
 							background: white;
 						}
-						.sub-nav {
+						.sub-nav { 
 							display: block;
-						  	text-align: center;
+						  	text-align: left;
 						}
 					}
 				}
@@ -842,14 +843,19 @@ input[type="checkbox"] {
 						}
 					}
 				}
+				>ul {				
+					@media (min-width: 1041px) {
+						overflow: hidden;
+						height: 56px;
+					}
+				}
 			}
 		}
 	}
 
 	.sub-nav {
 		position: absolute;
-		left: 0;
-		right: 0;
+		right: auto;
 		top: 100%;
 		z-index: 11;
 		display: none;
@@ -883,6 +889,17 @@ input[type="checkbox"] {
 
 
 	}
+	
+	.has-sub-nav {
+		position: relative;
+		&.last:hover {
+			.sub-nav {
+				text-align: right;
+				right: 0;
+				left: auto;
+			}
+		}
+	}					
 
 	@media (max-width: 1140px) {
 		position: absolute;
@@ -915,8 +932,12 @@ input[type="checkbox"] {
 					width: 100%;
 					padding: 0;
 					margin-bottom: 25px;
+					&:last-child, &.last {
+						margin-bottom: 0;
+					}
 
 					&.has-sub-nav {
+						position: relative;
 						&.active {
 							> a {
 								&:after {
@@ -938,7 +959,11 @@ input[type="checkbox"] {
 								@include sized-sprite($icons, plus);
 							}
 						}
-
+						&:hover {
+							.sub-nav {
+								text-align: left;
+							}
+						}
 						.sub-nav {
 							position: relative;
 							left: auto;
@@ -948,7 +973,8 @@ input[type="checkbox"] {
 							margin-top: 10px;
 							padding-top: 10px;
 							padding-bottom: 10px;
-							display: none;
+							display: none;    
+							width: auto !important; 
 
 							ul {
 
@@ -2142,7 +2168,7 @@ input[type="checkbox"] {
 		ul {
 		  	@extend .clearfix;
 			li {
-				float: left;
+				//float: left;
 				padding-left: 40px;
 				position: relative;
 				color: #fff;
@@ -2805,6 +2831,7 @@ input[type="checkbox"] {
 		width: 20px;
 		height: 20px;
 		margin-top: -2px;
+		outline: none;
 	}
 
 	.ui-slider-range {
@@ -9115,7 +9142,38 @@ body {
 				&:last-child {
 					width: 120px;
 				}
-			}
+			} 
 		}
 	}
+}
+
+.ctable {
+	@include respond-to(mobile) {
+		display: block;
+	}
+	&-col{
+		margin-bottom: 20px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		@include respond-to(mobile) {
+			display: block;
+		}
+	}
+}
+
+.pseudo-right:after {
+	content: '';
+	background: #333333;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	border: 2px solid #fff;
+	width: 20px;
+	height: 20px;
+	margin-top: -2px;
+	outline: none;
+	position: absolute;
+	left: 20px;
 }
