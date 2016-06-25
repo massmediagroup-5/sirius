@@ -109,7 +109,8 @@ class ShareAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $classNames = $this->getConfigurationPool()->getContainer()->get('share')->getNamedClassNames();
-        $image = $this->getSubject()->getImage();
+//        $image = $this->getSubject()->getImage();
+        $image = $this->getSubject();
 
         $formMapper
             ->tab('Акция')
@@ -117,13 +118,32 @@ class ShareAdmin extends Admin
             ->add('name', null, ['label' => 'Имя'])
             ->add('description', null, ['label' => 'Описание', 'attr' => ['class' => 'ckeditor']])
             ->add('startTime', null, ['label' => 'Время начала'])
-            ->add('endTime', null, ['label' => 'Время окончания'])
-            ->add('image', 'file', [
+            ->add('image', 'comur_image', array(
                 'label' => 'Картинка',
-                'data_class' => null,
-                'help' => $image ? "<img src='{$image}' class='admin-preview' />" : false,
-                'required' => false
-            ])
+                'uploadConfig' => array(
+                    'uploadRoute' => 'comur_api_upload',        //optional
+                    'uploadUrl' => $image->getUploadRootDir(),       // required - see explanation below (you can also put just a dir path)
+                    'webDir' => $image->getUploadDir(),              // required - see explanation below (you can also put just a dir path)
+                    'fileExt' => '*.jpg;*.gif;*.png;*.jpeg',    //optional
+                    'libraryDir' => null,                       //optional
+                    'libraryRoute' => 'comur_api_image_library', //optional
+                    'showLibrary' => true,                      //optional
+                    'generateFilename' => true          //optional
+                ),
+                'cropConfig' => array(
+                    'minWidth' => 1140,
+                    'minHeight' => 280,
+                    'aspectRatio' => true,              //optional
+                    'cropRoute' => 'comur_api_crop',    //optional
+                    'forceResize' => false,             //optional
+                    'thumbs' => array(                  //optional
+                        array(
+                            'maxWidth' => 114,
+                            'maxHeight' => 28,
+                        )
+                    )
+                )
+            ))
             ->add('status', null, ['label' => 'Статус', 'required' => false])
             ->add('className', 'choice', [
                 'label' => 'Имя класса',
@@ -248,27 +268,27 @@ class ShareAdmin extends Admin
         return json_encode($parameters);
     }
 
-    public function prePersist($object)
-    {
-        $this->uploadImage($object);
-    }
-
-    public function preUpdate($object)
-    {
-        $this->uploadImage($object);
-    }
-
-    /**
-     * @param $object
-     */
-    protected function uploadImage($object)
-    {
-        $container = $this->getConfigurationPool()->getContainer();
-
-        $imagePath = $container->get('uploader')->upload($container->getParameter('upload_shares_img_directory'),
-            $object->getImage());
-
-        $object->setImage($imagePath);
-    }
+//    public function prePersist($object)
+//    {
+//        $this->uploadImage($object);
+//    }
+//
+//    public function preUpdate($object)
+//    {
+//        $this->uploadImage($object);
+//    }
+//
+//    /**
+//     * @param $object
+//     */
+//    protected function uploadImage($object)
+//    {
+//        $container = $this->getConfigurationPool()->getContainer();
+//
+//        $imagePath = $container->get('uploader')->upload($container->getParameter('upload_shares_img_directory'),
+//            $object->getImage());
+//
+//        $object->setImage($imagePath);
+//    }
 
 }

@@ -342,4 +342,43 @@ class Share
     {
         return $this->image;
     }
+
+    /**
+     * getUploadRootDir
+     * the absolute directory path where uploaded
+     * documents should be saved
+     *
+     * @return string
+     */
+    public function getUploadRootDir()
+    {
+//        dump(realpath(__DIR__.'/../../../web/'.$this->getUploadDir()));exit;
+        // absolute path to your directory where images must be saved
+        $path=__DIR__.'/../../../web/'.$this->getUploadDir();
+        $path = str_replace('\\','/',$path);
+        return $path;
+    }
+
+    /**
+     * getUploadDir
+     * get rid of the __DIR__ so it doesn't screw up
+     * when displaying uploaded /img/slider in the view.
+     *
+     * @return string
+     * /img/products
+     */
+    public function getUploadDir()
+    {
+        return 'img/shares';
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->getImage() ? null : $this->getUploadRootDir().'/'.$this->getImage();
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->getImage() ? null : '/'.$this->getUploadDir().'/'.$this->getImage();
+    }
 }

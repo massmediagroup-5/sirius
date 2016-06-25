@@ -66,7 +66,6 @@ class MainSliderAdmin extends Admin
                     'libraryDir' => null,                       //optional
                     'libraryRoute' => 'comur_api_image_library', //optional
                     'showLibrary' => true,                      //optional
-//                    'saveOriginal' => 'originalImage',          //optional
                     'generateFilename' => true          //optional
                 ),
                 'cropConfig' => array(
@@ -78,8 +77,7 @@ class MainSliderAdmin extends Admin
                     'thumbs' => array(                  //optional
                         array(
                             'maxWidth' => 192,
-                            'maxHeight' => 77,
-//                            'useAsFieldImage' => true  //optional
+                            'maxHeight' => 77
                         )
                     )
                 )
