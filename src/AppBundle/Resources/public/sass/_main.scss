@@ -768,9 +768,9 @@ input[type="checkbox"] {
 							color: #000;
 							background: white;
 						}
-						.sub-nav {
+						.sub-nav { 
 							display: block;
-						  	text-align: center;
+						  	text-align: left;
 						}
 					}
 				}
@@ -848,8 +848,7 @@ input[type="checkbox"] {
 
 	.sub-nav {
 		position: absolute;
-		left: 0;
-		right: 0;
+		right: auto;
 		top: 100%;
 		z-index: 11;
 		display: none;
@@ -883,6 +882,17 @@ input[type="checkbox"] {
 
 
 	}
+	
+	.has-sub-nav {
+		position: relative;
+		&.last:hover {
+			.sub-nav {
+				text-align: right;
+				right: 0;
+				left: auto;
+			}
+		}
+	}					
 
 	@media (max-width: 1140px) {
 		position: absolute;
@@ -915,8 +925,12 @@ input[type="checkbox"] {
 					width: 100%;
 					padding: 0;
 					margin-bottom: 25px;
+					&:last-child, &.last {
+						margin-bottom: 0;
+					}
 
 					&.has-sub-nav {
+						position: relative;
 						&.active {
 							> a {
 								&:after {
@@ -938,7 +952,11 @@ input[type="checkbox"] {
 								@include sized-sprite($icons, plus);
 							}
 						}
-
+						&:hover {
+							.sub-nav {
+								text-align: left;
+							}
+						}
 						.sub-nav {
 							position: relative;
 							left: auto;
@@ -948,7 +966,8 @@ input[type="checkbox"] {
 							margin-top: 10px;
 							padding-top: 10px;
 							padding-bottom: 10px;
-							display: none;
+							display: none;    
+							width: auto !important; 
 
 							ul {
 
@@ -9129,6 +9148,7 @@ body {
 	}
 	&-col{
 		display: table-cell;
+		vertical-align: top;
 		padding-left: 15px;
 		padding-right: 15px;
 		margin-bottom: 20px;
