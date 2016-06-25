@@ -39,8 +39,6 @@ class ContactsController extends Controller
                     ->setContentType("text/html")
                 ;
                 $this->container->get('mailer')->send($message);
-                dump($data);
-                exit;
             }
         }
 
