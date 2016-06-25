@@ -9167,3 +9167,19 @@ body {
 		}
 	}
 }
+
+.pseudo-right:after {
+	content: '';
+	background: #333333;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	border: 2px solid #fff;
+	width: 20px;
+	height: 20px;
+	margin-top: -2px;
+	outline: none;
+	position: absolute;
+	left: 20px;
+}
