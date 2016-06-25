@@ -45,6 +45,26 @@ show:
 Products List: Модели
 Product Models List: Товары
 Action: Действия
+Orders List: Заказы
+Order Product Size List: Все заказанные товары
+Call Back List: Запросы на перезвон
+Order Status List: Статусы заказов
+Order Status Pay List: Статусы оплаты заказов
+Categories List: Категории
+Loyalty Program List: Програма лояльности
+Characteristics List: Характеристики
+Characteristic Values List: Значения характеристик
+Product Colors List: Цвета товаров
+Product Model Sizes List: Размеры товаров
+Product Model Specific Size List: Прайс
+Main Slider List: Слайдер главной страницы
+Pages List: Статические страницы
+Site Params List: Параметры
+Main Banners List: Банеры главной страницы
+Menu List: Меню
+Menu Items List: Пункты меню
+Unisender List: Параметры Unisender
+Novaposhta List: Параметры "Нова Пошта"
 Share List: Акции
 
 search_placeholder: "Информация по ТТН"

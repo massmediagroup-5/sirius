@@ -356,3 +356,10 @@ div[class="form-group"][id$="_images"] {
         }
     }
 }
+
+input#image_upload_file {
+    display: none;
+}
+#image_upload_file_container {
+    padding-bottom: 10px;
+}
