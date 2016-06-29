@@ -10,7 +10,8 @@
                 {% if not data %}
                     <div class="search-not-found">
                         <div class="search-not-found__i">
-                            <h2>Мы не смогли ничего найти по Вашему запросу <span>«</span><strong>{{ slug }}</strong><span>»</span></h2>
+                            <h2>Мы не смогли ничего найти по Вашему запросу
+                                <span>«</span><strong>{{ slug }}</strong><span>»</span></h2>
 
                             <ul>
                                 <li>Проверьте написание</li>
@@ -22,7 +23,8 @@
                 {% else %}
                     {{ widget('breadcrumbs.render')|raw }}
                     <h2 class="catalog-title">
-                        По Вашему запросу «{{ slug }}» <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount%count% ) }})</span>
+                        По Вашему запросу «{{ slug }}»
+                        <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount() ) }})</span>
                     </h2>
                     <div class="catalog">
                     <div class="catalog__i">
