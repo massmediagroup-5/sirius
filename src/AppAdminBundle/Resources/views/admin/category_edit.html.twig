@@ -13,7 +13,9 @@
         <form
             {% if admin_pool.getOption('form_type') == 'horizontal' %}class="form-horizontal"{% endif %}
             role="form"
-            action="{{ admin.generateUrl(url, {'id': admin.id(object), 'uniqid': admin.uniqid, 'subclass': app.request.get('subclass')}) }}" {{ form_enctype(form) }}
+            id="{{ admin.uniqid }}"
+            action="{{ admin.generateUrl(url, {'id': admin.id(object), 'uniqid': admin.uniqid, 'subclass': app.request.get('subclass')}) }}"
+            {{ form_enctype(form) }}
             method="POST"
             {% if not admin_pool.getOption('html5_validate') %}novalidate="novalidate"{% endif %}
             >
@@ -150,6 +152,36 @@
                 </div>
             {% endblock formactions %}
         </form>
+        <script type="text/javascript">
+            function textToUrl(w,v) {
+                var tr='a b v h d e ["zh","j"] z y y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"] ["ye","ie"] '.split(' ');
+                tr[6] = 'zg';
+                tr[25] = 'sh';
+                tr[36] = 'ye';
+                tr[38] = 'i';
+                tr[39] = 'i';
+                tr[97] = 'g';
+                var ww=''; w=w.toLowerCase();
+                for(i=0; i<w.length; ++i) {
+                    cc=w.charCodeAt(i);
+//                    return (cc-1072);
+                    ch=(cc>=1072?tr[cc-1072]:w[i]);
+                    if(ch.length<3) ww+=ch; else ww+=eval(ch)[v];
+                }
+                return(ww.replace(/[^a-zA-Z0-9\-]/g,'-').replace(/[-]{2,}/gim, '-').replace( /^\-+/g, '').replace( /\-+$/g, ''));
+            }
+            $( document ).ready(function() {
+                var origin_alias = $('#{{ admin.form.config.name }}_alias').val();
+                $('#{{ admin.form.config.name }}_alias').data( "alias", origin_alias );
+            });
+            $(document.body).on('propertychange change click keyup input paste', '#{{ admin.form.config.name }}_name', function() {
+                var alias = $('#{{ admin.form.config.name }}_alias');
+                var name = $('#{{ admin.form.config.name }}_name');
+                if($('#{{ admin.form.config.name }}_alias').data( "alias" )==''){
+                    alias.val( textToUrl(name.val()) );
+                }
+            });
+        </script>
     {% endif%}
 
     {{ sonata_block_render_event('sonata.admin.edit.form.bottom', { 'admin': admin, 'object': object }) }}

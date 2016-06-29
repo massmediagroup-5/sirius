@@ -18,6 +18,10 @@ file that was distributed with this source code.
     {% endstylesheets %}
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
 {% block title %}
     {% if admin.id(object) is not null %}
         {{ "title_edit"|trans({'%name%': admin.toString(object)|truncate(30) }, 'SonataAdminBundle') }}
