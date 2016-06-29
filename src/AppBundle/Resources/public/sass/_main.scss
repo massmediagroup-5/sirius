@@ -2824,19 +2824,61 @@ input[type="checkbox"] {
 	}
 
 	.ui-slider-handle {
-		background: #333333;
+		/*background: #333333;
 		display: block;
 		@include border-radius(50%);
 		border: 2px solid #fff;
 		width: 20px;
 		height: 20px;
 		margin-top: -2px;
+		*/
+		width: 0; 
+		height: 0;
+		margin: 0;
+		border: 0;
 		outline: none;
+		&:before{
+			content: '';
+			display: block;
+			@include border-radius(50%);
+			background: #333333;
+			width: 20px;
+			height: 20px;
+			position: absolute;
+			top: -1px;
+		}
+		&.left:before {
+			right: 100%;
+		}
+		&.right:before {
+			left: 100%; 
+		}
+		&:hover:before {
+		    background: #4c4c4c;
+		}
 	}
 
 	.ui-slider-range {
-
+		border-radius: 0;
 		background: #747474;
+		&:before{
+			content: '';
+			width: 3px;
+			height: 100%;
+			display: block;
+			background: #747474;
+			position: absolute;
+			left: -2px;
+		}
+		&:after{
+			content: '';
+			width: 3px;
+			height: 100%;
+			display: block;
+			background: #747474;
+			position: absolute;
+			right: -2px;
+		} 
 	}
 }
 
