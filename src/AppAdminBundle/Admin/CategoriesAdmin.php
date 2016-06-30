@@ -157,22 +157,22 @@ class CategoriesAdmin extends Admin
                     )
                 ->end()
             ->end()
-            ->tab('Фильтры')
-                ->with('Filters',
-                    [
-                        'class'       => 'col-md-12',
-                        'collapsed' => true
-                    ])
-                    ->add('filters', 'sonata_type_model',
-                        [
-                            'class'     => 'AppBundle:Filters',
-                            'label'     => 'Фильтры',
-                            'property'=> 'name',
-                            'by_reference' => false,
-                        ]
-                    )
-                ->end()
-            ->end()
+//            ->tab('Фильтры')
+//                ->with('Filters',
+//                    [
+//                        'class'       => 'col-md-12',
+//                        'collapsed' => true
+//                    ])
+//                    ->add('filters', 'sonata_type_model',
+//                        [
+//                            'class'     => 'AppBundle:Filters',
+//                            'label'     => 'Фильтры',
+//                            'property'=> 'name',
+//                            'by_reference' => false,
+//                        ]
+//                    )
+//                ->end()
+//            ->end()
         ;
     }
 

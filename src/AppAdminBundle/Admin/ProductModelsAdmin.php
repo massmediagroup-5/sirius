@@ -90,34 +90,14 @@ class ProductModelsAdmin extends Admin
                 'class' => 'col-md-12',
             ])
             ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
-            ->add('products', 'entity',
-                [
-                    'class' => 'AppBundle:Products',
-                    'property' => 'name',
-                    'label' => 'Модель',
-                    'empty_value' => 'Выберите Модель'
-                ]
-            )
-            ->add('productColors', 'entity',
-                [
-                    'class' => 'AppBundle:ProductColors',
-                    'property' => 'name',
-                    'label' => 'Цвет товара',
-                    'empty_value' => 'Выберите цвет товара'
-                ]
-            )
-            ->add('decorationColor', 'entity',
-                [
-                    'class' => 'AppBundle:ProductColors',
-                    'property' => 'name',
-                    'label' => 'Цвет отделки',
-                    'empty_value' => 'Выберите цвет отделки',
-                    'required' => false
-                ]
-            )
+            ->add('products', 'sonata_type_model_list', ['label' => 'Модель'])
+            ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара', ])
+            ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])
             ->add('price', null, ['label' => 'Цена'])
+            ->add('oldPrice', null, ['label' => 'Старая цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('endCount', null, ['label' => 'Количество для "Этот товар скоро заканчится"'])
             ->add('published', null, ['label' => 'Опубликованно'])
             ->end()
             ->end()
