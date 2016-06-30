@@ -30,6 +30,11 @@ class ProductModels
     /**
      * @var string
      */
+    private $oldPrice = 0.0;
+
+    /**
+     * @var string
+     */
     private $wholesalePrice = 0.0;
 
     /**
@@ -46,6 +51,11 @@ class ProductModels
      * @var integer
      */
     private $status = 0;
+
+    /**
+     * @var integer
+     */
+    private $endCount;
 
     /**
      * @var boolean
@@ -171,6 +181,30 @@ class ProductModels
     }
 
     /**
+     * Set oldPrice
+     *
+     * @param string $oldPrice
+     *
+     * @return ProductModels
+     */
+    public function setOldPrice($oldPrice)
+    {
+        $this->oldPrice = $oldPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get oldPrice
+     *
+     * @return string
+     */
+    public function getOldPrice()
+    {
+        return $this->oldPrice;
+    }
+
+    /**
      * Set priority
      *
      * @param integer $priority
@@ -216,6 +250,30 @@ class ProductModels
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set endCount
+     *
+     * @param integer $endCount
+     *
+     * @return ProductModels
+     */
+    public function setEndCount($endCount)
+    {
+        $this->endCount = $endCount;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getEndCount()
+    {
+        return $this->endCount;
     }
 
     /**

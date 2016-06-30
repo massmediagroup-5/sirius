@@ -21,10 +21,37 @@
                                 {% if field_name == "characteristicValues" %}
                                     {#{{ new_form['vars'] as form[field_name]['vars'] }}#}
                                     {% for form_view in (form[field_name]|regroup()) %}
-                                        <div id="{{ form_view.vars.id }}>" class="charackteristic-category">
+                                        <div id="{{ form_view.vars.id }}" class="charackteristic-category">
                                             <h4>
                                                 {{ form_view.vars.label }}
                                             </h4>
+                                            <div class="col-sm-2" style="padding-left: 0px;margin-left: 0px;">
+                                                <label class="control-label" for="check_all_{{ form_view.vars.id }}">Выбрать все</label>
+                                                <input type="checkbox" id="check_all_{{ form_view.vars.id }}" class="all">
+                                            </div>
+                                            <script type="text/javascript">
+                                                $(function () {
+                                                    var checkAll{{ form_view.vars.id }} = $('input#check_all_{{ form_view.vars.id }}');
+                                                    var checkboxes{{ form_view.vars.id }} = $('#{{ form_view.vars.id }} .form-group input:checkbox');
+                                                    checkAll{{ form_view.vars.id }}.on('ifChecked ifUnchecked', function(event) {
+                                                        if (event.type == 'ifChecked') {
+                                                            checkboxes{{ form_view.vars.id }}.iCheck('check');
+                                                        } else {
+                                                            checkboxes{{ form_view.vars.id }}.iCheck('uncheck');
+                                                        }
+                                                    });
+
+                                                    checkboxes{{ form_view.vars.id }}.on('ifChanged', function(event){
+                                                        if(checkboxes{{ form_view.vars.id }}.filter(':checked').length == checkboxes{{ form_view.vars.id }}.length) {
+                                                            checkAll{{ form_view.vars.id }}.prop('checked', 'checked');
+                                                        } else {
+                                                            checkAll{{ form_view.vars.id }}.removeProp('checked');
+                                                        }
+                                                        checkAll{{ form_view.vars.id }}.iCheck('update');
+                                                    });
+                                                });
+                                            </script>
+                                            <div style="clear: both;"></div>
                                             {% for view_form in form_view %}
                                                 {{ form_row(view_form) }}
                                             {% endfor %}
