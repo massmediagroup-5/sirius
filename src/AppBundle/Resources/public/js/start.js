@@ -185,13 +185,6 @@ $(document).ready(function () {
             }
         },
         submitHandler: function(form) {
-            //$('.pass-recovery').find('form').on('submit', function () {
-            //    $.fancybox.open({href: '#email-change', type: 'inline'});
-            //    return false;
-            //});
-            //console.log(form);
-            //return false;
-
             /*
              * Get all form values
              */
@@ -760,7 +753,7 @@ $(window).load(function () {
     //FILTER DROPS END
 
     $('.select').select2({
-        minimumResultsForSearch: -1
+        minimumResultsForSearch: 2
     }).on('change select2-opening', function () {
         $(this).removeClass('error');
     });
