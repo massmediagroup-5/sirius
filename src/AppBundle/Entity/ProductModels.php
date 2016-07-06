@@ -4,9 +4,13 @@ namespace AppBundle\Entity;
 
 use AppBundle\Traits\ProcessHasMany;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * ProductModels
+ * @UniqueEntity("alias")
  */
 class ProductModels
 {

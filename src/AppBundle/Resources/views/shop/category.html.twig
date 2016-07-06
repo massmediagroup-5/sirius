@@ -2,6 +2,17 @@
 
 {% block out_class %} out_sub {% endblock %}
 
+{% block meta %}
+    <title>{{ data.category.name }}</title>
+    <meta name="description" content="{{ data.category.seoDescription }}" />
+    <meta name="keywords" content="{{ data.category.seoKeywords }}" />
+    <meta property="og:title" content="{{ data.category.seoTitle }}"/>
+    <meta property="og:description" content="{{ data.category.seoDescription }}"/>
+    <meta property="og:type" content="category" />
+    <meta property="og:url" content="{{ url(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}"/>
+    <meta property="og:site_name" content="Интернет магазин Sirius-sport.com" />
+{% endblock %}
+
 {% block body %}
     <section class="content">
         <div class="darkness"></div>

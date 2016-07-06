@@ -8,8 +8,7 @@
         {% endfor %}
 
         <div class="img">
-            <a href="{{ url_to(item.baseCategory, item.productModels.0) }}" title="{{ item.name }}">
-            <a href="{{ url('product', {'category': item.baseCategory.alias,'product': item.productModels.0.alias}) }}" title="{{ item.name }}">
+            <a class="js_main_alias" href="{{ url('product', {'category': item.baseCategory.alias,'product': item.productModels.0.alias}) }}" title="{{ item.name }}">
                 {% if item.productModels.0.images.0 is defined and item.productModels.0.images.0.link is not null %}
                     <img src="{{ item.productModels.0.images.0.link | imagine_filter('medium') }}" alt="{{ item.name }}"/>
                 {% else %}
@@ -43,6 +42,7 @@
                         {% if model.images.0 is defined and model.images.0.link is not null%}
                             <a href="#" class="js_change_model {{ selectedClass }}"
                                data-model-id="{{ model.id }}"
+                               data-model-alias="{{ model.alias }}"
                                data-big-img="{{ model.images.0.link|imagine_filter('medium') }}">
                                 <img src="{{ model.images.0.link|imagine_filter('mini') }}" alt="{{ item.name }}"/>
                             </a>

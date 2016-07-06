@@ -9,6 +9,8 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\CoreBundle\Validator\ErrorElement;
+
 
 /**
  * Class ProductModelsAdmin
@@ -22,6 +24,13 @@ class ProductModelsAdmin extends Admin
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'createTime',
+    );
+
+    /**
+     * @var array
+     */
+    protected $formOptions = array(
+        'validation_groups' => 'Default'
     );
 
     /**
