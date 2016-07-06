@@ -124,16 +124,15 @@ class ProductModelsAdmin extends Admin
                 ->end()
             ->end();
         if (!$this->hasParentFieldDescription()) {
-            $formMapper->tab('Изображения товара')
-                ->with('Изображения товара', [
-                        'class' => 'col-md-12',
-                    ]
-                )
-                ->add('images', 'sonata_type_collection',
-                    ['label' => 'Изображения'], ['edit' => 'inline']
-                )
-                ->end()
+            if($this->getSubject()->getId()){
+                $formMapper->tab('Изображения товара')
+                    ->with('Изображения товара', ['class' => 'col-md-12'])
+                        ->add('images', 'sonata_type_collection',
+                           ['label' => 'Изображения'], ['edit' => 'inline']
+                        )
+                   ->end()
                 ->end();
+            }
         }
     }
 
@@ -168,7 +167,7 @@ class ProductModelsAdmin extends Admin
     {
         if(!$model->getAlias()) {
             $slugify = new Slugify();
-            $alias = $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
+            $alias = rand(1,99999) . ' ' . $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
             $alias = $slugify->slugify($alias);
             $model->setAlias($alias);
         }
