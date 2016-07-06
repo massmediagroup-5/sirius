@@ -1343,11 +1343,26 @@ input[type="checkbox"] {
 
 	.inp {
 		margin-bottom: 20px;
+		position: relative;
 
 		&.inp_error {
 			input {
 				border-color: #f24841;
 			}
+			label.error {
+				visibility: visible;
+			}
+		}
+		
+		label.error {
+			position: absolute;
+			right: 0;
+			bottom: 100%;
+			font-size: 11px !important;
+			color: red;
+			margin: 0 0 0 5px;
+			white-space: nowrap;
+			visibility: hidden;
 		}
 	}
 
