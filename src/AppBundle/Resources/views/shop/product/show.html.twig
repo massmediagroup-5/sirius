@@ -215,21 +215,21 @@
                         is not empty or current_model.products.features is not empty %}
                         <h1>{{ current_model.products.name }}</h1>
                         {% endif %}
-                        <div class="row">
+                        <div class="row ctable">
                             {% if current_model.products.content is not empty %}
-                            <div class="col-md-4 col-lg-4">
+                            <div class="ctable-col">
                                 <h2>О модели</h2>
                                 {{ current_model.products.content|raw }}
                             </div>
                             {% endif %}
                             {% if current_model.products.characteristics is not empty %}
-                            <div class="col-md-4 col-lg-4">
+                            <div class="ctable-col">
                                 <h2>Характеристики</h2>
                                 {{ current_model.products.characteristics|raw }}
                             </div>
                             {% endif %}
                             {% if current_model.products.features is not empty %}
-                            <div class="col-md-4 col-lg-4">
+                            <div class="ctable-col">
                                 <h2>Особенности</h2>
                                 {{ current_model.products.features|raw }}
                             </div>
