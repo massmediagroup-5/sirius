@@ -50,7 +50,7 @@ class Users extends BaseUser
     /**
      * @var integer
      */
-    protected $bonuses;
+    protected $bonuses = 0;
 
     /**
      * @var \DateTime

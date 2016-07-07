@@ -579,6 +579,7 @@ class Order
             ->select('orders')
             ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
             ->where('orders.users = :user')
+            ->orderBy('orders.id', 'DESC')
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();

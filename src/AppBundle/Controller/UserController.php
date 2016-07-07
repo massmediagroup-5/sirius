@@ -30,7 +30,12 @@ class UserController extends Controller
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $this->get('users')->updateProfile($user);
+                if($this->get('users')->updateProfile($user)) {
+                    $this->addFlash(
+                        'success',
+                        'Ваши данные обновлены'
+                    );
+                }
             }
         }
         return $this->render('AppBundle:user/profile.html.twig', ['form' => $form->createView()]);
