@@ -211,7 +211,7 @@ $(document).ready(function () {
             return false;
         },
         errorPlacement: function (error, element) {
-            element.attr('title', error.text());
+			error.appendTo(element.closest('.inp'));
         }
     });
 
@@ -246,7 +246,7 @@ $(document).ready(function () {
             }
         },
         errorPlacement: function (error, element) {
-            element.attr('placeholder', error.text());
+            error.appendTo(element.closest('.inp'));
         }
     });
 
@@ -294,7 +294,7 @@ $(document).ready(function () {
             return false;
         },
         errorPlacement: function (error, element) {
-            element.attr('placeholder', error.text());
+            error.appendTo(element.closest('.inp'));
         }
     });
 
@@ -329,7 +329,7 @@ $(document).ready(function () {
             format: 'on'
         })
     });
-    //ACTION COUNTER END//
+    //ACTION COUNTER END// 
 
 
     //floating panel
