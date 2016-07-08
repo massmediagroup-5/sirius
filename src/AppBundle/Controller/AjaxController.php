@@ -26,7 +26,6 @@ class AjaxController extends Controller
         if ($request->get('phone')) {
             $phone = new \AppBundle\Entity\CallBack();
             $phone->setPhone($request->get('phone'));
-//            $phone->setUsers($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($phone);
@@ -80,11 +79,35 @@ class AjaxController extends Controller
             $articleQuery->setFieldParam('article', 'type', 'phrase_prefix');
             $boolQuery->addShould($articleQuery);
 
+            $contentQuery = new \Elastica\Query\Match();
+            $contentQuery->setFieldQuery('content', $slug);
+            $contentQuery->setFieldParam('content', 'boost', 3);
+            $contentQuery->setFieldParam('content', 'type', 'phrase_prefix');
+            $boolQuery->addShould($contentQuery);
+
+            $characteristicsQuery = new \Elastica\Query\Match();
+            $characteristicsQuery->setFieldQuery('characteristics', $slug);
+            $characteristicsQuery->setFieldParam('characteristics', 'boost', 3);
+            $characteristicsQuery->setFieldParam('characteristics', 'type', 'phrase_prefix');
+            $boolQuery->addShould($characteristicsQuery);
+
+            $featuresQuery = new \Elastica\Query\Match();
+            $featuresQuery->setFieldQuery('features', $slug);
+            $featuresQuery->setFieldParam('features', 'boost', 3);
+            $featuresQuery->setFieldParam('features', 'type', 'phrase_prefix');
+            $boolQuery->addShould($featuresQuery);
+
             $baseCategoryQuery = new \Elastica\Query\Match();
             $baseCategoryQuery->setFieldQuery('baseCategory.name', $slug);
             $baseCategoryQuery->setFieldParam('baseCategory.name', 'boost', 3);
             $baseCategoryQuery->setFieldParam('baseCategory.name', 'type', 'phrase_prefix');
             $boolQuery->addShould($baseCategoryQuery);
+
+            $productColorsQuery = new \Elastica\Query\Match();
+            $productColorsQuery->setFieldQuery('productModels.productColors.name', $slug);
+            $productColorsQuery->setFieldParam('productModels.productColors.name', 'boost', 3);
+            $productColorsQuery->setFieldParam('productModels.productColors.name', 'type', 'phrase_prefix');
+            $boolQuery->addShould($productColorsQuery);
 
             $boolFilter = new \Elastica\Filter\Bool();
 

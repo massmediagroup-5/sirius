@@ -51,6 +51,13 @@ AppBundle\Entity\ProductModels:
             scale: 2
             options:
                 default: 0.00
+        oldPrice:
+            type: decimal
+            nullable: true
+            precision: 8
+            scale: 2
+            options:
+                default: 0.00
         wholesalePrice:
             type: decimal
             precision: 8
@@ -72,6 +79,11 @@ AppBundle\Entity\ProductModels:
             options:
                 unsigned: false
                 default: '0'
+        endCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
         published:
             type: boolean
             nullable: true

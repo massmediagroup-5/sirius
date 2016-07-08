@@ -322,32 +322,45 @@ class Order
         $orderChanges = $this->em->getUnitOfWork()->getEntityChangeSet($order);
         foreach ($orderChanges as $fieldName => $orderChange) {
             if (in_array($fieldName, $allowedFields)) {
+                switch ($fieldName) {
+                    case "status":
+                        $orderStatus = $order->getStatus();
+                        break;
+                    case "payStatus":
+                        $orderStatus = $order->getPayStatus();
+                        break;
+                }
                 $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
-                if ($uniSender) {
-                    switch ($fieldName) {
-                        case "status":
-                            $orderStatus = $order->getStatus();
-                            break;
-                        case "payStatus":
-                            $orderStatus = $order->getPayStatus();
-                            break;
-                    }
-                    if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
-                        $client_sms_status = $this->sendSmsRequest(
-                            $uniSender,
-                            $order->getPhone(),
-                            $order->getId(),
-                            $orderStatus->getSendClientText()
-                        );
-                        if ($client_sms_status['error'] == false) {
-                            // если без ошибок то сохраняем идентификатор смс
-                            $order->setClientSmsId($client_sms_status['sms_id']);
-                        } else {
-                            // если ошибка то сохраняем текст ошибки
-                            $order->setClientSmsStatus($client_sms_status['error']);
+                if ( $orderStatus ){
+                    if ($uniSender) {
+                        if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
+                            $client_sms_status = $this->sendSmsRequest(
+                                $uniSender,
+                                $order->getPhone(),
+                                $order->getId(),
+                                $orderStatus->getSendClientText()
+                            );
+                            if ($client_sms_status['error'] == false) {
+                                // если без ошибок то сохраняем идентификатор смс
+                                $order->setClientSmsId($client_sms_status['sms_id']);
+                            } else {
+                                // если ошибка то сохраняем текст ошибки
+                                $order->setClientSmsStatus($client_sms_status['error']);
+                            }
+                        }
+                        if( ( $orderStatus->getSendManager() ) && ( !empty( $orderStatus->getSendManagerText() ) ) ){
+                            $phones = explode( ',', $uniSender->getPhones() );
+                            foreach( $phones as $phone ){
+                                $this->sendSmsRequest(
+                                    $uniSender,
+                                    $phone,
+                                    $order->getId() ? $order->getId() : date('G:i:s d-m-Y', time()),
+                                    $orderStatus->getSendManagerText()
+                                );
+                            }
                         }
                     }
-                    if( ( $orderStatus->getSendClientEmail() ) && ( !empty($orderStatus->getSendClientEmailText() ) ) ){
+                    if( ($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers()) ){
                         $body = sprintf(
                             $orderStatus->getSendClientEmailText(),
                             $orderStatus->getId() // %s
@@ -355,21 +368,10 @@ class Order
                         $message = \Swift_Message::newInstance()
                                                  ->setSubject('Order from orders@sirius.com.ua')
                                                  ->setFrom('orders@sirius.com.ua')
-                                                 ->addTo($orderStatus->getUsers()->getEmail())
+                                                 ->addTo($order->getUsers()->getEmail())
                                                  ->setBody($body)
                                                  ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
-                    }
-                    if( ( $orderStatus->getSendManager() ) && ( !empty( $orderStatus->getSendManagerText() ) ) ){
-                        $phones = explode( ',', $uniSender->getPhones() );
-                        foreach( $phones as $phone ){
-                            $this->sendSmsRequest(
-                                $uniSender,
-                                $phone,
-                                $order->getId() ? $order->getId() : date('G:i:s d-m-Y', time()),
-                                $orderStatus->getSendManagerText()
-                            );
-                        }
                     }
                 }
             }
@@ -577,6 +579,7 @@ class Order
             ->select('orders')
             ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
             ->where('orders.users = :user')
+            ->orderBy('orders.id', 'DESC')
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();

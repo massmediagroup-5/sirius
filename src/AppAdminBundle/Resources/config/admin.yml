@@ -75,14 +75,6 @@ services:
         class: AppAdminBundle\Admin\FiltersAdmin
         arguments: [~, AppBundle\Entity\Filters, SonataAdminBundle:CRUD]
 
-    app.admin.loyalty_program:
-        class: AppAdminBundle\Admin\LoyaltyProgramAdmin
-        arguments: [~, AppBundle\Entity\LoyaltyProgram, AppAdminBundle:CRUD, @service_container]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Програма лояльности"}
-        calls:
-            - [ setTranslationDomain, [AppAdminBundle]]
-
     app.admin.products:
         class: AppAdminBundle\Admin\ProductsAdmin
         arguments: [~, AppBundle\Entity\Products, AppAdminBundle:CRUD, @service_container]
@@ -157,6 +149,21 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Поставщики", show_in_dashboard: false}
 
+    app_admin.admin.price_list:
+        pattern:  /admin/app/price-list
+        class: AppAdminBundle\Admin\PriceListAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Магазин", label: "Прайс" }
+        arguments: [~, AppBundle\Entity\ProductModelSpecificSize, SonataAdminBundle:CRUD]
+
+    app.admin.loyalty_program:
+            class: AppAdminBundle\Admin\LoyaltyProgramAdmin
+            arguments: [~, AppBundle\Entity\LoyaltyProgram, AppAdminBundle:CRUD, @service_container]
+            tags:
+                - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Программа лояльности"}
+            calls:
+                - [ setTranslationDomain, [AppAdminBundle]]
+
     app_admin.admin.main_slider:
         class: AppAdminBundle\Admin\MainSliderAdmin
         arguments: [~, AppBundle\Entity\MainSlider, SonataAdminBundle:CRUD]
@@ -220,13 +227,6 @@ services:
         arguments: [~, AppBundle\Entity\OrderStatusPay, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Статусы оплаты заказов"}
-
-    app_admin.admin.price_list:
-        pattern:  /admin/app/price-list
-        class: AppAdminBundle\Admin\PriceListAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Магазин", label: "Прайс" }
-        arguments: [~, AppBundle\Entity\ProductModelSpecificSize, SonataAdminBundle:CRUD]
 
     sonata.user.editable_role_builder:
         class:     AppAdminBundle\Security\EditableRolesBuilder
