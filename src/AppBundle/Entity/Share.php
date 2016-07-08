@@ -381,4 +381,9 @@ class Share
     {
         return null === $this->getImage() ? null : '/'.$this->getUploadDir().'/'.$this->getImage();
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

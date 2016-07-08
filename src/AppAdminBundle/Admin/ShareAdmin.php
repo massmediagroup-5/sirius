@@ -117,7 +117,8 @@ class ShareAdmin extends Admin
             ->with('Акция', ['class' => 'col-md-12'])
             ->add('name', null, ['label' => 'Имя'])
             ->add('description', null, ['label' => 'Описание', 'attr' => ['class' => 'ckeditor']])
-            ->add('startTime', null, ['label' => 'Время начала'])
+            ->add('startTime', 'sonata_type_datetime_picker', ['label' => 'Время начала'])
+            ->add('endTime', 'sonata_type_datetime_picker', ['label' => 'Время окончания'])
             ->add('image', 'comur_image', array(
                 'label' => 'Картинка',
                 'uploadConfig' => array(
