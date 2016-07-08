@@ -140,11 +140,6 @@ class Orders
     private $individualDiscount = 0;
 
     /**
-     * @var boolean
-     */
-    private $quickFlag = false;
-
-    /**
      * @var string
      */
     private $additionalSolarDescription;
@@ -786,30 +781,6 @@ class Orders
     public function getSizes()
     {
         return $this->sizes;
-    }
-
-    /**
-     * Set quickFlag
-     *
-     * @param boolean $quickFlag
-     *
-     * @return Orders
-     */
-    public function setQuickFlag($quickFlag)
-    {
-        $this->quickFlag = $quickFlag;
-
-        return $this;
-    }
-
-    /**
-     * Get quickFlag
-     *
-     * @return boolean
-     */
-    public function getQuickFlag()
-    {
-        return $this->quickFlag;
     }
 
     /**
