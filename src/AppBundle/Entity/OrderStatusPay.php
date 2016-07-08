@@ -62,6 +62,16 @@ class OrderStatusPay
      */
     private $active;
 
+    /**
+     * @var boolean
+     */
+    private $sendClientEmail;
+
+    /**
+     * @var string
+     */
+    private $sendClientEmailText;
+
 
     /**
      * Get id
@@ -311,6 +321,54 @@ class OrderStatusPay
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set sendClientEmail
+     *
+     * @param boolean $sendClientEmail
+     *
+     * @return OrderStatusPay
+     */
+    public function setSendClientEmail($sendClientEmail)
+    {
+        $this->sendClientEmail = $sendClientEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get sendClientEmail
+     *
+     * @return boolean
+     */
+    public function getSendClientEmail()
+    {
+        return $this->sendClientEmail;
+    }
+
+    /**
+     * Set sendClientEmailText
+     *
+     * @param string $sendClientEmailText
+     *
+     * @return OrderStatusPay
+     */
+    public function setSendClientEmailText($sendClientEmailText)
+    {
+        $this->sendClientEmailText = $sendClientEmailText;
+
+        return $this;
+    }
+
+    /**
+     * Get sendClientEmailText
+     *
+     * @return string
+     */
+    public function getSendClientEmailText()
+    {
+        return $this->sendClientEmailText;
     }
 
     /**
