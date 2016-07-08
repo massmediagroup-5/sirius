@@ -4952,6 +4952,7 @@ input[type="checkbox"] {
 		width: 40%;
 	}
 	.inp {
+		position: relative;
 		float: left;
 		width: 60%;
 		margin-bottom: 20px;
@@ -4966,11 +4967,29 @@ input[type="checkbox"] {
 				padding-right: 1%;
 			}
 		}
-
+		
+		.inp {
+			float: none;
+			width: 100%;
+			margin-bottom: 0;
+		}
 		&.inp_error {
 			input {
 				border-color: #f24841;
 			}
+			label.error {
+				visibility: visible;
+			}
+		}
+		label.error {
+			position: absolute;
+			right: 0;
+			bottom: 100%;
+			font-size: 11px !important;
+			color: red;
+			margin: 0 0 0 5px;
+			white-space: nowrap;
+			visibility: hidden;
 		}
 	}
 
