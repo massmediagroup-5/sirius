@@ -377,6 +377,9 @@ class Order
             }
         }
 
+        // Recompute order changes
+        $this->em->getUnitOfWork()->recomputeSingleEntityChangeSet($this->em->getClassMetadata(get_class($order)),
+            $order);
         $this->em->persist($order);
     }
 
