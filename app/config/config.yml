@@ -271,6 +271,15 @@ fos_elastica:
                         article:
                             type: string
                             analyzer: my_analyzer
+                        content:
+                            type: string
+                            analyzer: my_analyzer
+                        characteristics:
+                            type: string
+                            analyzer: my_analyzer
+                        features:
+                            type: string
+                            analyzer: my_analyzer
                         active:
                             type: boolean
                         baseCategory:
@@ -282,6 +291,12 @@ fos_elastica:
                         productModels:
                             type: "object"
                             properties:
+                                productColors:
+                                    type: "object"
+                                    properties:
+                                        name:
+                                            type: string
+                                            analyzer: my_analyzer
                                 published:
                                     type: boolean
                     persistence:

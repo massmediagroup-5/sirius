@@ -9,6 +9,8 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\CoreBundle\Validator\ErrorElement;
+
 
 /**
  * Class ProductModelsAdmin
@@ -22,6 +24,13 @@ class ProductModelsAdmin extends Admin
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'createTime',
+    );
+
+    /**
+     * @var array
+     */
+    protected $formOptions = array(
+        'validation_groups' => 'Default'
     );
 
     /**
@@ -90,34 +99,14 @@ class ProductModelsAdmin extends Admin
                 'class' => 'col-md-12',
             ])
             ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
-            ->add('products', 'entity',
-                [
-                    'class' => 'AppBundle:Products',
-                    'property' => 'name',
-                    'label' => 'Модель',
-                    'empty_value' => 'Выберите Модель'
-                ]
-            )
-            ->add('productColors', 'entity',
-                [
-                    'class' => 'AppBundle:ProductColors',
-                    'property' => 'name',
-                    'label' => 'Цвет товара',
-                    'empty_value' => 'Выберите цвет товара'
-                ]
-            )
-            ->add('decorationColor', 'entity',
-                [
-                    'class' => 'AppBundle:ProductColors',
-                    'property' => 'name',
-                    'label' => 'Цвет отделки',
-                    'empty_value' => 'Выберите цвет отделки',
-                    'required' => false
-                ]
-            )
+            ->add('products', 'sonata_type_model_list', ['label' => 'Модель'])
+            ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара', ])
+            ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])
             ->add('price', null, ['label' => 'Цена'])
+            ->add('oldPrice', null, ['label' => 'Старая цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('endCount', null, ['label' => 'Количество для "Этот товар скоро заканчится"'])
             ->add('published', null, ['label' => 'Опубликованно'])
             ->end()
             ->end()
@@ -144,16 +133,15 @@ class ProductModelsAdmin extends Admin
                 ->end()
             ->end();
         if (!$this->hasParentFieldDescription()) {
-            $formMapper->tab('Изображения товара')
-                ->with('Изображения товара', [
-                        'class' => 'col-md-12',
-                    ]
-                )
-                ->add('images', 'sonata_type_collection',
-                    ['label' => 'Изображения'], ['edit' => 'inline']
-                )
-                ->end()
+            if($this->getSubject()->getId()){
+                $formMapper->tab('Изображения товара')
+                    ->with('Изображения товара', ['class' => 'col-md-12'])
+                        ->add('images', 'sonata_type_collection',
+                           ['label' => 'Изображения'], ['edit' => 'inline']
+                        )
+                   ->end()
                 ->end();
+            }
         }
     }
 
@@ -188,7 +176,7 @@ class ProductModelsAdmin extends Admin
     {
         if(!$model->getAlias()) {
             $slugify = new Slugify();
-            $alias = $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
+            $alias = rand(1,99999) . ' ' . $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
             $alias = $slugify->slugify($alias);
             $model->setAlias($alias);
         }

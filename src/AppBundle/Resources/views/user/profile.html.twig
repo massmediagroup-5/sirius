@@ -3,7 +3,13 @@
 {% block out_class %} out_sub {% endblock %}
 
 {% block cabinet_content %}
-
+    {% if app.session.flashBag.has('success') %}
+        <div class="flash-success">
+            {% for msg in app.session.flashBag.get('success') %}
+                {{ msg }}
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="user-form">
         {{ form_start(form, {'attr': {'class': 'user-form__i'}}) }}
             <div class="rw">

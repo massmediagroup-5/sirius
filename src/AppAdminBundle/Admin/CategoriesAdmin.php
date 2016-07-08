@@ -99,6 +99,7 @@ class CategoriesAdmin extends Admin
                         [
                             'class'         => 'AppBundle:Categories',
                             'property'      => 'name',
+                            'attr'          => ['data-sonata-select2'=>'false'],
                             'label'         => 'Родительская категория',
                             'empty_value'   => 'Выберите родительскую категорию'
                         ]
@@ -106,7 +107,7 @@ class CategoriesAdmin extends Admin
                     ->add('priority', null, ['label' => 'Приоритет'])
                     ->add('inMenu', null, ['label' => 'В меню'])
                     ->add('active', null, ['label' => 'Актиная'])
-                    ->add('content', null, ['label' => 'Контент'])
+                    ->add('content', null, ['label' => 'Контент','attr' => ['class' => 'ckeditor']])
                     ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
                     ->add('seoDescription', null, ['label' => 'СЕО описание'])
                     ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
@@ -156,22 +157,22 @@ class CategoriesAdmin extends Admin
                     )
                 ->end()
             ->end()
-            ->tab('Фильтры')
-                ->with('Filters',
-                    [
-                        'class'       => 'col-md-12',
-                        'collapsed' => true
-                    ])
-                    ->add('filters', 'sonata_type_model',
-                        [
-                            'class'     => 'AppBundle:Filters',
-                            'label'     => 'Фильтры',
-                            'property'=> 'name',
-                            'by_reference' => false,
-                        ]
-                    )
-                ->end()
-            ->end()
+//            ->tab('Фильтры')
+//                ->with('Filters',
+//                    [
+//                        'class'       => 'col-md-12',
+//                        'collapsed' => true
+//                    ])
+//                    ->add('filters', 'sonata_type_model',
+//                        [
+//                            'class'     => 'AppBundle:Filters',
+//                            'label'     => 'Фильтры',
+//                            'property'=> 'name',
+//                            'by_reference' => false,
+//                        ]
+//                    )
+//                ->end()
+//            ->end()
         ;
     }
 

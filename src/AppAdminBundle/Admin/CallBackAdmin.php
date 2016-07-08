@@ -70,7 +70,14 @@ class CallBackAdmin extends Admin
     {
         $formMapper
             ->add('phone', null, array('label' => 'Номер телефона'))
-            ->add('status', null, array('label' => 'Статус'))
+            ->add('status', 'choice', array(
+                'label' => 'Статус',
+                'choices' => array(
+                    '0' => 'Ожидает',
+                    '1' => 'Принят',
+                    '2' => 'Отклонен'
+                )
+            ))
         ;
     }
 
