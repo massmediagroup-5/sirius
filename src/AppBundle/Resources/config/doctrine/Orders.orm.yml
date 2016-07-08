@@ -129,10 +129,6 @@ AppBundle\Entity\Orders:
             options:
                 fixed: false
             column: manager_sms_status
-        quickFlag:
-            type: boolean
-            options:
-                default: false
         preOrderFlag:
             type: boolean
             options:

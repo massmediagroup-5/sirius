@@ -548,11 +548,11 @@ class Order
         } else {
             // todo temporary, 1 - Nova poshta
             $order->setCarriers($this->em->getRepository('AppBundle:Carriers')->findOneById(1));
+            $order->setType(Orders::TYPE_QUICK);
         }
 
         $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
         $order->setUsers($user ?: null);
-        $order->setQuickFlag($quickFlag);
         $order->setPhone(Arr::get($data, 'phone'));
 
         foreach ($sizes as $size) {
