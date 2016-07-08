@@ -171,11 +171,11 @@ class Share
     {
         if($share = $object->getShare()){
 
-            $now = strtotime(strtotime((date('Y-m-d h:i:s'))));
+            $now = strtotime(date('Y-m-d h:i:s'));
             $startTime = strtotime($share->getStartTime()->format('Y-m-d h:i:s'));
             $endTime = strtotime($share->getEndTime()->format('Y-m-d h:i:s'));
 
-            return (($now > $startTime )&&($now < $endTime)) ? true : false;
+            return (($now >= $startTime )&&($now <= $endTime)) ? true : false;
         }else{
             return false;
         }
