@@ -83,7 +83,8 @@ class OrdersAdmin extends Admin
             ])
             ->add('change_pre_order_flag', $this->getRouterIdParameter() . '/change_pre_order_flag', [], [], [
                 'expose' => true
-            ]);
+            ])
+            ->add('cancel_order', $this->getRouterIdParameter() . '/cancel_order');
         if($this->statusName == 'waiting_for_departure')
         {
             $collection->add('ajax_create_waybill', $this->getRouterIdParameter() . '/ajax_create_waybill', [], [], [
@@ -135,6 +136,7 @@ class OrdersAdmin extends Admin
             ->add('pay', 'choice', [
                 'label' => 'Способ оплаты',
                 'choices' => [
+                    '' => 'Не выбрано',
                     (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
                 ]
@@ -146,7 +148,6 @@ class OrdersAdmin extends Admin
                     'template' => 'AppAdminBundle:list:list.template.roles.html.twig'
                 ]
             )
-            ->add('carriers.name', null, ['label' => 'Способ доставки'])
             ->add('cities.name', null, ['label' => 'Город'])
             ->add('stores.name', null, ['label' => 'Адрес склада'])
             ->add('createTime', null, ['label' => 'Время оформления'])
@@ -258,6 +259,7 @@ class OrdersAdmin extends Admin
                 'read_only' => $this->disableEdit,
                 'disabled' => $this->disableEdit,
                 'choices' => [
+                    '' => 'Не выбрано',
                     (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
                 ]

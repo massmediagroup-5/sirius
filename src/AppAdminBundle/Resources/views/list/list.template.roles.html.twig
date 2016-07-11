@@ -1,7 +1,7 @@
 <td nowrap="nowrap">
-    {% if object.users is not empty %}
-        {% for role in object.users.roles %}
-            [{{ admin.trans(role) }}]<br />
-        {% endfor %}
+    {% if object.users is not empty and object.users.hasRole('ROLE_WHOLESALER') %}
+        Оптовик
+    {% else %}
+        Пользователь
     {% endif %}
 </td>

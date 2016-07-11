@@ -71,6 +71,7 @@ search_placeholder: "Информация по ТТН"
 flash_delete_not_empty_error: 'Не возможно удалить запись поскольку она не пуста'
 link_to_pre_order: Переместить в предзаказ
 link_to_order: Переместить в заказ
+link_to_cancel_order: Отменить заказ
 
 history:
   field_changed_from_to_by_user: :field_changed изменено с ":before" на ":after" пользователем :user
