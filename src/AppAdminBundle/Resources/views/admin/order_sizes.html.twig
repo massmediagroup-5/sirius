@@ -9,6 +9,7 @@
                     <thead>
                         <tr>
                             <th>Артикул</th>
+                            <th>Картинка</th>
                             <th>Модель</th>
                             <th>Цвет</th>
                             <th>Размер</th>
@@ -29,6 +30,15 @@
                     {% for size in admin.subject.sizes %}
                         <tr data-size-id="{{ size.id }}">
                             <td class="control-group">{{ size.size.model.products.article }}</td>
+                            <td class="control-group">
+                                {% if size.size.model.images.0 is defined %}
+                                    <a data-lightbox="size-{{ size.id }}" href="{{ size.size.model.images.0.link }}">
+                                        <img src="{{ size.size.model.images.0.link | imagine_filter('small') }}"/>
+                                    </a>
+                                {% else %}
+                                    <img src="{{ param('no_image') | imagine_filter('small') }}"/>
+                                {% endif %}
+                            </td>
                             <td class="control-group">{{ size.size.model.products.name }}</td>
                             <td class="control-group">{{ size.size.model.productColors.name }}</td>
                             <td class="control-group">{{ size.size }}</td>
