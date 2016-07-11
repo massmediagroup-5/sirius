@@ -11,6 +11,10 @@ use Symfony\Component\Validator\Constraints\NotBlank as Assert;
  */
 class Users extends BaseUser
 {
+    const OAUTH_VKONTAKTE = 0;
+
+    const OAUTH_FACEBOOK = 1;
+
     /**
      * @var integer
      */
@@ -508,5 +512,20 @@ class Users extends BaseUser
     public function getOrders()
     {
         return $this->orders;
+    }
+
+    /**
+     * Get oauth provider
+     *
+     * @return integer|null
+     */
+    public function getOauthProvider()
+    {
+        if($this->facebook_id) {
+            return self::OAUTH_FACEBOOK;
+        } elseif($this->vkontakte_id) {
+            return self::OAUTH_VKONTAKTE;
+        }
+        return null;
     }
 }

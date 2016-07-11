@@ -1,0 +1,5 @@
+{% for type in ['info'] %}
+    {% for flash_message in app.session.flashBag.get(type) %}
+        <div class="js_flash_message">{{ flash_message }}</div>
+    {% endfor %}
+{% endfor %}
