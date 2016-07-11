@@ -55,6 +55,8 @@
     {% block popups %}
         {{ include('AppBundle:partials/msg_popup.html.twig') }}
     {% endblock %}
+
+    {{ include('AppBundle:partials/messages.html.twig') }}
 </div>
 <div class="preloader">
     {% image '@AppBundle/Resources/public/img/preloader.svg' %}

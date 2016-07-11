@@ -2,6 +2,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\Users as UserEntity;
 use AppBundle\Entity\Orders;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -70,6 +71,22 @@ class Humanizer
                 return $this->translator->trans('orders pay bank');
             default:
                 return $this->translator->trans('orders pay wrong');
+        }
+    }
+
+    /**
+     * @param $provider
+     * @return string
+     */
+    public function oauthProvider($provider)
+    {
+        switch ($provider) {
+            case UserEntity::OAUTH_FACEBOOK:
+                return $this->translator->trans('oauth facebook');
+            case UserEntity::OAUTH_VKONTAKTE:
+                return $this->translator->trans('oauth vkontakte');
+            default:
+                return null;
         }
     }
 

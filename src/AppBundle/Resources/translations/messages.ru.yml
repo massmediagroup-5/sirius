@@ -43,6 +43,9 @@ orders status wrong: Ошибочный статус
 orders pay cod: Наложеным платежом
 orders pay bank: На карту банка
 orders pay wrong: Ошибочный тип
+oauth facebook: Facebook
+oauth vkontakte: ВКонтакте
+login with social net: Вы авторизировались с помощью %net%. Можете дооформить свой заказ.
 labels:
   colors: цвет|цвета|цветов
   products_count: '%count% товар|%count% товара|%count% товаров'
