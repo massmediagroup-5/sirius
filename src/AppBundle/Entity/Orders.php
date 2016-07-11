@@ -67,7 +67,7 @@ class Orders
     /**
      * @var int
      */
-    private $pay = 1;
+    private $pay;
 
     /**
      * @var string

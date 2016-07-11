@@ -55,6 +55,7 @@ class AppExtension extends \Twig_Extension
             'json_decode' => new \Twig_Filter_Method($this, 'jsonDecode'),
             'regroup' => new \Twig_Filter_Method($this, 'regroup'),
             'format_price' => new \Twig_Filter_Method($this, 'formatPrice'),
+            'values' => new \Twig_SimpleFilter('values', array($this, 'values')),
         );
     }
 
@@ -257,6 +258,18 @@ class AppExtension extends \Twig_Extension
             }
         }
         return false;
+    }
+
+    /**
+     * Return all the values of an array
+     *
+     * @param array $array
+     * @return int
+     */
+    public function values($array)
+    {
+        if (!isset($array)) return null;
+        return array_values((array)$array);
     }
 
 }
