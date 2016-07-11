@@ -146,7 +146,7 @@ class OrdersAdmin extends Admin
             ->add('createTime', null, ['label' => 'Время оформления'])
             ->add('_action', 'actions', [
                 'actions' => [
-                    'show' => [],
+//                    'show' => [],
                     'edit' => [],
                 ]
             ]);
