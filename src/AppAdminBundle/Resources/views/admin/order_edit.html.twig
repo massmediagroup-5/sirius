@@ -100,10 +100,16 @@
                 </button>
             {% endif %}
 
-            <a class="btn btn-default" href="{{ path(admin.baseRouteName ~ '_change_pre_order_flag', {id: object.id}) }}">
+            <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_change_pre_order_flag', {id: object.id}) }}">
                 <i class="glyphicon glyphicon-arrow-right"></i>
                 {{ (object.preOrderFlag ? 'link_to_order' : 'link_to_pre_order')|trans({}, 'AppAdminBundle') }}
             </a>
+
+            {% if object.status.code != 'canceled' %}
+                <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_cancel_order', {id: object.id}) }}">
+                    <i class="fa fa-ban"></i> {{ 'link_to_cancel_order'|trans({}, 'AppAdminBundle') }}
+                </a>
+            {% endif %}
         {% endif %}
         <a class="btn btn-info" href="{{ admin.generateUrl('list') }}"><i class="fa fa-users"></i> Вернуться</a>
     </div>

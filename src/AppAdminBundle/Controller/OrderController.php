@@ -107,6 +107,20 @@ class OrderController extends BaseController
     }
 
     /**
+     * @return RedirectResponse
+     */
+    public function cancelOrderAction()
+    {
+        $object = $this->admin->getSubject();
+
+        $this->get('order')->cancelOrder($object);
+
+        $this->addFlash('sonata_flash_success', 'flash_cancel_order');
+
+        return new RedirectResponse($this->admin->generateUrl('list'));
+    }
+
+    /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
