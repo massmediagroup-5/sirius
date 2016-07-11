@@ -37,17 +37,17 @@
         <div class="hover__i">
             <div class="color-slider">
                 <div class="color-slider__i">
-                    {% for model  in item.productModels %}
+                    {% for model in item.productModels %}
                         {% set selectedClass = selectedModel is defined and selectedModel.id == model.id ? 'js_selected' : '' %}
                         {% if model.images.0 is defined and model.images.0.link is not null%}
-                            <a href="#" class="js_change_model {{ selectedClass }}"
+                            <a href="#" class="js_change_model {{ selectedClass }} {{ loop.first ? 'active' : '' }}"
                                data-model-id="{{ model.id }}"
                                data-model-alias="{{ model.alias }}"
                                data-big-img="{{ model.images.0.link|imagine_filter('medium') }}">
                                 <img src="{{ model.images.0.link|imagine_filter('mini') }}" alt="{{ item.name }}"/>
                             </a>
                         {% else %}
-                            <a href="#" class="js_change_model {{ selectedClass }}" data-model-id="{{ model.id }}" data-big-img="{{ param('no_image')|imagine_filter('medium') }}">
+                            <a href="#" class="js_change_model {{ selectedClass }} {{ loop.first ? 'active' : '' }}" data-model-id="{{ model.id }}" data-big-img="{{ param('no_image')|imagine_filter('medium') }}">
                                 <img src="{{ param('no_image')|imagine_filter('mini') }}" alt="{{ item.name }}"/>
                             </a>
                         {% endif %}
