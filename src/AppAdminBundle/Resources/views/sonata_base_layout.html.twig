@@ -123,3 +123,8 @@
         <div class="sonata-ba-form">{{ _form|raw }}</div>
     {% endif %}
 {% endblock sonata_admin_content %}
+
+{% block sonata_wrapper %}
+    {{ parent() }}
+    {% block bottom_assets %}{% endblock bottom_assets %}
+{% endblock sonata_wrapper %}

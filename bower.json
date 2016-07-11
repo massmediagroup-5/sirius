@@ -1,0 +1,21 @@
+{
+  "name": "Sirius",
+  "description": "Sirius",
+  "main": "",
+  "authors": [
+    "Zimm"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "web/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lightbox2": "~2.8.2"
+  }
+}
