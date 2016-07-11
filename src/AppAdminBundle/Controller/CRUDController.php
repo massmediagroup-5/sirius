@@ -181,6 +181,7 @@ class CRUDController extends BaseController
 
         if ($object instanceof Categories) {
             $disallowDelete = (bool)($object->getBasedProducts()->count() + $object->getChildren()->count());
+            $params = ['count'=>$object->getBasedProducts()->count(),'count1'=>$object->getChildren()->count()];
         } elseif($object instanceof Products) {
             $disallowDelete = (bool)$object->getProductModels()->count();
         } else {
@@ -188,11 +189,17 @@ class CRUDController extends BaseController
         }
 
         if($disallowDelete) {
-
-            $this->addFlash(
-                'sonata_flash_error',
-                $this->admin->trans('flash_delete_not_empty_error', [], 'AppAdminBundle')
-            );
+            if ($object instanceof Categories) {
+                $this->addFlash(
+                    'sonata_flash_error',
+                    $this->admin->trans( 'flash_delete_not_empty_error', $params, 'AppAdminBundle' )
+                );
+            }elseif ($object instanceof Products) {
+                $this->addFlash(
+                    'sonata_flash_error',
+                    $this->admin->trans( 'flash_delete_not_empty_error1', [ ], 'AppAdminBundle' )
+                );
+            }
 
             return $this->redirectTo($object);
         }
