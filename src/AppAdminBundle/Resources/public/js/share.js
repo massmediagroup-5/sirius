@@ -67,6 +67,18 @@ var LoadableContent = (function () {
         this.$loading.hide();
     };
 
+    LoadableContent.prototype.contentLinkClick = function (e) {
+        var $this = $(e.target),
+            params = $this.data('params');
+        e.preventDefault();
+
+        if (!params) {
+            params = $.url($this.attr('href')).param();
+        }
+
+        this.loadContent(params);
+    };
+
     mix(LoadableContent, requestMixin);
 
     return LoadableContent;
@@ -119,7 +131,7 @@ var DialogFiltersSelect = (function (superClass) {
             checkboxClass: 'icheckbox_minimal',
             radioClass: 'iradio_minimal'
         });
-        this.$holder.find('a.js_link').on('click', this.contentLinkClick.bind(this));
+        this.$holder.find('a').on('click', this.contentLinkClick.bind(this));
         this.filtersForm = this.$holder.find('.js_filters_form');
         this.filtersForm.on('submit', this.filtersFormChanged.bind(this));
         this.filtersForm.on('click', '[type=submit]', function () {
@@ -143,13 +155,6 @@ var DialogFiltersSelect = (function (superClass) {
         data[this.filtersForm.find("[type=submit][clicked=true]").attr('name')] = 1;
 
         this.loadContent(data);
-    };
-
-    DialogFiltersSelect.prototype.contentLinkClick = function (e) {
-        var $this = $(e.target);
-        e.preventDefault();
-
-        this.loadContent($this.data('params'));
     };
 
     mix(DialogFiltersSelect, modelsListMixin);
@@ -201,13 +206,6 @@ var DialogSizesSelect = (function (superClass) {
             new DialogSelectableSizeItem($(this), self.sizesGroupId);
         });
         this.hideLoading();
-    };
-
-    DialogSizesSelect.prototype.contentLinkClick = function (e) {
-        var $this = $(e.target);
-        e.preventDefault();
-
-        this.loadContent($this.data('params'));
     };
 
     DialogSizesSelect.prototype.submitFilters = function (e) {
