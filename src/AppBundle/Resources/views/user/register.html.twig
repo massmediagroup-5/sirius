@@ -30,20 +30,24 @@
                                 <label>Номер мобильного<sup>*</sup></label>
                             </div>
                             <div class="inp {{ add_error(form, ['phone']) }}">
-                                {{ form_widget(form.phone, {'attr': {'class': 'phone-inp', 'placeholder': 'Введите Ваш номер', 'class': form.phone.vars.errors|length > 0 ? 'error' : ''}}) }}
+                                {{ form_widget(form.phone, {'attr': {'class': 'phone-inp', 'placeholder': 'Введите Ваш номер'}}) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="inp-name">
                                 <label>Ваше имя и фамилия<sup>*</sup></label>
                             </div>
-                            <div class="inp {{ add_error(form, ['name', 'surname']) }}">
+							<div class="inp">
                                 <div class="col">
+									<div class="inp {{ add_error(form, ['name', 'surname']) }}">
                                     {{ form_widget(form.name, {'attr': {'placeholder': 'Введите Имя', 'class': form.name.vars.errors|length > 0 ? 'error' : ''}}) }}
-                                </div>
+									</div>
+								</div>							
                                 <div class="col">
+									<div class="inp {{ add_error(form, ['name', 'surname']) }}">
                                     {{ form_widget(form.surname, {'attr': {'placeholder': 'Введите Фамилию', 'class': form.surname.vars.errors|length > 0 ? 'error' : ''}}) }}
-                                </div>
+									</div>
+								</div>
                             </div>
                         </div>
                         <div class="row">
