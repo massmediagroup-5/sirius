@@ -35,6 +35,17 @@
     {% include 'AppAdminBundle:admin:order_sizes_popup.html.twig' %}
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bower_components/lightbox2/dist/css/lightbox.min.css') }}">
+{% endblock %}
+
+
+{% block bottom_assets %}
+    {{ parent() }}
+    <script src="{{ asset('bower_components/lightbox2/dist/js/lightbox.min.js') }}"></script>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script>
@@ -101,10 +112,16 @@
                 </button>
             {% endif %}
 
-            <a class="btn btn-default" href="{{ path(admin.baseRouteName ~ '_change_pre_order_flag', {id: object.id}) }}">
+            <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_change_pre_order_flag', {id: object.id}) }}">
                 <i class="glyphicon glyphicon-arrow-right"></i>
                 {{ (object.preOrderFlag ? 'link_to_order' : 'link_to_pre_order')|trans({}, 'AppAdminBundle') }}
             </a>
+
+            {% if object.status.code != 'canceled' %}
+                <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_cancel_order', {id: object.id}) }}">
+                    <i class="fa fa-ban"></i> {{ 'link_to_cancel_order'|trans({}, 'AppAdminBundle') }}
+                </a>
+            {% endif %}
         {% endif %}
         <a class="btn btn-info" href="{{ admin.generateUrl('list') }}"><i class="fa fa-users"></i> Вернуться</a>
     </div>

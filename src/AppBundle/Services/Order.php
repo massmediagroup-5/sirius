@@ -484,6 +484,23 @@ class Order
 
     /**
      * @param Orders $order
+     * @return Orders
+     */
+    public function cancelOrder(Orders $order)
+    {
+        $cancelStatus = $this->em->getRepository('AppBundle:OrderStatus')
+            ->findOneBy(['code' => 'canceled']);
+
+        $order->setStatus($cancelStatus);
+
+        $this->em->persist($order);
+        $this->em->flush();
+
+        return $order;
+    }
+
+    /**
+     * @param Orders $order
      */
     protected function appendBonuses(Orders $order)
     {

@@ -89,6 +89,10 @@
 
 {% block sonata_admin_content %}
 
+    {% block notice %}
+        {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
+    {% endblock notice %}
+
     {% if _list_table is not empty or _list_filters is not empty %}
         <div class="row">
             {% if _list_filters|trim %}
@@ -102,10 +106,6 @@
             </div>
         </div>
     {% endif %}
-
-    {% block notice %}
-        {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
-    {% endblock notice %}
 
     {% if _preview is not empty %}
         <div class="sonata-ba-preview">{{ _preview|raw }}</div>
@@ -123,3 +123,8 @@
         <div class="sonata-ba-form">{{ _form|raw }}</div>
     {% endif %}
 {% endblock sonata_admin_content %}
+
+{% block sonata_wrapper %}
+    {{ parent() }}
+    {% block bottom_assets %}{% endblock bottom_assets %}
+{% endblock sonata_wrapper %}
