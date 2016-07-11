@@ -62,6 +62,11 @@ class CreateOrderType extends AbstractType
         $authenticated = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY');
 //        dump($authenticated);exit;
 
+        $paymentTypes = [
+            Orders::PAY_TYPE_BANK_CARD,
+            Orders::PAY_TYPE_COD,
+        ];
+
         $builder
             ->add('phone', TextType::class, [
                 'required' => true,
@@ -107,12 +112,11 @@ class CreateOrderType extends AbstractType
                 'data' => 'np',
                 'expanded' => true,
             ])
-            ->add('payStatus', 'entity', [
-                'class' => 'AppBundle:OrderStatusPay',
-                'property' => 'name',
-                'label' => 'Сатус оплаты заказа',
-                'empty_value' => 'Выберите статус оплаты',
-                'expanded'      => true
+            ->add('pay', ChoiceType::class, [
+                'choices' => array_combine($paymentTypes, $paymentTypes),
+                'required' => true,
+                'data' => Orders::PAY_TYPE_BANK_CARD,
+                'expanded' => true,
             ])
             ->add('bonuses', HiddenType::class, [
                 'constraints' => [
