@@ -230,6 +230,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 break;
         }
         $query->addOrderBy("$modelAlias.inStock", 'DESC');
+        $query->addOrderBy("$modelAlias.priority", 'DESC');
         $query->addOrderBy("$modelAlias.createTime", 'DESC');
         $query->addOrderBy("$modelAlias.id", 'DESC');
 
