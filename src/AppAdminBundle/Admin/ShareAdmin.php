@@ -111,14 +111,22 @@ class ShareAdmin extends Admin
         $classNames = $this->getConfigurationPool()->getContainer()->get('share')->getNamedClassNames();
 //        $image = $this->getSubject()->getImage();
         $image = $this->getSubject();
-
+//        'Y-m-d h:i:s'
         $formMapper
             ->tab('Акция')
             ->with('Акция', ['class' => 'col-md-12'])
             ->add('name', null, ['label' => 'Имя'])
             ->add('description', null, ['label' => 'Описание', 'attr' => ['class' => 'ckeditor']])
-            ->add('startTime', 'sonata_type_datetime_picker', ['label' => 'Время начала'])
-            ->add('endTime', 'sonata_type_datetime_picker', ['label' => 'Время окончания'])
+                ->add('startTime', 'sonata_type_datetime_picker', [
+                'label' => 'Время начала',
+                'dp_language'=>'ru',
+                'format'=>'yy-MM-dd HH:mm']
+            )
+            ->add('endTime', 'sonata_type_datetime_picker', [
+                'label' => 'Время окончания',
+                'dp_language'=>'ru',
+                'format'=>'yy-MM-dd HH:mm']
+            )
             ->add('image', 'comur_image', array(
                 'label' => 'Картинка',
                 'uploadConfig' => array(
