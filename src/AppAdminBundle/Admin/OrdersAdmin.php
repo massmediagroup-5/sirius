@@ -11,6 +11,8 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Validator\ErrorElement;
+
 
 use NovaPoshta\Config;
 use NovaPoshta\ApiModels\InternetDocument;
@@ -28,6 +30,10 @@ class OrdersAdmin extends Admin
 
         // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
     ];
+
+    protected $formOptions = array(
+        'validation_groups' => array()
+    );
 
     protected $sizesPerPage = 15;
 
@@ -225,6 +231,7 @@ class OrdersAdmin extends Admin
                     'property' => 'name',
                     'label' => 'Сатус оплаты заказа',
                     'empty_value' => 'Выберите статус оплаты',
+                    'attr'=>array('data-sonata-select2'=>'false')
                 ]
             )
             ->add('type', 'choice', [
@@ -477,5 +484,20 @@ class OrdersAdmin extends Admin
                 ->setParameter('code', 'canceled')
                 ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(3);
         };
+    }
+
+    public function validate(ErrorElement $errorElement, $object)
+    {
+//        payStatus
+        $errorElement
+            ->with('payStatus')
+                ->assertNotNull(array())
+                ->assertNotBlank()
+            ->end()
+            ->with('status')
+                ->assertNotNull(array())
+                ->assertNotBlank()
+            ->end()
+        ;
     }
 }
