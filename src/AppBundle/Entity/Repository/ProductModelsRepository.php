@@ -28,7 +28,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->createQueryBuilder('productModels')
             ->innerJoin('productModels.products', 'products')->addselect('products')
             ->where('productModels.products = :prodId')
-            ->setParameter('prodId', $prodId);
+            ->setParameter('prodId', $prodId)
+            ->addOrderBy("productModels.priority", 'DESC');
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
 
