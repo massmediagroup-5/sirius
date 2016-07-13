@@ -247,6 +247,7 @@ var DialogSelectableModelItem = (function () {
 
 var DialogSelectableSizeItem = (function () {
     function DialogSelectableSizeItem($content, sizesGroupId) {
+        this.preventRequest = false;
         this.$content = $content;
         this.sizesGroupId = sizesGroupId;
         this.sizeId = this.$content.data('size-id');
@@ -255,10 +256,15 @@ var DialogSelectableSizeItem = (function () {
     }
 
     DialogSelectableSizeItem.prototype.sizeCheckToggle = function (e) {
-        this.request('toggle_group_size', {}, {sizes_group_id: this.sizesGroupId, size_id: this.sizeId});
+        if(this.preventRequest) {
+            this.preventRequest = false;
+        } else {
+            this.request('toggle_group_size', {}, {sizes_group_id: this.sizesGroupId, size_id: this.sizeId});
+        }
     };
 
     DialogSelectableSizeItem.prototype.sizeCheckToggleToListener = function (e, flag) {
+        this.preventRequest = true;
         if(flag) {
             this.$content.find('.js_check_size').iCheck('check');
         } else {
