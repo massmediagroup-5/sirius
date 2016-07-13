@@ -276,11 +276,10 @@ class AjaxController extends Controller
                 ->getQuery();
             $data = $query->getArrayResult();
             $this->result['stores'] = $data;
-            $this->result['status'] = 'OK';
         } else {
-            $this->result['status'] = 'ERROR';
+            return new JsonResponse(null, 420);
         }
-        return new Response(json_encode($this->result));
+        return new JsonResponse($this->result);
     }
 
     /**

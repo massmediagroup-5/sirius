@@ -274,7 +274,8 @@ class OrdersAdmin extends Admin
                     return $er->createQueryBuilder('s')
                         ->where('s.carriers = :id')
                         ->setParameter('id', $carrier ? $carrier->getId() : null);
-                }
+                },
+                'empty_value' => 'Выберите город',
             ])
             ->add('stores', 'sonata_stores_list', [
                 'class' => 'AppBundle:Stores',
