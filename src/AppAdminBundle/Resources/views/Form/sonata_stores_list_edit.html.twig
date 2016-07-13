@@ -8,15 +8,15 @@
                 var $storesInput = $('select[id$=stores]'), $citiesInput = $('select[id$=cities]');
                 function changeStoreValues() {
                     var city_id = $citiesInput.val();
-                    $.ajax({
-                        url: '/ajax/get_stores_by_city',
-                        data: {
-                            city_id: city_id,
-                        },
-                        dataType: "json",
-                        type: "POST",
-                        success: function (data) {
-                            if (data.status == 'OK') {
+                    if (city_id) {
+                        $.ajax({
+                            url: '/ajax/get_stores_by_city',
+                            data: {
+                                city_id: city_id,
+                            },
+                            dataType: "json",
+                            type: "POST",
+                            success: function (data) {
                                 $storesInput.select2('data', null);
                                 $storesInput.find('option').remove();
                                 $storesInput.find("option:selected").prop("selected", false);
@@ -24,12 +24,15 @@
                                     $storesInput.append(new Option(value.name, value.id));
                                 });
                                 return false;
-                            } else {}
-                        },
-                        error: function (message) {
-                            console.log(message.status + ' ' + message.statusText);
-                        },
-                    });
+                            },
+                            error: function (message) {
+                                alert(message.status + ' ' + message.statusText);
+                            }
+                        });
+                    } else {
+                        $storesInput.select2('data', null);
+                        $storesInput.find('option').remove();
+                    }
                 }
                 $citiesInput.on('change', changeStoreValues);
                 changeStoreValues()
