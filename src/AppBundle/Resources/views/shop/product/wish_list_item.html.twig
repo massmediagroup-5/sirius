@@ -1,0 +1,5 @@
+{% extends 'AppBundle:shop:product/list_item.html.twig' %}
+
+{% block wishButton %}
+    {{ widget('products.wishButton', model, {autoRemove: true})|raw }}
+{% endblock wishButton %}

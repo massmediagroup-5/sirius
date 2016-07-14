@@ -9,6 +9,7 @@ use AppBundle\Form\Type\ChangeProductSizeType;
 use AppBundle\Form\Type\RemoveProductSizeType;
 use AppBundle\Model\CartSize;
 use Doctrine\ORM\EntityManager;
+use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Form\Type\AddInCartType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -55,18 +56,20 @@ class Products
     }
 
     /**
-     * Render list item
+     * Render wish button
      *
      * @param ProductModels $item
+     * @param array $params
      * @return mixed
      */
-    public function wishButton(ProductModels $item)
+    public function wishButton(ProductModels $item, $params = [])
     {
         $addedFlag = in_array($item->getId(), $this->container->get('wishlist')->getIds());
 
         return $this->templating->render('AppBundle:widgets/product/wish_button.html.twig', [
                 'item' => $item,
                 'addedFlag' => $addedFlag,
+                'autoRemove' => Arr::get($params, 'autoRemove')
             ]
         );
     }
