@@ -4,7 +4,9 @@
         {% for model in item.productModels %}
             {{ widget('products.flags', model)|raw }}
 
-            {{ widget('products.wishButton', model)|raw }}
+            {% block wishButton %}
+                {{ widget('products.wishButton', model)|raw }}
+            {% endblock wishButton %}
         {% endfor %}
 
         <div class="img">
