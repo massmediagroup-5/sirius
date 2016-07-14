@@ -422,7 +422,6 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $builder
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
-            ->innerJoin('characteristicValues.categories', 'categories')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
