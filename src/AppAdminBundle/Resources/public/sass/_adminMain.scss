@@ -201,7 +201,7 @@ div[class="form-group"][id$="_images"] {
     }
 }
 
-.filter_container {
+.content .filter_container {
     .form-group {
         width: 24%;
         float: left;
@@ -213,14 +213,14 @@ div[class="form-group"][id$="_images"] {
     > .btn {
         margin-top: 24px;
     }
-}
-.form-group {
-    .sonata-ba-field {
-        line-height: 34px;
-    }
-    .select2-container .select2-choice {
-        height: 34px;
-        line-height: 34px;
+    .form-group {
+        .sonata-ba-field {
+            line-height: 34px;
+        }
+        .select2-container .select2-choice {
+            height: 34px;
+            line-height: 34px;
+        }
     }
 }
 

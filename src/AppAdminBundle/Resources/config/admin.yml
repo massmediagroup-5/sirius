@@ -243,6 +243,11 @@ services:
         tags:
             - { name: form.type, alias: sonata_stores_list }
 
+    sonata.user.form.type.sonata_type_models_list:
+        class:     AppAdminBundle\Form\Type\SonataTypeModelsList
+        tags:
+            - { name: form.type, alias: sonata_type_models_list }
+
     app_admin.admin.unisender:
         class: AppAdminBundle\Admin\UnisenderAdmin
         arguments: [~, AppBundle\Entity\Unisender, SonataAdminBundle:CRUD]
