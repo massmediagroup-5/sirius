@@ -120,12 +120,12 @@ class ShareAdmin extends Admin
                 ->add('startTime', 'sonata_type_datetime_picker', [
                 'label' => 'Время начала',
                 'dp_language'=>'ru',
-                'format'=>'yy-MM-dd HH:mm']
+                'format'=>'dd-MM-yy HH:mm']
             )
             ->add('endTime', 'sonata_type_datetime_picker', [
                 'label' => 'Время окончания',
                 'dp_language'=>'ru',
-                'format'=>'yy-MM-dd HH:mm']
+                'format'=>'dd-MM-yy HH:mm']
             )
             ->add('image', 'comur_image', array(
                 'label' => 'Картинка',
