@@ -2,7 +2,7 @@
 
 namespace AppAdminBundle\Form;
 
-use Doctrine\ORM\EntityRepository;
+use AppAdminBundle\Admin\ImportAdmin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -11,16 +11,12 @@ class ImportForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('vendor', 'entity', [
-                'class' => 'AppBundle:Vendors',
-                'required' => true,
-                'choice_label' => function ($vendor, $key, $index) {
-                    return strtoupper($vendor->getName());
-                },
-//                'query_builder' => function (EntityRepository $er) {
-//                    return $er->createQueryBuilder()
-//                }
-
+            ->add('type', 'choice', [
+                'label' => 'Тип',
+                'choices' => [
+                    (string)ImportAdmin::ACTUALIZE_TYPE => 'Актуализация',
+                    (string)ImportAdmin::APPEND_TYPE => 'Приход',
+                ]
             ])
             ->add('file', 'file', ['required' => true])
             ->add('submit', 'submit');

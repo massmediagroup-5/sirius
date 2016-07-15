@@ -1,6 +1,7 @@
 AppBundle\Entity\ProductModelSizes:
     type: entity
     table: product_model_sizes
+    repositoryClass: AppBundle\Entity\Repository\ProductModelSizesRepository
     indexes:
         size:
             columns:
