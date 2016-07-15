@@ -70,7 +70,7 @@
                         {#{{ render(controller('FOSUserBundle:Resetting:request')) }}#}
                         <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="change-passw-form fos_user_resetting_request">
                             <div class="inp">
-                                <input type="text" placeholder="E-mail адрес" id="username" name="username" />
+                                <input type="email" placeholder="E-mail адрес" id="username" name="username" />
                             </div>
                             <div class="inp">
                                 <input type="submit" class="btn btn_blue" value="ПОДТВЕРДИТЬ"/>
