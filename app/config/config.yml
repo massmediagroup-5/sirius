@@ -204,7 +204,7 @@ sonata_admin:
     dashboard:
         blocks:
             - { position: left, type: sonata.admin.block.admin_list }
-#            - { position: left, type: app.admin.block.import}
+            - { position: left, type: app.admin.block.import}
     security:
         handler: sonata.admin.security.handler.role
 

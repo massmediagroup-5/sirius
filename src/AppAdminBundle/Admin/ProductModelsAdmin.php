@@ -105,6 +105,7 @@ class ProductModelsAdmin extends Admin
             ->add('price', null, ['label' => 'Цена'])
             ->add('oldPrice', null, ['label' => 'Старая цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('quantity', null, ['label' => 'Количество'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('endCount', null, ['label' => 'Количество для "Этот товар скоро заканчится"'])
             ->add('published', null, ['label' => 'Опубликованно'])

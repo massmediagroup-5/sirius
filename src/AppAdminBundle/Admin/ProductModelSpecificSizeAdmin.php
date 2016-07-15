@@ -66,6 +66,7 @@ class ProductModelSpecificSizeAdmin extends Admin
         $formMapper
             ->add('price', null, ['label' => 'Цена', 'required' => true])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('quantity', null, ['label' => 'Количество'])
             ->add('preOrderFlag', null, ['label' => 'Предзаказ'])
             ->add('size', 'entity', [
                     'class' => 'AppBundle:ProductModelSizes',
