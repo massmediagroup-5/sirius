@@ -82,6 +82,11 @@ class ProductModels
     private $updateTime;
 
     /**
+     * @var integer
+     */
+    private $quantity = 0;
+
+    /**
      * @var \AppBundle\Entity\ProductColors
      */
     private $productColors;
@@ -629,6 +634,30 @@ class ProductModels
     public function getRecommended()
     {
         return $this->recommended;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     *
+     * @return ProductModels
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return integer
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 
     /**

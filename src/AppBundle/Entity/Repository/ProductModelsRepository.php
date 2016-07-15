@@ -41,6 +41,33 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * Get product and category info by their aliases.
+     *
+     * @param $product
+     * @param $color
+     * @param $decorationColor
+     * @return mixed
+     */
+    public function getModelsByProductAndColors($product, $color, $decorationColor)
+    {
+        $builder = $this->createQueryBuilder('models')
+            ->innerJoin('models.productColors', 'color')
+            ->leftJoin('models.decorationColor', 'decorationColor')
+            ->innerJoin('models.products', 'products')
+            ->where('models.products = :product AND color.name = :color')
+            ->setParameters(['product' => $product, 'color' => $color]);
+
+        if ($decorationColor) {
+            $builder->andWhere('decorationColor.name = :decorationColor')
+                ->setParameter('decorationColor', $decorationColor);
+        } else {
+            $builder->andWhere('decorationColor.name IS NULL');
+        }
+
+        return $builder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * @param array $ids
      * @return mixed
      */
