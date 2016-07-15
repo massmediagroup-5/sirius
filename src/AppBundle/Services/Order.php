@@ -300,9 +300,8 @@ class Order
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Order from orders@sirius.com.ua')
-            ->setFrom('orders@sirius.com.ua')
-            ->addTo('r.slobodzyanmassmedia@gmail.com', 'r.slobodzyanmassmedia@gmail.com')
-            ->addTo('alisayatsyuk@gmail.com', 'alisayatsyuk@gmail.com')
+            ->setFrom('orders@sirius-sport.com')
+            ->setTo($this->container->get('options')->getParamValue('email'))
             ->setBody($body)
             ->setContentType("text/html");
         $this->container->get('mailer')->send($message);
@@ -366,8 +365,8 @@ class Order
                             $orderStatus->getId() // %s
                         );
                         $message = \Swift_Message::newInstance()
-                                                 ->setSubject('Order from orders@sirius.com.ua')
-                                                 ->setFrom('orders@sirius.com.ua')
+                                                 ->setSubject('Order from orders@sirius-sport.com')
+                                                 ->setFrom('orders@sirius-sport.com')
                                                  ->addTo($order->getUsers()->getEmail())
                                                  ->setBody($body)
                                                  ->setContentType("text/html");

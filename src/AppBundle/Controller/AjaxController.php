@@ -33,8 +33,8 @@ class AjaxController extends Controller
 
             $message = \Swift_Message::newInstance()
                 ->setSubject('Callback from orders@mytex.com.ua')
-                ->setFrom('callback@mytex.com.ua')
-                ->setTo('mytex777@gmail.com')
+                ->setFrom('callback@sirius-sport.com')
+                ->setTo($this->get('options')->getParamValue('email'))
                 ->setBody('<h2>Запрос на обратный звонок с сайта mytex.com.ua!</h2><hr>' .
                     '<p>Номер телефона: ' . $request->get('phone') . '</p>'
                 )
