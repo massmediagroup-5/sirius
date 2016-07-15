@@ -39,8 +39,8 @@ class CategoriesRepository extends BaseRepository
             ->leftJoin('cat.parrent', 'parrent')->addSelect('parrent')
             ->where('cat.inMenu = 1 AND cat.active = 1 AND cat.id != 1')
             ->orderBy('cat.priority', 'ASC')
-            ->addOrderBy('cat.parrent', 'ASC')
             ->addOrderBy('cat.name', 'ASC')
+            ->addOrderBy('cat.parrent', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
