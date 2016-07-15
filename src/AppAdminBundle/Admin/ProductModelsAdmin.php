@@ -122,12 +122,10 @@ class ProductModelsAdmin extends Admin
             ->end()
             ->tab('Рекомендуем')
                 ->with('Рекомендуем', ['class' => 'col-md-12'])
-                    ->add('recommended', 'sonata_type_model',
+                    ->add('recommended', 'sonata_type_models_list',
                         [
-                            'by_reference' => true,
-                            'multiple' => true,
-                            'required' => false,
-                            'btn_add' => false
+                            'class' => 'AppBundle:ProductModels',
+                            'model_manager' => $this->getModelManager()
                         ]
                     )
                 ->end()
@@ -192,5 +190,13 @@ class ProductModelsAdmin extends Admin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormTheme()
+    {
+        return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_type_models_list.html.twig']);
     }
 }
