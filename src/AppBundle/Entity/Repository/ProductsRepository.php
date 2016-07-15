@@ -421,7 +421,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         // Add a starting Joins.
         $builder
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
-            ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
+            ->leftJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
@@ -430,7 +430,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('shareGroup.share', 'share')->addselect('share')
             ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
             ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics');
+            ->leftJoin('characteristicValues.characteristics', 'characteristics');
 
         if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")

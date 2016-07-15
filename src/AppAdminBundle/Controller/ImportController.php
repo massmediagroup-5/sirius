@@ -25,16 +25,15 @@ class ImportController extends CoreController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // Todo protect run import process copy, maybe cli_set_process_title and exec grep
             $this->startImport($form);
         }
 
-        return $this->render('AppAdminBundle:admin:import.html.twig', array(
+        return $this->render('AppAdminBundle:admin:import.html.twig', [
             'base_template' => $this->getBaseTemplate(),
             'admin_pool' => $this->container->get('sonata.admin.pool'),
             'blocks' => $this->container->getParameter('sonata.admin.configuration.dashboard_blocks'),
             'form' => $form->createView()
-        ));
+        ]);
     }
 
     /**
@@ -47,11 +46,9 @@ class ImportController extends CoreController
     {
         $formData = $form->getData();
 
-        $productModels = $this->get('app.admin.import')
-            ->setVendor($formData['vendor'])
-            ->import($formData['file']);
-
-//        $this->get('updateAll')->unpublishedProductModelsExcept($productModels); // ???
+        $this->get('app.admin.import')->import($formData['file'], $formData);
+        
+        // Todo reindex elastica
 
         return new RedirectResponse(
             $this->generateUrl('sonata_admin_dashboard')

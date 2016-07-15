@@ -49,6 +49,22 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param $size
+     * @return mixed
+     */
+    public function findOneByProductModelAndSizeName($productModel, $size)
+    {
+        return $this->createQueryBuilder('modelSizes')
+            ->innerJoin('modelSizes.size', 'size')
+            ->andWhere('modelSizes.model = :model')
+            ->andWhere('size.size = :size')
+            ->setParameter('size', $size)
+            ->setParameter('model', $productModel)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
      * @param ShareSizesGroup $group
      * @return \Doctrine\ORM\Query
      */
