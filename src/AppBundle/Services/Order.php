@@ -55,7 +55,7 @@ class Order
      */
     public function orderFromCart($data, $user, $quickFlag = false)
     {
-        if(($user)&&($user->getGrayListFlag())) {
+        if (($user) && ($user->getGrayListFlag())) {
             throw new UserInGrayListException;
         }
 
@@ -85,7 +85,7 @@ class Order
             $this->em->persist($preOrder);
         }
 
-        if($user){
+        if ($user) {
             $user->decrementBonuses(Arr::get($data, 'bonuses', 0));
 
             $this->em->persist($user);
@@ -330,7 +330,7 @@ class Order
                         break;
                 }
                 $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
-                if ( $orderStatus ){
+                if ($orderStatus) {
                     if ($uniSender) {
                         if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
                             $client_sms_status = $this->sendSmsRequest(
@@ -347,9 +347,9 @@ class Order
                                 $order->setClientSmsStatus($client_sms_status['error']);
                             }
                         }
-                        if( ( $orderStatus->getSendManager() ) && ( !empty( $orderStatus->getSendManagerText() ) ) ){
-                            $phones = explode( ',', $uniSender->getPhones() );
-                            foreach( $phones as $phone ){
+                        if (($orderStatus->getSendManager()) && (!empty($orderStatus->getSendManagerText()))) {
+                            $phones = explode(',', $uniSender->getPhones());
+                            foreach ($phones as $phone) {
                                 $this->sendSmsRequest(
                                     $uniSender,
                                     $phone,
@@ -359,17 +359,17 @@ class Order
                             }
                         }
                     }
-                    if( ($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers()) ){
+                    if (($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers())) {
                         $body = sprintf(
                             $orderStatus->getSendClientEmailText(),
                             $orderStatus->getId() // %s
                         );
                         $message = \Swift_Message::newInstance()
-                                                 ->setSubject('Order from orders@sirius-sport.com')
-                                                 ->setFrom('orders@sirius-sport.com')
-                                                 ->addTo($order->getUsers()->getEmail())
-                                                 ->setBody($body)
-                                                 ->setContentType("text/html");
+                            ->setSubject('Order from orders@sirius-sport.com')
+                            ->setFrom('orders@sirius-sport.com')
+                            ->addTo($order->getUsers()->getEmail())
+                            ->setBody($body)
+                            ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
                     }
                 }
@@ -472,8 +472,9 @@ class Order
                         'AppAdminBundle'
                     ));
                 }
-                if ($fieldName == 'payStatus') {
-                    $this->appendBonuses($order);
+                if ($fieldName == 'payStatus' && $orderChange[1]) {
+                    $doneDate = $orderChange[1]->getCode() == OrderStatusPay::CODE_PAID ? new \DateTime() : null;
+                    $order->setDoneTime($doneDate);
                 }
             }
         }
@@ -499,16 +500,33 @@ class Order
     }
 
     /**
+     * Append bonuses to orders
+     */
+    public function appendBonusesToOrders()
+    {
+        $interval = $this->container->getParameter('orders.add_bonuses_days_interval');
+
+        $orders = $this->em->getRepository('AppBundle:Orders')->findToAppendBonuses($interval);
+
+        foreach ($orders as $order) {
+            $this->appendBonuses($order);
+        }
+    }
+
+    /**
      * @param Orders $order
      */
     protected function appendBonuses(Orders $order)
     {
         if ($user = $order->getUsers()) {
-            $sum = $order->getDiscountedTotalPrice();
-            $sign = $order->getPayStatus()->getCode() == 'paid' ? 1 : -1;
-            $user->incrementBonuses($sign * $this->container->get('prices_calculator')->getBonusesToSum($sum));
+            $sum = $order->getIndividualDiscountedTotalPrice();
+            $user->incrementBonuses($this->container->get('prices_calculator')->getBonusesToSum($sum));
 
+            $order->setBonusesEnrolled(true);
+
+            $this->em->persist($order);
             $this->em->persist($user);
+            $this->em->flush($user);
         }
     }
 
@@ -555,7 +573,7 @@ class Order
             $cities = Arr::get($data, $prefix . 'delivery_city', null);
             $stores = Arr::get($data, $prefix . 'delivery_store', null);
             $bonuses = Arr::get($data, 'bonuses', 0);
-            
+
             $order->setCities($cities);
             $order->setStores($stores);
             $order->setCarriers($cities->getCarriers());

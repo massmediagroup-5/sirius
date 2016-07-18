@@ -102,6 +102,11 @@ class Orders
     private $updateTime;
 
     /**
+     * @var \DateTime
+     */
+    private $doneTime;
+
+    /**
      * @var OrderStatus
      */
     private $status;
@@ -175,6 +180,11 @@ class Orders
      * @var integer
      */
     private $bonuses = 0;
+
+    /**
+     * @var boolean
+     */
+    private $bonusesEnrolled = false;
 
 
     /**
@@ -1002,5 +1012,53 @@ class Orders
     public function getBonuses()
     {
         return $this->bonuses;
+    }
+
+    /**
+     * Set bonusesEnrolled
+     *
+     * @param boolean $bonusesEnrolled
+     *
+     * @return Orders
+     */
+    public function setBonusesEnrolled($bonusesEnrolled)
+    {
+        $this->bonusesEnrolled = $bonusesEnrolled;
+
+        return $this;
+    }
+
+    /**
+     * Get bonusesEnrolled
+     *
+     * @return boolean
+     */
+    public function getBonusesEnrolled()
+    {
+        return $this->bonusesEnrolled;
+    }
+
+    /**
+     * Set doneTime
+     *
+     * @param \DateTime $doneTime
+     *
+     * @return Orders
+     */
+    public function setDoneTime($doneTime)
+    {
+        $this->doneTime = $doneTime;
+
+        return $this;
+    }
+
+    /**
+     * Get doneTime
+     *
+     * @return \DateTime
+     */
+    public function getDoneTime()
+    {
+        return $this->doneTime;
     }
 }

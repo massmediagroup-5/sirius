@@ -16,6 +16,7 @@ parameters:
     upload_shares_img_directory:                        img/shares
     sonata.user.admin.user.entity:                      AppBundle\Entity\Users
     sonata.user.admin.user.class:                       AppAdminBundle\Admin\UsersAdmin
+    orders.add_bonuses_days_interval:                   14
 
 imports:
     - { resource: parameters.yml }

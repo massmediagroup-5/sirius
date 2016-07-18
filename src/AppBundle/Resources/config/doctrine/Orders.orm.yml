@@ -1,6 +1,7 @@
 AppBundle\Entity\Orders:
     type: entity
     table: orders
+    repositoryClass: AppBundle\Entity\Repository\OrdersRepository
     indexes:
         fk_call_back_users1_idx:
             columns:
@@ -102,6 +103,11 @@ AppBundle\Entity\Orders:
             nullable: false
             options:
                 default: 0
+        bonusesEnrolled:
+            type: boolean
+            nullable: false
+            options:
+                default: false
         clientSmsId:
             type: string
             nullable: true
@@ -144,6 +150,9 @@ AppBundle\Entity\Orders:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
+        doneTime:
+            type: datetime
+            nullable: true
     oneToMany:
         sizes:
             targetEntity: OrderProductSize
