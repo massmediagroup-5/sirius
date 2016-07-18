@@ -25,7 +25,7 @@ class ExceptionListener
                 $event->setResponse(new JsonResponse(['messages' => ['Вы в сером списке, вам запрещено делать заказы!']],
                     422));
             } else {
-                
+
             }
         }
     }
