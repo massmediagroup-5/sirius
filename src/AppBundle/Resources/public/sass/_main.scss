@@ -486,6 +486,37 @@ input[type="checkbox"] {
 				}
 			}
 
+			h2 {
+			   text-align: center;
+			   position: relative;
+			   line-height: 1.2;
+			   padding-bottom: 33px;
+			   margin-top: 1em;
+			   
+			   &:before {
+			     content: '';
+			     width: 10px;
+			     height: 10px;
+			     -moz-border-radius: 50%;
+			     -webkit-border-radius: 50%;
+			     border-radius: 50%;
+			     background: #229fff;
+			     display: inline-block;
+			     margin: 0 15px;
+			   }
+			   &:after {
+			     content: '';
+			     width: 10px;
+			     height: 10px;
+			     -moz-border-radius: 50%;
+			     -webkit-border-radius: 50%;
+			     border-radius: 50%;
+			     background: #229fff;
+			     display: inline-block;
+			     margin: 0 15px;
+			   }
+			}
+
 			&.static-content-wrap_about {
 				.content {
 					&:nth-child(even) {
@@ -9265,35 +9296,4 @@ body {
 	outline: none;
 	position: absolute;
 	left: 20px;
-}
-
-.content__i h2 {
-   text-align: center;
-   position: relative;
-   line-height: 1.2;
-   padding-bottom: 33px;
-   margin-top: 1em;
-   
-   &:before {
-     content: '';
-     width: 10px;
-     height: 10px;
-     -moz-border-radius: 50%;
-     -webkit-border-radius: 50%;
-     border-radius: 50%;
-     background: #229fff;
-     display: inline-block;
-     margin: 0 15px;
-   }
-   &:after {
-     content: '';
-     width: 10px;
-     height: 10px;
-     -moz-border-radius: 50%;
-     -webkit-border-radius: 50%;
-     border-radius: 50%;
-     background: #229fff;
-     display: inline-block;
-     margin: 0 15px;
-   }
 }
