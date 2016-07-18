@@ -2178,8 +2178,20 @@ input[type="checkbox"] {
 
 	table {
 		width: 100%;
+		td {
+		    vertical-align: middle;
+		}
 	}
 	.contacts {
+		position: relative;
+		.icon {
+			position: absolute; 
+		    left: 0;
+		    top: 46%;
+		    transform: translate(0%, -50%);
+		    -webkit-transform: translate(0%, -50%);
+		    -moz-transform: translate(0%, -50%);
+		}
 		ul {
 		  	@extend .clearfix;
 			li {
