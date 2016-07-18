@@ -6,9 +6,10 @@
                     <td>
                         <div class="contacts">
                             <div class="contacts__i">
+                                <i class="icon icon-mobile"></i>
                                 <ul>
                                     {% if options.params.phone1.value is defined and options.params.phone1.active == true %}
-                                        <li><i class="icon icon-mobile"></i>{{ options.params.phone1.value }}</li>
+                                        <li>{{ options.params.phone1.value }}</li>
                                     {% endif %}
                                     {% if options.params.phone2.value is defined and options.params.phone2.active == true %}
                                         <li>{{ options.params.phone2.value }}</li>
@@ -50,10 +51,10 @@
                     <td>
                         <div class="contacts">
                             <div class="contacts__i">
+                                <i class="icon icon-email"></i>
                                 <ul>
                                     {% if options.params.email1.value is defined and options.params.email1.active == true %}
-                                    <li class="email">
-                                        <i class="icon icon-email"></i>
+                                    <li class="email">                                        
                                         <a href="mailto:{{ options.params.email1.value }}">{{ options.params.email1.value }}</a>
                                     </li>
                                     {% endif %}
