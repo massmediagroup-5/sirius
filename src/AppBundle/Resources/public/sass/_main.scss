@@ -2791,7 +2791,7 @@ input[type="checkbox"] {
 	padding-bottom: 40px;
 
 	.price-slider__i {
-		margin: 55px 10px 20px 0;
+		margin: 55px 10px 20px 10px;
 		height: 10px;
 		background: #d6d6d6;
 		position: relative;
@@ -2831,7 +2831,7 @@ input[type="checkbox"] {
 			padding-right: 5px;
 
 			&.to {
-				padding-left: 10px;
+				padding-left: 5px;
 			}
 
 		}
@@ -2849,9 +2849,9 @@ input[type="checkbox"] {
 		*/
 		width: 0; 
 		height: 0;
-		margin: 0;
 		border: 0;
 		outline: none;
+		margin-left: -20px;
 		&:before{
 			content: '';
 			display: block;
@@ -2870,6 +2870,9 @@ input[type="checkbox"] {
 		}
 		&:hover:before {
 		    background: #4c4c4c;
+		}
+		&:last-child {
+			margin-left: 0;
 		}
 	}
 
