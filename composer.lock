@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "67d10de0186d84fe28be7f7d774fe7ee",
-    "content-hash": "79815dd6ebb5ec2a5573ea79f5fc148f",
+    "hash": "341f9af4e919fe8fed767ea1838a5ddf",
+    "content-hash": "9f05cd0c9565fade1eddeff787529e4a",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -1654,16 +1654,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.15",
+            "version": "v2.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "8f172af78138ee3ea12e87be431dec3da0c2f4a9"
+                "reference": "1a0824035a46be999b9a04a951c9366455bd2585"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/8f172af78138ee3ea12e87be431dec3da0c2f4a9",
-                "reference": "8f172af78138ee3ea12e87be431dec3da0c2f4a9",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/1a0824035a46be999b9a04a951c9366455bd2585",
+                "reference": "1a0824035a46be999b9a04a951c9366455bd2585",
                 "shasum": ""
             },
             "require": {
@@ -1729,7 +1729,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2016-07-08 05:48:13"
+            "time": "2016-07-15 13:40:22"
         },
         {
             "name": "herrera-io/json",
@@ -1850,16 +1850,16 @@
         },
         {
             "name": "hwi/oauth-bundle",
-            "version": "0.4.1",
+            "version": "0.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hwi/HWIOAuthBundle.git",
-                "reference": "ae741802c8e99d8fa52de927fd483d0299911293"
+                "reference": "c0a231e413b6006087f050a553073f3274b598fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/ae741802c8e99d8fa52de927fd483d0299911293",
-                "reference": "ae741802c8e99d8fa52de927fd483d0299911293",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/c0a231e413b6006087f050a553073f3274b598fb",
+                "reference": "c0a231e413b6006087f050a553073f3274b598fb",
                 "shasum": ""
             },
             "require": {
@@ -1986,7 +1986,7 @@
                 "yandex",
                 "youtube"
             ],
-            "time": "2016-03-08 08:00:04"
+            "time": "2016-05-11 13:10:34"
         },
         {
             "name": "illuminate/contracts",
@@ -2905,7 +2905,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -7526,6 +7526,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/user-bundle": 20,
+        "hwi/oauth-bundle": 20,
         "comur/image-bundle": 20,
         "hautelook/alice-bundle": 20
     },
