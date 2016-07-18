@@ -376,10 +376,7 @@ class Order
             }
         }
 
-        // Recompute order changes
-        $this->em->getUnitOfWork()->recomputeSingleEntityChangeSet($this->em->getClassMetadata(get_class($order)),
-            $order);
-        $this->em->persist($order);
+        $this->recomputeChanges($order);
     }
 
     /**
@@ -479,7 +476,7 @@ class Order
             }
         }
 
-        $this->em->persist($order);
+        $this->recomputeChanges($order);
     }
 
     /**
@@ -642,5 +639,16 @@ class Order
             $availableSizes->add($size);
         }
         $order->setSizes($availableSizes);
+    }
+
+    /**
+     * @param $entity
+     */
+    protected function recomputeChanges($entity)
+    {
+        // Recompute order changes
+        $this->em->getUnitOfWork()->recomputeSingleEntityChangeSet($this->em->getClassMetadata(get_class($entity)),
+            $entity);
+        $this->em->persist($entity);
     }
 }
