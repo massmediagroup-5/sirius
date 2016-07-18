@@ -7,6 +7,8 @@ namespace AppBundle\Entity;
  */
 class OrderStatusPay
 {
+    const CODE_PAID = 'paid';
+    
     /**
      * @var integer
      */
