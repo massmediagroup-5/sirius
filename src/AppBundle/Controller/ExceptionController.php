@@ -23,4 +23,14 @@ class ExceptionController extends Controller
     {
         return $this->render('AppBundle:error.html.twig');
     }
+
+    /**
+     * indexAction
+     *
+     * @return mixed
+     */
+    public function disableAction()
+    {
+        return $this->render('AppBundle:disable.html.twig');
+    }
 }
