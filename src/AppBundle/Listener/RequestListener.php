@@ -2,9 +2,10 @@
 
 namespace AppBundle\Listener;
 
+
+use AppBundle\Services\Options;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use AppBundle\Services\LastUrls;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class RequestListener
 {
@@ -14,22 +15,9 @@ class RequestListener
     protected $container;
 
     /**
-     * @var LastUrls $lastUrls
+     * @var Options $options
      */
-    protected $lastUrls;
-
-    /**
-     * @var array
-     */
-    protected $routesToRemember = [
-        'category',
-        'product',
-        'homepage',
-        'homepage',
-        'contacts',
-        'cart_show',
-        'cart_order',
-    ];
+    protected $options;
 
     /**
      * @param ContainerInterface $container
@@ -37,17 +25,20 @@ class RequestListener
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->lastUrls = $container->get('last_urls');
+
+        $this->options = $this->container->get('options');
     }
 
     /**
-     * @param FilterResponseEvent $event
+     * @param GetResponseEvent $event
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event)
     {
-        $route = $event->getRequest()->attributes->get('_route');
-        if (in_array($route, $this->routesToRemember)) {
-            $this->lastUrls->setLastRequestedUrl($event->getRequest()->getRequestUri());
+        $uri = $event->getRequest()->getRequestUri();
+
+        if ($this->options->getParamValue('blockAllSite') && strpos($uri, '/admin') !== 0) {
+            $event->getRequest()->attributes->set('_controller',
+                'AppBundle\Controller\ExceptionController::disableAction');
         }
     }
 
