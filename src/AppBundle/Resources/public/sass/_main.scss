@@ -687,6 +687,7 @@ input[type="checkbox"] {
 	right: 0;
 	top: 0;
 	z-index: 9998;
+	min-height: 56px;
 
 	&.search-active {
 		//position: relative;
@@ -9299,4 +9300,29 @@ body {
 	outline: none;
 	position: absolute;
 	left: 20px;
+}
+
+.repair {
+  padding-top: 15%;
+  font-family: 'LatoWebBlack';
+  text-transform: uppercase;
+
+  h2 {
+    font-size: 53px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  h4 {
+    font-size: 23px;
+    font-weight: bold;
+    line-height: 29px;
+  }
+   h5 {
+    font-size: 16px;
+    line-height: 32px;
+  }
+  &-text {
+    padding-top: 92px;
+    margin-bottom: 30px;
+  }
 }
