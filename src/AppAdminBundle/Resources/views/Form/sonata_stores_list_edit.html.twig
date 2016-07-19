@@ -32,10 +32,10 @@
                     } else {
                         $storesInput.select2('data', null);
                         $storesInput.find('option').remove();
+                        changeStoreValues();
                     }
                 }
                 $citiesInput.on('change', changeStoreValues);
-                changeStoreValues()
             })(jQuery);
         </script>
     {% endspaceless %}
