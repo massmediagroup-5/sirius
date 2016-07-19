@@ -1,6 +1,6 @@
 {{ discountedPrice|format_price }} грн.
 {% if price != discountedPrice %}
     <strong>{{ price|format_price }} грн.</strong>
-{% else %}
-    <strong>{{ discountedPrice * options.paramValue('old_price_koef')|format_price }} грн.</strong>
+{% elseif discountedPrice != oldPrice %}
+    <strong>{{ oldPrice|format_price }} грн.</strong>
 {% endif %}

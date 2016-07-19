@@ -68,11 +68,16 @@ services:
     prices_calculator:
         class: AppBundle\Services\PricesCalculator
         arguments: [@service_container, @doctrine.orm.entity_manager]
+    response_listener:
+        class: AppBundle\Listener\ResponseListener
+        arguments: ["@service_container"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
     request_listener:
         class: AppBundle\Listener\RequestListener
         arguments: ["@service_container"]
         tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
