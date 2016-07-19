@@ -687,6 +687,7 @@ input[type="checkbox"] {
 	right: 0;
 	top: 0;
 	z-index: 9998;
+	min-height: 56px;
 
 	&.search-active {
 		//position: relative;
@@ -7846,15 +7847,26 @@ input[type="checkbox"] {
 			position: relative;
 
 			&:first-child {
-				padding-left: 30px;
-				width: 68px;
+			    padding-left: 30px;
+    			padding-right: 10px;
+    			width: 68px;
 
 				span {
-					position: relative;
+					position: static;
+				    overflow-wrap: break-word;
+				    word-wrap: break-word;
+				    -ms-word-break: break-all;
+				    word-break: break-word;
+				    -ms-hyphens: auto;
+				    -moz-hyphens: auto;
+				    -webkit-hyphens: auto;
+				    hyphens: auto;
+				    text-align: left;
+				    display: block;
 
 					a {
 						position: absolute;
-						left: -35px;
+						left: 8px;
 						top: 50%;
 						@include translate(0, -50%);
 						@include sized-sprite($icons, arr-down-blue-2);
@@ -8133,10 +8145,10 @@ input[type="checkbox"] {
 
 .amount-control {
 	position: relative;
-	padding-left: 20px;
-	padding-right: 20px;
+    padding-left: 22px;
+    padding-right: 22px;
 	display: inline-block;
-	width: 73px;
+	width: 83px;
 	@include border-box();
 
 	input {
@@ -8145,23 +8157,43 @@ input[type="checkbox"] {
 		text-align: center;
 		border: 1px solid #000;
 	}
-
 	.plus {
-		display: block;
-		@include sized-sprite($icons, plus-blue);
-		position: absolute;
-		right: -5px;
-		top: 50%;
-		margin-top: -4px;
-
+	    display: block;
+	    width: 22px;
+	    height: 100%;
+	    position: absolute;
+	    left: 0px;
+	    top: 0;
+		&:before{
+			content: '';
+			display: block;
+			@include sized-sprite($icons, plus-blue);
+			position: absolute;
+		    top: 0;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		    margin: auto;
+		}
 	}
 	.minus {
-		display: block;
-		@include sized-sprite($icons, minus-blue);
-		position: absolute;
-		left: 0;
-		top: 50%;
-		margin-top: 0;
+	    display: block;
+	    width: 22px;
+	    height: 100%;
+	    position: absolute;
+	    right: 0;
+	    top: 0;
+		&:before{
+			content: '';
+			display: block;
+			@include sized-sprite($icons, minus-blue);
+			position: absolute;
+		    top: 0;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		    margin: auto;
+		}
 	}
 }
 
@@ -9300,4 +9332,29 @@ body {
 	outline: none;
 	position: absolute;
 	left: 20px;
+}
+
+.repair {
+  padding-top: 15%;
+  font-family: 'LatoWebBlack';
+  text-transform: uppercase;
+
+  h2 {
+    font-size: 53px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  h4 {
+    font-size: 23px;
+    font-weight: bold;
+    line-height: 29px;
+  }
+   h5 {
+    font-size: 16px;
+    line-height: 32px;
+  }
+  &-text {
+    padding-top: 92px;
+    margin-bottom: 30px;
+  }
 }
