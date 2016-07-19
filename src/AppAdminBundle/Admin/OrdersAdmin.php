@@ -231,8 +231,7 @@ class OrdersAdmin extends Admin
                     'class' => 'AppBundle:OrderStatusPay',
                     'property' => 'name',
                     'label' => 'Сатус оплаты заказа',
-                    'empty_value' => 'Выберите статус оплаты',
-                    'attr'=>array('data-sonata-select2'=>'false')
+                    'empty_value' => 'Выберите статус оплаты'
                 ]
             )
             ->add('type', 'choice', [

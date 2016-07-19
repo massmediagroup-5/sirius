@@ -83,7 +83,7 @@
                                         </div>
                                         {% if current_model.oldPrice != 0.00 %}
                                         <div class="price price_old">
-                                            <s>Старая цена: {{ current_model.oldPrice|format_price }} грн.</s>
+                                            Старая цена: <s>{{ current_model.oldPrice|format_price }} грн.</s>
                                         </div>
                                         {% endif %}
                                         <div class="color-select">
