@@ -136,7 +136,8 @@ class Products
         return $this->templating->render('AppBundle:widgets/product/prices.html.twig', [
                 'object' => $object,
                 'price' => $price,
-                'discountedPrice' => $discountedPrice
+                'discountedPrice' => $discountedPrice,
+                'oldPrice' => $discountedPrice * $this->container->get('options')->getParamValue('old_price_koef'),
             ]
         );
     }
