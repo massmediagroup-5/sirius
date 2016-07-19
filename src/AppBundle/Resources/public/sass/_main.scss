@@ -8144,10 +8144,10 @@ input[type="checkbox"] {
 
 .amount-control {
 	position: relative;
-	padding-left: 20px;
-	padding-right: 20px;
+    padding-left: 22px;
+    padding-right: 22px;
 	display: inline-block;
-	width: 73px;
+	width: 83px;
 	@include border-box();
 
 	input {
@@ -8156,23 +8156,43 @@ input[type="checkbox"] {
 		text-align: center;
 		border: 1px solid #000;
 	}
-
 	.plus {
-		display: block;
-		@include sized-sprite($icons, plus-blue);
-		position: absolute;
-		right: -5px;
-		top: 50%;
-		margin-top: -4px;
-
+	    display: block;
+	    width: 22px;
+	    height: 100%;
+	    position: absolute;
+	    left: 0px;
+	    top: 0;
+		&:before{
+			content: '';
+			display: block;
+			@include sized-sprite($icons, plus-blue);
+			position: absolute;
+		    top: 0;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		    margin: auto;
+		}
 	}
 	.minus {
-		display: block;
-		@include sized-sprite($icons, minus-blue);
-		position: absolute;
-		left: 0;
-		top: 50%;
-		margin-top: 0;
+	    display: block;
+	    width: 22px;
+	    height: 100%;
+	    position: absolute;
+	    right: 0;
+	    top: 0;
+		&:before{
+			content: '';
+			display: block;
+			@include sized-sprite($icons, minus-blue);
+			position: absolute;
+		    top: 0;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		    margin: auto;
+		}
 	}
 }
 
