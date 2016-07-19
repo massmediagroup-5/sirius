@@ -6,12 +6,13 @@
     <section class="content">
         <div class="wrap">
             <div class="content__i">
-
                 {{ widget('breadcrumbs.render')|raw }}
 
                 {% if wishList.count() %}
                     <h2 class="catalog-title">
-                        Список желаний <span>({{ 'labels.products_count'|transchoice(wishList.count, {'%count%': wishList.count}) }})</span>
+                        Список желаний
+                        <span>({{ 'labels.products_count'|transchoice(wishList.getPaginationData()['totalCount'],
+                            {'%count%': wishList.getPaginationData()['totalCount']}) }})</span>
                     </h2>
 
                     <div class="catalog">
