@@ -1,14 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html class="">
 <head lang="ru">
-    <meta charset="UTF-8">
-    {% block meta %}
-        <title>Sirius || Main</title>
-    {% endblock %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Sirius || Main</title>
+    {% stylesheets
+        '@AppBundle/Resources/public/sass/screen.scss' filter='compass' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 </head>
-<body>
-<div>
-    Проводятся технические работы. Извините за неудобства.
+<body class="">
+<div class="out ">
+    <header class="header">
+        <div class="wrap">
+            <div class="header__i">
+                <a href="http://sirius-sport.com/#" class="mobile-nav-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </a>
+                <div class="logo">
+                    <a href="http://sirius-sport.com/">
+                        <img src="/img/logo.png" alt="Logo">
+                        <span>БРЕНД СПОРТИВНОЙ ЖЕНСКОЙ ОДЕЖДЫ</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="header_sub-nav">
+            <div class="wrap">
+                <div class="sub-nav__i">
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+        <div class="search-shadow"></div>
+    </header>
+    <section class="content">
+        <div class="wrap">
+            <div class="repair col-sm-8 col-sm-offset-2">
+                <div class="row">
+                    <div class="repair-text col-sm-7">
+                        <h4>у нас технические работы</h4>
+                        <h5>но уже скоро мы снова будем с вами</h5>
+                        <h2>не грустите</h2>
+                    </div>
+                    <div class="col-sm-5">
+                        <img src="/img/repair.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="push"></div>
 </div>
 </body>
 </html>
