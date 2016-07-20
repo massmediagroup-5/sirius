@@ -60,6 +60,10 @@ class ProductModelsAdmin extends Admin
                 'template' => 'AppAdminBundle:list:product_model_alias.html.twig'
             ])
             ->add('products.article', null, ['label' => 'Артикул'])
+            ->add('images', null, [
+                'label' => 'Картинка',
+                'template' => 'AppAdminBundle:list:product_model_image.html.twig'
+            ])
             ->addIdentifier('products.name', null, ['label' => 'Модель'])
             ->add('productColors.name', null, ['label' => 'Цвет'])
             ->add('products.baseCategory.name', null, ['label' => 'Категория'])

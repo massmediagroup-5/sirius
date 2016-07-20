@@ -1,0 +1,11 @@
+<td>
+    {% block field%}
+        {% if object.images.0 is defined %}
+            <a data-lightbox="size-{{ object.id }}" href="{{ object.images.0.link }}">
+                <img src="{{ object.images.0.link | imagine_filter('small') }}"/>
+            </a>
+        {% else %}
+            <img src="{{ param('no_image') | imagine_filter('small') }}"/>
+        {% endif %}
+    {% endblock %}
+</td>

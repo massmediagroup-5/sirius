@@ -35,17 +35,6 @@
     {% include 'AppAdminBundle:admin:order_sizes_popup.html.twig' %}
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bower_components/lightbox2/dist/css/lightbox.min.css') }}">
-{% endblock %}
-
-
-{% block bottom_assets %}
-    {{ parent() }}
-    <script src="{{ asset('bower_components/lightbox2/dist/js/lightbox.min.js') }}"></script>
-{% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script>
