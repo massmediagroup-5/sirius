@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bower_components/lightbox2/dist/css/lightbox.min.css') }}">
     {% stylesheets 'bundles/appadmin/sass/admin.scss' filter='compass' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -126,5 +127,7 @@
 
 {% block sonata_wrapper %}
     {{ parent() }}
+
+    <script src="{{ asset('bower_components/lightbox2/dist/js/lightbox.min.js') }}"></script>
     {% block bottom_assets %}{% endblock bottom_assets %}
 {% endblock sonata_wrapper %}
