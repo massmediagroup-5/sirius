@@ -8,7 +8,7 @@ class AppKernel extends Kernel
 {
     public function __construct($environment, $debug)
     {
-        date_default_timezone_set( 'Europe/Kiev' );
+//        date_default_timezone_set('Europe/Kiev');
         parent::__construct($environment, $debug);
     }
 
@@ -71,7 +71,7 @@ class AppKernel extends Kernel
         $class = $this->getContainerClass();
         $cache = new ConfigCache($this->getCacheDir() . '/' . $class . '.php', $this->debug);
         $fresh = true;
-        if (!$cache->isFresh()) {
+        if ( ! $cache->isFresh()) {
             $container = $this->buildContainer();
             $container->compile();
             $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
@@ -88,7 +88,7 @@ class AppKernel extends Kernel
         }
         $this->container->set('kernel', $this);
 
-        if (!$fresh && $this->container->has('cache_warmer')) {
+        if ( ! $fresh && $this->container->has('cache_warmer')) {
             $this->container->get('cache_warmer')->warmUp($this->container->getParameter('kernel.cache_dir'));
         }
     }
