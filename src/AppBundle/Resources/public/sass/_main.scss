@@ -4296,6 +4296,40 @@ input[type="checkbox"] {
 		right: 0;
 		top: 38px;
 	}
+	&.discount {
+		padding: 20px 15px;
+ 	 	margin-bottom: 22px;
+ 	 	border-width: 2px;
+		border-color: rgb(246, 25, 25);
+		border-style: solid;
+		&:after {
+		  content: '';
+		  clear: both;
+		  font-size: 1px;
+		  line-height: 1px;
+		  height: 0;
+		  overflow: hidden;
+		  display: block; 
+		}
+ 	 	.share-counter-wrap {
+			position: static;
+  			margin-left: 220px;
+		}
+		.product-info-share-title {
+		  float: none;
+		}
+		&-title {
+		  float: left;
+		  font-size: 24px;
+		  color: rgb(246, 25, 25);
+		  font-family: "LatoWebBold", sans-serif;
+		  font-weight: bold;
+		  line-height: 1.25;
+		  text-align: left;
+		  max-width: 190px;
+		  margin-right: 30px;
+		}
+	}
 }
 .product-info-share-title {
 	float: right;
