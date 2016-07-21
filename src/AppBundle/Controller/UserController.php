@@ -63,7 +63,16 @@ class UserController extends Controller
      */
     public function loyalAction()
     {
-        return $this->render('AppBundle:user/loyal.html.twig');
+        if ($this->isGranted('ROLE_WHOLESALER')) {
+            return $this->render('AppBundle:user/wholesaler_loyal_info.html.twig');
+        }
+
+        $bonusesInProcess = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Orders')
+            ->bonusesInProcess($this->getUser());
+
+        return $this->render('AppBundle:user/loyal_info.html.twig', compact('bonusesInProcess'));
     }
 
     /**
