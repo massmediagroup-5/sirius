@@ -42,26 +42,33 @@ class Options
      */
     public function getParams()
     {
-        if (empty($this->params)) {
+        if (empty( $this->params )) {
             $params = $this->em->getRepository('AppBundle:SiteParams')->findAll();
             foreach ($params as $value) {
                 $this->params[$value->getParamName()] = array(
-                    'value' => $value->getParamValue(),
+                    'value'  => $value->getParamValue(),
                     'active' => $value->getActive()
                 );
             }
         }
+
         return $this->params;
     }
 
     /**
      * @param $name
      * @param bool $default
+     *
      * @return mixed
      */
     public function getParamValue($name, $default = false)
     {
-        return isset($this->getParams()[$name]['value']) ? $this->params[$name]['value'] : $default;
+        return isset( $this->getParams()[$name]['value'] ) ? $this->params[$name]['value'] : $default;
+    }
+
+    public function getSocialIcons()
+    {
+        return $this->em->getRepository('AppBundle:SocialNetworks')->findBy(['active' => 1]);
     }
 
 }
