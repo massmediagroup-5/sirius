@@ -2,15 +2,15 @@
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale:                                             ru
-    assetic.filter.compass.bin:                         %compass_path%
-    assetic.filter.compass.images_dir:                  %kernel.root_dir%/../web/bundles/app/img
-    assetic.filter.compass.fonts_dir:                   %kernel.root_dir%/../web/bundles/app/fonts
-    assetic.filter.compass.generated_images_path:       %kernel.root_dir%/../web/bundles/app/img
+    assetic.filter.compass.bin:                         "%compass_path%"
+    assetic.filter.compass.images_dir:                  "%kernel.root_dir%/../web/bundles/app/img"
+    assetic.filter.compass.fonts_dir:                   "%kernel.root_dir%/../web/bundles/app/fonts"
+    assetic.filter.compass.generated_images_path:       "%kernel.root_dir%/../web/bundles/app/img"
     assetic.filter.compass.http_path:                   /
     assetic.filter.compass.http_generated_images_path:  /bundles/app/img
     assetic.filter.compass.http_fonts_path:             /bundles/app/fonts
-    web_dir:                                            %kernel.root_dir%/../web
-    watermark_path:                                     %kernel.root_dir%/../web/img/watermark.png
+    web_dir:                                            "%kernel.root_dir%/../web"
+    watermark_path:                                     "%kernel.root_dir%/../web/img/watermark.png"
     no_image:                                           img/no-image.png
     upload_img_directory:                               img/products
     upload_shares_img_directory:                        img/shares
@@ -22,10 +22,10 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: @AppBundle/Resources/config/services.yml }
-    - { resource: @AppBundle/Resources/config/widgets.yml }
-    - { resource: @UserBundle/Resources/config/config.yml }
-    - { resource: @AppAdminBundle/Resources/config/admin.yml }
+    - { resource: "@AppBundle/Resources/config/services.yml" }
+    - { resource: "@AppBundle/Resources/config/widgets.yml" }
+    - { resource: "@UserBundle/Resources/config/config.yml" }
+    - { resource: "@AppAdminBundle/Resources/config/admin.yml" }
     - { resource: mysql.yml }
 
 framework:
@@ -66,13 +66,13 @@ twig:
     strict_variables: "%kernel.debug%"
 #    exception_controller:  AppBundle:Exception:index
     globals:
-        options: @options
-        cart: @cart
-        humanizer: @humanizer
-        prices: @prices_calculator
+        options: "@options"
+        cart: "@cart"
+        humanizer: "@humanizer"
+        prices: "@prices_calculator"
         fos_csrf_provider: "@form.csrf_provider"
-        filters: @filters
-        share: @share
+        filters: "@filters"
+        share: "@share"
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
@@ -312,13 +312,13 @@ liip_imagine:
     resolvers:
         default:
             web_path:
-                web_root: %kernel.root_dir%/../web
+                web_root: "%kernel.root_dir%/../web"
                 cache_prefix: media/cache
 
     loaders:
         default:
             filesystem:
-                data_root: %kernel.root_dir%/../web/
+                data_root: "%kernel.root_dir%/../web/"
 
     driver:               gd
     cache:                default
