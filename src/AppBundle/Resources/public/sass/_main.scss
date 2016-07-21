@@ -5639,10 +5639,14 @@ input[type="checkbox"] {
 			padding-bottom: 0;
 		}
 	}
-
+   
+   a:hover {
+      text-decoration: underline;
+   }
+   
 	.btn {
 		display: block;
-		text-align: center;
+		text-align: center; 
 		width: 100%;
 		box-sizing: border-box;
 	}
@@ -7848,12 +7852,13 @@ input[type="checkbox"] {
 			position: relative;
 
 			&:first-child {
-			    padding-left: 30px;
+			   padding-left: 20px;
     			padding-right: 10px;
     			width: 68px;
 
 				span {
-					position: static;
+                padding-left: 10px;
+					 position: static;
 				    overflow-wrap: break-word;
 				    word-wrap: break-word;
 				    -ms-word-break: break-all;
