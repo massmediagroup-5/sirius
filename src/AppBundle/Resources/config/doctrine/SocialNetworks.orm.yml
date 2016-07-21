@@ -1,0 +1,39 @@
+AppBundle\Entity\SocialNetworks:
+    type: entity
+    table: social_networks
+    uniqueConstraints:
+        id_UNIQUE:
+            columns:
+                - id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        link:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+        picture:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        active:
+            type: boolean
+            nullable: true
+    lifecycleCallbacks: {  }
