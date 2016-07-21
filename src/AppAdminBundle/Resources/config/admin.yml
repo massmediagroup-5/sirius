@@ -285,3 +285,9 @@ services:
         arguments: [~, AppBundle\Entity\Novaposhta, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Нова Пошта"}
+
+    app_admin.admin.social_networks:
+        class: AppAdminBundle\Admin\SocialNetworksAdmin
+        arguments: [~, AppBundle\Entity\SocialNetworks, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Соц.сети"}
