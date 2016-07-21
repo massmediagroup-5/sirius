@@ -38,6 +38,7 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     *
      * @return RedirectResponse
      */
     public function moveSizeAction(Request $request)
@@ -45,9 +46,9 @@ class OrderController extends BaseController
         $object = $this->admin->getSubject();
 
         $size = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('AppBundle:OrderProductSize')
-            ->find($request->get('size'));
+                     ->getManager()
+                     ->getRepository('AppBundle:OrderProductSize')
+                     ->find($request->get('size'));
 
         $this->get('order')->moveSize($object, $size, $request->get('quantity'));
 
@@ -56,6 +57,7 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     *
      * @return RedirectResponse
      */
     public function removeSizeAction(Request $request)
@@ -72,6 +74,7 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     *
      * @return RedirectResponse
      */
     public function addSizesAction(Request $request)
@@ -82,9 +85,9 @@ class OrderController extends BaseController
         foreach ($request->get('sizes') as $sizeArray) {
             $sizes[] = [
                 $this->getDoctrine()
-                    ->getManager()
-                    ->getRepository('AppBundle:ProductModelSpecificSize')
-                    ->find($sizeArray['id']),
+                     ->getManager()
+                     ->getRepository('AppBundle:ProductModelSpecificSize')
+                     ->find($sizeArray['id']),
                 $sizeArray['count']
             ];
         }
@@ -122,11 +125,12 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function ajaxUpdateAction(Request $request)
     {
-        $data = Arr::only($request->request->all(), [
+        $data   = Arr::only($request->request->all(), [
             'individualDiscount',
             'additionalSolarDescription',
             'additionalSolar',
@@ -150,47 +154,48 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function ajaxCreateWaybillAction(Request $request)
     {
         // Получаем ключ апи с базы и конфигуруем прослойку для работы с апи
-        $api = $this->getDoctrine()->getRepository('AppBundle:Novaposhta')->findOneBy(['active'=>1]);
+        $api = $this->getDoctrine()->getRepository('AppBundle:Novaposhta')->findOneBy(['active' => 1]);
         Config::setApiKey($api->getApiKey());
         Config::setFormat(Config::FORMAT_JSONRPC2);
         Config::setLanguage(Config::LANGUAGE_RU);
 
         $orderObject = $this->admin->getSubject();
-        $form_data = $request->request->all();
+        $form_data   = $request->request->all();
 
         // Габариты груза
         $optionsSeat = new \NovaPoshta\Models\OptionsSeat();
         $optionsSeat->setVolumetricHeight($form_data['np_volumetric_height'])
-                     ->setVolumetricLength($form_data['np_volumetric_length'])
-                     ->setVolumetricWidth($form_data['np_volumetric_width'])
-                     ->setWeight($form_data['np_weight']);
+                    ->setVolumetricLength($form_data['np_volumetric_length'])
+                    ->setVolumetricWidth($form_data['np_volumetric_width'])
+                    ->setWeight($form_data['np_weight']);
 
         // Город получателя
         $data = new \NovaPoshta\MethodParameters\Address_getCities();
         $data->setFindByString($orderObject->getCities()->getName());
-        $result = \NovaPoshta\ApiModels\Address::getCities($data);
+        $result        = \NovaPoshta\ApiModels\Address::getCities($data);
         $cityRecipient = $result->data[0]->Ref;
 
         // Выбираем тип контрагента:
-        $result = \NovaPoshta\ApiModels\Common::getTypesOfCounterparties();
+        $result           = \NovaPoshta\ApiModels\Common::getTypesOfCounterparties();
         $counterpartyType = $result->data[1]->Ref; // тип PrivatePerson
 
         // данные отправителя
-        $data = new MethodParameters();
+        $data                       = new MethodParameters();
         $data->CounterpartyProperty = 'Sender';
-        $data->FindByString = 'Мудрицька';
-        $result = Counterparty::getCounterparties($data);
-        $senderInfo = $result->data[0]; // Полная информация о отправителе
-        $citySender = $senderInfo->City; // Город отправителя
-        $counterpartySender = $senderInfo->Ref;
+        $data->FindByString         = 'Мудрицька';
+        $result                     = Counterparty::getCounterparties($data);
+        $senderInfo                 = $result->data[0]; // Полная информация о отправителе
+        $citySender                 = $senderInfo->City; // Город отправителя
+        $counterpartySender         = $senderInfo->Ref;
 
         // создаем контрагента получателя если до этого он небыл создан
-        if(!$orderObject->getUsers()->getCounterpartyRef()){
+        if ( ! $orderObject->getUsers()->getCounterpartyRef()) {
             $counterparty = new \NovaPoshta\ApiModels\Counterparty();
             $counterparty->setCounterpartyProperty(\NovaPoshta\ApiModels\Counterparty::RECIPIENT);
             $counterparty->setCityRef($cityRecipient);
@@ -204,7 +209,7 @@ class OrderController extends BaseController
 
             $counterpartyRecipient = $result->data[0]->Ref;
             $orderObject->getUsers()->setCounterpartyRef($counterpartyRecipient);
-        }else{
+        } else {
             $counterpartyRecipient = $orderObject->getUsers()->getCounterpartyRef();
         }
 
@@ -228,18 +233,18 @@ class OrderController extends BaseController
         $addressRecipient = $orderObject->getStores()->getRef();
 
         // Теперь получим тип услуги:
-        $result = \NovaPoshta\ApiModels\Common::getServiceTypes();
+        $result      = \NovaPoshta\ApiModels\Common::getServiceTypes();
         $serviceType = $result->data[2]->Ref; // Выбрали: WarehouseWarehouse
 
         // Выбираем плательщика:
         $payerType = $form_data['np_delivery_payer'];
 
         // Форму оплаты:
-        $result = \NovaPoshta\ApiModels\Common::getPaymentForms();
+        $result        = \NovaPoshta\ApiModels\Common::getPaymentForms();
         $paymentMethod = $result->data[1]->Ref; // Выбрали: Cash
 
         // Тип груза:
-        $result = \NovaPoshta\ApiModels\Common::getCargoTypes();
+        $result    = \NovaPoshta\ApiModels\Common::getCargoTypes();
         $cargoType = $result->data[0]->Ref; // Выбрали: Cargo
 
         // Мы выбрали все данные которые нам нужны для создания ЭН. Создаем ЭН:
@@ -294,17 +299,18 @@ class OrderController extends BaseController
         $this->getDoctrine()->getManager()->persist($orderObject);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->renderJson(['status'=>'OK']);
+        return $this->renderJson(['status' => 'OK']);
     }
 
     /**
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function ajaxPrintWaybillAction(Request $request)
     {
         // Получаем ключ апи с базы и конфигуруем прослойку для работы с апи
-        $api = $this->getDoctrine()->getRepository('AppBundle:Novaposhta')->findOneBy(['active'=>1]);
+        $api = $this->getDoctrine()->getRepository('AppBundle:Novaposhta')->findOneBy(['active' => 1]);
         Config::setApiKey($api->getApiKey());
         Config::setFormat(Config::FORMAT_JSONRPC2);
         Config::setLanguage(Config::LANGUAGE_RU);
@@ -324,13 +330,14 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function ajaxDeleteWaybillAction(Request $request)
     {
         $orderObject = $this->admin->getSubject();
         // Получаем ключ апи с базы и конфигуруем прослойку для работы с апи
-        $api = $this->getDoctrine()->getRepository('AppBundle:Novaposhta')->findOneBy(['active'=>1]);
+        $api = $this->getDoctrine()->getRepository('AppBundle:Novaposhta')->findOneBy(['active' => 1]);
         Config::setApiKey($api->getApiKey());
         Config::setFormat(Config::FORMAT_JSONRPC2);
         Config::setLanguage(Config::LANGUAGE_RU);
@@ -352,6 +359,7 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getSizesAction(Request $request)
@@ -376,7 +384,7 @@ class OrderController extends BaseController
     protected function renderPartials()
     {
         $parameters = [
-            'admin' => isset($parameters['admin']) ? $parameters['admin'] : $this->admin,
+            'admin'    => isset( $parameters['admin'] ) ? $parameters['admin'] : $this->admin,
             'form_tab' => [
                 'name' => 'Список заказанных товаров'
             ]
