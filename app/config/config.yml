@@ -176,9 +176,9 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: gmail
-    username:  "mytex.com.ua@gmail.com"
-    password:  "Mytex-33000"
+    transport: "%mailer_transport%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
     spool:
         type: file
         path: "%kernel.root_dir%/spool"

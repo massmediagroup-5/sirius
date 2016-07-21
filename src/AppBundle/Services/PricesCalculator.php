@@ -184,9 +184,10 @@ class PricesCalculator
      * Calculate discounted price for model size
      *
      * @param ProductModelSpecificSize $object
+     * @param Boolean $fromCart
      * @return float
      */
-    public function getProductModelSpecificSizeDiscountedPrice(ProductModelSpecificSize $object)
+    public function getProductModelSpecificSizeDiscountedPrice(ProductModelSpecificSize $object, $fromCart = false)
     {
         if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
             $user = $this->container->get('security.context')->getToken()->getUser();
@@ -195,8 +196,12 @@ class PricesCalculator
             $wholesalePrice = $object->getWholesalePrice() ?: $this->getProductModelDiscountedPrice($object->getModel());
 
             $cart = $this->container->get('cart');
-            $totalPriceWithNewSize = $cart->getTotalPrice() + $price;
-            if ($user->getOrders()->count() > 1) {
+            $totalPriceWithNewSize = $cart->getTotalPrice();
+            // When size from cart not add it to total sum
+            if (!$fromCart) {
+                $totalPriceWithNewSize += $price;
+            }
+            if ($user->getOrders()->count() >= 1) {
                 if ($totalPriceWithNewSize > 500) {
                     $price = $wholesalePrice;
                 }
@@ -204,7 +209,7 @@ class PricesCalculator
                 if ($totalPriceWithNewSize > 2500) {
                     $price = $wholesalePrice;
                 } elseif ($price > 500) {
-                    $price = $price - ceil($price * 10);
+                    $price = $price - ceil($price * 0.1);
                 }
             }
             return $price;
@@ -313,7 +318,7 @@ class PricesCalculator
                     return $cartSize->getQuantity();
                 }, $otherSizesInShare));
 
-                $pricePerItem = $this->getDiscountedPrice($object->getSize());
+                $pricePerItem = $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true);
 
                 $price = ($pricePerItem - ceil($shareGroup->getDiscount() * $pricePerItem) * 0.01) * $minSizesCount
                     + $pricePerItem * ($object->getQuantity() - $minSizesCount);
@@ -322,7 +327,7 @@ class PricesCalculator
             }
         }
 
-        return $this->getDiscountedPrice($object->getSize()) * $object->getQuantity();
+        return $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true) * $object->getQuantity();
     }
 
     /**
