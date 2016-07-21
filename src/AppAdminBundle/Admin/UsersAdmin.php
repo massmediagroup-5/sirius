@@ -13,7 +13,6 @@ class UsersAdmin extends BaseUserAdmin
 {
 
     protected $userRole = 'a:0:{}';
-//    protected $userRole = '';
 
     /**
      * @param string $context
@@ -33,7 +32,6 @@ class UsersAdmin extends BaseUserAdmin
     {
         $showMapper
             ->with('General')
-            ->add('username')
             ->add('name')
             ->add('surname')
             ->add('email')
@@ -50,11 +48,10 @@ class UsersAdmin extends BaseUserAdmin
 
         $formMapper
             ->with('General')
-            ->add('username')
             ->add('email')
             ->add('name')
             ->add('surname')
-            ->add('plainPassword', 'text', array('required' => false))
+            ->add('plainPassword', 'text', ['required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))])
             ->end()
             // .. more info
         ;
@@ -82,7 +79,6 @@ class UsersAdmin extends BaseUserAdmin
     {
         $filterMapper
             ->add('id')
-            ->add('username')
             ->add('name')
             ->add('surname')
             ->add('locked')
@@ -95,8 +91,7 @@ class UsersAdmin extends BaseUserAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('username')
-            ->add('email')
+            ->addIdentifier('email')
             ->add('name')
             ->add('surname')
             ->add('enabled', null, array('editable' => true))

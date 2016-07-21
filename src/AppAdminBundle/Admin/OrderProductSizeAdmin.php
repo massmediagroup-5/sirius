@@ -29,8 +29,8 @@ class OrderProductSizeAdmin extends Admin
     {
         $listMapper
             ->add('id')
-            ->addIdentifier('order.fio', null, array('label' => 'Ф.И.О.'))
-            ->addIdentifier('order.phone', null, array('label' => 'Телефон'))
+            ->addIdentifier('order.fio', null, ['label' => 'Ф.И.О.'])
+            ->addIdentifier('order.phone', null, ['label' => 'Телефон'])
             ->add('order.type', 'choice', [
                 'label' => 'Тип заказа',
                 'choices' => [
@@ -38,22 +38,17 @@ class OrderProductSizeAdmin extends Admin
                     (string)Orders::TYPE_QUICK => 'Быстрый',
                 ]
             ])
-            ->add('status', 'choice', array(
-                'label' => 'Статус заказа',
-                'choices' => [
-                    '0' => 'Ожидает обработки',
-                    '1' => 'Принят',
-                    '2' => 'Отклонен'
+            ->add('order.status.name', null, [
+                'label' => 'Статус заказа'
+            ])
+            ->add('createTime', null, ['label' => 'Дата создания(заказа)'])
+            ->add('updateTime', null, ['label' => 'Дата последнего редактирования(заказа)'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'delete' => [],
                 ]
-            ))
-            ->add('createTime', null, array('label' => 'Дата создания(заказа)'))
-            ->add('updateTime', null, array('label' => 'Дата последнего редактирования(заказа)'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'show' => array(),
-                    'delete' => array(),
-                )
-            ));
+            ]);
     }
 
     /**

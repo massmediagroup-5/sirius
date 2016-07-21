@@ -35,6 +35,9 @@
 
 {% block bottom_assets %}
     {{ parent() }}
+    <script>
+        var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_FULLY') ? 'true' : 'false' }};
+    </script>
 
     {% if is_granted('ROLE_WHOLESALER') %}
         {% javascripts
@@ -48,4 +51,10 @@
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% endif %}
+{% endblock %}
+
+{% block popups %}
+    {{ parent() }}
+    
+    {{ include('AppBundle:shop/product/preorder_warning_popup.html.twig') }}
 {% endblock %}
