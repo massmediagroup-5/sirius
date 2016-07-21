@@ -515,6 +515,17 @@ class Users extends BaseUser
     }
 
     /**
+     * @param string $email
+     * @return $this
+     */
+    public function setEmail($email)
+    {
+        $this->email = $this->username = $email;
+
+        return $this;
+    }
+
+    /**
      * Get oauth provider
      *
      * @return integer|null
