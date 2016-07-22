@@ -29,8 +29,7 @@ class ContactsController extends Controller
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Message from contacts@sirius-sport.com')
                     ->setFrom('contacts@sirius-sport.com')
-                    ->addTo('taptak1989@gmail.com','taptak1989@gmail.com')
-                    ->addTo('alisayatsyuk@gmail.com','alisayatsyuk@gmail.com')
+                    ->addTo($this->get('options')->getParamValue('email'))
                     ->setBody('<h2>Собщение с раздела Контакты</h2><hr>'.
                         '<p>Имя: '.$data['name'].'</p>'.
                         '<p>E-mail: '.$data['email'].'</p>'.
