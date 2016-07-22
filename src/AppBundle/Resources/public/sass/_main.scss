@@ -4756,6 +4756,11 @@ input[type="checkbox"] {
 	}
 }
 
+.select2-results .select2-no-results {
+    height: 1px;
+    visibility: hidden;
+}
+
 .to-top {
 	position: fixed;
 	bottom: 50px;
