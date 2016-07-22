@@ -3,11 +3,16 @@
 {% block out_class %} out_sub {% endblock %}
 
 {% block cabinet_content %}
-    {% if app.session.flashBag.has('success') %}
-        <div class="flash-success">
-            {% for msg in app.session.flashBag.get('success') %}
-                {{ msg }}
-            {% endfor %}
+    {% if app.session.flashBag.has('success') %} 
+    {% for msg in app.session.flashBag.get('success') %}
+        <div class="flash-success" id="flash-success">
+            <div class="text-popup">
+               <div class="text-popup__i">
+                  {{ msg }}
+               </div>
+            </div> 
+         </div>  
+         {% endfor %}
         </div>
     {% endif %}
     <div class="user-form">
