@@ -442,21 +442,25 @@ class Order
         }
     }
 
+    /**
+     * @return int count of updated sms statuses
+     */
     public function checkSmsStatus()
     {
         $orders = $this->em
             ->createQuery('SELECT o FROM AppBundle\Entity\Orders o WHERE o.clientSmsId != :where')
-            ->setParameter('where','null')
+            ->setParameter('where', 'null')
             ->getResult();
-
-        foreach($orders as $order){
+        $count  = 0;
+        foreach ($orders as $order) {
             $status = $this->sendCheckSmsStatus($order->getClientSmsId());
             $order->setClientSmsStatus($status);
             $this->em->persist($order);
             $this->em->flush($order);
+            $count ++;
         }
 
-        return 0;
+        return $count;
     }
 
     /**
