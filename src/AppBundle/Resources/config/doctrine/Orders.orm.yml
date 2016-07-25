@@ -161,7 +161,7 @@ AppBundle\Entity\Orders:
             mappedBy: order
             inversedBy: null
         history:
-            targetEntity: History
+            targetEntity: OrderHistory
             cascade: [ all ]
             fetch: LAZY
             mappedBy: order
