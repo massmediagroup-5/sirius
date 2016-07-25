@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\History;
+use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\OrderStatusPay;
@@ -104,10 +105,11 @@ class Order
      * @param $order
      * @param $size
      * @param bool|false $quantity
+     * @param bool|false $addHistory
      * @return Orders
      * @throws CartEmptyException
      */
-    public function moveSize(Orders $order, OrderProductSize $size, $quantity = false)
+    public function moveSize(Orders $order, OrderProductSize $size, $quantity = false, $addHistory = true)
     {
         $order->getSizes();
         $relatedOrder = $order->getRelatedOrder();
@@ -119,12 +121,12 @@ class Order
         }
 
         // Add history to order
-        $label = $order->getPreOrderFlag() ? 'size_moved_to_order' : 'size_moved_to_pre_order';
-        $this->addOrderHistoryItem($order, $this->translator->trans("history.$label", [
-            ':size' => $size->getSize(),
-            ':count' => $quantity,
-            ':user' => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
+        if ($addHistory) {
+            $type = $order->getPreOrderFlag() ? OrderHistory::TYPE_MOVE_TO_ORDER : OrderHistory::TYPE_MOVE_TO_PRE_ORDER;
+            $this->addOrderHistoryItem($order, $type, 'sizes', $size->getSize(), null, $this->getUser(), [
+                'quantity' => $quantity
+            ]);
+        }
 
         if (!$relatedOrder) {
             $relatedOrder = clone $order;
@@ -132,14 +134,6 @@ class Order
             $order->setRelatedOrder($relatedOrder);
             $relatedOrder->setPreOrderFlag(!$relatedOrder->getPreOrderFlag());
         }
-
-        // Add history to related
-        $label = $order->getPreOrderFlag() ? 'size_moved_from_pre_order' : 'size_moved_from_order';
-        $this->addOrderHistoryItem($relatedOrder, $this->translator->trans("history.$label", [
-            ':size' => $size->getSize(),
-            ':count' => $quantity,
-            ':user' => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
 
         $relatedSizes = $relatedOrder->getSizes();
 
@@ -179,15 +173,9 @@ class Order
             $this->mergeSizesToOrder($relatedOrder, $order->getSizes());
             $relatedOrder->setRelatedOrder(null);
             $order->setRelatedOrder(null);
-            foreach ($order->getHistory() as $history) {
-                $history->setOrder($relatedOrder);
-                $relatedOrder->addHistory($history);
-            }
 
-            $label = $relatedOrder->getPreOrderFlag() ? 'merged_with_pre_order' : 'merged_with_order';
-            $this->addOrderHistoryItem($relatedOrder, $this->translator->trans("history.$label", [
-                ':user' => $this->getUser()->getUsername(),
-            ], 'AppAdminBundle'));
+            $type = $relatedOrder->getPreOrderFlag() ? OrderHistory::TYPE_MERGED_WITH_PRE_ORDER : OrderHistory::TYPE_MERGED_WITH_ORDER;
+            $this->addOrderHistoryItem($relatedOrder, $type, null, null, null, $this->getUser());
 
             $this->em->persist($relatedOrder);
 
@@ -199,10 +187,8 @@ class Order
 
         $order->setPreOrderFlag(!$order->getPreOrderFlag());
 
-        $label = $order->getPreOrderFlag() ? 'order_to_pre_order' : 'order_to_order';
-        $this->addOrderHistoryItem($order, $this->translator->trans("history.$label", [
-            ':user' => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
+        $type = $relatedOrder->getPreOrderFlag() ? OrderHistory::TYPE_ORDER_TO_PRE_ORDER : OrderHistory::TYPE_PRE_ORDER_TO_ORDER;
+        $this->addOrderHistoryItem($order, $type, null, null, null, $this->getUser());
 
         $this->em->persist($order);
 
@@ -214,10 +200,11 @@ class Order
     /**
      * @param $order
      * @param $sizes
+     * @param $addHistory
      * @return Orders
      * @throws CartEmptyException
      */
-    public function addSizes(Orders $order, array $sizes)
+    public function addSizes(Orders $order, array $sizes, $addHistory = true)
     {
         $availableSizes = $order->getSizes();
 
@@ -233,12 +220,10 @@ class Order
 
                     $afterQuantity = $availableSize->getQuantity();
 
-                    $this->addOrderHistoryItem($order, $this->translator->trans('history.order_update_size', [
-                        ':size' => $size->getSize(),
-                        ':before' => $beforeQuantity,
-                        ':after' => $afterQuantity,
-                        ':user' => $this->getUser()->getUsername(),
-                    ], 'AppAdminBundle'));
+                    if ($addHistory) {
+                        $this->addOrderHistoryItem($order, OrderHistory::TYPE_RELATION_CHANGE, 'sizes', $beforeQuantity,
+                            $afterQuantity, $this->getUser(), ['id' => $size->getId(), 'change' => 'quantity']);
+                    }
                     continue 2;
                 }
             }
@@ -250,11 +235,13 @@ class Order
             $orderSize->setTotalPricePerItem($this->container->get('prices_calculator')->getPrice($size));
             $availableSizes->add($orderSize);
 
-            $this->addOrderHistoryItem($order, $this->translator->trans('history.order_new_size', [
-                ':size' => $size->getSize(),
-                ':count' => $quantity,
-                ':user' => $this->getUser()->getUsername(),
-            ], 'AppAdminBundle'));
+            $this->em->persist($orderSize);
+            $this->em->flush();
+
+            if ($addHistory) {
+                $this->addOrderHistoryItem($order, OrderHistory::TYPE_RELATION_ADD, 'sizes', null, $orderSize->getId(),
+                    $this->getUser());
+            }
         }
         $order->setSizes($availableSizes);
 
@@ -268,17 +255,18 @@ class Order
     /**
      * @param $order
      * @param $size
+     * @param $addHistory
      * @return Orders
      * @throws CartEmptyException
      */
-    public function removeSize(Orders $order, $size)
+    public function removeSize(Orders $order, $size, $addHistory = true)
     {
         $this->em->remove($size);
 
-        $this->addOrderHistoryItem($order, $this->translator->trans("history.size_removed", [
-            ':size' => $size->getSize(),
-            ':user' => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
+        if ($addHistory) {
+            $this->addOrderHistoryItem($order, OrderHistory::TYPE_RELATION_REMOVE, 'sizes', null, null,
+                $this->getUser(), ['size' => clone $size]);
+        }
 
         $this->em->persist($order);
 
@@ -439,6 +427,10 @@ class Order
      */
     public function processOrderChanges(Orders $order)
     {
+        if ($order->isIgnoreFlushEvent()) {
+            return;
+        }
+
         $allowedFields = [
             'fio',
             'phone',
@@ -450,24 +442,22 @@ class Order
             'individualDiscount',
             'additionalSolar'
         ];
+        $relationsNames = $this->em->getClassMetadata('AppBundle:Orders')->getAssociationNames();
 
         $uow = $this->em->getUnitOfWork();
         if ($order->getId() === null) {
-            $this->addOrderHistoryItem($order, $this->translator->trans('history.order_created', [], 'AppAdminBundle'));
+            $this->addOrderHistoryItem($order, OrderHistory::TYPE_CREATED);
         } else {
             $orderChanges = $uow->getEntityChangeSet($order);
             foreach ($orderChanges as $fieldName => $orderChange) {
                 if (in_array($fieldName, $allowedFields)) {
-                    $this->addOrderHistoryItem($order, $this->translator->trans(
-                        'history.field_changed_from_to_by_user',
-                        [
-                            ':field_changed' => $this->translator->trans("history.$fieldName", [], 'AppAdminBundle'),
-                            ':before' => $orderChange[0],
-                            ':after' => $orderChange[1],
-                            ':user' => $this->getUser()->getUsername()
-                        ],
-                        'AppAdminBundle'
-                    ));
+                    if (in_array($fieldName, $relationsNames)) {
+                        $this->addOrderHistoryItem($order, OrderHistory::TYPE_CHANGE, $fieldName,
+                            $orderChange[0]->getId(), $orderChange[1]->getId(), $this->getUser());
+                    } else {
+                        $this->addOrderHistoryItem($order, OrderHistory::TYPE_CHANGE, $fieldName, $orderChange[0],
+                            $orderChange[1], $this->getUser());
+                    }
                 }
                 if ($fieldName == 'payStatus' && $orderChange[1]) {
                     $doneDate = $orderChange[1]->getCode() == OrderStatusPay::CODE_PAID ? new \DateTime() : null;
@@ -477,6 +467,90 @@ class Order
         }
 
         $this->recomputeChanges($order);
+    }
+
+    /**
+     * @param Orders $order
+     * @param OrderHistory $historyItem
+     * @return bool
+     */
+    public function cancelOrderHistory(Orders $order, OrderHistory $historyItem)
+    {
+        $changeType = $historyItem->getChangeType();
+        $relationsNames = $this->em->getClassMetadata('AppBundle:Orders')->getAssociationNames();
+        $canRemoveFlag = true;
+
+        if ($changeType == OrderHistory::TYPE_CHANGE) {
+            $setter = 'set' . lcfirst($historyItem->getChanged());
+            if (in_array($historyItem->getChanged(), $relationsNames)) {
+                if ($historyItem->getChanged() == 'status') {
+                    $order->$setter($this->em->getRepository('AppBundle:OrderStatus')->find($historyItem->getFrom()));
+                } elseif ($historyItem->getChanged() == 'payStatus') {
+                    $order->$setter($this->em->getRepository('AppBundle:OrderStatusPay')->find($historyItem->getFrom()));
+                }
+            } else {
+                $order->$setter($historyItem->getFrom());
+            }
+            $canRemoveFlag = true;
+
+        } elseif ($changeType == OrderHistory::TYPE_RELATION_CHANGE) {
+            $changedField = $historyItem->getAdditional('change');
+            if ($historyItem->getChanged() == 'sizes' && $changedField == 'quantity') {
+                $size = $this->em->getRepository('AppBundle:OrderProductSize')->find($historyItem->getAdditional('id'));
+                $size->setQuantity($historyItem->getFrom());
+                $this->em->persist($size);
+                $canRemoveFlag = true;
+            }
+
+        } elseif ($changeType == OrderHistory::TYPE_RELATION_REMOVE) {
+            if ($historyItem->getChanged() == 'sizes') {
+                $orderSize = $historyItem->getAdditional('size');
+                $size = $this->em->getRepository('AppBundle:ProductModelSpecificSize')->find($orderSize->getSize()->getId());
+
+
+                $this->addSizes($order, [[$size, $orderSize->getQuantity()]], false);
+                $canRemoveFlag = true;
+            }
+
+        } elseif ($changeType == OrderHistory::TYPE_RELATION_ADD) {
+            if ($historyItem->getChanged() == 'sizes') {
+                $size = $this->em->getRepository('AppBundle:OrderProductSize')->find($historyItem->getTo());
+                $this->removeSize($order, $size, false);
+                $canRemoveFlag = true;
+            }
+
+        } elseif ($changeType == OrderHistory::TYPE_MOVE_TO_ORDER || $changeType == OrderHistory::TYPE_MOVE_TO_PRE_ORDER) {
+            $changedField = $historyItem->getAdditional('change');
+            if ($historyItem->getChanged() == 'sizes' && $changedField == 'quantity') {
+                $size = $this->em->getRepository('AppBundle:OrderProductSize')->find($historyItem->getAdditional('id'));
+                $this->moveSize($order->getRelatedOrder(), $size, $historyItem->getAdditional('quantity'), false);
+                $canRemoveFlag = true;
+                $this->em->persist($size);
+            }
+
+        } elseif ($changeType == OrderHistory::TYPE_MERGED_WITH_PRE_ORDER) {
+            // can`t undo changes
+
+        } elseif ($changeType == OrderHistory::TYPE_MERGED_WITH_ORDER) {
+            // can`t undo changes
+
+        } elseif ($changeType == OrderHistory::TYPE_PRE_ORDER_TO_ORDER) {
+            // can`t undo changes, this change can be undo by "change flag" button
+
+        } elseif ($changeType == OrderHistory::TYPE_ORDER_TO_PRE_ORDER) {
+            // can`t undo changes, this change can be undo by "change flag" button
+
+        }
+
+        if ($canRemoveFlag) {
+            $order->setIgnoreFlushEvent(true);
+            $this->em->remove($historyItem);
+            $this->em->persist($order);
+            $this->em->flush();
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -529,13 +603,30 @@ class Order
 
     /**
      * @param Orders $order
-     * @param $text
+     * @param $type
+     * @param $changed
+     * @param $from
+     * @param $to
+     * @param $user
+     * @param array $additional
      */
-    protected function addOrderHistoryItem(Orders $order, $text)
-    {
-        $historyItem = new History();
+    protected function addOrderHistoryItem(
+        Orders $order,
+        $type,
+        $changed = null,
+        $from = null,
+        $to = null,
+        $user = null,
+        $additional = []
+    ) {
+        $historyItem = new OrderHistory();
+        $historyItem->setChanged($changed);
+        $historyItem->setChangeType($type);
+        $historyItem->setFrom($from);
+        $historyItem->setTo($to);
+        $historyItem->setUser($user);
         $historyItem->setOrder($order);
-        $historyItem->setText($text);
+        $historyItem->setAdditional($additional);
         $order->addHistory($historyItem);
     }
 

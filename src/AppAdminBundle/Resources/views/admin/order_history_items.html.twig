@@ -6,7 +6,11 @@
         <div class="box-body order-history">
             <ul>
                 {% for historyItem in admin.subject.history %}
-                    <li>{{ historyItem.createTime.format('Y-m-d H:i') }} &nbsp; {{ historyItem.text }}</li>
+                    <li>
+                        {{ admin.getHistoryItemLabel(historyItem) }}
+                        <a href="{{ path(admin.baseRouteName ~ '_cancel_order_change', {id: admin.subject.id, history_id: historyItem.id}) }}">
+                            Отменить</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
