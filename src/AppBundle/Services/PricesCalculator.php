@@ -272,7 +272,7 @@ class PricesCalculator
 
         $shareGroup = $object->getSize()->getShareGroup();
         $share = $shareGroup ? $shareGroup->getShare() : false;
-        if ($share && $share->isActive() && $share->getSizesGroups()->count() > 1) {
+        if ($this->container->get('share')->isActualSingleShare($share)) {
             $otherSizesInShare = [];
             foreach ($share->getSizesGroups() as $group) {
                 $sizesIds = array_map(function ($size) {
