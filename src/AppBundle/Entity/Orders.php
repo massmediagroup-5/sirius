@@ -186,6 +186,11 @@ class Orders
      */
     private $bonusesEnrolled = false;
 
+    /**
+     * @var boolean
+     */
+    private $ignoreFlushEvent = false;
+
 
     /**
      * Constructor
@@ -959,11 +964,11 @@ class Orders
     /**
      * Add history
      *
-     * @param \AppBundle\Entity\History $history
+     * @param OrderHistory $history
      *
      * @return Orders
      */
-    public function addHistory(\AppBundle\Entity\History $history)
+    public function addHistory(OrderHistory $history)
     {
         $this->history[] = $history;
 
@@ -973,9 +978,9 @@ class Orders
     /**
      * Remove history
      *
-     * @param \AppBundle\Entity\History $history
+     * @param OrderHistory $history
      */
-    public function removeHistory(\AppBundle\Entity\History $history)
+    public function removeHistory(OrderHistory $history)
     {
         $this->history->removeElement($history);
     }
@@ -1060,5 +1065,21 @@ class Orders
     public function getDoneTime()
     {
         return $this->doneTime;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIgnoreFlushEvent()
+    {
+        return $this->ignoreFlushEvent;
+    }
+
+    /**
+     * @param boolean $ignoreFlushEvent
+     */
+    public function setIgnoreFlushEvent($ignoreFlushEvent)
+    {
+        $this->ignoreFlushEvent = $ignoreFlushEvent;
     }
 }
