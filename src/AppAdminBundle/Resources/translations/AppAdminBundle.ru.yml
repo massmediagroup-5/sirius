@@ -76,12 +76,14 @@ link_to_order: Переместить в заказ
 link_to_cancel_order: Отменить заказ
 
 history:
-  field_changed_from_to_by_user: :field_changed изменено с ":before" на ":after" пользователем :user
+  field_changed_from_to_by_user: :field_changed изменено с «:before» на «:after» пользователем :user
   order_created: Заказ создан
   order_new_size: Добавлен новый размер :size :count шт. пользователем :user.
-  order_update_size: Изменено количество размера :size с :before на :after шт. пользователем :user.
+  order_update_size: "Изменено количество размера «:size» товара «:name», артикул «:article», цвет «:color» с :before на :after шт. пользователем :user."
+  order_remove_size: "Удалено :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» пользователем :user."
+  order_add_size: "Добавлено :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» пользователем :user."
   order_to_pre_order: Перемещено в предзаказ пользователем :user.
-  order_to_order: Перемещено в заказ пользователем :user.
+  pre_order_to_order: Перемещено в заказ пользователем :user.
   merged_with_pre_order: Объеденено с предзаказом пользователем :user.
   merged_with_order: Объеденено с заказом пользователем :user.
   size_moved_to_pre_order: :count шт. размера :size перемещено в предзаказ пользователем :user.

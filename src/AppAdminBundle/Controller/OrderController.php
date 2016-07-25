@@ -125,6 +125,27 @@ class OrderController extends BaseController
 
     /**
      * @param Request $request
+     * @return RedirectResponse
+     */
+    public function cancelOrderChangeAction(Request $request)
+    {
+        $object = $this->admin->getSubject();
+
+        $historyItem = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('AppBundle:OrderHistory')
+            ->find($request->get('history_id'));
+        
+        if ($this->get('order')->cancelOrderHistory($object, $historyItem)) {
+            $this->addFlash('sonata_flash_success', 'flash_order_history_item_canceled');
+        } else {
+            $this->addFlash('sonata_flash_error', 'flash_order_history_item_canceled_fail');
+        }
+
+        return new RedirectResponse($this->admin->generateUrl('edit', ['id' => $object->getId()]));
+    }
+
+    /**
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
