@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+
 use Illuminate\Support\Arr;
 
 /**
@@ -23,7 +24,7 @@ class History
      * @var string
      */
     private $changeType;
-    
+
     /**
      * @var string
      */
@@ -81,7 +82,7 @@ class History
      */
     public function getCreateTime()
     {
-        return $this->createTime ? : new \DateTime();
+        return $this->createTime ?: new \DateTime();
     }
 
     /**
@@ -227,6 +228,7 @@ class History
     {
         $args = func_get_args();
         $additional = unserialize($this->additional);
+
         return isset($args[0]) ? Arr::get($additional, $args[0]) : $additional;
     }
 }
