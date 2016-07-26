@@ -6,6 +6,7 @@ namespace AppBundle\HistoryItem;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\Users;
+use Illuminate\Support\Arr;
 
 /**
  * Class OrderHistoryChangedItem
@@ -13,6 +14,16 @@ use AppBundle\Entity\Users;
  */
 class OrderHistoryChangedItem extends AbstractHistoryItem
 {
+    /**
+     * @var array
+     */
+    protected $relationsMap = [
+        'status' => 'AppBundle:OrderStatus',
+        'payStatus' => 'AppBundle:OrderStatusPay',
+        'cities' => 'AppBundle:Cities',
+        'stores' => 'AppBundle:Stores',
+    ];
+
     /**
      * @param Orders $order
      * @param $fieldName
@@ -48,11 +59,9 @@ class OrderHistoryChangedItem extends AbstractHistoryItem
         $setter = 'set' . lcfirst($this->history->getChanged());
         if ($this->isRelation($this->history->getChanged())) {
             $ref = $this->history->getFrom();
-            if ($this->history->getChanged() == 'status') {
-                $ref = $ref ? $this->em->getReference('AppBundle:OrderStatus', $ref) : null;
-                $order->$setter($ref);
-            } elseif ($this->history->getChanged() == 'payStatus') {
-                $ref = $ref ? $this->em->getReference('AppBundle:OrderStatusPay', $ref) : null;
+
+            if ($repo = $this->getChangedRepo()) {
+                $ref = $ref ? $this->em->getReference($repo, $ref) : null;
                 $order->$setter($ref);
             }
         } else {
@@ -72,16 +81,8 @@ class OrderHistoryChangedItem extends AbstractHistoryItem
         $to = $this->history->getTo();
 
         if ($this->isRelation($this->history->getChanged())) {
-            if ($this->history->getChanged() == 'status') {
-                $repo = $this->em->getRepository('AppBundle:OrderStatus');
-                if ($from) {
-                    $from = $repo->find($from) ?: "#{$from}";
-                }
-                if ($to) {
-                    $to = $repo->find($to) ?: "#{$to}";
-                }
-            } elseif ($this->history->getChanged() == 'payStatus') {
-                $repo = $this->em->getRepository('AppBundle:OrderStatusPay');
+            if ($this->getChangedRepo()) {
+                $repo = $this->em->getRepository($this->getChangedRepo());
                 if ($from) {
                     $from = $repo->find($from) ?: "#{$from}";
                 }
@@ -119,5 +120,13 @@ class OrderHistoryChangedItem extends AbstractHistoryItem
     {
         $relationsNames = $this->em->getClassMetadata('AppBundle:Orders')->getAssociationNames();
         return in_array($fieldName, $relationsNames);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getChangedRepo()
+    {
+        return Arr::get($this->relationsMap, $this->history->getChanged());
     }
 }
