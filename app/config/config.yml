@@ -73,6 +73,7 @@ twig:
         fos_csrf_provider: "@form.csrf_provider"
         filters: "@filters"
         share: "@share"
+        history_manager: "@history_manager"
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
