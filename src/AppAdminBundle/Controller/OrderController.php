@@ -131,11 +131,9 @@ class OrderController extends BaseController
     {
         $object = $this->admin->getSubject();
 
-        $historyItem = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('AppBundle:OrderHistory')
-            ->find($request->get('history_id'));
+        $historyItem = $this->get('history_manager')->createFromId($request->get('history_id'));
         
-        if ($this->get('order')->cancelOrderHistory($object, $historyItem)) {
+        if ($historyItem->rollback()) {
             $this->addFlash('sonata_flash_success', 'flash_order_history_item_canceled');
         } else {
             $this->addFlash('sonata_flash_error', 'flash_order_history_item_canceled_fail');

@@ -2,17 +2,13 @@
 
 namespace AppBundle\Entity;
 
+use Illuminate\Support\Arr;
+
 /**
  * History
  */
 class History
 {
-    const TYPE_CREATED = 'created';
-    const TYPE_CHANGE = 'change';
-    const TYPE_RELATION_CHANGE = 'relation_change';
-    const TYPE_RELATION_REMOVE = 'relation_remove';
-    const TYPE_RELATION_ADD = 'relation_add';
-    
     /**
      * @var integer
      */
@@ -231,6 +227,6 @@ class History
     {
         $args = func_get_args();
         $additional = unserialize($this->additional);
-        return isset($args[0]) ? $additional[$args[0]] : $additional;
+        return isset($args[0]) ? Arr::get($additional, $args[0]) : $additional;
     }
 }

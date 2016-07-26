@@ -68,6 +68,9 @@ services:
     prices_calculator:
         class: AppBundle\Services\PricesCalculator
         arguments: [@service_container, @doctrine.orm.entity_manager]
+    history_manager:
+        class: AppBundle\Services\HistoryManager
+        arguments: [@service_container, @doctrine.orm.entity_manager]
     response_listener:
         class: AppBundle\Listener\ResponseListener
         arguments: ["@service_container"]
