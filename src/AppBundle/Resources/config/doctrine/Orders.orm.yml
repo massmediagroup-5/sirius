@@ -160,13 +160,14 @@ AppBundle\Entity\Orders:
             fetch: LAZY
             mappedBy: order
             inversedBy: null
+            orphanRemoval: true
         history:
             targetEntity: OrderHistory
             cascade: [ all ]
             fetch: LAZY
             mappedBy: order
             inversedBy: null
-            orderBy: {createTime: DESC}
+            orderBy: {id: DESC}
     manyToOne:
         relatedOrder:
             targetEntity: Orders

@@ -116,10 +116,15 @@ var OrderSizesDialog = (function () {
     };
 
     OrderSizesDialog.prototype.contentLinkClick = function (e) {
-        var $this = $(e.target);
+        var $this = $(e.target),
+            params = $this.data('params');
         e.preventDefault();
 
-        this.loadContent($this.data('params'));
+        if (!params) {
+            params = $.url($this.attr('href')).param();
+        }
+
+        this.loadContent(params);
     };
 
     OrderSizesDialog.prototype.submitFilters = function (e) {

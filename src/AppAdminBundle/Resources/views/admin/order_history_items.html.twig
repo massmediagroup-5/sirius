@@ -8,8 +8,10 @@
                 {% for historyItem in admin.subject.history %}
                     <li>
                         {{ admin.getHistoryItemLabel(historyItem) }}
-                        <a href="{{ path(admin.baseRouteName ~ '_cancel_order_change', {id: admin.subject.id, history_id: historyItem.id}) }}">
-                            Отменить</a>
+                        {% if history_manager.createFromHistoryItem(historyItem).canRollback() %}
+                            <a href="{{ path(admin.baseRouteName ~ '_cancel_order_change', {id: admin.subject.id, history_id: historyItem.id}) }}">
+                                Отменить</a>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
