@@ -1,2 +1,4 @@
 sonata_user: "Пользователи"
 flash_cancel_order: Заказ отменен
+flash_order_history_item_canceled: Изменения отменены
+flash_order_history_item_canceled_fail: Нельзя отменить данное изменение

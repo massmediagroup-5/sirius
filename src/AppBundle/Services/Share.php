@@ -164,21 +164,29 @@ class Share
     }
 
     /**
-     * @param ProductModels $object
-     * @return boolean
+     * @param \AppBundle\Entity\Share $share
+     * @return bool
      */
-    public function checkSharesActuality(ProductModels $object)
+    public function checkShareActuality(\AppBundle\Entity\Share $share = null)
     {
-        if($share = $object->getShare()){
+        if ($share) {
+            $now = new \DateTime();
 
-            $now = strtotime(date('Y-m-d h:i:s'));
-            $startTime = strtotime($share->getStartTime()->format('Y-m-d h:i:s'));
-            $endTime = strtotime($share->getEndTime()->format('Y-m-d h:i:s'));
+            $actualFlag = $share->getStartTime() <= $now && $share->getEndTime() >= $now;
 
-            return (($now >= $startTime )&&($now <= $endTime)) ? true : false;
-        }else{
+            return $actualFlag && $share->isActive();
+        } else {
             return false;
         }
+    }
+
+    /**
+     * @param \AppBundle\Entity\Share $share
+     * @return bool
+     */
+    public function isActualSingleShare(\AppBundle\Entity\Share $share = null)
+    {
+        return $this->checkShareActuality($share) && $share->getSizesGroups()->count() == 1;
     }
 
 }

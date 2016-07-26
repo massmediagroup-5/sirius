@@ -1,6 +1,12 @@
 AppBundle\Entity\History:
     type: entity
-    table: null
+    inheritanceType: SINGLE_TABLE
+    discriminatorColumn:
+      name: discr
+      type: string
+    discriminatorMap:
+      history: History
+      order_history: OrderHistory
     id:
         id:
             type: integer
@@ -11,15 +17,29 @@ AppBundle\Entity\History:
         createTime:
             type: datetime
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-        text:
+        changeType:
             type: string
-            length: 255
+        changed:
+            type: string
+            nullable: true
+        from:
+            type: string
+            nullable: true
+            column: change_from
+        to:
+            type: string
+            nullable: true
+            column: change_to
+        additional:
+            type: text
+            nullable: true
     manyToOne:
-        order:
-            targetEntity: Orders
-            cascade: { }
+        user:
+            targetEntity: Users
+            cascade: {  }
             fetch: LAZY
-            mappedBy: null
             inversedBy: history
-            orphanRemoval: false
+            joinColumns:
+                user_id:
+                    nullable: true
     lifecycleCallbacks: {  }

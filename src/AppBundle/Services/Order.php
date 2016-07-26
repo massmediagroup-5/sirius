@@ -3,13 +3,24 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\History;
+use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\OrderStatusPay;
+use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
 use AppBundle\Exception\CartEmptyException;
 use AppBundle\Exception\UserInGrayListException;
+use AppBundle\HistoryItem\OrderHistoryChangedItem;
+use AppBundle\HistoryItem\OrderHistoryCreatedItem;
+use AppBundle\HistoryItem\OrderHistoryMergedWithRelatedItem;
+use AppBundle\HistoryItem\OrderHistoryMoveFromSizeItem;
+use AppBundle\HistoryItem\OrderHistoryMoveSizeCommand;
+use AppBundle\HistoryItem\OrderHistoryMoveToSizeItem;
+use AppBundle\HistoryItem\OrderHistoryRelationAddedItem;
+use AppBundle\HistoryItem\OrderHistoryRelationChangedItem;
+use AppBundle\HistoryItem\OrderHistoryRelationRemovedItem;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
@@ -35,34 +46,39 @@ class Order
     protected $container;
 
     /**
+     * @var HistoryManager
+     */
+    protected $historyManager;
+
+    /**
      * @param EntityManager $em
      * @param ContainerInterface $container
      */
     public function __construct(EntityManager $em, ContainerInterface $container)
     {
-        $this->container  = $container;
-        $this->em         = $em;
+        $this->container = $container;
+        $this->em = $em;
         $this->translator = $this->container->get('translator');
+        $this->historyManager = $this->container->get('history_manager');
     }
 
     /**
      * @param $data
      * @param $user
      * @param bool|false $quickFlag
-     *
      * @return Orders
      * @throws CartEmptyException
      * @throws UserInGrayListException
      */
     public function orderFromCart($data, $user, $quickFlag = false)
     {
-        if (( $user ) && ( $user->getGrayListFlag() )) {
+        if (($user) && ($user->getGrayListFlag())) {
             throw new UserInGrayListException;
         }
 
         $cart = $this->container->get('cart');
 
-        if ( ! $cart->getItems()) {
+        if (!$cart->getItems()) {
             throw new CartEmptyException;
         }
 
@@ -105,7 +121,6 @@ class Order
      * @param $order
      * @param $size
      * @param bool|false $quantity
-     *
      * @return Orders
      * @throws CartEmptyException
      */
@@ -113,35 +128,23 @@ class Order
     {
         $order->getSizes();
         $relatedOrder = $order->getRelatedOrder();
+        $size->setQuantity($size->getQuantity() - $quantity);
         if ($size->getQuantity() > $quantity) {
-            $size->setQuantity($size->getQuantity() - $quantity);
             $this->em->persist($size);
         } else {
             $order->removeSize($size);
         }
 
         // Add history to order
-        $label = $order->getPreOrderFlag() ? 'size_moved_to_order' : 'size_moved_to_pre_order';
-        $this->addOrderHistoryItem($order, $this->translator->trans("history.$label", [
-            ':size'  => $size->getSize(),
-            ':count' => $quantity,
-            ':user'  => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
+        (new OrderHistoryMoveToSizeItem($this->container))->createHistoryItem($order, $size, $quantity,
+            $this->getUser());
 
-        if ( ! $relatedOrder) {
+        if (!$relatedOrder) {
             $relatedOrder = clone $order;
             $relatedOrder->setRelatedOrder($order);
             $order->setRelatedOrder($relatedOrder);
-            $relatedOrder->setPreOrderFlag(! $relatedOrder->getPreOrderFlag());
+            $relatedOrder->setPreOrderFlag(!$relatedOrder->getPreOrderFlag());
         }
-
-        // Add history to related
-        $label = $order->getPreOrderFlag() ? 'size_moved_from_pre_order' : 'size_moved_from_order';
-        $this->addOrderHistoryItem($relatedOrder, $this->translator->trans("history.$label", [
-            ':size'  => $size->getSize(),
-            ':count' => $quantity,
-            ':user'  => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
 
         $relatedSizes = $relatedOrder->getSizes();
 
@@ -155,14 +158,19 @@ class Order
                 break;
             }
         }
-        if ( ! $foundedFlag) {
-            $clonedSize = clone $size;
-            $clonedSize->setOrder($relatedOrder);
-            $clonedSize->setQuantity($quantity);
-            $relatedSizes->add($clonedSize);
+        if (!$foundedFlag) {
+            $relatedSize = clone $size;
+            $relatedSize->setOrder($relatedOrder);
+            $relatedSize->setQuantity($quantity);
+            $relatedSizes->add($relatedSize);
         }
 
         $relatedOrder->setSizes($relatedSizes);
+
+        // Add history to order
+        (new OrderHistoryMoveFromSizeItem($this->container))->createHistoryItem($relatedOrder, $relatedSize, $quantity,
+            $this->getUser());
+
         $this->em->persist($order);
         $this->em->persist($relatedOrder);
 
@@ -173,7 +181,6 @@ class Order
 
     /**
      * @param Orders $order
-     *
      * @return Orders
      */
     public function changePreOrderFlag(Orders $order)
@@ -182,31 +189,20 @@ class Order
             $this->mergeSizesToOrder($relatedOrder, $order->getSizes());
             $relatedOrder->setRelatedOrder(null);
             $order->setRelatedOrder(null);
-            foreach ($order->getHistory() as $history) {
-                $history->setOrder($relatedOrder);
-                $relatedOrder->addHistory($history);
-            }
 
-            $label = $relatedOrder->getPreOrderFlag() ? 'merged_with_pre_order' : 'merged_with_order';
-            $this->addOrderHistoryItem($relatedOrder, $this->translator->trans("history.$label", [
-                ':user' => $this->getUser()->getUsername(),
-            ], 'AppAdminBundle'));
+            (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($relatedOrder, $this->getUser());
 
             $this->em->persist($relatedOrder);
 
             $this->em->remove($order);
 
             $this->em->flush();
-
             return $relatedOrder;
         }
 
-        $order->setPreOrderFlag(! $order->getPreOrderFlag());
+        $order->setPreOrderFlag(!$order->getPreOrderFlag());
 
-        $label = $order->getPreOrderFlag() ? 'order_to_pre_order' : 'order_to_order';
-        $this->addOrderHistoryItem($order, $this->translator->trans("history.$label", [
-            ':user' => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
+        (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($order, $this->getUser());
 
         $this->em->persist($order);
 
@@ -218,73 +214,16 @@ class Order
     /**
      * @param $order
      * @param $sizes
-     *
      * @return Orders
      * @throws CartEmptyException
      */
     public function addSizes(Orders $order, array $sizes)
     {
-        $availableSizes = $order->getSizes();
-
         foreach ($sizes as $size) {
-            list( $size, $quantity ) = $size;
+            list($size, $quantity) = $size;
 
-            foreach ($availableSizes as $key => $availableSize) {
-                if ($availableSize->getSize()->getId() == $size->getId()) {
-                    $beforeQuantity = $availableSize->getQuantity();
-
-                    $availableSize->incrementQuantity($quantity);
-                    $availableSizes->set($key, $availableSize);
-
-                    $afterQuantity = $availableSize->getQuantity();
-
-                    $this->addOrderHistoryItem($order, $this->translator->trans('history.order_update_size', [
-                        ':size'   => $size->getSize(),
-                        ':before' => $beforeQuantity,
-                        ':after'  => $afterQuantity,
-                        ':user'   => $this->getUser()->getUsername(),
-                    ], 'AppAdminBundle'));
-                    continue 2;
-                }
-            }
-            $orderSize = new OrderProductSize();
-            $orderSize->setSize($size);
-            $orderSize->setQuantity($quantity);
-            $orderSize->setOrder($order);
-            $orderSize->setDiscountedTotalPricePerItem($this->container->get('prices_calculator')->getDiscountedPrice($size));
-            $orderSize->setTotalPricePerItem($this->container->get('prices_calculator')->getPrice($size));
-            $availableSizes->add($orderSize);
-
-            $this->addOrderHistoryItem($order, $this->translator->trans('history.order_new_size', [
-                ':size'  => $size->getSize(),
-                ':count' => $quantity,
-                ':user'  => $this->getUser()->getUsername(),
-            ], 'AppAdminBundle'));
+            $this->changeSizeCount($order, $size, $quantity);
         }
-        $order->setSizes($availableSizes);
-
-        $this->em->persist($order);
-
-        $this->em->flush();
-
-        return $order;
-    }
-
-    /**
-     * @param $order
-     * @param $size
-     *
-     * @return Orders
-     * @throws CartEmptyException
-     */
-    public function removeSize(Orders $order, $size)
-    {
-        $this->em->remove($size);
-
-        $this->addOrderHistoryItem($order, $this->translator->trans("history.size_removed", [
-            ':size' => $size->getSize(),
-            ':user' => $this->getUser()->getUsername(),
-        ], 'AppAdminBundle'));
 
         $this->em->persist($order);
 
@@ -295,7 +234,81 @@ class Order
 
     /**
      * @param Orders $order
-     *
+     * @param ProductModelSpecificSize $size
+     * @param boolean $flushFlag
+     * @param $quantity
+     */
+    public function changeSizeCount(Orders $order, ProductModelSpecificSize $size, $quantity, $flushFlag = false)
+    {
+        $availableSizes = $order->getSizes();
+        $foundedFlag = false;
+
+        foreach ($availableSizes as $key => $availableSize) {
+            if ($availableSize->getSize()->getId() == $size->getId()) {
+                $beforeQuantity = $availableSize->getQuantity();
+
+                $availableSize->incrementQuantity($quantity);
+                $availableSizes->set($key, $availableSize);
+
+                $afterQuantity = $availableSize->getQuantity();
+
+                if ($afterQuantity < 1) {
+                    throw new \RuntimeException("Can`t set size quantity lower than 1");
+                }
+
+                (new OrderHistoryRelationChangedItem($this->container))->createHistoryItem($order, 'sizes', $size,
+                    'quantity', $beforeQuantity, $afterQuantity, $this->getUser());
+
+                $foundedFlag = true;
+            }
+        }
+
+        if (!$foundedFlag) {
+            if ($quantity > 0) {
+                $orderSize = new OrderProductSize();
+                $orderSize->setSize($size);
+                $orderSize->setQuantity($quantity);
+                $orderSize->setOrder($order);
+                $orderSize->setDiscountedTotalPricePerItem($this->container->get('prices_calculator')->getDiscountedPrice($size));
+                $orderSize->setTotalPricePerItem($this->container->get('prices_calculator')->getPrice($size));
+                $availableSizes->add($orderSize);
+
+                (new OrderHistoryRelationAddedItem($this->container))->createHistoryItem($order, 'sizes', $orderSize,
+                    $this->getUser());
+            } else {
+                throw new \RuntimeException("Can`t add new size with quantity lower than 1");
+            }
+        }
+
+        $order->setSizes($availableSizes);
+
+        if ($flushFlag) {
+            $this->em->persist($order);
+            $this->em->flush();
+        }
+    }
+
+    /**
+     * @param $order
+     * @param $size
+     * @return Orders
+     * @throws CartEmptyException
+     */
+    public function removeSize(Orders $order, $size)
+    {
+        $this->em->remove($size);
+
+        (new OrderHistoryRelationRemovedItem($this->container))->createHistoryItem($order, 'sizes', $size,
+            $this->getUser());
+
+        $this->em->persist($order);
+        $this->em->flush();
+
+        return $order;
+    }
+
+    /**
+     * @param Orders $order
      * @return Orders
      */
     public function sendOrderEmail(Orders $order)
@@ -306,11 +319,11 @@ class Order
         );
 
         $message = \Swift_Message::newInstance()
-                                 ->setSubject('Order from orders@sirius.com.ua')
-                                 ->setFrom('orders@sirius-sport.com')
-                                 ->setTo($this->container->get('options')->getParamValue('email'))
-                                 ->setBody($body)
-                                 ->setContentType("text/html");
+            ->setSubject('Order from orders@sirius.com.ua')
+            ->setFrom('orders@sirius-sport.com')
+            ->setTo($this->container->get('options')->getParamValue('email'))
+            ->setBody($body)
+            ->setContentType("text/html");
         $this->container->get('mailer')->send($message);
 
         return $order;
@@ -325,7 +338,7 @@ class Order
             'payStatus',
             'status'
         ];
-        $orderChanges  = $this->em->getUnitOfWork()->getEntityChangeSet($order);
+        $orderChanges = $this->em->getUnitOfWork()->getEntityChangeSet($order);
         foreach ($orderChanges as $fieldName => $orderChange) {
             if (in_array($fieldName, $allowedFields)) {
                 switch ($fieldName) {
@@ -339,7 +352,7 @@ class Order
                 $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
                 if ($orderStatus) {
                     if ($uniSender) {
-                        if (( $orderStatus->getSendClient() ) && ( ! empty( $orderStatus->getSendClientText() ) )) {
+                        if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
                             $client_sms_status = $this->sendSmsRequest(
                                 $uniSender,
                                 $order->getPhone(),
@@ -354,7 +367,7 @@ class Order
                                 $order->setClientSmsStatus($client_sms_status['error']);
                             }
                         }
-                        if (( $orderStatus->getSendManager() ) && ( ! empty( $orderStatus->getSendManagerText() ) )) {
+                        if (($orderStatus->getSendManager()) && (!empty($orderStatus->getSendManagerText()))) {
                             $phones = explode(',', $uniSender->getPhones());
                             foreach ($phones as $phone) {
                                 $this->sendSmsRequest(
@@ -366,17 +379,17 @@ class Order
                             }
                         }
                     }
-                    if (( $orderStatus->getSendClientEmail() ) && ( ! empty( $orderStatus->getSendClientEmailText() ) ) && ( $order->getUsers() )) {
-                        $body    = sprintf(
+                    if (($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers())) {
+                        $body = sprintf(
                             $orderStatus->getSendClientEmailText(),
                             $orderStatus->getId() // %s
                         );
                         $message = \Swift_Message::newInstance()
-                                                 ->setSubject('Order from orders@sirius-sport.com')
-                                                 ->setFrom('orders@sirius-sport.com')
-                                                 ->addTo($order->getUsers()->getEmail())
-                                                 ->setBody($body)
-                                                 ->setContentType("text/html");
+                            ->setSubject('Order from orders@sirius-sport.com')
+                            ->setFrom('orders@sirius-sport.com')
+                            ->addTo($order->getUsers()->getEmail())
+                            ->setBody($body)
+                            ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
                     }
                 }
@@ -387,12 +400,14 @@ class Order
     }
 
     /**
+     * sendSmsRequest
+     *
      * @param Unisender $uniSender
      * @param mixed $phone
      * @param string $dynamic_text
      * @param string $sms_text
      *
-     * @return bool|array
+     * return mixed
      */
     public function sendSmsRequest($uniSender, $phone, $dynamic_text, $sms_text = null)
     {
@@ -404,9 +419,9 @@ class Order
             // массив передаваемых параметров
             $parameters_array = array(
                 'api_key' => $uniSender->getApiKey(),
-                'phone'   => preg_replace("/[^0-9]/", '', strip_tags($phone)),
-                'sender'  => $uniSender->getSenderName(),
-                'text'    => $sms_body
+                'phone' => preg_replace("/[^0-9]/", '', strip_tags($phone)),
+                'sender' => $uniSender->getSenderName(),
+                'text' => $sms_body
             );
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -422,72 +437,20 @@ class Order
                 if (null === $jsonObj) {
                     // Ошибка в полученном ответе
                     $result['error'] = "Invalid JSON";
-                } elseif ( ! empty( $jsonObj->result->error )) {
+                } elseif (!empty($jsonObj->result->error)) {
                     // Ошибка отправки сообщения
                     $result['error'] = "An error occured: " . $jsonObj->result->error . "(code: " . $jsonObj->result->code . ")";
                 } else {
                     // Сообщение успешно отправлено
                     $result['sms_id'] = $jsonObj->result->sms_id;
-                    $result['error']  = false;
+                    $result['error'] = false;
                 }
             } else {
                 // Ошибка соединения с API-сервером
                 $result['error'] = "API access error";
             }
             curl_close($curl);
-
             return $result;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @return int count of updated sms statuses
-     */
-    public function checkSmsStatus()
-    {
-        $orders = $this->em
-            ->createQuery('SELECT o FROM AppBundle\Entity\Orders o WHERE o.clientSmsId != :where')
-            ->setParameter('where', 'null')
-            ->getResult();
-        $count  = 0;
-        foreach ($orders as $order) {
-            $status = $this->sendCheckSmsStatus($order->getClientSmsId());
-            $order->setClientSmsStatus($status);
-            $this->em->persist($order);
-            $this->em->flush($order);
-            $count ++;
-        }
-
-        return $count;
-    }
-
-    /**
-     * @param integer|string $sms_id
-     *
-     * @return bool|mixed
-     */
-    public function sendCheckSmsStatus($sms_id)
-    {
-        if ($curl = curl_init()) {
-            $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '0']);
-            // массив передаваемых параметров
-            $parameters_array = array(
-                'api_key' => $uniSender->getApiKey(),
-                'sms_id'  => $sms_id
-            );
-
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_POST, 1);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters_array);
-            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-            curl_setopt($curl, CURLOPT_URL, 'http://api.unisender.com/ru/api/checkSms?format=json');
-            $response = curl_exec($curl);
-
-            return $response;
-        } else {
-            return false;
         }
     }
 
@@ -510,21 +473,13 @@ class Order
 
         $uow = $this->em->getUnitOfWork();
         if ($order->getId() === null) {
-            $this->addOrderHistoryItem($order, $this->translator->trans('history.order_created', [], 'AppAdminBundle'));
+            (new OrderHistoryCreatedItem($this->container))->createHistoryItem($order);
         } else {
             $orderChanges = $uow->getEntityChangeSet($order);
             foreach ($orderChanges as $fieldName => $orderChange) {
                 if (in_array($fieldName, $allowedFields)) {
-                    $this->addOrderHistoryItem($order, $this->translator->trans(
-                        'history.field_changed_from_to_by_user',
-                        [
-                            ':field_changed' => $this->translator->trans("history.$fieldName", [], 'AppAdminBundle'),
-                            ':before'        => $orderChange[0],
-                            ':after'         => $orderChange[1],
-                            ':user'          => $this->getUser()->getUsername()
-                        ],
-                        'AppAdminBundle'
-                    ));
+                    (new OrderHistoryChangedItem($this->container))->createHistoryItem($order, $fieldName,
+                        $orderChange[0], $orderChange[1], $this->getUser());
                 }
                 if ($fieldName == 'payStatus' && $orderChange[1]) {
                     $doneDate = $orderChange[1]->getCode() == OrderStatusPay::CODE_PAID ? new \DateTime() : null;
@@ -538,13 +493,12 @@ class Order
 
     /**
      * @param Orders $order
-     *
      * @return Orders
      */
     public function cancelOrder(Orders $order)
     {
         $cancelStatus = $this->em->getRepository('AppBundle:OrderStatus')
-                                 ->findOneBy(['code' => 'canceled']);
+            ->findOneBy(['code' => 'canceled']);
 
         $order->setStatus($cancelStatus);
 
@@ -587,13 +541,30 @@ class Order
 
     /**
      * @param Orders $order
-     * @param $text
+     * @param $type
+     * @param $changed
+     * @param $from
+     * @param $to
+     * @param $user
+     * @param array $additional
      */
-    protected function addOrderHistoryItem(Orders $order, $text)
-    {
-        $historyItem = new History();
+    protected function addOrderHistoryItem(
+        Orders $order,
+        $type,
+        $changed = null,
+        $from = null,
+        $to = null,
+        $user = null,
+        $additional = []
+    ) {
+        $historyItem = new OrderHistory();
+        $historyItem->setChanged($changed);
+        $historyItem->setChangeType($type);
+        $historyItem->setFrom($from);
+        $historyItem->setTo($to);
+        $historyItem->setUser($user);
         $historyItem->setOrder($order);
-        $historyItem->setText($text);
+        $historyItem->setAdditional($additional);
         $order->addHistory($historyItem);
     }
 
@@ -610,7 +581,6 @@ class Order
      * @param $data
      * @param $user
      * @param bool|false $quickFlag
-     *
      * @return Orders
      * @throws CartEmptyException
      */
@@ -618,7 +588,7 @@ class Order
     {
         $order = new Orders();
 
-        if ( ! $quickFlag) {
+        if (!$quickFlag) {
             if ($data['delivery_type'] == 'np') {
                 // Nova poshta
                 $prefix = 'np_';
@@ -626,8 +596,8 @@ class Order
                 // Delivery
                 $prefix = 'del_';
             }
-            $cities  = Arr::get($data, $prefix . 'delivery_city', null);
-            $stores  = Arr::get($data, $prefix . 'delivery_store', null);
+            $cities = Arr::get($data, $prefix . 'delivery_city', null);
+            $stores = Arr::get($data, $prefix . 'delivery_store', null);
             $bonuses = Arr::get($data, 'bonuses', 0);
 
             $order->setCities($cities);
@@ -663,20 +633,19 @@ class Order
 
     /**
      * @param UsersEntity $user
-     *
      * @return array
      */
     public function getUserOrders(UsersEntity $user)
     {
         return $this->em->getRepository('AppBundle:Orders')
-                        ->createQueryBuilder('orders')
-                        ->select('orders')
-                        ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
-                        ->where('orders.users = :user')
-                        ->orderBy('orders.id', 'DESC')
-                        ->setParameter('user', $user)
-                        ->getQuery()
-                        ->getResult();
+            ->createQueryBuilder('orders')
+            ->select('orders')
+            ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
+            ->where('orders.users = :user')
+            ->orderBy('orders.id', 'DESC')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

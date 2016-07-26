@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\Orders;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Arr;
@@ -84,7 +85,8 @@ class OrdersAdmin extends Admin
             ->add('change_pre_order_flag', $this->getRouterIdParameter() . '/change_pre_order_flag', [], [], [
                 'expose' => true
             ])
-            ->add('cancel_order', $this->getRouterIdParameter() . '/cancel_order');
+            ->add('cancel_order', $this->getRouterIdParameter() . '/cancel_order')
+            ->add('cancel_order_change', $this->getRouterIdParameter() . '/cancel_order_change/{history_id}');
         if($this->statusName == 'waiting_for_departure')
         {
             $collection->add('ajax_create_waybill', $this->getRouterIdParameter() . '/ajax_create_waybill', [], [], [
@@ -487,6 +489,13 @@ class OrdersAdmin extends Admin
         };
     }
 
+    public function getHistoryItemLabel(OrderHistory $historyItem)
+    {
+        $historyManager = $this->getConfigurationPool()->getContainer()->get('history_manager');
+        $history = $historyManager->createFromHistoryItem($historyItem);
+        return $history->label();
+    }
+
     public function validate(ErrorElement $errorElement, $object)
     {
 //        payStatus
@@ -500,5 +509,14 @@ class OrdersAdmin extends Admin
                 ->assertNotBlank()
             ->end()
         ;
+    }
+
+    /**
+     * @param $historyItem
+     */
+    protected function getSizeFromHistory($historyItem)
+    {
+        $em = $this->getConfigurationPool()->getContainer()->get('doctrine.orm.entity_manager');
+        return $em->getRepository('AppBundle:ProductModelSpecificSize')->find($historyItem->getAdditional('sizeId'));
     }
 }

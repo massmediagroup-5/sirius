@@ -2,6 +2,9 @@
 
 namespace AppBundle\Entity;
 
+
+use Illuminate\Support\Arr;
+
 /**
  * History
  */
@@ -20,12 +23,32 @@ class History
     /**
      * @var string
      */
-    private $text;
+    private $changeType;
 
     /**
-     * @var \AppBundle\Entity\Orders
+     * @var string
      */
-    private $order;
+    private $changed;
+
+    /**
+     * @var string
+     */
+    private $from;
+
+    /**
+     * @var string
+     */
+    private $to;
+
+    /**
+     * @var string
+     */
+    private $additional;
+
+    /**
+     * @var \AppBundle\Entity\Users
+     */
+    private $user;
 
 
     /**
@@ -59,54 +82,153 @@ class History
      */
     public function getCreateTime()
     {
-        return $this->createTime ? : new \DateTime();
+        return $this->createTime ?: new \DateTime();
     }
 
     /**
-     * Set text
+     * Set changed
      *
-     * @param string $text
+     * @param string $changed
      *
      * @return History
      */
-    public function setText($text)
+    public function setChanged($changed)
     {
-        $this->text = $text;
+        $this->changed = $changed;
 
         return $this;
     }
 
     /**
-     * Get text
+     * Get changed
      *
      * @return string
      */
-    public function getText()
+    public function getChanged()
     {
-        return $this->text;
+        return $this->changed;
     }
 
     /**
-     * Set order
+     * Set from
      *
-     * @param \AppBundle\Entity\Orders $order
+     * @param string $from
      *
      * @return History
      */
-    public function setOrder(\AppBundle\Entity\Orders $order = null)
+    public function setFrom($from)
     {
-        $this->order = $order;
+        $this->from = $from;
 
         return $this;
     }
 
     /**
-     * Get order
+     * Get from
      *
-     * @return \AppBundle\Entity\Orders
+     * @return string
      */
-    public function getOrder()
+    public function getFrom()
     {
-        return $this->order;
+        return $this->from;
+    }
+
+    /**
+     * Set to
+     *
+     * @param string $to
+     *
+     * @return History
+     */
+    public function setTo($to)
+    {
+        $this->to = $to;
+
+        return $this;
+    }
+
+    /**
+     * Get to
+     *
+     * @return string
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\Users $user
+     *
+     * @return History
+     */
+    public function setUser(\AppBundle\Entity\Users $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\Users
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set changeType
+     *
+     * @param string $changeType
+     *
+     * @return History
+     */
+    public function setChangeType($changeType)
+    {
+        $this->changeType = $changeType;
+
+        return $this;
+    }
+
+    /**
+     * Get changeType
+     *
+     * @return string
+     */
+    public function getChangeType()
+    {
+        return $this->changeType;
+    }
+
+    /**
+     * Set additional
+     *
+     * @param string $additional
+     *
+     * @return History
+     */
+    public function setAdditional($additional)
+    {
+        $this->additional = serialize($additional);
+
+        return $this;
+    }
+
+    /**
+     * Get additional
+     *
+     * @return string
+     */
+    public function getAdditional()
+    {
+        $args = func_get_args();
+        $additional = unserialize($this->additional);
+
+        return isset($args[0]) ? Arr::get($additional, $args[0]) : $additional;
     }
 }

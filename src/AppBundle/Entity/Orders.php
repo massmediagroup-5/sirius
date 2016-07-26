@@ -959,11 +959,11 @@ class Orders
     /**
      * Add history
      *
-     * @param \AppBundle\Entity\History $history
+     * @param OrderHistory $history
      *
      * @return Orders
      */
-    public function addHistory(\AppBundle\Entity\History $history)
+    public function addHistory(OrderHistory $history)
     {
         $this->history[] = $history;
 
@@ -973,9 +973,9 @@ class Orders
     /**
      * Remove history
      *
-     * @param \AppBundle\Entity\History $history
+     * @param OrderHistory $history
      */
-    public function removeHistory(\AppBundle\Entity\History $history)
+    public function removeHistory(OrderHistory $history)
     {
         $this->history->removeElement($history);
     }
