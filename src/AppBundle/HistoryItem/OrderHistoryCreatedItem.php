@@ -22,6 +22,7 @@ class OrderHistoryCreatedItem extends AbstractHistoryItem
         $historyItem->setChangeType(get_called_class());
         $historyItem->setOrder($order);
         $order->addHistory($historyItem);
+
         return $historyItem;
     }
 
