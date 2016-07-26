@@ -1,5 +1,6 @@
 AppBundle\Entity\OrderHistory:
     type: entity
+    repositoryClass: AppBundle\Entity\Repository\OrderHistoryRepository
     manyToOne:
         order:
             targetEntity: Orders

@@ -186,11 +186,6 @@ class Orders
      */
     private $bonusesEnrolled = false;
 
-    /**
-     * @var boolean
-     */
-    private $ignoreFlushEvent = false;
-
 
     /**
      * Constructor
@@ -1065,21 +1060,5 @@ class Orders
     public function getDoneTime()
     {
         return $this->doneTime;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isIgnoreFlushEvent()
-    {
-        return $this->ignoreFlushEvent;
-    }
-
-    /**
-     * @param boolean $ignoreFlushEvent
-     */
-    public function setIgnoreFlushEvent($ignoreFlushEvent)
-    {
-        $this->ignoreFlushEvent = $ignoreFlushEvent;
     }
 }

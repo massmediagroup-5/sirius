@@ -491,127 +491,9 @@ class OrdersAdmin extends Admin
 
     public function getHistoryItemLabel(OrderHistory $historyItem)
     {
-        $changeType = $historyItem->getChangeType();
-        $em = $this->getConfigurationPool()->getContainer()->get('doctrine.orm.entity_manager');
-        $relationsNames = $em->getClassMetadata('AppBundle:Orders')->getAssociationNames();
-
-        $label = null;
-        if ($changeType == OrderHistory::TYPE_CREATED) {
-            $label = $this->translator->trans('history.order_created', [], 'AppAdminBundle');
-            
-        } elseif ($changeType == OrderHistory::TYPE_CHANGE) {
-            if (in_array($historyItem->getChanged(), $relationsNames)) {
-                if ($historyItem->getChanged() == 'status') {
-                    $repo = $em->getRepository('AppBundle:OrderStatus');
-                    $from = $repo->find($historyItem->getFrom()) ?: "#{$historyItem->getFrom()}";
-                    $to = $repo->find($historyItem->getTo()) ?: "#{$historyItem->getTo()}";
-                } elseif ($historyItem->getChanged() == 'payStatus') {
-                    $repo = $em->getRepository('AppBundle:OrderStatusPay');
-                    $from = $repo->find($historyItem->getFrom()) ?: "#{$historyItem->getFrom()}";
-                    $to = $repo->find($historyItem->getTo()) ?: "#{$historyItem->getTo()}";
-                } else {
-                    $from = $to = '';
-                }
-            } else {
-                $from = $historyItem->getFrom();
-                $to = $historyItem->getTo();
-            }
-            $label = $this->translator->trans('history.field_changed_from_to_by_user', [
-                ':field_changed' => $this->translator->trans("history.{$historyItem->getChanged()}", [],
-                    'AppAdminBundle'),
-                ':before' => $from,
-                ':after' => $to,
-                ':user' => $historyItem->getUser()->getUsername()
-            ],
-                'AppAdminBundle'
-            );
-
-        } elseif ($changeType == OrderHistory::TYPE_RELATION_CHANGE) {
-            $changedField = $historyItem->getAdditional('change');
-            if ($historyItem->getChanged() == 'sizes' && $changedField == 'quantity') {
-                $changedId = $historyItem->getAdditional('id');
-                $size = $em->getRepository('AppBundle:OrderProductSize')->find($changedId);
-                $size = $size ? $size->getSize() : false;
-                $label = $this->translator->trans('history.order_update_size', [
-                    ':size' => $size ?: "#$changedId",
-                    ':name' => $size ? $size->getModel()->getProducts()->getName() : '#',
-                    ':article' => $size ? $size->getModel()->getProducts()->getArticle() : "#",
-                    ':color' => $size ? $size->getModel()->getProductColors()->getName() : "#",
-                    ':before' => $historyItem->getFrom(),
-                    ':after' => $historyItem->getTo(),
-                    ':user' => $historyItem->getUser()->getUsername(),
-                ], 'AppAdminBundle');
-            }
-            
-        } elseif ($changeType == OrderHistory::TYPE_RELATION_REMOVE) {
-            if ($historyItem->getChanged() == 'sizes') {
-                if ($orderSize = $historyItem->getAdditional('size')) {
-                    $size = $em->getRepository('AppBundle:ProductModelSpecificSize')->find($orderSize->getSize()->getId());
-                } else {
-                    $size = false;
-                }
-
-                $label = $this->translator->trans('history.order_remove_size', [
-                    ':size' => $size ?: "#",
-                    ':name' => $size ? $size->getModel()->getProducts()->getName() : '#',
-                    ':article' => $size ? $size->getModel()->getProducts()->getArticle() : "#",
-                    ':color' => $size ? $size->getModel()->getProductColors()->getName() : "#",
-                    ':count' => $orderSize->getQuantity(),
-                    ':user' => $historyItem->getUser()->getUsername(),
-                ], 'AppAdminBundle');
-            }
-            
-        } elseif ($changeType == OrderHistory::TYPE_RELATION_ADD) {
-            if ($historyItem->getChanged() == 'sizes') {
-                $orderSize = $em->getRepository('AppBundle:OrderProductSize')->find($historyItem->getTo());
-                $size = $orderSize ? $orderSize->getSize() : false;
-                $label = $this->translator->trans('history.order_add_size', [
-                    ':size' => $size ?: "#{$historyItem->getTo()}",
-                    ':name' => $size ? $size->getModel()->getProducts()->getName() : '#',
-                    ':article' => $size ? $size->getModel()->getProducts()->getArticle() : "#",
-                    ':color' => $size ? $size->getModel()->getProductColors()->getName() : "#",
-                    ':count' => $orderSize->getQuantity(),
-                    ':user' => $historyItem->getUser()->getUsername(),
-                ], 'AppAdminBundle');
-            }
-            
-        } elseif ($changeType == OrderHistory::TYPE_MOVE_TO_ORDER) {
-            $label = $this->translator->trans("history.size_moved_to_order", [
-                ':size' => $historyItem->getFrom(),
-                ':count' => $historyItem->getAdditional('quantity'),
-                ':user' => $historyItem->getUser()->getUsername(),
-            ], 'AppAdminBundle');
-                
-        } elseif ($changeType == OrderHistory::TYPE_MOVE_TO_PRE_ORDER) {
-            $label = $this->translator->trans("history.size_moved_to_pre_order", [
-                ':size' => $historyItem->getFrom(),
-                ':count' => $historyItem->getAdditional('quantity'),
-                ':user' => $historyItem->getUser()->getUsername(),
-            ], 'AppAdminBundle');
-            
-        } elseif ($changeType == OrderHistory::TYPE_MERGED_WITH_PRE_ORDER) {
-            $label = $this->translator->trans("history.merged_with_pre_order", [
-                ':user' => $historyItem->getUser()->getUsername(),
-            ], 'AppAdminBundle');
-            
-        } elseif ($changeType == OrderHistory::TYPE_MERGED_WITH_ORDER) {
-            $label = $this->translator->trans("history.merged_with_order", [
-                ':user' => $historyItem->getUser()->getUsername(),
-            ], 'AppAdminBundle');
-            
-        } elseif ($changeType == OrderHistory::TYPE_PRE_ORDER_TO_ORDER) {
-            $label = $this->translator->trans("history.pre_order_to_order", [
-                ':user' => $historyItem->getUser()->getUsername(),
-            ], 'AppAdminBundle');
-                
-        } elseif ($changeType == OrderHistory::TYPE_ORDER_TO_PRE_ORDER) {
-            $label = $this->translator->trans("history.order_to_pre_order", [
-                ':user' => $historyItem->getUser()->getUsername(),
-            ], 'AppAdminBundle');
-
-        }
-        
-        return $label;
+        $historyManager = $this->getConfigurationPool()->getContainer()->get('history_manager');
+        $history = $historyManager->createFromHistoryItem($historyItem);
+        return $history->label();
     }
 
     public function validate(ErrorElement $errorElement, $object)
@@ -627,5 +509,14 @@ class OrdersAdmin extends Admin
                 ->assertNotBlank()
             ->end()
         ;
+    }
+
+    /**
+     * @param $historyItem
+     */
+    protected function getSizeFromHistory($historyItem)
+    {
+        $em = $this->getConfigurationPool()->getContainer()->get('doctrine.orm.entity_manager');
+        return $em->getRepository('AppBundle:ProductModelSpecificSize')->find($historyItem->getAdditional('sizeId'));
     }
 }

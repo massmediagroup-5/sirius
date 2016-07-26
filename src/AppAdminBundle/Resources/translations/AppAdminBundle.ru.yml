@@ -86,10 +86,10 @@ history:
   pre_order_to_order: Перемещено в заказ пользователем :user.
   merged_with_pre_order: Объеденено с предзаказом пользователем :user.
   merged_with_order: Объеденено с заказом пользователем :user.
-  size_moved_to_pre_order: :count шт. размера :size перемещено в предзаказ пользователем :user.
-  size_moved_to_order: :count шт. размера :size перемещено в заказ пользователем :user.
-  size_moved_from_pre_order: :count шт. размера :size перемещено с предзаказа пользователем :user.
-  size_moved_from_order: :count шт. размера :size перемещено с заказа пользователем :user.
+  size_moved_to_pre_order: :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» перемещено в предзаказ пользователем :user.
+  size_moved_to_order: :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» перемещено в заказ пользователем :user.
+  size_moved_from_pre_order: :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» перемещено с предзаказа пользователем :user.
+  size_moved_from_order: :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» перемещено с заказа пользователем :user.
   size_removed: Размер :size удален пользователем :user.
   fio: ФИО
   status: Статус
