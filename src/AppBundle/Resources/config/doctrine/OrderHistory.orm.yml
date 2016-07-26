@@ -1,0 +1,11 @@
+AppBundle\Entity\OrderHistory:
+    type: entity
+    repositoryClass: AppBundle\Entity\Repository\OrderHistoryRepository
+    manyToOne:
+        order:
+            targetEntity: Orders
+            cascade: { }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: history
+            orphanRemoval: false

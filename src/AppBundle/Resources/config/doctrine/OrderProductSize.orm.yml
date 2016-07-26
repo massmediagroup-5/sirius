@@ -1,5 +1,6 @@
 AppBundle\Entity\OrderProductSize:
     type: entity
+    repositoryClass: AppBundle\Entity\Repository\OrderProductSizeRepository
     table: null
     id:
         id:
