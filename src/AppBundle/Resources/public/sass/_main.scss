@@ -7520,11 +7520,19 @@ input[type="checkbox"] {
 	}
 
 	.inp {
-		padding-bottom: 15px;
+		padding-bottom: 25px;
 		position: relative;
 
 		label.error {
 			display: none;
+		    position: absolute;
+		    right: 0;
+		    bottom: 100%;
+		    font-size: 11px !important;
+		    color: red;
+		    margin: 0 0 0 5px;
+		    white-space: nowrap;
+		    line-height: 24px
 		}
 
 		&.inp_error {
@@ -7561,7 +7569,7 @@ input[type="checkbox"] {
 		line-height: 18px;
 		font-weight: 400;
 		font-family: $lato;
-		color: #c8cbcc;
+		color: #000;
 		padding: 5px 10px;
 		width: 100%;
 		@include border-box();
