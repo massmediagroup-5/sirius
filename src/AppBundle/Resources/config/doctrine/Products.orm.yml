@@ -124,8 +124,7 @@ AppBundle\Entity\Products:
             targetEntity: Categories
             cascade: {  }
             fetch: LAZY
-            mappedBy: null
-            inversedBy: null
+            inversedBy: basedProducts
             joinColumns:
                 base_category_id:
                     referencedColumnName: id

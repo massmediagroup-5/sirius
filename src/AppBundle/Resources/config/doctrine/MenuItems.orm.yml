@@ -75,7 +75,7 @@ AppBundle\Entity\MenuItems:
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: null
+            inversedBy: items
             joinColumns:
                 menu_id:
                     referencedColumnName: id
