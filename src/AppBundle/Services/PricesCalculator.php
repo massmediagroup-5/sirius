@@ -271,7 +271,7 @@ class PricesCalculator
         $cart = $this->container->get('cart');
 
         $shareGroup = $object->getSize()->getShareGroup();
-        $share = $shareGroup ? $shareGroup->getShare() : false;
+        $share = $shareGroup ? $shareGroup->getShare() : null;
         if ($this->container->get('share')->isActualSingleShare($share)) {
             $otherSizesInShare = [];
             foreach ($share->getSizesGroups() as $group) {
