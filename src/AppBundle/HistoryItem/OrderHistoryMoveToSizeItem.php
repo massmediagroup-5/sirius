@@ -26,6 +26,7 @@ class OrderHistoryMoveToSizeItem extends AbstractHistoryItem
     {
         $historyItem = new OrderHistory();
         $historyItem->setChangeType(get_called_class());
+        $historyItem->setChanged('sizes');
         $historyItem->setFrom($size->getQuantity() + $quantity);
         $historyItem->setTo($size->getQuantity());
         $historyItem->setUser($user);

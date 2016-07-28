@@ -4,7 +4,7 @@
 
 {% block cabinet_content %}
     {% if app.session.flashBag.has('success') %} 
-    {% for msg in app.session.flashBag.get('success') %}
+        {% for msg in app.session.flashBag.get('success') %}
         <div class="flash-success" id="flash-success">
             <div class="text-popup">
                <div class="text-popup__i">
