@@ -180,38 +180,6 @@ class OrdersAdmin extends Admin
             $otherSizes = [];
         }
 
-        if($this->statusName == 'waiting_for_departure')
-        {
-            if($this->subject->getTtn()){
-                $api = $this->modelManager
-                    ->getEntityManager('AppBundle:Novaposhta')
-                    ->getRepository('AppBundle:Novaposhta')
-                    ->findOneBy(['active'=>1]);
-                Config::setApiKey($api->getApiKey());
-                Config::setFormat(Config::FORMAT_JSONRPC2);
-                Config::setLanguage(Config::LANGUAGE_RU);
-
-                $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocument();
-                $data->setRef($this->subject->getTtn());
-                $ttn = InternetDocument::getDocument($data)->data[0];
-
-                $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocumentDeliveryDate();
-                $data->setDateTime($ttn->DateTime);
-                $data->setCitySender($ttn->CitySenderRef);
-                $data->setCityRecipient($ttn->CityRecipientRef);
-                $data->setServiceType($ttn->ServiceTypeRef);
-                $date = InternetDocument::getDocumentDeliveryDate($data)->data[0]->DeliveryDate;
-            }else {
-                $ttn = '';
-                $date = '';
-            }
-            $formMapper->tab('ТТН', [
-                'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
-                'object' => $this->getSubject(),
-                'ttn' => $ttn,
-                'date' => $date
-            ])->end();
-        }
         $formMapper
             ->tab('Заказ')
             ->with('Заказ',
@@ -324,7 +292,38 @@ class OrdersAdmin extends Admin
                 'tab_template' => 'AppAdminBundle:admin:order_sizes.html.twig'
             ])
             ->end();
+        if($this->statusName == 'waiting_for_departure')
+        {
+            if($this->subject->getTtn()){
+                $api = $this->modelManager
+                    ->getEntityManager('AppBundle:Novaposhta')
+                    ->getRepository('AppBundle:Novaposhta')
+                    ->findOneBy(['active'=>1]);
+                Config::setApiKey($api->getApiKey());
+                Config::setFormat(Config::FORMAT_JSONRPC2);
+                Config::setLanguage(Config::LANGUAGE_RU);
 
+                $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocument();
+                $data->setRef($this->subject->getTtn());
+                $ttn = InternetDocument::getDocument($data)->data[0];
+
+                $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocumentDeliveryDate();
+                $data->setDateTime($ttn->DateTime);
+                $data->setCitySender($ttn->CitySenderRef);
+                $data->setCityRecipient($ttn->CityRecipientRef);
+                $data->setServiceType($ttn->ServiceTypeRef);
+                $date = InternetDocument::getDocumentDeliveryDate($data)->data[0]->DeliveryDate;
+            }else {
+                $ttn = '';
+                $date = '';
+            }
+            $formMapper->tab('ТТН', [
+                'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
+                'object' => $this->getSubject(),
+                'ttn' => $ttn,
+                'date' => $date
+            ])->end();
+        }
         if ($otherSizes) {
             $formMapper->tab('Другие заказы покупателя', [
                 'tab_template' => 'AppAdminBundle:admin:order_other_sizes.html.twig',
