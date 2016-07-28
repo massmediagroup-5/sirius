@@ -56,9 +56,9 @@ class Order
      */
     public function __construct(EntityManager $em, ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->em = $em;
-        $this->translator = $this->container->get('translator');
+        $this->container      = $container;
+        $this->em             = $em;
+        $this->translator     = $this->container->get('translator');
         $this->historyManager = $this->container->get('history_manager');
     }
 
@@ -66,19 +66,20 @@ class Order
      * @param $data
      * @param $user
      * @param bool|false $quickFlag
+     *
      * @return Orders
      * @throws CartEmptyException
      * @throws UserInGrayListException
      */
     public function orderFromCart($data, $user, $quickFlag = false)
     {
-        if (($user) && ($user->getGrayListFlag())) {
+        if (( $user ) && ( $user->getGrayListFlag() )) {
             throw new UserInGrayListException;
         }
 
         $cart = $this->container->get('cart');
 
-        if (!$cart->getItems()) {
+        if ( ! $cart->getItems()) {
             throw new CartEmptyException;
         }
 
@@ -121,6 +122,7 @@ class Order
      * @param $order
      * @param $size
      * @param bool|false $quantity
+     *
      * @return Orders
      * @throws CartEmptyException
      */
@@ -139,11 +141,11 @@ class Order
         (new OrderHistoryMoveToSizeItem($this->container))->createHistoryItem($order, $size, $quantity,
             $this->getUser());
 
-        if (!$relatedOrder) {
+        if ( ! $relatedOrder) {
             $relatedOrder = clone $order;
             $relatedOrder->setRelatedOrder($order);
             $order->setRelatedOrder($relatedOrder);
-            $relatedOrder->setPreOrderFlag(!$relatedOrder->getPreOrderFlag());
+            $relatedOrder->setPreOrderFlag(! $relatedOrder->getPreOrderFlag());
         }
 
         $relatedSizes = $relatedOrder->getSizes();
@@ -158,7 +160,7 @@ class Order
                 break;
             }
         }
-        if (!$foundedFlag) {
+        if ( ! $foundedFlag) {
             $relatedSize = clone $size;
             $relatedSize->setOrder($relatedOrder);
             $relatedSize->setQuantity($quantity);
@@ -181,6 +183,7 @@ class Order
 
     /**
      * @param Orders $order
+     *
      * @return Orders
      */
     public function changePreOrderFlag(Orders $order)
@@ -190,17 +193,19 @@ class Order
             $relatedOrder->setRelatedOrder(null);
             $order->setRelatedOrder(null);
 
-            (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($relatedOrder, $this->getUser());
+            (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($relatedOrder,
+                $this->getUser());
 
             $this->em->persist($relatedOrder);
 
             $this->em->remove($order);
 
             $this->em->flush();
+
             return $relatedOrder;
         }
 
-        $order->setPreOrderFlag(!$order->getPreOrderFlag());
+        $order->setPreOrderFlag(! $order->getPreOrderFlag());
 
         (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($order, $this->getUser());
 
@@ -214,13 +219,14 @@ class Order
     /**
      * @param $order
      * @param $sizes
+     *
      * @return Orders
      * @throws CartEmptyException
      */
     public function addSizes(Orders $order, array $sizes)
     {
         foreach ($sizes as $size) {
-            list($size, $quantity) = $size;
+            list( $size, $quantity ) = $size;
 
             $this->changeSizeCount($order, $size, $quantity);
         }
@@ -241,7 +247,7 @@ class Order
     public function changeSizeCount(Orders $order, ProductModelSpecificSize $size, $quantity, $flushFlag = false)
     {
         $availableSizes = $order->getSizes();
-        $foundedFlag = false;
+        $foundedFlag    = false;
 
         foreach ($availableSizes as $key => $availableSize) {
             if ($availableSize->getSize()->getId() == $size->getId()) {
@@ -263,7 +269,7 @@ class Order
             }
         }
 
-        if (!$foundedFlag) {
+        if ( ! $foundedFlag) {
             if ($quantity > 0) {
                 $orderSize = new OrderProductSize();
                 $orderSize->setSize($size);
@@ -291,6 +297,7 @@ class Order
     /**
      * @param $order
      * @param $size
+     *
      * @return Orders
      * @throws CartEmptyException
      */
@@ -309,6 +316,7 @@ class Order
 
     /**
      * @param Orders $order
+     *
      * @return Orders
      */
     public function sendOrderEmail(Orders $order)
@@ -319,11 +327,11 @@ class Order
         );
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Order from orders@sirius.com.ua')
-            ->setFrom('orders@sirius-sport.com')
-            ->setTo($this->container->get('options')->getParamValue('email'))
-            ->setBody($body)
-            ->setContentType("text/html");
+                                 ->setSubject('Order from orders@sirius.com.ua')
+                                 ->setFrom('orders@sirius-sport.com')
+                                 ->setTo($this->container->get('options')->getParamValue('email'))
+                                 ->setBody($body)
+                                 ->setContentType("text/html");
         $this->container->get('mailer')->send($message);
 
         return $order;
@@ -338,7 +346,7 @@ class Order
             'payStatus',
             'status'
         ];
-        $orderChanges = $this->em->getUnitOfWork()->getEntityChangeSet($order);
+        $orderChanges  = $this->em->getUnitOfWork()->getEntityChangeSet($order);
         foreach ($orderChanges as $fieldName => $orderChange) {
             if (in_array($fieldName, $allowedFields)) {
                 switch ($fieldName) {
@@ -352,7 +360,7 @@ class Order
                 $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
                 if ($orderStatus) {
                     if ($uniSender) {
-                        if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
+                        if (( $orderStatus->getSendClient() ) && ( ! empty( $orderStatus->getSendClientText() ) )) {
                             $client_sms_status = $this->sendSmsRequest(
                                 $uniSender,
                                 $order->getPhone(),
@@ -367,7 +375,7 @@ class Order
                                 $order->setClientSmsStatus($client_sms_status['error']);
                             }
                         }
-                        if (($orderStatus->getSendManager()) && (!empty($orderStatus->getSendManagerText()))) {
+                        if (( $orderStatus->getSendManager() ) && ( ! empty( $orderStatus->getSendManagerText() ) )) {
                             $phones = explode(',', $uniSender->getPhones());
                             foreach ($phones as $phone) {
                                 $this->sendSmsRequest(
@@ -379,17 +387,17 @@ class Order
                             }
                         }
                     }
-                    if (($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers())) {
-                        $body = sprintf(
+                    if (( $orderStatus->getSendClientEmail() ) && ( ! empty( $orderStatus->getSendClientEmailText() ) ) && ( $order->getUsers() )) {
+                        $body    = sprintf(
                             $orderStatus->getSendClientEmailText(),
                             $orderStatus->getId() // %s
                         );
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Order from orders@sirius-sport.com')
-                            ->setFrom('orders@sirius-sport.com')
-                            ->addTo($order->getUsers()->getEmail())
-                            ->setBody($body)
-                            ->setContentType("text/html");
+                                                 ->setSubject('Order from orders@sirius-sport.com')
+                                                 ->setFrom('orders@sirius-sport.com')
+                                                 ->addTo($order->getUsers()->getEmail())
+                                                 ->setBody($body)
+                                                 ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
                     }
                 }
@@ -419,9 +427,9 @@ class Order
             // массив передаваемых параметров
             $parameters_array = array(
                 'api_key' => $uniSender->getApiKey(),
-                'phone' => preg_replace("/[^0-9]/", '', strip_tags($phone)),
-                'sender' => $uniSender->getSenderName(),
-                'text' => $sms_body
+                'phone'   => preg_replace("/[^0-9]/", '', strip_tags($phone)),
+                'sender'  => $uniSender->getSenderName(),
+                'text'    => $sms_body
             );
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -437,20 +445,88 @@ class Order
                 if (null === $jsonObj) {
                     // Ошибка в полученном ответе
                     $result['error'] = "Invalid JSON";
-                } elseif (!empty($jsonObj->result->error)) {
+                } elseif ( ! empty( $jsonObj->error )) {
                     // Ошибка отправки сообщения
-                    $result['error'] = "An error occured: " . $jsonObj->result->error . "(code: " . $jsonObj->result->code . ")";
+                    $result['error'] = "An error occured: " . $jsonObj->error . "(code: " . $jsonObj->code . ")";
                 } else {
                     // Сообщение успешно отправлено
                     $result['sms_id'] = $jsonObj->result->sms_id;
-                    $result['error'] = false;
+                    $result['error']  = false;
                 }
             } else {
                 // Ошибка соединения с API-сервером
                 $result['error'] = "API access error";
             }
             curl_close($curl);
+
             return $result;
+        }
+    }
+
+    /**
+     * @return int count of updated sms statuses
+     */
+    public function checkSmsStatus()
+    {
+        $orders     = $this->em
+            ->createQuery('SELECT o FROM AppBundle\Entity\Orders o WHERE o.clientSmsId != :where AND o.clientSmsStatus NOT LIKE :like')
+            ->setParameter('where', 'null')
+            ->setParameter('like', '%Статус окончательный%')
+            ->getResult();
+        $count      = 0;
+        $status_arr = [
+            'not_sent'            => 'Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки',
+            'ok_sent'             => 'Сообщение отправлено, но статус доставки пока неизвестен. Статус временный и может измениться',
+            'ok_delivered'        => 'Сообщение доставлено. Статус окончательный',
+            'err_src_invalid'     => 'Доставка невозможна, отправитель задан неправильно. Статус окончательный',
+            'err_dest_invalid'    => 'Доставка невозможна, указан неправильный номер. Статус окончательный',
+            'err_skip_letter'     => 'Доставка невозможна, т.к. во время отправки был изменён статус телефона, либо телефон был удалён из списка, либо письмо было удалено. Статус окончательный',
+            'err_not_allowed'     => 'Доставка невозможна, этот оператор связи не обслуживается. Статус окончательный',
+            'err_delivery_failed' => 'Доставка не удалась - обычно по причине указания формально правильного, но несуществующего номера или из-за выключенного телефона. Статус окончательный',
+            'err_lost'            => 'Сообщение было утеряно, отправитель должен переотправить сообщение самостоятельно, т.к. оригинал не сохранился. Статус окончательный',
+            'err_internal'        => 'внутренний сбой. Необходима переотправка сообщения. Статус окончательный',
+        ];
+        foreach ($orders as $order) {
+            $result = json_decode($this->sendCheckSmsStatus($order->getClientSmsId()));
+            if ( ! empty( $result->error )) {
+                $message = "An error occured: " . isset($result->error)?$result->error:' ' . "(code: " . isset($result->code)?$result->code:' ' . ") " . $status_arr[$result->result->status];
+            } else {
+                $message = $status_arr[$result->result->status];
+            }
+            $order->setClientSmsStatus($message);
+            $this->em->persist($order);
+            $this->em->flush($order);
+            $count ++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * @param integer|string $sms_id
+     *
+     * @return bool|mixed
+     */
+    public function sendCheckSmsStatus($sms_id)
+    {
+        if ($curl = curl_init()) {
+            $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '0']);
+            // массив передаваемых параметров
+            $parameters_array = array(
+                'api_key' => $uniSender->getApiKey(),
+                'sms_id'  => $sms_id
+            );
+
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters_array);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+            curl_setopt($curl, CURLOPT_URL, 'http://api.unisender.com/ru/api/checkSms?format=json');
+            $response = curl_exec($curl);
+
+            return $response;
+        } else {
+            return false;
         }
     }
 
@@ -493,12 +569,13 @@ class Order
 
     /**
      * @param Orders $order
+     *
      * @return Orders
      */
     public function cancelOrder(Orders $order)
     {
         $cancelStatus = $this->em->getRepository('AppBundle:OrderStatus')
-            ->findOneBy(['code' => 'canceled']);
+                                 ->findOneBy(['code' => 'canceled']);
 
         $order->setStatus($cancelStatus);
 
@@ -581,6 +658,7 @@ class Order
      * @param $data
      * @param $user
      * @param bool|false $quickFlag
+     *
      * @return Orders
      * @throws CartEmptyException
      */
@@ -588,7 +666,7 @@ class Order
     {
         $order = new Orders();
 
-        if (!$quickFlag) {
+        if ( ! $quickFlag) {
             if ($data['delivery_type'] == 'np') {
                 // Nova poshta
                 $prefix = 'np_';
@@ -596,8 +674,8 @@ class Order
                 // Delivery
                 $prefix = 'del_';
             }
-            $cities = Arr::get($data, $prefix . 'delivery_city', null);
-            $stores = Arr::get($data, $prefix . 'delivery_store', null);
+            $cities  = Arr::get($data, $prefix . 'delivery_city', null);
+            $stores  = Arr::get($data, $prefix . 'delivery_store', null);
             $bonuses = Arr::get($data, 'bonuses', 0);
 
             $order->setCities($cities);
@@ -633,19 +711,20 @@ class Order
 
     /**
      * @param UsersEntity $user
+     *
      * @return array
      */
     public function getUserOrders(UsersEntity $user)
     {
         return $this->em->getRepository('AppBundle:Orders')
-            ->createQueryBuilder('orders')
-            ->select('orders')
-            ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
-            ->where('orders.users = :user')
-            ->orderBy('orders.id', 'DESC')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult();
+                        ->createQueryBuilder('orders')
+                        ->select('orders')
+                        ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
+                        ->where('orders.users = :user')
+                        ->orderBy('orders.id', 'DESC')
+                        ->setParameter('user', $user)
+                        ->getQuery()
+                        ->getResult();
     }
 
     /**
