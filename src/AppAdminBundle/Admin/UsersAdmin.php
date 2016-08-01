@@ -8,11 +8,12 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use AppBundle\Entity\Users;
 
 class UsersAdmin extends BaseUserAdmin
 {
 
-    protected $userRole = 'a:0:{}';
+    protected $userRole;
 
     /**
      * @param string $context
@@ -21,8 +22,26 @@ class UsersAdmin extends BaseUserAdmin
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
-        $query->andWhere('o.roles LIKE :role')->setParameter('role', '%' . $this->userRole . '%');
+
+        $role = $this->userRole ?: 'a:0:{}';
+
+        $query->andWhere('o.roles LIKE :role')->setParameter('role', "%$role%");
         return $query;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getNewInstance()
+    {
+        /** @var Users $object */
+        $object = parent::getNewInstance();
+
+        if ($this->userRole) {
+            $object->setRoles([$this->userRole]);
+        }
+
+        return $object;
     }
 
     /**
