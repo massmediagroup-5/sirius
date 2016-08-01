@@ -75,6 +75,11 @@ AppBundle\Entity\Users:
             options:
                 unsigned: true
                 default: 0
+        discount:
+            type: integer
+            options:
+                unsigned: true
+                default: 0
         grayListFlag:
             type: boolean
             options:

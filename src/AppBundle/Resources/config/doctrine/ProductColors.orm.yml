@@ -51,5 +51,4 @@ AppBundle\Entity\ProductColors:
             cascade: { }
             fetch: LAZY
             mappedBy: productColors
-            inversedBy: null
     lifecycleCallbacks: {  }

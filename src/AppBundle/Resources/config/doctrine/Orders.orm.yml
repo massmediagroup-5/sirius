@@ -180,8 +180,7 @@ AppBundle\Entity\Orders:
             targetEntity: Users
             cascade: {  }
             fetch: LAZY
-            mappedBy: null
-            inversedBy: null
+            inversedBy: orders
             joinColumns:
                 users_id:
                     referencedColumnName: id

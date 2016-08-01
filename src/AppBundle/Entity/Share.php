@@ -23,6 +23,11 @@ class Share
     private $description;
 
     /**
+     * @var string
+     */
+    private $terms;
+
+    /**
      * @var \DateTime
      */
     private $createTime;
@@ -127,6 +132,30 @@ class Share
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set terms
+     *
+     * @param string $terms
+     *
+     * @return Share
+     */
+    public function setTerms($terms)
+    {
+        $this->terms = $terms;
+
+        return $this;
+    }
+
+    /**
+     * Get terms
+     *
+     * @return string
+     */
+    public function getTerms()
+    {
+        return $this->terms;
     }
 
     /**

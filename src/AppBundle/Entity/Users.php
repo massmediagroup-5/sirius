@@ -91,6 +91,11 @@ class Users extends BaseUser
     protected $grayListFlag = false;
 
     /**
+     * @var boolean
+     */
+    protected $discount = 0;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $orders;
@@ -538,5 +543,29 @@ class Users extends BaseUser
             return self::OAUTH_VKONTAKTE;
         }
         return null;
+    }
+
+    /**
+     * Set discount
+     *
+     * @param string $discount
+     *
+     * @return Users
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+
+        return $this;
+    }
+
+    /**
+     * Get discount
+     *
+     * @return string
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
     }
 }
