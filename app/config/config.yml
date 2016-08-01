@@ -58,7 +58,7 @@ ewz_recaptcha:
 #    ajax: true
     public_key:  6LcBThwTAAAAAONvtJ8-xxl78jy6hWFiKOiUSPjC
     private_key: 6LcBThwTAAAAAONvtJ8-xxl78jy6hWFiKOiUSPjC
-    locale_key:  %kernel.default_locale%
+    locale_key:  '%kernel.default_locale%'
 
 # Twig Configuration
 twig:
