@@ -52,7 +52,8 @@ class Filters
             }
         }
         return $hasCharacteristics || $this->request->get('price_from') && $this->request->get('price_from') != $data['price_filter']['min_price']
-        || $this->request->get('price_to') && $this->request->get('price_to') != $data['price_filter']['max_price'] || $this->selectedColors($data);
+        || $this->request->get('price_to') && $this->request->get('price_to') != $data['price_filter']['max_price'] || $this->selectedColors($data)
+        || $this->has('shares');
     }
 
     /**
@@ -62,6 +63,35 @@ class Filters
     public function isSelectedColor(ProductColors $color)
     {
         return in_array($color->getId(), Arr::get($this->parseFiltersUrl(), 'query.colors', []));
+    }
+
+    /**
+     * @param $filterName
+     * @param $value
+     * @return bool
+     */
+    public function hasEq($filterName, $value)
+    {
+        return $this->request->get($filterName) == $value;
+    }
+
+    /**
+     * @param $filterName
+     * @return bool
+     */
+    public function has($filterName)
+    {
+        return $this->request->get($filterName) != false;
+    }
+
+    /**
+     * @param $filterName
+     * @param $default
+     * @return bool
+     */
+    public function get($filterName, $default = false)
+    {
+        return $this->request->get($filterName, $default);
     }
 
     /**
@@ -83,7 +113,7 @@ class Filters
      * @param bool|false $url
      * @return string
      */
-    public function replaceQueryParameter($parameter, $newValue, $url = false)
+    public function replaceQueryParameter($parameter, $newValue = false, $url = false)
     {
         $url = $this->parseFiltersUrl($url);
 

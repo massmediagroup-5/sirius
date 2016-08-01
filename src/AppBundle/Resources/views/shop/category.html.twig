@@ -30,18 +30,29 @@
                                 {% if filters.isShowFiltered(data) %}
                                     <div class="filtered">
                                         <div class="filtered__i">
-                                            <h2>ВЫ ИЩЕТЕ <a href="{{ url('category', {'category': data.category.alias}) }}" class="clear">Очистить все</a></h2>
+                                            <h2>ВЫ ИЩЕТЕ <a
+                                                        href="{{ url('category', {'category': data.category.alias}) }}"
+                                                        class="clear">Очистить все</a></h2>
                                             <div class="filtered-list">
                                                 <div class="filtered-list__i">
                                                     <ul>
+                                                        {% if filters.has('shares') %}
+                                                            <li>
+                                                                <a href="{{ filters.replaceQueryParameter('shares') }}"
+                                                                   class="remove"></a><strong>Акции</strong>
+                                                            </li>
+                                                        {% endif %}
+
                                                         {% for filter_item in data.characteristics %}
                                                             {% if app.request.get(filter_item.id) %}
                                                                 {% for param in filter_item.characteristicValues %}
                                                                     {% set checked_array = app.request.get(filter_item.id)|split(',') %}
                                                                     {% if param.id in checked_array %}
                                                                         <li>
-                                                                            <a href="{{ filters.removeQueryParameter(filter_item.id, param.id) }}" class="remove"></a>
-                                                                            <strong>{{ filter_item.name }}:</strong> {{ param.name }}
+                                                                            <a href="{{ filters.removeQueryParameter(filter_item.id, param.id) }}"
+                                                                               class="remove"></a>
+                                                                            <strong>{{ filter_item.name }}
+                                                                                :</strong> {{ param.name }}
                                                                         </li>
                                                                     {% endif %}
                                                                 {% endfor %}
@@ -49,14 +60,16 @@
                                                         {% endfor %}
                                                         {% if data.filters.price_from != data.price_filter.min_price %}
                                                             <li>
-                                                                <a href="{{ filters.replaceQueryParameter('price_from', data.price_filter.min_price|round) }}" class="remove"></a>
+                                                                <a href="{{ filters.replaceQueryParameter('price_from', data.price_filter.min_price|round) }}"
+                                                                   class="remove"></a>
                                                                 <strong>Цена от:</strong>
                                                                 {{ app.request.get('price_from') ? app.request.get('price_from') : data.price_filter.min_price }}
                                                             </li>
                                                         {% endif %}
                                                         {% if data.filters.price_to != data.price_filter.max_price %}
                                                             <li>
-                                                                <a href="{{ filters.replaceQueryParameter('price_to', data.price_filter.max_price|round) }}" class="remove"></a>
+                                                                <a href="{{ filters.replaceQueryParameter('price_to', data.price_filter.max_price|round) }}"
+                                                                   class="remove"></a>
                                                                 <strong>Цена до:</strong>
                                                                 {{ app.request.get('price_to') ? app.request.get('price_to') : data.price_filter.max_price }}
                                                             </li>
@@ -64,8 +77,10 @@
 
                                                         {% for color in filters.selectedColors(data) %}
                                                             <li>
-                                                                <a href="{{ filters.removeQueryParameter('colors', color.id) }}" class="remove"></a><strong>Цвет:</strong> {{ color.name }}
-                                                                <span class="color" style="background: {{ color.hex }}"></span>
+                                                                <a href="{{ filters.removeQueryParameter('colors', color.id) }}"
+                                                                   class="remove"></a><strong>Цвет:</strong> {{ color.name }}
+                                                                <span class="color"
+                                                                      style="background: {{ color.hex }}"></span>
                                                             </li>
                                                         {% endfor %}
                                                     </ul>
@@ -77,6 +92,21 @@
 
                                 <form class="filters" id="filters">
                                     <div class="filters__i">
+                                        {% if not is_granted('ROLE_WHOLESALER') and not filters.has('shares') %}
+                                            {% if filters.get('share') %}
+                                                <input type="hidden" name="share" value="{{ filters.get('share') }}"/>
+                                            {% endif %}
+                                            <div class="sale">
+                                                <ul class="check-fltr">
+                                                    <li>
+                                                        <label class="filter-check">
+                                                            <input type="checkbox" class="checkbox" name="shares"
+                                                                   value="any" />
+                                                            <span class="f-check"></span> Акции <i></i></label></li>
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+
                                         <div class="price-slider">
                                             <p>Цена (грн)</p>
                                             <div class="price-slider__i">
