@@ -21,7 +21,7 @@ class UsersAdmin extends BaseUserAdmin
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
-        $query->andWhere('o.roles LIKE :role')->setParameter('role', '%'.$this->userRole.'%');
+        $query->andWhere('o.roles LIKE :role')->setParameter('role', '%' . $this->userRole . '%');
         return $query;
     }
 
@@ -35,8 +35,7 @@ class UsersAdmin extends BaseUserAdmin
             ->add('name')
             ->add('surname')
             ->add('email')
-            ->end()
-            // .. more info
+            ->end()// .. more info
         ;
     }
 
@@ -51,24 +50,24 @@ class UsersAdmin extends BaseUserAdmin
             ->add('email')
             ->add('name')
             ->add('surname')
-            ->add('plainPassword', 'text', ['required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))])
-            ->end()
-            // .. more info
-        ;
+            ->add('plainPassword', 'text', [
+                'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
+            ])
+            ->end();
 
         if (!$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
             $formMapper
                 ->with('Management')
-                ->add('roles', 'sonata_security_roles', array(
+                ->add('roles', 'sonata_security_roles', [
                     'expanded' => true,
                     'multiple' => true,
                     'required' => false
-                ))
-                ->add('locked', null, array('required' => false))
-                ->add('grayListFlag', null, array('required' => false))
-                ->add('enabled', null, array('required' => false))
-                ->end()
-            ;
+                ])
+                ->add('locked', null, ['required' => false])
+                ->add('grayListFlag', null, ['required' => false])
+                ->add('discount', null, ['required' => false])
+                ->add('enabled', null, ['required' => false])
+                ->end();
         }
     }
 
@@ -82,9 +81,9 @@ class UsersAdmin extends BaseUserAdmin
             ->add('name')
             ->add('surname')
             ->add('locked')
-            ->add('email')
-        ;
+            ->add('email');
     }
+
     /**
      * {@inheritdoc}
      */
@@ -94,9 +93,8 @@ class UsersAdmin extends BaseUserAdmin
             ->addIdentifier('email')
             ->add('name')
             ->add('surname')
-            ->add('enabled', null, array('editable' => true))
-            ->add('locked', null, array('editable' => true))
-            ->add('createTime')
-        ;
+            ->add('enabled', null, ['editable' => true])
+            ->add('locked', null, ['editable' => true])
+            ->add('createTime');
     }
 }
