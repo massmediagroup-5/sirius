@@ -212,6 +212,7 @@ class PricesCalculator
                     $price = $price - ceil($price * 0.1);
                 }
             }
+            $price -= $price * $user->getDiscount() * 0.01;
             return $price;
         }
 
