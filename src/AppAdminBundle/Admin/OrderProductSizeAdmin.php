@@ -22,18 +22,44 @@ class OrderProductSizeAdmin extends Admin
      */
     protected $parentAssociationMapping = 'order';
 
+
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('order.type', 'doctrine_orm_choice', array('label' => 'Тип заказа'),
+                'choice',
+                [
+                    'choices' => [
+                        '' => 'Не указанно',
+                        (string)Orders::TYPE_NORMAL => 'Обычный',
+                        (string)Orders::TYPE_QUICK => 'Быстрый',
+                    ]
+                ]
+            )
+            ->add('order.status', null, [
+                'label' => 'Статус заказа'
+            ])
+            ->add('order.users', null, [
+                'label' => 'Пользователи'
+            ])
+        ;
+    }
+
+
     /**
      * @param ListMapper $listMapper
      */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->addIdentifier('order.fio', null, ['label' => 'Ф.И.О.'])
-            ->addIdentifier('order.phone', null, ['label' => 'Телефон'])
+//            ->add('id')
             ->add('order.type', 'choice', [
                 'label' => 'Тип заказа',
                 'choices' => [
+                    '' => 'Не указанно',
                     (string)Orders::TYPE_NORMAL => 'Обычный',
                     (string)Orders::TYPE_QUICK => 'Быстрый',
                 ]
@@ -41,11 +67,17 @@ class OrderProductSizeAdmin extends Admin
             ->add('order.status.name', null, [
                 'label' => 'Статус заказа'
             ])
+            ->add('size.model.products.article', null, ['label' => 'Размер'])
+            ->add('size.model.products.name', null, ['label' => 'Название'])
+            ->add('size.model.productColors.name', null, ['label' => 'Цвет'])
+            ->add('quantity', null, ['label' => 'Количество'])
+            ->add('totalPrice', 'text', ['label' => 'Цена'])
+            ->add('discountedTotalPrice', 'text', ['label' => 'Цена со скидкой'])
             ->add('createTime', null, ['label' => 'Дата создания(заказа)'])
             ->add('updateTime', null, ['label' => 'Дата последнего редактирования(заказа)'])
             ->add('_action', 'actions', [
                 'actions' => [
-                    'show' => [],
+//                    'show' => [],
                     'delete' => [],
                 ]
             ]);
@@ -61,7 +93,7 @@ class OrderProductSizeAdmin extends Admin
         $formMapper
             ->add('size.model.products.article', null, ['label' => 'Размер', 'disabled' => true])
             ->add('size.model.products.name', null, ['label' => 'Размер', 'disabled' => true])
-            ->add('size.model.productColors.name', null, ['label' => 'Размер', 'disabled' => true])
+            ->add('size.model.productColors.name', null, ['label' => 'Цвет', 'disabled' => true])
             ->add('size.size', null, ['label' => 'Размер', 'disabled' => true])
             ->add('quantity', null, ['label' => 'Количество', 'disabled' => true])
             ->add('totalPrice', 'text', ['label' => 'Цена', 'disabled' => true])

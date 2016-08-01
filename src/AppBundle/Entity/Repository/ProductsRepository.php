@@ -509,8 +509,11 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             $colors = explode(',', $colors);
             $builder->andWhere($builder->expr()->in("$alias.productColors", $colors));
         }
-        if ($shareId = Arr::get($filters, 'share')) {
-            $builder->andWhere('share.id = :shareId')->setParameter('shareId', $shareId);
+        if ($share = Arr::get($filters, 'share')) {
+            $builder->andWhere('share.id = :shareId')->setParameter('shareId', $share);
+        }
+        if ($shares = Arr::get($filters, 'shares')) {
+            $builder->andWhere('share.id IS NOT NULL');
         }
 
         return $builder;

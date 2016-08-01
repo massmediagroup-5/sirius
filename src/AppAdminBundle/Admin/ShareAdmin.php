@@ -117,7 +117,8 @@ class ShareAdmin extends Admin
             ->with('Акция', ['class' => 'col-md-12'])
             ->add('name', null, ['label' => 'Имя'])
             ->add('description', null, ['label' => 'Описание', 'attr' => ['class' => 'ckeditor']])
-                ->add('startTime', 'sonata_type_datetime_picker', [
+            ->add('terms', null, ['label' => 'Условия акции', 'attr' => ['class' => 'ckeditor']])
+            ->add('startTime', 'sonata_type_datetime_picker', [
                 'label' => 'Время начала',
                 'dp_language'=>'ru',
                 'format'=>'dd-MM-yy HH:mm']
@@ -153,7 +154,7 @@ class ShareAdmin extends Admin
                     )
                 )
             ))
-            ->add('status', null, ['label' => 'Статус', 'required' => false])
+            ->add('status', null, ['label' => 'Статус публікації', 'required' => false])
             ->add('className', 'choice', [
                 'label' => 'Имя класса',
                 'choices' => $classNames,

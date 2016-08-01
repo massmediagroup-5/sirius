@@ -126,8 +126,7 @@ AppBundle\Entity\ProductModels:
             targetEntity: ProductColors
             cascade: {  }
             fetch: EAGER
-            mappedBy: null
-            inversedBy: null
+            inversedBy: models
             joinColumns:
                 product_colors_id:
                     referencedColumnName: id
