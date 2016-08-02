@@ -87,9 +87,11 @@ class OrdersAdmin extends Admin
             ])
             ->add('cancel_order', $this->getRouterIdParameter() . '/cancel_order')
             ->add('cancel_order_change', $this->getRouterIdParameter() . '/cancel_order_change/{history_id}');
-        if($this->statusName == 'waiting_for_departure')
-        {
+        if ($this->statusName == 'waiting_for_departure') {
             $collection->add('ajax_create_waybill', $this->getRouterIdParameter() . '/ajax_create_waybill', [], [], [
+                'expose' => true
+            ])
+            ->add('ajax_update_waybill', $this->getRouterIdParameter() . '/ajax_update_waybill', [], [], [
                 'expose' => true
             ])
             ->add('ajax_print_waybill', $this->getRouterIdParameter() . '/ajax_print_waybill', [], [], [
@@ -295,6 +297,7 @@ class OrdersAdmin extends Admin
             ->end();
         if($this->statusName == 'waiting_for_departure')
         {
+            $ttn = $date = '';
             if($this->subject->getTtn()){
                 $api = $this->modelManager
                     ->getEntityManager('AppBundle:Novaposhta')
@@ -306,18 +309,19 @@ class OrdersAdmin extends Admin
 
                 $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocument();
                 $data->setRef($this->subject->getTtn());
-                $ttn = InternetDocument::getDocument($data)->data[0];
+                $document = InternetDocument::getDocument($data);
+                if ($document->data) {
+                    $ttn = $document->data[0];
 
-                $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocumentDeliveryDate();
-                $data->setDateTime($ttn->DateTime);
-                $data->setCitySender($ttn->CitySenderRef);
-                $data->setCityRecipient($ttn->CityRecipientRef);
-                $data->setServiceType($ttn->ServiceTypeRef);
-                $date = InternetDocument::getDocumentDeliveryDate($data)->data[0]->DeliveryDate;
-            }else {
-                $ttn = '';
-                $date = '';
+                    $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocumentDeliveryDate();
+                    $data->setDateTime($ttn->DateTime);
+                    $data->setCitySender($ttn->CitySenderRef);
+                    $data->setCityRecipient($ttn->CityRecipientRef);
+                    $data->setServiceType($ttn->ServiceTypeRef);
+                    $date = InternetDocument::getDocumentDeliveryDate($data)->data[0]->DeliveryDate;
+                }
             }
+
             $formMapper->tab('ТТН', [
                 'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
                 'object' => $this->getSubject(),

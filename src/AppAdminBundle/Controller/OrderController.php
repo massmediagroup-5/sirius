@@ -326,6 +326,22 @@ class OrderController extends BaseController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
+    public function ajaxUpdateWaybillAction(Request $request)
+    {
+        $orderObject = $this->admin->getSubject();
+        $orderObject->setTtn($request->get('np_ttn'));
+
+        $this->getDoctrine()->getManager()->persist($orderObject);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->renderJson([]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function ajaxPrintWaybillAction(Request $request)
     {
         // Получаем ключ апи с базы и конфигуруем прослойку для работы с апи
