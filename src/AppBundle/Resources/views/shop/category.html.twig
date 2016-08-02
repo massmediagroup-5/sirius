@@ -22,6 +22,11 @@
                 <h2 class="catalog-title">
                     {{ data.category.name }} <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
                 </h2>
+                {% if data.share %}
+                    <div class="catalog-action">
+                        {{ include('AppBundle:share/partials/_item.html.twig', { share: data.share, hideMore: true }) }}
+                    </div>
+                {% endif %}
                 <div class="catalog">
                     <div class="catalog__i">
 
