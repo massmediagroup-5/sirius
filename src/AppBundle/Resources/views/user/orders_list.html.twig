@@ -46,9 +46,14 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <p class="name"><a href="#">{{ size.size.model.products.name }}</a></p>
-                                                        <p class="description">Цвет {{ size.size.model.productColors.name }}</p>
-                                                        <p class="description">(Артикул: {{ size.size.model.products.article }})</p>
+                                                        <p class="name"><a
+                                                                    href="#">{{ size.size.model.products.name }}</a></p>
+                                                        <p class="description">
+                                                        Цвет {{ size.size.model.productColors.name }}, размер
+                                                            {{ size.size.size }}
+                                                        </p>
+                                                        <p class="description">
+                                                            (Артикул: {{ size.size.model.products.article }})</p>
                                                     </td>
                                                     <td>
                                                         <p class="title">Количество</p>
@@ -118,7 +123,8 @@
 
                                     <div class="item">
                                         <p>Адрес склада:	</p>
-                                        <p><strong>{{ order.cities.name }}, {{ order.stores.name }}</strong></p>
+                                        <p><strong>{{ order.cities ? order.cities.name : 'город не выбран' }},
+                                                {{ order.stores ? order.stores.name : 'склад не выбран' }}</strong></p>
                                     </div>
 
                                     <div class="item">
@@ -131,7 +137,7 @@
                                         <div class="item-history">
                                             <ul>
                                                 {% for historyItem in order.history %}
-                                                    <li>{{ historyItem.createTime.format('Y-m-d H:i') }} &nbsp; {{ historyItem.text }}</li>
+                                                    {{ widget('orders.historyItem', historyItem)|raw }}
                                                 {% endfor %}
                                             </ul>
                                         </div>

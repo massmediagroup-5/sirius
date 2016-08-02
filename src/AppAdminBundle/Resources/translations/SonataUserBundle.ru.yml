@@ -9,3 +9,4 @@ form:
   label_surname: Фамилия
   label_gray_list_flag: Серый список
   label_discount: Скидка %
+  label_bonuses: Бонусы

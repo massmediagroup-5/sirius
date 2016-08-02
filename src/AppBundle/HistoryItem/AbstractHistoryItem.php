@@ -75,6 +75,14 @@ abstract class AbstractHistoryItem
     }
 
     /**
+     * @return OrderHistory
+     */
+    public function getEntity()
+    {
+        return $this->history;
+    }
+
+    /**
      * @return mixed
      */
     abstract protected function makeRollback();

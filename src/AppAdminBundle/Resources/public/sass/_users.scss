@@ -1,0 +1,309 @@
+.user-orders {
+    .user-orders__i {
+        > .item {
+            margin-bottom: 20px;
+            border: 1px solid #9a9b9b;
+
+            &:hover {
+                @include box-shadow(0 0 17px rgba(0, 0, 0, 0.4));
+            }
+
+            &.active {
+                table {
+                    .order-num {
+                        &:after {
+                            @include rotate(180);
+                            margin-top: -3px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .item__i {
+        padding: 0 20px 0;
+        @include border-box();
+
+        > table {
+            td {
+                height: 52px;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .order-item {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-top: 1px solid #eeeeee;
+        margin-left: 20px;
+        margin-right: 20px;
+        &:first-child {
+            border-top: 0;
+        }
+    }
+
+    table {
+        width: 100%;
+
+        td {
+            &:nth-child(1) {
+                width: 150px;
+            }
+            &:nth-child(2) {
+                width: 230px;
+            }
+            &:nth-child(3) {
+                width: 240px;
+            }
+            &:nth-child(4) {
+                width: 170px;
+
+                span {
+                    color: #9a9b9b;
+                }
+
+                &.error {
+                    color: #fb3f4c;
+                }
+            }
+        }
+        .order-num {
+            color: #4ca7ed;
+            position: relative;
+            padding-left: 25px;
+
+            &:after {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 50%;
+                @include sized-sprite($icons, order-arr-down);
+                @include translate(0, -50%);
+            }
+        }
+
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .drop-table {
+        min-height: 260px;
+        border-bottom: 1px solid #eeeeee;
+
+    }
+
+    .item-drop {
+        border-top: 1px solid #eeeeee;
+        display: none;
+
+        table {
+            width: 100%;
+
+            td {
+                color: #050505;
+
+                &:nth-child(1) {
+                    width: 90px;
+                    text-align: center;
+                }
+                &:nth-child(2) {
+                    width: 220px;
+                }
+                &:nth-child(3) {
+                    width: 84px;
+                    text-align: center;
+                }
+                &:nth-child(4) {
+                    width: 160px;
+                    padding-left: 10px;
+                    text-align: center;
+
+                }
+            }
+        }
+
+        .title {
+            padding-bottom: 18px;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+            font-family: $lato;
+        }
+
+        .val {
+            font-family: $latoBlack;
+            font-size: 16px;
+            line-height: 18px;
+        }
+    }
+
+    .item-drop {
+        @extend .clearfix;
+    }
+
+    .name {
+        padding-bottom: 3px;
+        a {
+            font-size: 16px;
+            line-height: 20px;
+            font-family: $lato;
+            color: #050505;
+        }
+    }
+    .description {
+        color: #9a9b9b;
+        font-size: 12px;
+        line-height: 14px;
+    }
+    .col {
+        @include border-box();
+        width: 31%;
+        float: left;
+
+        &:first-child {
+            width: 69%;
+            padding-left: 0;
+            padding-right: 0;
+            border-right: 1px solid #eeeeee;
+
+            .col__i {
+                padding-left: 0;
+                padding-right: 0;
+                padding-top: 0;
+            }
+        }
+    }
+
+    .col__i {
+        padding: 30px 30px 15px;
+
+    }
+    .price {
+        p {
+            font-size: 16px;
+            line-height: 18px;
+            color: #050505;
+            font-weight: 400;
+            font-family: $latoBold;
+        }
+
+        &.price_new {
+            p {
+                color: #c53622;
+
+                strong {
+                    text-decoration: line-through;
+                    font-weight: 400;
+                    font-family: $lato;
+                    font-size: 12px;
+                    color: #050505;
+
+                }
+            }
+        }
+    }
+
+    .info {
+        .item {
+            padding: 0 0 10px;
+            margin: 0;
+            border: 0;
+        }
+        p {
+            color: #9a9b9b;
+            font-size: 16px;
+            line-height: 18px;
+            font-family: $lato;
+            font-weight: 400;
+            padding-bottom: 5px;
+
+            strong {
+                font-weight: 400;
+                font-size: 14px;
+                color: #050505;
+                line-height: 16px;
+            }
+        }
+        .item-history {
+            max-height: 200px;
+            overflow-y: scroll;
+            li {
+                font-weight: 400;
+                font-size: 14px;
+                color: #050505;
+                line-height: 16px;
+                margin-bottom: 10px;
+                list-style-type: none;
+                &:before {
+                    display: inline-block;
+                    content: '⚫';
+                    padding-right: 5px;
+                }
+            }
+        }
+    }
+}
+
+.total-item-wrap {
+    @extend .clearfix;
+    padding-top: 15px;
+    padding-right: 30px;
+    .total-item {
+        float: right;
+        max-width: 300px;
+
+        table {
+            width: 100%;
+
+            tr {
+                td {
+                    &:nth-child(2) {
+                        font-size: 16px;
+                        line-height: 24px;
+                        font-family: $latoBold;
+                    }
+                }
+                &.discount-row {
+                    td {
+                        color: #c53622;
+                        &:nth-child(2) {
+                            font-size: 16px;
+                            line-height: 24px;
+                            font-family: $latoBold;
+                        }
+                    }
+                }
+                &:last-child {
+                    td {
+                        padding-bottom: 0 !important;
+
+                        &:nth-child(2) {
+                            font-size: 22px;
+                            line-height: 24px;
+                            font-family: $latoBold;
+                        }
+                    }
+                }
+            }
+
+            td {
+                text-align: left !important;
+                width: 40% !important;
+                font-family: $lato;
+                color: #050505;
+                font-size: 14px;
+                line-height: 24px;
+                padding-bottom: 20px !important;
+                &:nth-child(2) {
+                    width: 60% !important;
+                    text-align: right !important;
+                }
+            }
+        }
+    }
+}

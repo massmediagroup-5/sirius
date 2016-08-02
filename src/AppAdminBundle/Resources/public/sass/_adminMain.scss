@@ -366,3 +366,12 @@ input#image_upload_file {
 .lb-image{
     max-width: inherit !important;
 }
+
+.clearfix {
+    &:before, &:after {
+        content: "\0020";
+        display: block;
+        height: 0;
+        visibility: hidden;
+    }
+}
