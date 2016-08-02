@@ -11,3 +11,6 @@ services:
     widgets.products:
         class: AppBundle\Widgets\Products
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    widgets.orders:
+        class: AppBundle\Widgets\Orders
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]

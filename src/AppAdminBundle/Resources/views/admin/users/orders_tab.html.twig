@@ -1,0 +1,156 @@
+{% if admin.subject.orders %}
+    <div class="user-orders">
+        <div class="user-orders__i">
+            {% for order in admin.subject.orders %}
+                <div class="item">
+                    <div class="item__i">
+                        <table>
+                            <tr>
+                                <td>
+                                    <a href="#" class="order-num">№ {{ order.id }}</a>
+                                </td>
+                                <td>
+                                    {{ order.createTime|format_datetime }}
+                                </td>
+                                <td>
+                                    {{ order.quantity }} {{ 'labels.cart_products'|transchoice(order.quantity) }} на
+                                    сумму {{ order.discountedTotalPrice }} грн.
+                                </td>
+                                <td>
+                                    <span>Статус заказа:</span> {{ order.status.name }} {# todo add status #}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="item-drop clearfix">
+                        <div class="item-drop__i">
+                            <div class="col">
+                                <div class="col__i">
+                                    <div class="drop-table">
+                                        {% for size in order.sizes %}
+                                            <div class="order-item">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="prod-img">
+                                                                {% if size.size.model.images.0 is defined %}
+                                                                    <img src="{{ size.size.model.images.0.link | imagine_filter('on_wholesale_cart_page') }}"/>
+                                                                {% else %}
+                                                                    <img src="{{ param('no_image') | imagine_filter('on_wholesale_cart_page') }}"/>
+                                                                {% endif %}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <p class="name"><a
+                                                                        href="#">{{ size.size.model.products.name }}</a>
+                                                            </p>
+                                                            <p class="description">
+                                                                Цвет {{ size.size.model.productColors.name }}, размер
+                                                                {{ size.size.size }}
+                                                            </p>
+                                                            <p class="description">
+                                                                (Артикул: {{ size.size.model.products.article }})</p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="title">Количество</p>
+                                                            <p class="val">{{ size.quantity }}</p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="title">Сумма</p>
+                                                            <div class="price price_new">
+                                                                <p>{{ size.discountedTotalPrice }} грн.
+                                                                    {% if size.discountedTotalPrice != size.totalPrice %}
+                                                                        <strong>{{ size.totalPrice }} грн.</strong>
+                                                                    {% endif %}
+                                                                </p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="total-item-wrap">
+                                        <div class="total-item">
+                                            <table>
+                                                <tr>
+                                                    <td>Итого</td>
+                                                    <td>{{ order.totalPrice|format_price }} грн.</td>
+                                                </tr>
+                                                <tr class="discount-row">
+                                                    <td>Скидка</td>
+                                                    <td>{{ order.discount|format_price }} грн.</td>
+                                                </tr>
+                                                {% if order.individualDiscount %}
+                                                    <tr class="discount-row">
+                                                        <td>Индивидуальная скидка</td>
+                                                        <td>{{ order.individualDiscount|format_price }} грн.</td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td>Сумма к оплате</td>
+                                                    <td>{{ order.individualDiscountedTotalPrice|format_price }}грн.
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col">
+
+                                <div class="col__i">
+                                    <div class="info">
+                                        <div class="item">
+                                            <p>Оплата:</p>
+                                            <p><strong>{{ humanizer.orderPayType(order) }}</strong></p>
+                                        </div>
+
+                                        <div class="item">
+                                            <p>Имя и фамилия</p>
+                                            <p><strong>{{ order.fio }}</strong></p>
+                                        </div>
+
+                                        <div class="item">
+                                            <p>Номер мобильного</p>
+                                            <p><strong>{{ order.phone }}</strong></p>
+                                        </div>
+
+                                        <div class="item">
+                                            <p>Адрес склада: </p>
+                                            <p><strong>{{ order.cities ? order.cities.name : 'город не выбран' }},
+                                                    {{ order.stores ? order.stores.name : 'склад не выбран' }}</strong></p>
+                                        </div>
+
+                                        <div class="item">
+                                            <p>E-mail:</p>
+                                            <p><strong>{{ order.users.email }}</strong></p>
+                                        </div>
+
+                                        <div class="item">
+                                            <p>История:</p>
+                                            <div class="item-history">
+                                                <ul>
+                                                    {% for historyItem in order.history %}
+                                                        {{ widget('orders.historyItem', historyItem)|raw }}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div class="filter-no-results lk-opt">
+        <p>У Вас пока нет заказов</p>
+    </div>
+{% endif %}

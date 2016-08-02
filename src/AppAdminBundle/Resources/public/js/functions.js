@@ -70,3 +70,14 @@ var extend = function (child, parent) {
         return child;
     },
     hasProp = {}.hasOwnProperty;
+
+function equalHeight(group) {
+    var tallest = 0;
+    group.each(function () {
+        thisHeight = $(this).height();
+        if (thisHeight > tallest) {
+            tallest = thisHeight;
+        }
+    });
+    group.height(tallest);
+}

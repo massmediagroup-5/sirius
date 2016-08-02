@@ -63,10 +63,13 @@ class UsersAdmin extends BaseUserAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $this->setTemplate('edit', 'AppAdminBundle:admin:user_edit.html.twig');
 
         $formMapper
-            ->with('General')
+            ->tab('Общее')
+            ->with('Общее')
             ->add('email')
+            ->add('phone')
             ->add('name')
             ->add('surname')
             ->add('plainPassword', 'text', [
@@ -84,10 +87,18 @@ class UsersAdmin extends BaseUserAdmin
                 ])
                 ->add('locked', null, ['required' => false])
                 ->add('grayListFlag', null, ['required' => false])
-                ->add('discount', null, ['required' => false])
                 ->add('enabled', null, ['required' => false])
                 ->end();
         }
+        $formMapper
+            ->end()
+            ->tab('Заказы', ['tab_template' => 'AppAdminBundle:admin:users/orders_tab.html.twig'])
+            ->end()
+            ->tab('Бонусы')
+            ->with('Бонусы')
+            ->add('discount', null, ['required' => false])
+            ->add('bonuses', null, ['required' => false])
+            ->end();
     }
 
     /**
