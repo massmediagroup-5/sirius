@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class EntityBeforeSaveSubscriber
+ * Class EntityEventsSubscriber
  * @package AppBundle\Listener
  */
 class ShareGroupListener implements EventSubscriberInterface
