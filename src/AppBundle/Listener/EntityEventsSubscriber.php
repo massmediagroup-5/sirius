@@ -10,6 +10,7 @@ use AppBundle\Entity\ProductModelImage;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
+use AppBundle\Entity\SiteParams;
 use Doctrine\Common\EventSubscriber;
 use AppBundle\Entity\Orders;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -86,6 +87,9 @@ class EntityEventsSubscriber implements EventSubscriber
             case ProductColors::class:
             case Categories::class:
                 $em->getConfiguration()->getResultCacheImpl()->deleteAll();
+                break;
+            case SiteParams::class:
+                $this->container->get('cache')->delete('options');
                 break;
         }
     }
