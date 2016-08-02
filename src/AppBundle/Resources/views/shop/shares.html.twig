@@ -33,8 +33,7 @@
 
                         <div class="item-list">
                             {% for share in shares %}
-                                <div class="item item_center">
-                                    <a href="#">
+                                <div class="item item_center">                                   
                                         <div class="item__i" style="background-image: url('/img/shares/{{ share.image }}')">
 
                                             <div class="flag flag_discount">
@@ -56,15 +55,18 @@
                                             {{ include('AppBundle:share/counter.html.twig', {share: share}) }}
 
                                             <div class="btn-wrap">
+												<a href="#detail-popup" class="detail popup_js">Подробнее</a>
                                                 <a href="{{ url_to(share) }}" class="btn btn_black_transparent">узнать больше</a>
                                             </div>
                                             {#ПОЧАТОК ТЕКСТ УМОВИ#}
                                             {{ share.terms }}
                                             {#КІНЕЦЬ ТЕКСТ УМОВИ#}
                                         </div>
-                                    </a>
                                 </div><!--item end-->
-                            {% endfor %}
+								<div id="#detail-popup" class="text-popup">
+									<div class="text-popup__i">Lorem ipsum curabitur integer et nibh at nec sagittis bibendum porttitor bibendum ornare, gravida: nam porttitor pharetra quam.</div>
+								</div>
+							{% endfor %}
                         </div>
 
                         {% if shares.pageCount > 1 %}
