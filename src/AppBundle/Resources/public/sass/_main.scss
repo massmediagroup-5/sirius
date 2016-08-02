@@ -7311,6 +7311,10 @@ input[type="checkbox"] {
 		}
 	}
 }
+.catalog-action {
+	@extend .action-list;
+	padding-bottom: 20px;
+}
 
 .share-counter-wrap {
 	right: 20px;

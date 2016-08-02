@@ -33,37 +33,7 @@
 
                         <div class="item-list">
                             {% for share in shares %}
-                                <div class="item item_center">
-                                    <a href="#">
-                                        <div class="item__i" style="background-image: url('/img/shares/{{ share.image }}')">
-
-                                            <div class="flag flag_discount">
-                                                <div class="flag__i">
-                                                    <p>
-                                                        {% if share.sizesGroups.count() == 1 %}
-                                                            {{ share.sizesGroups.first.discount }}%
-                                                        {% else %}
-                                                            Акция
-                                                        {% endif %}
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <div class="title">
-                                                <div class="title__i">{{ share.description|raw }}</div>
-                                            </div>
-
-                                            {{ include('AppBundle:share/counter.html.twig', {share: share}) }}
-
-                                            <div class="btn-wrap">
-                                                <a href="{{ url_to(share) }}" class="btn btn_black_transparent">узнать больше</a>
-                                            </div>
-                                            {#ПОЧАТОК ТЕКСТ УМОВИ#}
-                                            {{ share.terms }}
-                                            {#КІНЕЦЬ ТЕКСТ УМОВИ#}
-                                        </div>
-                                    </a>
-                                </div><!--item end-->
+                                {{ include('AppBundle:share/partials/_item.html.twig', { share: share }) }}
                             {% endfor %}
                         </div>
 

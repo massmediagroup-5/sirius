@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Entity as Entity;
 
@@ -126,7 +127,13 @@ class Entities
             }
         }
 
-        return compact('category', 'characteristicValues', 'products', 'characteristics', 'price_filter', 'colors', 'filters');
+        if ($share = Arr::get($filters, 'share')) {
+            $share = $this->em->getRepository('AppBundle:Share')->find($share);
+        }
+
+
+        return compact('category', 'characteristicValues', 'products', 'characteristics', 'price_filter', 'colors',
+            'filters', 'share');
     }
 
     /**
