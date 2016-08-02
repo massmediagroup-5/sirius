@@ -20,14 +20,20 @@
 
             {{ include('AppBundle:share/counter.html.twig', {share: share}) }}
 
-            {% if hideMore is not defined %}
-                <div class="btn-wrap">
+            <div class="btn-wrap">
+                {% if share.terms %}
+                    <a href="#detail-popup-{{ share.id }}" class="detail popup_js">Подробнее</a>
+                {% endif %}
+                {% if hideMore is not defined %}
                     <a href="{{ url_to(share) }}" class="btn btn_black_transparent">узнать больше</a>
-                </div>
-            {% endif %}
-            {#ПОЧАТОК ТЕКСТ УМОВИ#}
-            {{ share.terms }}
-            {#КІНЕЦЬ ТЕКСТ УМОВИ#}
+                {% endif %}
+            </div>
         </div>
     </a>
 </div><!--item end-->
+
+<div class="hidden">
+    <div id="detail-popup-{{ share.id }}" class="text-popup">
+        <div class="text-popup__i">{{ share.terms|raw }}</div>
+    </div>
+</div>

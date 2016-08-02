@@ -7290,6 +7290,26 @@ input[type="checkbox"] {
 			}
 		}
 	}
+	
+	.btn-wrap {
+		a.detail {
+		    position: absolute;
+		    bottom: 20px;
+		    left: 0;
+		    color: #fff;
+		    background: #4ca7ed;
+		    line-height: 26px;
+		    padding: 0 15px;
+		    font-size: 17px;
+		    &:after {
+			 content:"\203A"; 
+			 padding-left: 4px;
+			}
+			&:hover {
+			 background: #3D91D2;
+			}
+		}	
+	}
 
 	.btn {
 		right: 20px;
