@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity\Repository;
 
+use AppBundle\Entity\ProductModels;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Illuminate\Support\Arr;
@@ -303,7 +304,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getProductInfoByAlias($modelAlias)
     {
-        $query_obj = $this->createQueryBuilder('prod')
+        $cacheKey = "get_product_by_alias_$modelAlias";
+
+        return $this->createQueryBuilder('prod')
             ->select('prod')
             ->leftJoin('prod.actionLabels', 'act')->addselect('act')
             ->innerJoin('prod.productModels', 'prodMod')->addselect('prodMod')
@@ -313,9 +316,23 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('prodChVal.characteristics', 'prodChName')->addselect('prodChName')
             ->innerJoin('prodMod.productColors', 'prodCol')->addselect('prodCol')
             ->leftJoin('prodMod.images', 'prodMImg')->addselect('prodMImg')
+            ->leftJoin('prodMod.sizes', 'specific_sizes')->addselect('specific_sizes')
+            ->leftJoin('specific_sizes.size', 'sizes')->addselect('sizes')
             ->where('prod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
-            ->setParameter('alias', $modelAlias);
-        return $query_obj->getQuery()->getSingleResult();
+            ->setParameter('alias', $modelAlias)
+            ->getQuery()
+            ->useResultCache(true, 3600, $cacheKey)
+            ->getSingleResult();
+    }
+
+    /**
+     * @param $model
+     */
+    public function clearGetProductInfoByAliasCache(ProductModels $model)
+    {
+        $cacheKey = "get_product_by_alias_{$model->getAlias()}";
+
+        $this->_em->getConfiguration()->getResultCacheImpl()->delete($cacheKey);
     }
 
     /**

@@ -3,18 +3,25 @@
 namespace AppBundle\Listener;
 
 
+use AppBundle\Entity\Categories;
 use AppBundle\Entity\OrderProductSize;
+use AppBundle\Entity\ProductColors;
+use AppBundle\Entity\ProductModelImage;
+use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\ProductModelSpecificSize;
+use AppBundle\Entity\Products;
 use Doctrine\Common\EventSubscriber;
 use AppBundle\Entity\Orders;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class EntityBeforeSaveSubscriber
+ * Class EntityEventsSubscriber
  * @package AppBundle\Listener
  */
-class EntityBeforeSaveSubscriber implements EventSubscriber
+class EntityEventsSubscriber implements EventSubscriber
 {
     /**
      * @var ContainerInterface
@@ -58,8 +65,28 @@ class EntityBeforeSaveSubscriber implements EventSubscriber
                 $this->container->get('order')->sendStatusInfo($entity);
                 $this->container->get('order')->processOrderChanges($entity);
             }
+            $this->clearCache($entity);
         }
 
         $uow->computeChangeSets();
+    }
+
+    private function clearCache($entity)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        switch (get_class($entity)) {
+            case ProductModelImage::class:
+            case ProductModelSpecificSize::class:
+                $em->getRepository('AppBundle:Products')->clearGetProductInfoByAliasCache($entity->getModel());
+                break;
+            case ProductModels::class:
+                $em->getRepository('AppBundle:Products')->clearGetProductInfoByAliasCache($entity);
+                break;
+            case Products::class:
+            case ProductColors::class:
+            case Categories::class:
+                $em->getConfiguration()->getResultCacheImpl()->deleteAll();
+                break;
+        }
     }
 }
