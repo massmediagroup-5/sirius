@@ -764,7 +764,7 @@ class ProductModels
 
     /**
      * Return Share when all sizes has share
-     * @return ShareSizesGroup|null
+     * @return Share|null
      */
     public function getShare()
     {

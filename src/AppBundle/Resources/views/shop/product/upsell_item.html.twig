@@ -1,0 +1,19 @@
+<div class="item">
+    <a href="#">
+        <div class="item__i">
+            <div class="flag {{ flagClass }}">
+                <div class="flag__i"><p>{{ flagContent }}</p></div>
+            </div>
+            <div class="img">
+                <img src="{{ (model.images.0.link ?: param('no_image')) | imagine_filter('medium') }}" />
+            </div>
+            <div class="info">
+                <div class="info__i">
+                    <p><strong>Befree</strong></p>
+
+                    <p>250 грн.</p>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>

@@ -155,9 +155,10 @@
             success: function (data) {
                     location.reload();
             },
-            error: function (message) {
-                console.log(message.status + ' ' + message.statusText);
-                return false;
+            error: function (data) {
+                if (data.status == 422) {
+                    alert(data.responseJSON.message);
+                }
             }
         });
         return false;
