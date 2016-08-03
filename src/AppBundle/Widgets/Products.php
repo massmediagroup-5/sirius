@@ -4,6 +4,7 @@ namespace AppBundle\Widgets;
 
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
+use AppBundle\Entity\ShareSizesGroup;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
 use AppBundle\Form\Type\ChangeProductSizeType;
 use AppBundle\Form\Type\RemoveProductSizeType;
@@ -112,6 +113,35 @@ class Products
                 'recommended' => $productModels->getRecommended()
             ]
         );
+    }
+
+    /**
+     * render model recommended
+     *
+     * @param ProductModels $model
+     * @return mixed
+     */
+    public function upsell(ProductModels $model)
+    {
+        if ($this->container->get('share')->isActualUpSellShare($model->getShare())) {
+            $currentShareGroup = $model->getSizes()->first()->getShareGroup();
+
+            $sizesGroups = $model->getShare()->getSizesGroups()->getValues();
+            $upSellGroups = array_filter($sizesGroups, function ($group) use ($currentShareGroup) {
+                return $group->getId() != $currentShareGroup->getId();
+            });
+            // Select one product from each group
+            $upSell = array_map(function (ShareSizesGroup $sizesGroup) {
+                $products = $sizesGroup->getProducts()->getValues();
+                return $products[array_rand($products)];
+            }, $upSellGroups);
+
+            // TODO render upsell items
+
+            return $this->templating->render('AppBundle:widgets/product/upsell.html.twig', compact('model', 'upSell'));
+        }
+        
+        return null;
     }
 
     /**

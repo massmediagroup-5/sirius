@@ -328,13 +328,21 @@ class OrderController extends BaseController
      */
     public function ajaxUpdateWaybillAction(Request $request)
     {
-        $orderObject = $this->admin->getSubject();
-        $orderObject->setTtn($request->get('np_ttn'));
+        $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocumentList();
+        $data->setIntDocNumber($request->get('np_ttn'));
+        $document = InternetDocument::getDocumentList($data);
 
-        $this->getDoctrine()->getManager()->persist($orderObject);
-        $this->getDoctrine()->getManager()->flush();
+        if ($document->data) {
+            $ttn = $document->data[0];
+            $orderObject = $this->admin->getSubject();
+            $orderObject->setTtn($ttn->Ref);
 
-        return $this->renderJson([]);
+            $this->getDoctrine()->getManager()->persist($orderObject);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->renderJson([]);
+        }
+        
+        return $this->renderJson(['message' => 'Неверный ТТН'], 422);
     }
 
     /**

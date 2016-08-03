@@ -1,0 +1,15 @@
+<div class="last-viewed">
+    <h2>Вместе дешевле</h2>
+    <div class="last-viewed__i complect">
+
+        {% for item in upSell %}
+            {{ include('AppBundle:shop/product/upsell_item.html.twig', {model: item, flagClass: 'flag_your',
+                flagContent: 'Ваш товар'}) }}
+        {% endfor %}
+
+        <div class="item item-complect buy-row">
+            <p>1110 грн.</p>
+            <a href="#" class="btn btn_blue btn_buy"><span>КУПИТЬ комплект</span></a>
+        </div>
+    </div>
+</div>

@@ -237,6 +237,7 @@
                         </div>
                     </div>
                 </div>
+                {{ widget('products.upsell', current_model)|raw }}
                 {{ widget('products.recommended', current_model)|raw }}
                 {{ widget('products.recentlyReviewed')|raw }}
             </div>
