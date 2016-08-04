@@ -24,6 +24,8 @@ class ImportTransformer extends AbstractTransformer
             $this->transformedData[$key] = $value;
         }
 
+        $this->transformedData['model'] = $this->transformedData['sku'];
+
         $this->transformedData['sizes'] = array_map(function ($size) {
             return trim($size);
         }, explode('/', $this->transformedData['sizes']));
