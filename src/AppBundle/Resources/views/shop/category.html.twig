@@ -41,7 +41,7 @@
                                             <div class="filtered-list">
                                                 <div class="filtered-list__i">
                                                     <ul>
-                                                        {% if filters.has('shares') %}
+                                                        {% if not is_granted('ROLE_WHOLESALER') and filters.has('shares') %}
                                                             <li>
                                                                 <a href="{{ filters.replaceQueryParameter('shares') }}"
                                                                    class="remove"></a><strong>Акции</strong>

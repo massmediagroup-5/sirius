@@ -53,7 +53,7 @@ class Filters
         }
         return $hasCharacteristics || $this->request->get('price_from') && $this->request->get('price_from') != $data['price_filter']['min_price']
         || $this->request->get('price_to') && $this->request->get('price_to') != $data['price_filter']['max_price'] || $this->selectedColors($data)
-        || $this->has('shares');
+        || ($this->has('shares') && !$this->container->get('security.context')->isGranted('ROLE_WHOLESALER'));
     }
 
     /**

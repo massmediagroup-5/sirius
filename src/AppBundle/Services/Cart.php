@@ -253,7 +253,8 @@ class Cart
     public function getItemSizeQuantity(ProductModelSpecificSize $size)
     {
         $item = Arr::get($this->items, $size->getModel()->getId());
-        return $item ? $item->getSize($size)->getQuantity() : 0;
+        $size = $item ? $item->getSize($size) : 0;
+        return $size ? $size->getQuantity() : 0;
     }
 
     /**
