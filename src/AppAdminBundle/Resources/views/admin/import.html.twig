@@ -1,11 +1,4 @@
-{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
-
-{% block breadcrumb %}
-    <li>
-        <a href="{{ url('sonata_admin_dashboard') }}"><i class="fa fa-home"></i></a>
-    </li>
-    <li class="active">Custom Page</li>
-{% endblock %}
+{% extends 'AppAdminBundle::sonata_base_layout.html.twig' %}
 
 {% block content %}
     <h1>Import</h1>
