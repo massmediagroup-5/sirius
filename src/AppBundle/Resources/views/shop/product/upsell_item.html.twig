@@ -1,17 +1,19 @@
 <div class="item">
-    <a href="#">
+    <a href="{{ url_to(size.model) }}">
         <div class="item__i">
-            <div class="flag {{ flagClass }}">
-                <div class="flag__i"><p>{{ flagContent }}</p></div>
-            </div>
+            {% if flagContent %}
+                <div class="flag {{ flagClass }}">
+                    <div class="flag__i"><p>{{ flagContent }}</p></div>
+                </div>
+            {% endif %}
             <div class="img">
-                <img src="{{ (model.images.0.link ?: param('no_image')) | imagine_filter('medium') }}" />
+                <img src="{{ (size.model.images.0.link ?: param('no_image')) | imagine_filter('medium') }}" />
             </div>
             <div class="info">
                 <div class="info__i">
-                    <p><strong>Befree</strong></p>
+                    <p><strong>{{ size.model.products.name }}</strong></p>
 
-                    <p>250 грн.</p>
+                    <p>{{ prices.getProductModelSpecificSizeUpSellDiscountedPrice(size) }} грн.</p>
                 </div>
             </div>
         </div>

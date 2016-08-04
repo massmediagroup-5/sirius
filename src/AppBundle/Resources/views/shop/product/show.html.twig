@@ -246,6 +246,8 @@
 {% endblock %}
 
 {% block popups %}
+    {{ parent() }}
+
     {{ include('AppBundle:shop/product/items_popup_galleries.html.twig', { 'items': [current_model] }) }}
 
     {{ include('AppBundle:shop/partials/sizes_popup.html.twig') }}

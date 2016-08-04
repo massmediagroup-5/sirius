@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Form\Type\AddInCartType;
+use AppBundle\Form\Type\AddUpSellInCartType;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
 use AppBundle\Form\Type\ChangeProductSizeType;
 use AppBundle\Form\Type\CreateOrderType;
@@ -50,6 +51,34 @@ class CartController extends BaseController
         if ($form->get('submit')->isClicked()) {
             return $this->redirect($request->headers->get('referer'));
         }
+        return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
+    }
+
+    /**
+     * @Route("/cart/add_many", name="cart_add_many", options={"expose"=true})
+     * @Method("POST")
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function addManyInCartAction(Request $request)
+    {
+        $form = $this->createForm(AddUpSellInCartType::class, null);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            foreach ($form->get('sizes')->getData() as $size) {
+                $sizeEntity = $this->getDoctrine()->getManager()->getRepository('AppBundle:ProductModelSpecificSize')
+                    ->find($size);
+                $this->get('cart')->addItemToCard($sizeEntity, 1);
+            }
+
+            return new JsonResponse([
+                'totalCount' => $this->get('cart')->getTotalCount(),
+                'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice(),
+                'messages' => ['Добавлено в корзину']
+            ]);
+        }
+
         return new JsonResponse(['errors' => $this->formErrorsToArray($form)], 422);
     }
 

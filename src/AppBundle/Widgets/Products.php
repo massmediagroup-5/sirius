@@ -5,6 +5,7 @@ namespace AppBundle\Widgets;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\ShareSizesGroup;
+use AppBundle\Form\Type\AddUpSellInCartType;
 use AppBundle\Form\Type\ChangeProductSizeQuantityType;
 use AppBundle\Form\Type\ChangeProductSizeType;
 use AppBundle\Form\Type\RemoveProductSizeType;
@@ -124,21 +125,36 @@ class Products
     public function upsell(ProductModels $model)
     {
         if ($this->container->get('share')->isActualUpSellShare($model->getShare())) {
+            $priceCalculator = $this->container->get('prices_calculator');
+            $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($model->getSizes()->first());
             $currentShareGroup = $model->getSizes()->first()->getShareGroup();
+            $currentSize = $model->getSizes()->first();
 
             $sizesGroups = $model->getShare()->getSizesGroups()->getValues();
             $upSellGroups = array_filter($sizesGroups, function ($group) use ($currentShareGroup) {
                 return $group->getId() != $currentShareGroup->getId();
             });
+
             // Select one product from each group
             $upSell = array_map(function (ShareSizesGroup $sizesGroup) {
-                $products = $sizesGroup->getProducts()->getValues();
-                return $products[array_rand($products)];
+                $sizes = $sizesGroup->getModelSpecificSizes()->getValues();
+                return $sizes[array_rand($sizes)];
             }, $upSellGroups);
 
-            // TODO render upsell items
+            $totalSum += round(array_sum(array_map(function (ProductModelSpecificSize $size) use($priceCalculator) {
+                return $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($size);
+            }, $upSell)));
 
-            return $this->templating->render('AppBundle:widgets/product/upsell.html.twig', compact('model', 'upSell'));
+            // Create form
+            $allUpSellSizes = $upSell;
+            $allUpSellSizes[] = $model->getSizes()->first();
+            $form = $this->container->get('form.factory')->create(AddUpSellInCartType::class, null, [
+                'action' => $this->container->get('router')->generate('cart_add_many'),
+                'sizes' => $allUpSellSizes
+            ])->createView();
+
+            return $this->templating->render('AppBundle:widgets/product/upsell.html.twig',
+                compact('model', 'upSell', 'totalSum', 'form', 'currentSize'));
         }
         
         return null;

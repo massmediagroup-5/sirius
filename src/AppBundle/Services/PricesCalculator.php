@@ -273,7 +273,7 @@ class PricesCalculator
 
         $shareGroup = $object->getSize()->getShareGroup();
         $share = $shareGroup ? $shareGroup->getShare() : null;
-        if ($this->container->get('share')->isActualSingleShare($share)) {
+        if ($this->container->get('share')->isActualUpSellShare($share)) {
             $otherSizesInShare = [];
             foreach ($share->getSizesGroups() as $group) {
                 $sizesIds = array_map(function ($size) {
@@ -329,6 +329,24 @@ class PricesCalculator
         }
 
         return $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true) * $object->getQuantity();
+    }
+
+    /**
+     * @param ProductModelSpecificSize $object
+     * @return float
+     */
+    public function getProductModelSpecificSizeUpSellDiscountedPrice(ProductModelSpecificSize $object)
+    {
+
+        $shareGroup = $object->getShareGroup();
+        $share = $shareGroup ? $shareGroup->getShare() : null;
+        $price = $this->getProductModelSpecificSizeDiscountedPrice($object);
+        
+        if ($this->container->get('share')->isActualUpSellShare($share)) {
+            $price -= $price * $shareGroup->getDiscount() * 0.01;
+        }
+
+        return $price;
     }
 
     /**
