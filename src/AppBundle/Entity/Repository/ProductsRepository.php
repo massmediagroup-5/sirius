@@ -530,7 +530,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             $builder->andWhere('share.id = :shareId')->setParameter('shareId', $share);
         }
         if ($shares = Arr::get($filters, 'shares')) {
-            $builder->andWhere('share.id IS NOT NULL');
+            $builder->andWhere('sizes.shareGroup IS NOT NULL')
+                ->andWhere('share.status = 1 AND share.startTime < :today AND share.endTime > :today')
+                ->setParameter('today', new \DateTime());
         }
 
         return $builder;

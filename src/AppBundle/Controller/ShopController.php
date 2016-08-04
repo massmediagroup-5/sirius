@@ -56,7 +56,13 @@ class ShopController extends Controller
         $filters = $request->query->all();
         $filters['page'] = 'page';
         try {
-            $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
+            if ($this->container->get('security.context')->isGranted('ROLE_WHOLESALER')) {
+                $entityName = 'ProductModels';
+                unset($filters['shares']);
+                unset($filters['share']);
+            } else {
+                $entityName = 'Products';
+            }
             $data = $this->get('entities')
                 ->getCollectionsByCategoriesAlias($category, $filters, $this->items_on_page, $current_page,
                     $entityName);
@@ -72,7 +78,7 @@ class ShopController extends Controller
             }
             $this->get('widgets.breadcrumbs')->push(['name' => $data['category']->getName()]);
             $this->get('last_urls')->setLastCatalogUrl($request->getRequestUri());
-//            dump($data);exit;
+//            dump($data);exit; 
             return $this->render('AppBundle:shop:category.html.twig', array(
                 'data' => $data,
                 'breadcrumb' => $this->breadcrumb,
