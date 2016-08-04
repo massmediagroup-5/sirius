@@ -518,7 +518,7 @@ class OrdersAdmin extends Admin
         $order->setPhone($callback->getPhone());
         $order->setCarriers($em->getRepository('AppBundle:Carriers')->findOneById(1));
         $order->setType(Orders::TYPE_QUICK);
-        $order->setStatus($em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
+        $order->setStatus($em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'accepted']));
 
         $em->persist($order);
         $em->flush();
