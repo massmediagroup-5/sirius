@@ -9443,16 +9443,16 @@ body {
 }
 
 .last-viewed__i {
-	.complect {
-		.item{
+	&.complect {
+		.item {
 			padding: 28px 8px;
 			position: relative;
 			width: 80%;
-		  	&:before {
+			&:before {
 				content: '+';
 				font-family: "Lato";
 				font-size: 56px;
-				color: rgb( 5, 5, 5 );
+				color: rgb(5, 5, 5);
 				text-transform: uppercase;
 				position: absolute;
 				top: 50%;
@@ -9461,24 +9461,24 @@ body {
 				z-index: 2;
 			}
 		}
-		.item-complect{
-		  background-color: rgba( 255, 240, 204, 0.8);
-		  	p{
+		.item-complect {
+			background-color: rgba(255, 240, 204, 0.8);
+			p {
 				font-size: 32px;
-				color: rgb( 197, 54, 34 );
+				color: rgb(197, 54, 34);
 				font-weight: bold;
-				text-align: center;    
+				text-align: center;
 				padding: 0;
 				margin-bottom: 22px;
 			}
 		}
 		.owl-item:nth-child(4n+1) .item:before {
-	  		content: none;
+			content: none;
 		}
 		.owl-item:nth-child(4n+4) .item:before {
-		  content: '=';    
-		  margin-left: -40px;
-		  font-size: 50px;
+			content: '=';
+			margin-left: -40px;
+			font-size: 50px;
 		}
 		.owl-stage {
 			display: -ms-flexbox;

@@ -195,11 +195,14 @@ class Share
      */
     public function isActualUpSellShare(\AppBundle\Entity\Share $share = null)
     {
-        // Skip empty groups
-        $sizesGroups = array_filter($share->getSizesGroups()->getValues(), function (ShareSizesGroup $sizesGroup) {
-            return $sizesGroup->getSizes()->count() > 0;
-        });
-        return $this->checkShareActuality($share) && count($sizesGroups) > 1;
+        if ($this->checkShareActuality($share)) {
+            // Skip empty groups
+            $sizesGroups = array_filter($share->getSizesGroups()->getValues(), function (ShareSizesGroup $sizesGroup) {
+                return $sizesGroup->getModelSpecificSizes()->count() > 0;
+            });
+            return count($sizesGroups) > 1;
+        }
+        return false;
     }
 
 }

@@ -2,14 +2,19 @@
     <h2>Вместе дешевле</h2>
     <div class="last-viewed__i complect">
 
+        {{ include('AppBundle:shop/product/upsell_item.html.twig', {size: currentSize, flagClass: 'flag_your',
+            flagContent: 'Ваш товар' ~ (currentSize.shareGroup.discount ? ' ' ~ currentSize.shareGroup.discount ~ '%')}) }}
+
         {% for item in upSell %}
-            {{ include('AppBundle:shop/product/upsell_item.html.twig', {model: item, flagClass: 'flag_your',
-                flagContent: 'Ваш товар'}) }}
+            {{ include('AppBundle:shop/product/upsell_item.html.twig', {size: item, flagClass: 'flag_percent',
+                flagContent: item.shareGroup.discount ? item.shareGroup.discount ~ '%' : false}) }}
         {% endfor %}
 
         <div class="item item-complect buy-row">
-            <p>1110 грн.</p>
-            <a href="#" class="btn btn_blue btn_buy"><span>КУПИТЬ комплект</span></a>
+            <p>{{ totalSum }} грн.</p>
+            {{ form_start(form, {attr: {class: 'js_upsell_form'}}) }}
+                <a href="#" class="btn btn_blue btn_buy js_click_submit"><span>КУПИТЬ комплект</span></a>
+            {{ form_end(form) }}
         </div>
     </div>
 </div>
