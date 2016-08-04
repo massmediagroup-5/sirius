@@ -6,6 +6,8 @@ use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
@@ -419,6 +421,30 @@ class OrderController extends BaseController
             'sizes' => $this->renderView('AppAdminBundle:admin:order_sizes_select.html.twig',
                 compact('models', 'categories', 'filters', 'admin'))
         ]);
+    }
+
+    /**
+     * Create action.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     *
+     * @throws AccessDeniedException If access is not granted
+     */
+    public function createFromCallbackAction(Request $request)
+    {
+        $request = $this->getRequest();
+
+        if (false === $this->admin->isGranted('CREATE')) {
+            throw new AccessDeniedException();
+        }
+
+        $object = $this->admin->createFromCallback($request->get('id'));
+
+        $this->admin->setSubject($object);
+
+        return $this->redirectTo($object);
     }
 
     /**

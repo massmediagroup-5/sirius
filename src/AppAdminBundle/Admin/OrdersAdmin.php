@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use AppBundle\Entity\CallBack;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\Orders;
 use Doctrine\ORM\EntityRepository;
@@ -86,7 +87,8 @@ class OrdersAdmin extends Admin
                 'expose' => true
             ])
             ->add('cancel_order', $this->getRouterIdParameter() . '/cancel_order')
-            ->add('cancel_order_change', $this->getRouterIdParameter() . '/cancel_order_change/{history_id}');
+            ->add('cancel_order_change', $this->getRouterIdParameter() . '/cancel_order_change/{history_id}')
+            ->add('create_from_callback', 'create_from_callback/{id}', [], []);
         if ($this->statusName == 'waiting_for_departure') {
             $collection->add('ajax_create_waybill', $this->getRouterIdParameter() . '/ajax_create_waybill', [], [], [
                 'expose' => true
@@ -498,6 +500,30 @@ class OrdersAdmin extends Admin
         $historyManager = $this->getConfigurationPool()->getContainer()->get('history_manager');
         $history = $historyManager->createFromHistoryItem($historyItem);
         return $history->label();
+    }
+
+    /**
+     * @param $callback
+     * @return Orders
+     */
+    public function createFromCallback($callback)
+    {
+        $em = $this->getConfigurationPool()
+            ->getContainer()
+            ->get('doctrine.orm.entity_manager');
+
+        $callback = $em->getRepository('AppBundle:CallBack')->find($callback);
+        
+        $order = new Orders();
+        $order->setPhone($callback->getPhone());
+        $order->setCarriers($em->getRepository('AppBundle:Carriers')->findOneById(1));
+        $order->setType(Orders::TYPE_QUICK);
+        $order->setStatus($em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
+
+        $em->persist($order);
+        $em->flush();
+        
+        return $order;
     }
 
     public function validate(ErrorElement $errorElement, $object)
