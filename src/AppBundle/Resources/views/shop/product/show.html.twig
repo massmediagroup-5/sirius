@@ -63,14 +63,14 @@
                                 </div>
                                 <div class="product-info">
                                     <div class="product-info__i">
-                                        <h3 class="type">{{ product.baseCategory.name }}</h3>
-                                        <h2 class="name">{{ current_model.products.name }}</h2>
                                         {% if share.isActualSingleShare(current_model.share) %}
-                                            <div class="product-info-share">
+                                            <div class="product-info-share discount">
                                                 <div class="product-info-share-title">{{ current_model.share.name }}</div>
                                                 {{ include('AppBundle:share/counter.html.twig', {share: current_model.share}) }}
                                             </div>
                                         {% endif %}
+                                        <h3 class="type">{{ product.baseCategory.name }}</h3>
+                                        <h2 class="name">{{ current_model.products.name }}</h2>
                                         <div class="price price_new">
                                             <p class="js_product_price" data-model-id="{{ current_model.id }}">
                                                 {{ widget('products.prices', current_model)|raw }}
