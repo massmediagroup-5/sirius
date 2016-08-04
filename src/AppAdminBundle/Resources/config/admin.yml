@@ -187,6 +187,8 @@ services:
         arguments: [~, AppBundle\Entity\CallBack, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Запросы на перезвон"}
+        calls:
+            - [ setTemplate, [edit, AppAdminBundle:admin:callback_edit.html.twig]]
 
     app.admin.menu:
         class: AppAdminBundle\Admin\MenuAdmin
