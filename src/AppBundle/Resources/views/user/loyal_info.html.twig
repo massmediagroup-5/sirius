@@ -19,8 +19,8 @@
                                 {{ 'labels.user_bonuses_processed'|transchoice(bonusesInProcess, {'%count%': bonusesInProcess}) }}
                             </div>
                         </td>
-                        <td><span>{{ app.user.bonuses }}
-                                <strong>{{ 'labels.user_bonuses'|transchoice(app.user.bonuses) }}</strong></span></td>
+                        <td><span>{{ app.user.bonuses|round }}
+                                <strong>{{ 'labels.user_bonuses'|transchoice(app.user.bonuses|round) }}</strong></span></td>
                     </tr>
                     </tbody>
                 </table>
