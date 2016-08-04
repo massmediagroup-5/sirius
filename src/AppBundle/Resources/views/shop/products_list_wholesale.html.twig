@@ -36,6 +36,8 @@
                     {% set item = item.0 %}
                 {% endif %}
                 {{ include('AppBundle:shop:product/list_item_wholesale.html.twig', { 'item': item }) }}
+            {% else %}
+                {{ include('AppBundle:shop/list_no_result.html.twig') }}
             {% endfor %}
         </div>
     </div>
