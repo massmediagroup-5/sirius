@@ -3,16 +3,12 @@
 namespace AppAdminBundle\Admin;
 
 use AppAdminBundle\Transformer\ImportTransformer;
-use AppBundle\Entity\Categories;
-use AppBundle\Entity\CharacteristicableInterface;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
-use AppBundle\Entity\Vendors;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -82,19 +78,9 @@ class ImportAdmin
     private $container;
 
     /**
-     * @var Vendors
-     */
-    private $vendor;
-
-    /**
      * @var \PHPExcel $phpExcelObj
      */
     private $phpExcelObj;
-
-    /**
-     * @var \PHPExcel_Worksheet $infoSheet
-     */
-    private $infoSheet;
 
     /**
      * @var \PHPExcel_Worksheet $listSheet
@@ -153,9 +139,7 @@ class ImportAdmin
         $this->phpExcelObj = $this->container->get('phpexcel')
             ->createPHPExcelObject($file);
 
-        $this->infoSheet = $this->phpExcelObj->getSheet(0);
-
-        $this->listSheet = $this->phpExcelObj->getSheet(1);
+        $this->listSheet = $this->phpExcelObj->getSheet(0);
 
         $this->baseCategory = $this->em->getRepository('AppBundle:Categories')->findOneBy(['alias' => 'all']);
 
@@ -320,13 +304,6 @@ class ImportAdmin
 
         $this->transformer->setData($currentRowData);
 
-        // Set data from info sheet
-        if ($letter = $this->getInfoColumnLetterByArticle()) {
-            foreach ($this->infoRowsMap as $number => $key) {
-                $currentRowData[$key] = $this->infoSheet->getCell($letter . $number)->getValue();
-            }
-        }
-
         if (count($this->validator->validate($currentRowData, $this->validationRules()))) {
             return false;
         }
@@ -334,20 +311,6 @@ class ImportAdmin
         $this->transformer->setData($currentRowData);
 
         return true;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getInfoColumnLetterByArticle()
-    {
-        // Iterate through all cells of article row
-        foreach ($this->infoSheet->getRowIterator(self::ARTICLE_ROW)->current()->getCellIterator('B') as $cell) {
-            if ($cell->getValue() == $this->getCurrentRowData('sku')) {
-                return $cell->getColumn();
-            }
-        }
-        return false;
     }
 
     /**
@@ -402,8 +365,8 @@ class ImportAdmin
             'wholesale_price' => new NotBlank(),
             'color' => new NotBlank(),
             'decoration_color' => new Optional(),
-            'model' => new NotBlank(),
-            'type' => new NotBlank(),
+            'model' => new Optional(),
+            'type' => new Optional(),
             'category' => new Optional(),
             'material' => new Optional(),
             'composition' => new Optional(),
