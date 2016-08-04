@@ -15,6 +15,7 @@
                             <th>Количество</th>
                             <th>Цена</th>
                             <th>Цена со скидкой</th>
+                            <th>Дата</th>
                         </tr>
                     </thead>
                     <tbody class="sonata-ba-tbody">
@@ -28,6 +29,7 @@
                             <td class="control-group">{{ size.quantity }}</td>
                             <td class="control-group">{{ size.totalPrice }}</td>
                             <td class="control-group">{{ size.discountedTotalPrice }}</td>
+                            <td class="control-group">{{ size.createTime.format('Y-m-d H:m') }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
