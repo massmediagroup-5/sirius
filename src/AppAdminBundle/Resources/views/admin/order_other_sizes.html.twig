@@ -5,35 +5,10 @@
                 <h4 class="box-title">{{ form_tab.name }}</h4>
             </div>
             <div class="box-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Артикул</th>
-                            <th>Модель</th>
-                            <th>Цвет</th>
-                            <th>Размер</th>
-                            <th>Количество</th>
-                            <th>Цена</th>
-                            <th>Цена со скидкой</th>
-                            <th>Дата</th>
-                        </tr>
-                    </thead>
-                    <tbody class="sonata-ba-tbody">
-                    {% for size in form_tab.otherSizes %}
-
-                        <tr>
-                            <td class="control-group">{{ size.size.model.products.article }}</td>
-                            <td class="control-group">{{ size.size.model.products.name }}</td>
-                            <td class="control-group">{{ size.size.model.productColors.name }}</td>
-                            <td class="control-group">{{ size.size }}</td>
-                            <td class="control-group">{{ size.quantity }}</td>
-                            <td class="control-group">{{ size.totalPrice }}</td>
-                            <td class="control-group">{{ size.discountedTotalPrice }}</td>
-                            <td class="control-group">{{ size.createTime.format('Y-m-d H:m') }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <div class="text-right"><strong>Всего на {{ form_tab.totalSum }}</strong></div>
+                <div class="js_pagination_content">
+                    {% include 'AppAdminBundle:admin/orders/orders_paginated_list.html.twig' with {orders: form_tab.otherOrders} %}
+                </div>
             </div>
         </div>
     </div>

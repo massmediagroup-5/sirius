@@ -424,6 +424,21 @@ class OrderController extends BaseController
     }
 
     /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getOtherOrdersAction(Request $request)
+    {
+        $orders = $this->admin->paginateOtherOrders($request->get('page', 1));
+
+        return $this->renderJson([
+            'content' => $this->renderView('AppAdminBundle:admin/orders/orders_paginated_list.html.twig',
+                compact('orders'))
+        ]);
+    }
+
+    /**
      * Create action.
      *
      * @param Request $request

@@ -107,8 +107,8 @@ var OrderSizesDialog = (function () {
         $content.find('a').on('click', this.contentLinkClick.bind(this));
         $content.find('.js_model_row').on('click', this.modelRowClick.bind(this));
         $content.find('.js_submit_filters').on('click', this.submitFilters.bind(this));
-        $content.find('.js_size_count').on('change', function() {
-           var $this = $(this);
+        $content.find('.js_size_count').on('change', function () {
+            var $this = $(this);
             $this.val(Math.abs(parseInt($this.val())));
         });
 
@@ -237,9 +237,40 @@ var OrderSizes = (function () {
     return OrderSizes;
 })();
 
+/**
+ * Order size control
+ */
+var AjaxPagination = (function () {
+    function AjaxPagination($content) {
+        this.$content = $content;
+
+        this.$content.on('click', 'a', this.linkClickHandler.bind(this))
+    }
+
+    AjaxPagination.prototype.linkClickHandler = function (e) {
+        e.preventDefault();
+        var params = $.url($(e.target).attr('href')).param();
+
+        if (params.page) {
+            this.request('get_other_orders', params, {}, this.contentLoaded.bind(this));
+        }
+    };
+
+    AjaxPagination.prototype.contentLoaded = function (data) {
+        this.$content.html(data.content);
+
+        $(document).trigger('ajax.insert_content', [this.$content]);
+    };
+
+    mix(AjaxPagination, requestMixin);
+
+    return AjaxPagination;
+})();
+
 $(document).ready(function () {
     var $sizes = $('#orderSizes');
 
     new OrderSizes($sizes);
 
+    new AjaxPagination($('.js_pagination_content'));
 });

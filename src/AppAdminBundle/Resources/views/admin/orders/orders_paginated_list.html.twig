@@ -1,0 +1,2 @@
+{% include 'AppAdminBundle:admin/orders/orders_list.html.twig' with {orders: orders} %}
+{{ knp_pagination_render(orders, 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig') }}

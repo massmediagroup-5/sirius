@@ -77,6 +77,9 @@ class OrdersAdmin extends Admin
             ->add('get_sizes', $this->getRouterIdParameter() . '/get_sizes', [], [], [
                 'expose' => true
             ])
+            ->add('get_other_orders', $this->getRouterIdParameter() . '/get_other_orders', [], [], [
+                'expose' => true
+            ])
             ->add('add_sizes', $this->getRouterIdParameter() . '/add_sizes', [], [], [
                 'expose' => true
             ])
@@ -93,15 +96,15 @@ class OrdersAdmin extends Admin
             $collection->add('ajax_create_waybill', $this->getRouterIdParameter() . '/ajax_create_waybill', [], [], [
                 'expose' => true
             ])
-            ->add('ajax_update_waybill', $this->getRouterIdParameter() . '/ajax_update_waybill', [], [], [
-                'expose' => true
-            ])
-            ->add('ajax_print_waybill', $this->getRouterIdParameter() . '/ajax_print_waybill', [], [], [
-                'expose' => true
-            ])
-            ->add('ajax_delete_waybill', $this->getRouterIdParameter() . '/ajax_delete_waybill', [], [], [
-                'expose' => true
-            ]);
+                ->add('ajax_update_waybill', $this->getRouterIdParameter() . '/ajax_update_waybill', [], [], [
+                    'expose' => true
+                ])
+                ->add('ajax_print_waybill', $this->getRouterIdParameter() . '/ajax_print_waybill', [], [], [
+                    'expose' => true
+                ])
+                ->add('ajax_delete_waybill', $this->getRouterIdParameter() . '/ajax_delete_waybill', [], [], [
+                    'expose' => true
+                ]);
         }
     }
 
@@ -170,20 +173,7 @@ class OrdersAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        if ($user = $this->subject->getUsers()) {
-            $otherSizes = $this->modelManager->getEntityManager('AppBundle:OrderProductSize')
-                ->getRepository('AppBundle:OrderProductSize')
-                ->createQueryBuilder('orderedSize')
-                ->innerJoin('orderedSize.size', 'size')
-                ->innerJoin('orderedSize.order', 'sizeOrder')
-                ->where('sizeOrder.users = :user_id AND sizeOrder.id <> :id')
-                ->setParameter('user_id', $user->getId())
-                ->setParameter('id', $this->subject->getId())
-                ->getQuery()
-                ->getResult();
-        } else {
-            $otherSizes = [];
-        }
+        $otherOrders = $this->paginateOtherOrders();
 
         $formMapper
             ->tab('Заказ')
@@ -297,14 +287,13 @@ class OrdersAdmin extends Admin
                 'tab_template' => 'AppAdminBundle:admin:order_sizes.html.twig'
             ])
             ->end();
-        if($this->statusName == 'waiting_for_departure')
-        {
+        if ($this->statusName == 'waiting_for_departure') {
             $ttn = $date = '';
-            if($this->subject->getTtn()){
+            if ($this->subject->getTtn()) {
                 $api = $this->modelManager
                     ->getEntityManager('AppBundle:Novaposhta')
                     ->getRepository('AppBundle:Novaposhta')
-                    ->findOneBy(['active'=>1]);
+                    ->findOneBy(['active' => 1]);
                 Config::setApiKey($api->getApiKey());
                 Config::setFormat(Config::FORMAT_JSONRPC2);
                 Config::setLanguage(Config::LANGUAGE_RU);
@@ -331,10 +320,11 @@ class OrdersAdmin extends Admin
                 'date' => $date
             ])->end();
         }
-        if ($otherSizes) {
+        if ($otherOrders) {
             $formMapper->tab('Другие заказы покупателя', [
                 'tab_template' => 'AppAdminBundle:admin:order_other_sizes.html.twig',
-                'otherSizes' => $otherSizes
+                'otherOrders' => $otherOrders,
+                'totalSum' => $this->getOtherOrdersTotalSum()
             ])
                 ->end();
         }
@@ -513,7 +503,7 @@ class OrdersAdmin extends Admin
             ->get('doctrine.orm.entity_manager');
 
         $callback = $em->getRepository('AppBundle:CallBack')->find($callback);
-        
+
         $order = new Orders();
         $order->setPhone($callback->getPhone());
         $order->setCarriers($em->getRepository('AppBundle:Carriers')->findOneById(1));
@@ -522,7 +512,7 @@ class OrdersAdmin extends Admin
 
         $em->persist($order);
         $em->flush();
-        
+
         return $order;
     }
 
@@ -531,14 +521,41 @@ class OrdersAdmin extends Admin
 //        payStatus
         $errorElement
             ->with('payStatus')
-                ->assertNotNull(array())
-                ->assertNotBlank()
+            ->assertNotNull(array())
+            ->assertNotBlank()
             ->end()
             ->with('status')
-                ->assertNotNull(array())
-                ->assertNotBlank()
-            ->end()
-        ;
+            ->assertNotNull(array())
+            ->assertNotBlank()
+            ->end();
+    }
+
+    /**
+     * @param int $currentPage
+     * @param int $perPage
+     * @return array
+     */
+    public function paginateOtherOrders($currentPage = 1, $perPage = 10)
+    {
+        if ($user = $this->getSubject()->getUsers()) {
+            $otherOrdersQuery = $this->modelManager->getEntityManager('AppBundle:Orders')
+                ->getRepository('AppBundle:Orders')
+                ->otherOrdersByUser($user, $this->subject);
+            return $this->getConfigurationPool()->getContainer()->get('knp_paginator')->paginate(
+                $otherOrdersQuery, $currentPage, $perPage, ['wrap-queries' => true]
+            );
+        }
+        return [];
+    }
+
+    public function getOtherOrdersTotalSum()
+    {
+        if ($user = $this->getSubject()->getUsers()) {
+            return $this->modelManager->getEntityManager('AppBundle:Orders')
+                ->getRepository('AppBundle:Orders')
+                ->otherOrdersSum($user, $this->subject);
+        }
+        return 0;
     }
 
     /**
@@ -550,3 +567,4 @@ class OrdersAdmin extends Admin
         return $em->getRepository('AppBundle:ProductModelSpecificSize')->find($historyItem->getAdditional('sizeId'));
     }
 }
+
