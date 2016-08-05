@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).on('ready ajax.insert_content', function () {
     $('.user-orders .order-num').on('click', function (e) {
         e.preventDefault();
 
