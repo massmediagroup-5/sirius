@@ -445,9 +445,9 @@ class Order
                 if (null === $jsonObj) {
                     // Ошибка в полученном ответе
                     $result['error'] = "Invalid JSON";
-                } elseif (isset($jsonObj->result->error)) {
+                } elseif (isset($jsonObj->error)) {
                     // Ошибка отправки сообщения
-                    $result['error'] = "An error occured: {$jsonObj->result->error} (code: {$jsonObj->result->code})";
+                    $result['error'] = "An error occured: {$jsonObj->error} (code: {$jsonObj->code})";
                 } else {
                     // Сообщение успешно отправлено
                     $result['sms_id'] = $jsonObj->result->sms_id;

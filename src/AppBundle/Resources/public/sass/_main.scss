@@ -526,6 +526,11 @@ input[type="checkbox"] {
                  margin: 0 15px;
                }
             }
+				> .wrap {
+					&:last-child {
+						margin-bottom: 75px;
+					}
+				}
 
 			}
 			.content {

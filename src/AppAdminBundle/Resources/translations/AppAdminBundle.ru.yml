@@ -68,7 +68,7 @@ Novaposhta List: Параметры "Нова Пошта"
 Social Networks List: Соц.сети
 Share List: Акции
 
-search_placeholder: "Информация по ТТН"
+search_placeholder: Поиск
 flash_delete_not_empty_error: 'Не возможно удалить запись поскольку она не пуста, имеет count товаров и count1 подкатегорий'
 flash_delete_not_empty_error1: 'Не возможно удалить запись поскольку она не пуста'
 link_to_pre_order: Переместить в предзаказ

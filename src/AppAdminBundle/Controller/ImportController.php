@@ -47,8 +47,8 @@ class ImportController extends CoreController
         $formData = $form->getData();
 
         $this->get('app.admin.import')->import($formData['file'], $formData);
-        
-        // Todo reindex elastica
+
+        $this->addFlash('sonata_flash_success', 'Успешно импортировано');
 
         return new RedirectResponse(
             $this->generateUrl('sonata_admin_dashboard')
