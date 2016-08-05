@@ -1,0 +1,9 @@
+<td>
+    {% block field%}
+        {% if object.paramName == 'blockAllSite' %}
+            {{ object.paramValue ? 'Сайт выключен' : 'Сайт включен' }}
+        {% else %}
+            {{ object.paramValue }}
+        {% endif %}
+    {% endblock %}
+</td>

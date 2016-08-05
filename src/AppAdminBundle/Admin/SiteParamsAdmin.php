@@ -17,8 +17,7 @@ class SiteParamsAdmin extends Admin
     {
         $datagridMapper
             ->add('paramName', null, array('label' => 'Название параметра'))
-            ->add('paramValue', null, array('label' => 'Значение параметра'))
-        ;
+            ->add('paramValue', null, array('label' => 'Значение параметра'));
     }
 
     /**
@@ -28,15 +27,17 @@ class SiteParamsAdmin extends Admin
     {
         $listMapper
             ->add('paramName', null, array('label' => 'Название параметра'))
-            ->add('paramValue', null, array('label' => 'Значение параметра'))
+            ->add('paramValue', 'text', array(
+                'label' => 'Значение параметра',
+                'template' => 'AppAdminBundle:list:param_value.html.twig',
+            ))
             ->add('active', null, array('editable' => true, 'label' => 'Активность(вкл/выкл)'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
                     'delete' => array(),
                 )
-            ))
-        ;
+            ));
     }
 
     /**
@@ -45,22 +46,30 @@ class SiteParamsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $param = $this->getSubject();
-        if($param->getEditor()){
+        if ($param->getEditor()) {
             $formMapper
                 ->add('paramName', null, array('label' => 'Название параметра'))
-                ->add('paramValue', 'textarea', array('label' => 'Значение параметра','attr' => array('class' => 'ckeditor')))
+                ->add('paramValue', 'textarea',
+                    array('label' => 'Значение параметра', 'attr' => array('class' => 'ckeditor')))
                 ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
-                ->add('editor', null, array('label' => 'Редактор(вкл/выкл)'))
-            ;
-        }
-        else
-        {
+                ->add('editor', null, array('label' => 'Редактор(вкл/выкл)'));
+        } else {
             $formMapper
-                ->add('paramName', null, array('label' => 'Название параметра'))
-                ->add('paramValue', 'text', array('label' => 'Значение параметра'))
-                ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
-                ->add('editor', null, array('label' => 'Редактор(вкл/выкл)'))
-            ;
+                ->add('paramName', null, array('label' => 'Название параметра'));
+            if ($param->getParamName() == 'blockAllSite') {
+                $formMapper->add('paramValue', 'choice', [
+                    'label' => 'Значение параметра',
+                    'choices' => [
+                        0 => 'Сайт включен',
+                        1 => 'Сайт выключен',
+                    ]
+                ]);
+            } else {
+                $formMapper->add('paramValue', 'text', array('label' => 'Значение параметра'));
+            }
+
+            $formMapper->add('active', null, array('label' => 'Активность(вкл/выкл)'))
+                ->add('editor', null, array('label' => 'Редактор(вкл/выкл)'));
         }
     }
 }
