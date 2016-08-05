@@ -1,7 +1,6 @@
-{% if flag %}
-    <div class="flag flag_{{ flag }} js_flag" data-id="{{ model.id }}">
-        <div class="flag__i">
-            <p>{{ flagText }}</p>
-        </div>
+<div class="flag {{ flag ? 'flag_' ~ flag : '' }} js_flag" data-id="{{ model.id }}"
+        {% if model.textLabelColor and model.textLabel %} style="background: {{ model.textLabelColor }}; border-left-color: {{ model.textLabelColor }};" {% endif %}>
+    <div class="flag__i">
+        <p>{{ flagText }}</p>
     </div>
-{% endif %}
+</div>

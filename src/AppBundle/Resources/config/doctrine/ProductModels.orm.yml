@@ -44,6 +44,12 @@ AppBundle\Entity\ProductModels:
         alias:
             type: string
             nullable: false
+        textLabel:
+            type: string
+            length: 255
+        textLabelColor:
+            type: string
+            length: 255
         price:
             type: decimal
             nullable: true
