@@ -87,6 +87,16 @@ class ProductModels
     private $quantity = 0;
 
     /**
+     * @var string
+     */
+    private $textLabel;
+
+    /**
+     * @var string
+     */
+    private $textLabelColor;
+
+    /**
      * @var \AppBundle\Entity\ProductColors
      */
     private $productColors;
@@ -772,5 +782,53 @@ class ProductModels
             return $this->sizes->first()->getShareGroup()->getShare();
         }
         return null;
+    }
+
+    /**
+     * Set textLabel
+     *
+     * @param string $textLabel
+     *
+     * @return ProductModels
+     */
+    public function setTextLabel($textLabel)
+    {
+        $this->textLabel = $textLabel;
+
+        return $this;
+    }
+
+    /**
+     * Get textLabel
+     *
+     * @return string
+     */
+    public function getTextLabel()
+    {
+        return $this->textLabel;
+    }
+
+    /**
+     * Set textLabelColor
+     *
+     * @param string $textLabelColor
+     *
+     * @return ProductModels
+     */
+    public function setTextLabelColor($textLabelColor)
+    {
+        $this->textLabelColor = $textLabelColor;
+
+        return $this;
+    }
+
+    /**
+     * Get textLabelColor
+     *
+     * @return string
+     */
+    public function getTextLabelColor()
+    {
+        return $this->textLabelColor;
     }
 }

@@ -108,6 +108,8 @@
                 event.preventDefault();
             });
         });
+        
+        $('.js_color_picker').colorpicker();
 
     });
 })(jQuery);

@@ -194,11 +194,13 @@ class Products
      */
     public function flags(ProductModels $model)
     {
-        if($discount = $this->container->get('share')->getSingleDiscount($model)) {
+        if($flagText = $model->getTextLabel()) {
+            $flag = $model->getTextLabelColor() ? false : 'discount';
+        } else if($discount = $this->container->get('share')->getSingleDiscount($model)) {
             $flag = 'discount';
             $flagText = $discount . '%';
         } else {
-            $flag = $flagText = false;
+            return '';
         }
 
         return $this->templating->render('AppBundle:widgets/product/flags.html.twig',

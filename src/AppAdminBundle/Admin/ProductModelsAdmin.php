@@ -103,6 +103,8 @@ class ProductModelsAdmin extends Admin
                 'class' => 'col-md-12',
             ])
             ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
+            ->add('textLabel', 'text', ['label' => 'Метка', 'required' => false])
+            ->add('textLabelColor', 'text', ['label' => 'Цвет метки', 'required' => false, 'attr' => ['class' => 'js_color_picker']])
             ->add('products', 'sonata_type_model_list', ['label' => 'Модель'])
             ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара', ])
             ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])

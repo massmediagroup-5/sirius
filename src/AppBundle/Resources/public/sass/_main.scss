@@ -3145,16 +3145,18 @@ input[type="checkbox"] {
 	left: 0;
 	top: 10px;
 	z-index: 10;
+	border-left-color: #fe8281;
 	&:after {
 		content: '';
 		width: 0;
 		height: 0;
 		border-top: 12px solid transparent;
 		border-bottom: 12px solid transparent;
-		border-left: 11px solid #fe8281;
+		border-left: 11px solid;
 		position: absolute;
 		right: -11px;
 		top: 0;
+		border-left-color: inherit;
 	}
 
 	.flag__i {
@@ -3170,26 +3172,16 @@ input[type="checkbox"] {
 
 	}
 	&.flag_percent {
-	    background: #ff8181; 
-
-		&:after {
-		  border-left: 11px solid #ff8181;
-		}
+	    background: #ff8181;
+		border-left-color: #ff8181;
 	}
 	&.flag_your {
 	    background: #ebc36e;
-
-		&:after {
-		  border-left: 11px solid #ebc36e;
-		}
+		border-left-color: #ebc36e;
 	}
 	&.flag_new {
 		background: #93e7b9;
-
-		&:after {
-			border-left-color: #93e7b9;
-		}
-
+		border-left-color: #93e7b9;
 	}
 	&.flag_hit {
 		background: #fe82ef;
