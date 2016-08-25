@@ -22,4 +22,37 @@
             </tbody>
         </table>
     {{ form_end(form) }}
+
+    {% if validation is defined and validation.errors.count() > 0 %}
+        <div class="import-errors">
+            {% for errors in validation.errors %}
+                {% for error in errors %}
+                    <div class="import-error">{{ error.propertyPath }} {{ error.message }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr class="sonata-ba-list-field-header">
+                {% for head in validation.data.getFields() %}
+                    <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
+                        {{ head }}
+                    </th>
+                {% endfor %}
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for items in validation.data %}
+                <tr>
+                    {% for item in items %}
+                        <td class="sonata-ba-list-field">{{ item }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
 {% endblock %}
