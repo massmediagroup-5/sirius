@@ -89,6 +89,7 @@ class OrdersRepository extends EntityRepository
             ->where('orders.users = :user_id AND orders.id <> :id')
             ->setParameter('user_id', $user->getId())
             ->setParameter('id', $order->getId())
+	        ->addOrderBy('orders.createTime', 'DESC')
             ->getQuery();
     }
 

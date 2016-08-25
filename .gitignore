@@ -18,3 +18,4 @@
 /web/media/*
 /web/bundles/*
 /web/bower_components/*
+/.idea/*
