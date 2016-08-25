@@ -41,6 +41,7 @@ class ProductModelsAdmin extends Admin
         $datagridMapper
             ->add('alias', null, ['label' => 'Ссылка'])
             ->add('products', null, ['label' => 'Модель'])
+            ->add('products.article', null, ['label' => 'Артикул'])
             ->add('products.baseCategory', null, ['label' => 'Категория'])
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
