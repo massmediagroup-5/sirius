@@ -18,4 +18,5 @@
 /web/media/*
 /web/bundles/*
 /web/bower_components/*
+/web/img/social/*
 /.idea/*
