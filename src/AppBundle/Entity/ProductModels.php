@@ -27,7 +27,7 @@ class ProductModels
     private $alias;
 
     /**
-     * @var string
+     * @var integer
      */
     private $price = 0.0;
 
@@ -37,7 +37,7 @@ class ProductModels
     private $oldPrice = 0.0;
 
     /**
-     * @var string
+     * @var integer
      */
     private $wholesalePrice = 0.0;
 

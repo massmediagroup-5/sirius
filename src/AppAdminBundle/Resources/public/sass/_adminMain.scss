@@ -375,3 +375,9 @@ input#image_upload_file {
         visibility: hidden;
     }
 }
+
+.import-errors {
+    height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 25px;
+}

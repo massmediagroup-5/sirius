@@ -2,13 +2,15 @@
 
 namespace AppAdminBundle\Admin;
 
-use AppAdminBundle\Transformer\ImportTransformer;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
+use AppBundle\FileReader\Transformer\PriceImportTransformer;
+use AppBundle\FileReader\XlsReader;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Arr;
+use Illuminate\Support\MessageBag;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -27,43 +29,6 @@ class ImportAdmin
     const ARTICLE_ROW = 3;
 
     /**
-     * Map column letter to column meaning
-     *
-     * @var array
-     */
-    private $listColumnsMap = [
-        'A' => 'sku',
-        'B' => 'count',
-        'C' => 'sizes',
-        'D' => 'wholesale_price',
-        'E' => 'price',
-        'F' => 'color',
-        'G' => 'decoration_color',
-    ];
-
-    /**
-     * Map row number to row meaning
-     *
-     * @var array
-     */
-    private $infoRowsMap = [
-        2 => 'model',
-        4 => 'type',
-        5 => 'category',
-        6 => 'material',
-        7 => 'composition',
-        8 => 'description',
-        9 => 'features',
-        10 => 'parameters',
-        11 => 'action',
-        12 => 'discount',
-        13 => 'sale',
-        14 => 'season',
-        15 => 'wholesale_min',
-        16 => 'packaging_contain',
-    ];
-
-    /**
      * em
      *
      * @var mixed
@@ -76,16 +41,6 @@ class ImportAdmin
      * @var mixed
      */
     private $container;
-
-    /**
-     * @var \PHPExcel $phpExcelObj
-     */
-    private $phpExcelObj;
-
-    /**
-     * @var \PHPExcel_Worksheet $listSheet
-     */
-    private $listSheet;
 
     /**
      * @var RecursiveValidator
@@ -108,6 +63,11 @@ class ImportAdmin
     protected $allFilter;
 
     /**
+     * @var XlsReader
+     */
+    protected $reader;
+
+    /**
      * Publish all imported data
      *
      * @var bool
@@ -125,7 +85,6 @@ class ImportAdmin
         $this->container = $container;
         $this->validator = $validator;
         $this->slugify = new Slugify();
-        $this->transformer = new ImportTransformer();
     }
 
     /**
@@ -136,98 +95,120 @@ class ImportAdmin
      */
     public function import($file, $params = [])
     {
-        $this->phpExcelObj = $this->container->get('phpexcel')
-            ->createPHPExcelObject($file);
+        $this->reader = new XlsReader($file, new PriceImportTransformer());
 
-        $this->listSheet = $this->phpExcelObj->getSheet(0);
-
-        $this->baseCategory = $this->em->getRepository('AppBundle:Categories')->findOneBy(['alias' => 'all']);
-
-        $this->allFilter = $this->em->getRepository('AppBundle:Filters')->findOneBy(['name' => 'all']);
-
-        foreach ($this->listSheet->getRowIterator(2) as $row) {
+        foreach ($this->reader as $row) {
             // If valid data
-            if ($this->setCurrentRowData($row)) {
-                $this->processProduct(Arr::get($params, 'type'));
+            if (count($this->validator->validate($row, $this->validationRules())) == 0) {
+                switch (Arr::get($params, 'type')) {
+                    case self::APPEND_TYPE:
+                        $this->updateProduct($row);
+                        break;
+                    case self::ACTUALIZE_TYPE:
+//                        Currently this not used
+//                        $this->actualizeProduct($row);
+                }
             }
         }
+    }
+
+    /**
+     * @param $file
+     * @param array $params
+     * @return array
+     */
+    public function validateImport($file, $params = [])
+    {
+        $this->reader = new XlsReader($file, new PriceImportTransformer());
+        $result = [
+            'errors' => new \Illuminate\Support\Collection(),
+            'total' => 0,
+            'data' => $this->reader
+        ];
+
+        foreach ($this->reader as $row) {
+            $result['total']++;
+            $errors = $this->validator->validate($row, $this->validationRules());
+            if ($errors->count()) {
+                $result['errors']->push($errors);
+            }
+        }
+
+        return $result;
     }
 
     /**
      * Process row
      *
-     * @param integer $type
+     * @param integer array data
      */
-    protected function processProduct($type)
+    protected function updateProduct($data)
     {
         // Process product
-        $product = $this->em->getRepository('AppBundle:Products')
-            ->findOneBy(['article' => $this->getCurrentRowData('sku')]);
+        $product = $this->em->getRepository('AppBundle:Products')->findOneBy(['article' => $data['products.article']]);
 
-        if ($type == self::APPEND_TYPE) {
-            if (!$product) {
-                $product = $this->createProduct();
-            }
-            // Process product model
-            $productModel = $this->em->getRepository('AppBundle:ProductModels')->getModelsByProductAndColors($product,
-                $this->getCurrentRowData('color'), $this->getCurrentRowData('decoration_color'));
+        if (!$product) {
+            $product = new Products();
+            $product->setArticle($data['products.article'])
+                ->setActive(true)
+                ->setName($data['products.name'])
+                ->setBaseCategory($this->getCategory($data['products.baseCategory.name']));
 
-            if (!$productModel) {
-                $productModel = $this->createProductModel($product);
-            }
-            // Process product model sizes
-            foreach ($this->getCurrentRowData('sizes') as $size) {
-                $specificSize = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
-                    ->findOneByProductModelAndSizeName($productModel, $size);
-                if (!$specificSize) {
-                    $this->createProductModelSpecificSize($productModel, $size);
-                }
-            }
-
-        } elseif ($type == self::ACTUALIZE_TYPE) {
-            if ($product) {
-                $this->updateProduct($product);
-            }
+            $this->em->persist($product);
+            $this->em->flush();
         }
+
+        // Process product model
+        $productModel = $this->updateOrCreateProductModel($product, $data);
+
+        // Process product model sizes
+        $this->updateOrCreateSpecificSize($productModel, $data);
 
         $this->em->flush();
     }
 
     /**
-     * Find or init scu product
-     *
-     * @return \AppBundle\Entity\Products
+     * @param $data
      */
-    private function createProduct()
+    protected function actualizeProduct($data)
     {
-        $product = new Products();
-        $product->setArticle($this->getCurrentRowData('sku'))
-            ->setQuantity($this->getCurrentRowData('count'))
-            ->setActive(true)
-            ->setName($this->getCurrentRowData('model'))
-            ->setBaseCategory($this->baseCategory);
+        $product = $this->em->getRepository('AppBundle:Products')->findOneBy(['article' => $data['products.article']]);
 
-        $this->em->persist($product);
-        $this->em->flush();
+        $productModel = $this->em->getRepository('AppBundle:ProductModels')->getModelsByProductAndColors($product,
+            $data['color.name'], $data['decorationColor.name']);
 
-        return $product;
+        if ($productModel) {
+            $productModel->setQuantity($data['model.quantity']);
+
+            $this->updateOrCreateSpecificSize($productModel, $data);
+
+            $this->em->persist($productModel);
+            $this->em->flush();
+        }
     }
 
     /**
      * @param $product
+     * @param $data
      * @return \AppBundle\Entity\Products
      */
-    private function createProductModel($product)
+    private function updateOrCreateProductModel($product, $data)
     {
-        $model = new ProductModels();
-        $model->setAlias($this->uniqAlias())
+        $model = $this->em->getRepository('AppBundle:ProductModels')->getModelsByProductAndColors($product,
+            $data['color.name'], $data['decorationColor.name']);
+
+        if (!$model) {
+            $model = new ProductModels();
+        }
+
+        $model->setAlias($this->getUniqalizedAlias($data['model.alias']))
             ->setPublished(true)
             ->setProducts($product)
-            ->setQuantity($this->getCurrentRowData('count'))
-            ->setPrice($this->getCurrentRowData('price'))
-            ->setWholesalePrice($this->getCurrentRowData('wholesale_price'))
-            ->setProductColors($this->getColor($this->getCurrentRowData('color')))
-            ->setDecorationColor($this->getColor($this->getCurrentRowData('decoration_color')));
+            ->setQuantity($data['model.quantity'])
+            ->setPrice($data['model.price'])
+            ->setWholesalePrice($data['model.wholesalePrice'])
+            ->setProductColors($this->getColor($data['color.name']))
+            ->setDecorationColor($this->getColor($data['decorationColor.name']));
 
         $this->em->persist($model);
         $this->em->flush();
@@ -237,112 +218,29 @@ class ImportAdmin
 
     /**
      * @param $productModel
-     * @param $sizeName
+     * @param $data
      * @return \AppBundle\Entity\Products
      */
-    private function createProductModelSpecificSize($productModel, $sizeName)
+    private function updateOrCreateSpecificSize($productModel, $data)
     {
-        $size = $this->em->getRepository('AppBundle:ProductModelSizes')->findOrCreate(['size' => $sizeName]);
+        $specificSize = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->findOneByProductModelAndSizeName($productModel, $data['size']);
 
-        $specificSize = new ProductModelSpecificSize();
-        $specificSize->setSize($size)
-            ->setQuantity($this->getCurrentRowData('count'))
+        if (!$specificSize) {
+            $size = $this->em->getRepository('AppBundle:ProductModelSizes')->findOrCreate(['size' => $data['size']]);
+
+            $specificSize = new ProductModelSpecificSize();
+            $specificSize->setSize($size);
+        }
+        $specificSize->setQuantity($data['quantity'])
+            ->setPrice($data['price'])
+            ->setWholesalePrice($data['wholesalePrice'])
+            ->setPreOrderFlag($data['preOrderFlag'])
             ->setModel($productModel);
 
-        $this->container->get('logger')->info("Add $sizeName");
-
         $this->em->persist($specificSize);
-        $this->em->flush();
 
         return $specificSize;
-    }
-
-    /**
-     * Update quantity and sizes
-     * @param Products $product
-     * @return \AppBundle\Entity\Products
-     */
-    private function updateProduct(Products $product)
-    {
-        $productModel = $this->em->getRepository('AppBundle:ProductModels')->getModelsByProductAndColors($product,
-            $this->getCurrentRowData('color'), $this->getCurrentRowData('decoration_color'));
-
-        if ($productModel) {
-            $productModel->setQuantity($this->getCurrentRowData('count'));
-
-            foreach ($this->getCurrentRowData('sizes') as $size) {
-                $specificSize = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
-                    ->findOneByProductModelAndSizeName($productModel, $size);
-
-                if (!$specificSize) {
-                    $this->createProductModelSpecificSize($productModel, $size);
-                } else {
-                    $specificSize->setQuantity($this->getCurrentRowData('count'));
-                    $this->em->persist($specificSize);
-                }
-            }
-            $this->em->persist($productModel);
-        }
-    }
-
-
-    /**
-     * Set current row data. If data not valid - return false
-     *
-     * @param $row
-     * @return bool
-     * @throws \PHPExcel_Exception
-     */
-    private function setCurrentRowData($row)
-    {
-        $currentRowData = [];
-
-        // Set data from sheet with list
-        foreach ($this->listColumnsMap as $letter => $key) {
-            $currentRowData[$key] = $this->listSheet->getCell($letter . $row->getRowIndex())->getValue();
-        }
-
-        $this->transformer->setData($currentRowData);
-
-        if (count($this->validator->validate($currentRowData, $this->validationRules()))) {
-            return false;
-        }
-
-        $this->transformer->setData($currentRowData);
-
-        return true;
-    }
-
-    /**
-     * Get current row data
-     *
-     * @param $key
-     * @return mixed
-     */
-    private function getCurrentRowData($key)
-    {
-        return $this->transformer->transformedData()[$key];
-    }
-
-    /**
-     * uniqAlias
-     *
-     * @return string
-     */
-    private function uniqAlias()
-    {
-        $slugify = new Slugify();
-        $firstAlias = $slugify->slugify($this->getCurrentRowData('model'));
-        $alias = $firstAlias;
-        $counter = 1;
-        while (!empty($this->em->getRepository('AppBundle:ProductModels')
-            ->findOneByAlias($alias))
-        ) {
-            $alias = $firstAlias . $counter;
-            $counter++;
-        }
-
-        return $alias;
     }
 
     /**
@@ -358,27 +256,25 @@ class ImportAdmin
         }
 
         return $this->validationRules = new Collection([
-            'sku' => new NotBlank(),
-            'count' => new NotBlank(),
-            'sizes' => new NotBlank(),
+            'products.name' => new NotBlank(),
+            'products.article' => new NotBlank(),
+            'products.price' => new NotBlank(),
+            'products.wholesalePrice' => new NotBlank(),
+            'color.name' => new NotBlank(),
+            'model.alias' => new NotBlank(),
+            'model.price' => new NotBlank(),
+            'model.wholesalePrice' => new NotBlank(),
+            'size' => new NotBlank(),
             'price' => new NotBlank(),
-            'wholesale_price' => new NotBlank(),
-            'color' => new NotBlank(),
-            'decoration_color' => new Optional(),
-            'model' => new Optional(),
-            'type' => new Optional(),
-            'category' => new Optional(),
-            'material' => new Optional(),
-            'composition' => new Optional(),
-            'description' => new Optional(),
-            'features' => new Optional(),
-            'parameters' => new Optional(),
-            'action' => new Optional(),
-            'discount' => new Optional(),
-            'sale' => new Optional(),
-            'season' => new Optional(),
-            'wholesale_min' => new Optional(),
-            'packaging_contain' => new Optional(),
+            'wholesalePrice' => new NotBlank(),
+            'quantity' => new NotBlank(),
+
+            'preOrderFlag' => new Optional(),
+            'model.quantity' => new Optional(),
+            'products.active' => new Optional(),
+            'model.published' => new Optional(),
+            'products.baseCategory.name' => new Optional(),
+            'decorationColor.name' => new Optional(),
         ]);
     }
 
@@ -391,6 +287,42 @@ class ImportAdmin
     private function getColor($colorStr)
     {
         return $colorStr ? $this->em->getRepository('AppBundle:ProductColors')->findOrCreate(['name' => $colorStr]) : null;
+    }
+
+    /**
+     * Get color
+     *
+     * @param $alias
+     * @return mixed
+     */
+    private function getUniqalizedAlias($alias)
+    {
+        if ($this->em->getRepository('AppBundle:ProductModels')->findOneByAlias($alias)) {
+            return $alias . '-' . uniqid();
+        }
+
+        return $alias;
+    }
+
+    /**
+     * Get color
+     *
+     * @param $categoryName
+     * @return mixed
+     */
+    private function getCategory($categoryName)
+    {
+        if ($category = $this->em->getRepository('AppBundle:Categories')->findOneBy(['name' => $categoryName])) {
+            return $category;
+        }
+
+        if ($this->baseCategory) {
+            return $this->baseCategory;
+        }
+
+        $this->baseCategory = $this->em->getRepository('AppBundle:Categories')->findOneBy(['alias' => 'all']);
+
+        return $this->baseCategory;
     }
 
 }
