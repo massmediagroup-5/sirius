@@ -293,3 +293,9 @@ services:
         arguments: [~, AppBundle\Entity\SocialNetworks, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление сайтом", label: "Соц.сети"}
+
+    app_admin.admin.carriers:
+        class: AppAdminBundle\Admin\CarriersAdmin
+        arguments: [~, AppBundle\Entity\Carriers, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Службы доставки"}

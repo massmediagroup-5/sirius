@@ -14,7 +14,6 @@
         <div class="inp-name">
             <label>Ваше имя и фамилия<sup>*</sup></label>
         </div>
-
         <div class="inp {{ add_error(form, ['name', 'surname']) }}">
             <div class="inp-i">
                 <div class="col">
@@ -32,11 +31,11 @@
             <label>Доставка<sup>*</sup></label>
         </div>
         <div class="inp {{ add_error(form, ['np_delivery_city', 'np_delivery_store']) }}">
-            <div class="inp-i active">
+            <div class="inp-i">
                 <div class="check-wrap">
                     <label>
-                        {{ form_widget(form.delivery_type.children[0], {'attr': {'class': 'js_delivery_radio'}}) }}
-                        Новой почтой <span><i></i></span> <strong>1-3 дня, от 35 грн.</strong></label>
+                        {{ form_widget(form.delivery_type.children[1], {'attr': {'class': 'js_delivery_radio'}}) }}
+                        {{ form.delivery_type.children[1].vars.label }} <span><i></i></span> <strong>1-3 дня, от 35 грн.</strong></label>
                 </div>
                 <div class="inp-drop">
                     <div class="col">
@@ -47,6 +46,21 @@
                     </div>
                 </div>
             </div>
+            {% for key, carrier in form.delivery_type.children if key != 1 %}
+                <div class="inp-i">
+                    <div class="check-wrap">
+                        <label>
+                            {{ carrier.vars.label }}
+                            {{ form_widget(carrier, {'attr': {'class': 'js_delivery_radio'}}) }}
+                            <span><i></i></span>
+                        </label>
+                    </div>
+                    <div class="inp-drop">
+
+                    </div>
+                </div>
+            {% endfor %}
+            {{ form_widget(form.customDelivery, {'attr': {'placeholder': 'Адрес доставки'}}) }}
         </div>
     </div>
     <div class="row">

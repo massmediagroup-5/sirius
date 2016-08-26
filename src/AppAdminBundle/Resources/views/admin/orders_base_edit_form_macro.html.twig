@@ -28,16 +28,20 @@
 
                         <div class="col-md-6">
                             {{ form_row(form.pay)}}
+                            {{ form_row(form.carriers)}}
+                            {% if form.carriers.vars.value == 1 %}
                             {{ form_row(form.cities)}}
                             {{ form_row(form.stores)}}
-
+                            {% else %}
+                            {{ form_row(form.customDelivery)}}
+                            {% endif %}
                             <div class="form-group">
                                 <label class="control-label">
                                     Сумма заказа
                                 </label>
 
-                                <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">
-                                    <input type="text" disabled="disabled" readonly="readonly" class=" form-control" value="{{ admin.subject.totalPrice}}">
+                                <div class="sonata-ba-field sonata-ba-field-standard-natural">
+                                    <input type="text" disabled="disabled" readonly="readonly" class="form-control" value="{{ admin.subject.totalPrice}}">
                                 </div>
                             </div>
 

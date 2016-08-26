@@ -17,6 +17,11 @@ class Carriers
      */
     private $name;
 
+    /**
+     * @var boolean
+     */
+    private $active;
+
 
     /**
      * Get id
@@ -48,6 +53,39 @@ class Carriers
      * @return string
      */
     public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Carriers
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * __toString
+     *
+     */
+    public function __toString()
     {
         return $this->name;
     }

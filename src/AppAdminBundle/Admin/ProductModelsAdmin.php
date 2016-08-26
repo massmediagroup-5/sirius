@@ -207,4 +207,23 @@ class ProductModelsAdmin extends Admin
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_type_models_list.html.twig']);
     }
+
+    /**
+     * @return array
+     */
+    public function getExportFields()
+    {
+        return $this->getModelManager()->getExportFields($this->getClass());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDataSourceIterator()
+    {
+        $datagrid = $this->getDatagrid();
+        $datagrid->buildPager();
+
+        return $this->getModelManager()->getDataSourceIterator($datagrid, $this->getExportFields());
+    }
 }
