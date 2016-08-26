@@ -154,6 +154,24 @@ class ProductModelSpecificSize
     }
 
     /**
+     * Decrement quantity
+     *
+     * @param $quantity
+     * @return $this
+     * @throws \RuntimeException
+     */
+    public function decrementQuantity($quantity)
+    {
+        if ($this->quantity < $quantity) {
+            throw new \RuntimeException('Can`t decrement size quantity to minus value');
+        }
+
+        $this->quantity -= $quantity;
+
+        return $this;
+    }
+
+    /**
      * Set model
      *
      * @param \AppBundle\Entity\ProductModels $model

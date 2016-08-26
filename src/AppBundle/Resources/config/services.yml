@@ -21,11 +21,19 @@ services:
     order:
         class: AppBundle\Services\Order
         arguments: [@doctrine.orm.entity_manager, @service_container]
+    product:
+        class: AppBundle\Services\Product
+        arguments: [@doctrine.orm.entity_manager, @service_container]
     share:
         class: AppBundle\Services\Share
         arguments: [@service_container, @doctrine.orm.entity_manager]
     share_group_listener:
         class: AppBundle\Listener\ShareGroupListener
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_subscriber }
+    decrement_sizes_quantity:
+        class: AppBundle\Listener\DecrementSizesQuantity
         arguments: [@service_container]
         tags:
             - { name: kernel.event_subscriber }

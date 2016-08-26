@@ -73,15 +73,21 @@ class Cart
      */
     public function addItemToCard(ProductModelSpecificSize $size, $quantity)
     {
-        if (isset($this->items[$size->getModel()->getId()])) {
-            // Each size quantity
-            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
-        } else {
-            $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(),
-                $this->container->get('prices_calculator'));
-            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
+        // Forbid adding to cart more products then exists
+        if ($quantity > $size->getQuantity()) {
+            $quantity = $size->getQuantity();
         }
-        $this->saveInSession();
+        if ($quantity > 0) {
+            if (isset($this->items[$size->getModel()->getId()])) {
+                // Each size quantity
+                $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
+            } else {
+                $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(),
+                    $this->container->get('prices_calculator'));
+                $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
+            }
+            $this->saveInSession();
+        }
     }
 
     /**
@@ -193,6 +199,20 @@ class Cart
     public function isEmpty()
     {
         return !count($this->items);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasValidQuantity()
+    {
+        foreach ($this->getSizes() as $size) {
+            if ($size->getQuantity() > $size->getSize()->getQuantity() && !$size->getSize()->getPreOrderFlag()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -393,7 +413,7 @@ class Cart
 
     /**
      * Return discounted price without loyalty discount
-     * 
+     *
      * @return int
      */
     public function getDiscountedIntermediatePrice()

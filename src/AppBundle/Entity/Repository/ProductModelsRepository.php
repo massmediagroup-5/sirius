@@ -27,11 +27,13 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this
             ->createQueryBuilder('productModels')
             ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->where('productModels.products = :prodId')
             ->setParameter('prodId', $prodId)
             ->addOrderBy("productModels.priority", 'DESC');
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
 
         if ($productModelAlias) {
             $builder->andWhere('prodMod.alias != :alias')->setParameter('alias', $productModelAlias);
@@ -76,10 +78,12 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this
             ->createQueryBuilder('productModels')
             ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->where('productModels IN (:ids)')
             ->setParameter('ids', $ids);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
 
         return $builder->getQuery()->getResult();
     }
@@ -102,6 +106,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
 
@@ -149,6 +154,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder, 'size');
 
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters);

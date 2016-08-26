@@ -40,6 +40,7 @@ class ProductColorsRepository extends BaseRepository
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
 
         return $builder->getQuery()->getResult();
     }

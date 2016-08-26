@@ -2,7 +2,6 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\History;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
@@ -10,13 +9,13 @@ use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
+use AppBundle\Event\OrderCreated;
 use AppBundle\Exception\CartEmptyException;
 use AppBundle\Exception\UserInGrayListException;
 use AppBundle\HistoryItem\OrderHistoryChangedItem;
 use AppBundle\HistoryItem\OrderHistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryMergedWithRelatedItem;
 use AppBundle\HistoryItem\OrderHistoryMoveFromSizeItem;
-use AppBundle\HistoryItem\OrderHistoryMoveSizeCommand;
 use AppBundle\HistoryItem\OrderHistoryMoveToSizeItem;
 use AppBundle\HistoryItem\OrderHistoryRelationAddedItem;
 use AppBundle\HistoryItem\OrderHistoryRelationChangedItem;
@@ -79,9 +78,11 @@ class Order
 
         $cart = $this->container->get('cart');
 
-        if ( ! $cart->getItems()) {
+        if (!$cart->getItems()) {
             throw new CartEmptyException;
         }
+
+        $this->em->getConnection()->beginTransaction();
 
         $order = null;
         if ($standardSizes = $cart->getStandardSizes()) {
@@ -114,6 +115,10 @@ class Order
         $this->em->flush();
 
         $cart->clear();
+
+        $this->container->get('event_dispatcher')->dispatch('app.order_created', new OrderCreated($order));
+
+        $this->em->getConnection()->commit();
 
         return $order;
     }
@@ -695,7 +700,7 @@ class Order
         $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
         $order->setUsers($user ?: null);
         $order->setPhone(Arr::get($data, 'phone'));
-
+        
         foreach ($sizes as $size) {
             $orderSize = new OrderProductSize();
             $orderSize->setOrder($order);

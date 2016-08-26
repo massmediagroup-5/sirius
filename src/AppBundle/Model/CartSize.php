@@ -84,6 +84,22 @@ class CartSize
     }
 
     /**
+     * @return integer
+     */
+    public function getSimpleQuantity()
+    {
+        return $this->getQuantity() > $this->size->getQuantity() ? $this->size->getQuantity() : $this->getQuantity();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getPreOrderQuantity()
+    {
+        return $this->getQuantity() > $this->size->getQuantity() ? $this->getQuantity() - $this->size->getQuantity() : 0;
+    }
+
+    /**
      * @return ProductModelSpecificSize
      */
     public function getSize()

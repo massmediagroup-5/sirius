@@ -35,6 +35,18 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param \Doctrine\ORM\QueryBuilder $builder
+     * @param $sizeAlias
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function addActiveConditionsToQuery($builder, $sizeAlias = 'sizes')
+    {
+        $builder->andWhere("$sizeAlias.quantity > 0");
+
+        return $builder;
+    }
+
+    /**
      * @param $ids
      * @return mixed
      */
