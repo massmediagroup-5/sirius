@@ -213,6 +213,26 @@ div[class="form-group"][id$="_images"] {
     > .btn {
         margin-top: 24px;
     }
+    #filter_createTime_value {
+    //    width: 475px;
+    //    height: 45px;
+    //
+    //    &>div:first-child{
+    //        float: left;
+    //    }
+    //    &>div:last-child{
+    //        margin-left: 15px;
+    //        float: left;
+    //    }
+        label {
+            float: left;
+            margin-right: 10px;
+            padding-top: 7px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+    }
     .form-group {
         .sonata-ba-field {
             line-height: 34px;
