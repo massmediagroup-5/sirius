@@ -87,7 +87,8 @@
                 <i class="fa fa-save"></i> Создать заказ
             </a>
         {% endif %}
-        <a class="btn btn-info" href="{{ admin.generateUrl('list') }}"><i class="fa fa-users"></i> Вернуться</a>
+        <a class="btn btn-info" href="{{ admin.request.headers.get('referer') }}"><i class="fa fa-users"></i> Вернуться</a>
+        {#<a class="btn btn-info" href="{{ admin.generateUrl('list') }}"><i class="fa fa-users"></i> Вернуться</a>#}
     </div>
 {% endblock formactions %}
 
