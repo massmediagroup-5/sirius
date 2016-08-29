@@ -119,14 +119,16 @@ class ShareAdmin extends Admin
             ->add('description', null, ['label' => 'Описание', 'attr' => ['class' => 'ckeditor']])
             ->add('terms', null, ['label' => 'Условия акции', 'attr' => ['class' => 'ckeditor']])
             ->add('startTime', 'sonata_type_datetime_picker', [
-                'label' => 'Время начала',
-                'dp_language'=>'ru',
-                'format'=>'dd-MM-yy HH:mm']
+                    'label' => 'Время начала',
+                    'dp_language'=>'ru',
+                    'format' => 'dd-MM-yyyy H:m',
+                ]
             )
             ->add('endTime', 'sonata_type_datetime_picker', [
-                'label' => 'Время окончания',
-                'dp_language'=>'ru',
-                'format'=>'dd-MM-yy HH:mm']
+                    'label' => 'Время окончания',
+                    'dp_language'=>'ru',
+                    'format' => 'dd-MM-yyyy H:m',
+                ]
             )
             ->add('image', 'comur_image', array(
                 'label' => 'Картинка',

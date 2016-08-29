@@ -29,8 +29,7 @@ class OrderProductSizeAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add(
-                'createTime',
+            ->add('createTime',
                 'doctrine_orm_datetime_range',
                 array('label'=>'Время заказа','field_type' => 'sonata_type_datetime_range_picker'),
                 null,
@@ -38,8 +37,7 @@ class OrderProductSizeAdmin extends Admin
                     'widget' => 'single_text',
                     'format' => 'dd-MM-yyyy H:m',
                     'required' => false,
-                    'attr' =>
-                        array('class' => 'date_time_selector')
+                    'attr' => ['class' => 'date_time_selector']
                 )
             )
             ->add('order', null,
