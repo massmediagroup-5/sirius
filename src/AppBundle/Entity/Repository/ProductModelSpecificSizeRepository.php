@@ -41,7 +41,10 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
      */
     public function addActiveConditionsToQuery($builder, $sizeAlias = 'sizes')
     {
-        $builder->andWhere("$sizeAlias.quantity > 0");
+        $builder->andWhere($builder->expr()->orX(
+            $builder->expr()->gt("$sizeAlias.quantity", 0),
+            $builder->expr()->eq("$sizeAlias.preOrderFlag", true)
+        ));
 
         return $builder;
     }

@@ -293,4 +293,12 @@ class OrderProductSize
     {
         $this->id = null;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasValidQuantity()
+    {
+        return !($this->getQuantity() > $this->size->getQuantity() && !$this->size->getPreOrderFlag());
+    }
 }

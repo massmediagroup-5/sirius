@@ -69,6 +69,12 @@ class EntityEventsSubscriber implements EventSubscriber
             $this->clearCache($entity);
         }
 
+        foreach ($uow->getScheduledEntityDeletions() as $entity) {
+            if ($entity instanceof OrderProductSize) {
+                $this->container->get('product')->incrementSizesQuantity($entity, false);
+            }
+        }
+
         $uow->computeChangeSets();
     }
 

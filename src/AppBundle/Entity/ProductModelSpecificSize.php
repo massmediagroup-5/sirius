@@ -172,6 +172,19 @@ class ProductModelSpecificSize
     }
 
     /**
+     * Increment quantity
+     *
+     * @param $quantity
+     * @return $this
+     */
+    public function incrementQuantity($quantity)
+    {
+        $this->quantity += $quantity;
+
+        return $this;
+    }
+
+    /**
      * Set model
      *
      * @param \AppBundle\Entity\ProductModels $model

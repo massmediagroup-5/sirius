@@ -39,21 +39,48 @@ class Product
 
     /**
      * @param Orders $order
+     * @param bool $flush
      * @throws \RuntimeException
      */
-    public function updateSizesQuantity(Orders $order)
+    public function decrementSizesQuantity(Orders $order, $flush = true)
     {
         /** @var OrderProductSize $orderSize */
         foreach ($order->getSizes() as $orderSize) {
             $size = $orderSize->getSize();
             if ($size->getQuantity() >= $orderSize->getQuantity()) {
                 $size->decrementQuantity($orderSize->getQuantity());
-                // Todo set countedQuantityFlag?
-                $orderSize->setCountedQuantityFlag();
             }
             $this->em->persist($size);
         }
-        $this->em->flush();
+        if ($flush) {
+            $this->em->flush();
+        }
+    }
+
+    /**
+     * @param $entity
+     * @param bool $flush
+     * @throws \InvalidArgumentException
+     */
+    public function incrementSizesQuantity($entity, $flush = true)
+    {
+        if ($entity instanceof Orders) {
+            $orderSizes = $entity->getSizes();
+        } elseif ($entity instanceof OrderProductSize) {
+            $orderSizes = [$entity];
+        } else {
+            throw new \InvalidArgumentException;
+        }
+
+        /** @var OrderProductSize $orderSize */
+        foreach ($orderSizes as $orderSize) {
+            $size = $orderSize->getSize();
+            $size->incrementQuantity($orderSize->getQuantity());
+            $this->em->persist($size);
+        }
+        if ($flush) {
+            $this->em->flush();
+        }
     }
 
 }

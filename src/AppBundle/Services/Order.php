@@ -5,11 +5,13 @@ namespace AppBundle\Services;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
+use AppBundle\Entity\OrderStatus;
 use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
-use AppBundle\Event\OrderCreated;
+use AppBundle\Event\CancelOrderEvent;
+use AppBundle\Event\OrderEvent;
 use AppBundle\Exception\CartEmptyException;
 use AppBundle\Exception\UserInGrayListException;
 use AppBundle\HistoryItem\OrderHistoryChangedItem;
@@ -85,12 +87,12 @@ class Order
         $this->em->getConnection()->beginTransaction();
 
         $order = null;
-        if ($standardSizes = $cart->getStandardSizes()) {
-            $order = $this->createOrder($standardSizes, $data, $user, $quickFlag);
+        if ($cart->getStandardCount()) {
+            $order = $this->createOrder($cart->getSizes(), $data, $user, $quickFlag, false);
         }
 
-        if ($preOrderSizes = $cart->getPreOrderSizes()) {
-            $preOrder = $this->createOrder($preOrderSizes, $data, $user, $quickFlag);
+        if ($cart->getPreOrderCount()) {
+            $preOrder = $this->createOrder($cart->getSizes(), $data, $user, $quickFlag, true);
 
             $preOrder->setPreOrderFlag(true);
 
@@ -115,8 +117,6 @@ class Order
         $this->em->flush();
 
         $cart->clear();
-
-        $this->container->get('event_dispatcher')->dispatch('app.order_created', new OrderCreated($order));
 
         $this->em->getConnection()->commit();
 
@@ -566,6 +566,16 @@ class Order
                     $doneDate = $orderChange[1]->getCode() == OrderStatusPay::CODE_PAID ? new \DateTime() : null;
                     $order->setDoneTime($doneDate);
                 }
+                if ($fieldName == 'status' && $orderChange[1]) {
+                    if ($orderChange[1]->getCode() == 'accepted') {
+                        $this->container->get('event_dispatcher')->dispatch('app.order_accepted',
+                            new OrderEvent($order, false));
+                    } elseif ($orderChange[1]->getCode() == 'canceled') {
+                        $this->container->get('event_dispatcher')->dispatch('app.order_canceled',
+                            new CancelOrderEvent($order, $orderChange[0], false));
+                    }
+
+                }
             }
         }
 
@@ -663,11 +673,12 @@ class Order
      * @param $data
      * @param $user
      * @param bool|false $quickFlag
+     * @param bool|false $preOrderFlag
      *
      * @return Orders
      * @throws CartEmptyException
      */
-    protected function createOrder($sizes, $data, $user, $quickFlag = false)
+    protected function createOrder($sizes, $data, $user, $quickFlag = false, $preOrderFlag = false)
     {
         $order = new Orders();
 
@@ -702,13 +713,16 @@ class Order
         $order->setPhone(Arr::get($data, 'phone'));
         
         foreach ($sizes as $size) {
-            $orderSize = new OrderProductSize();
-            $orderSize->setOrder($order);
-            $orderSize->setQuantity($size->getQuantity());
-            $orderSize->setDiscountedTotalPricePerItem($size->getDiscountedPricePerItem());
-            $orderSize->setTotalPricePerItem($size->getPricePerItem());
-            $orderSize->setSize($size->getSize());
-            $order->addSize($orderSize);
+            $quantity = $preOrderFlag ? $size->getPreOrderQuantity() : $size->getStandardQuantity();
+            if ($quantity) {
+                $orderSize = new OrderProductSize();
+                $orderSize->setOrder($order);
+                $orderSize->setQuantity($quantity);
+                $orderSize->setDiscountedTotalPricePerItem($size->getDiscountedPricePerItem());
+                $orderSize->setTotalPricePerItem($size->getPricePerItem());
+                $orderSize->setSize($size->getSize());
+                $order->addSize($orderSize);
+            }
         }
 
         return $order;

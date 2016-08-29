@@ -4,6 +4,7 @@ namespace AppBundle\Model;
 
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\ProductModels;
+use AppBundle\Helper\Arr;
 use AppBundle\Services\PricesCalculator;
 
 class CartItem
@@ -180,28 +181,6 @@ class CartItem
     /**
      * @return int
      */
-    public function getPackagesQuantity()
-    {
-        $availableSizesIds = $this->productModel->getSizes()->map(function ($size) {
-            return $size->getId();
-        })->toArray();
-        $currentSizesIds = array_keys($this->sizes);
-
-        // If array equals in cart all available model sizes.
-        if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
-            // Packages count - is minimal amount of concrete size.
-            // When we have only one size "52-54" - we can`n have more then one package.
-            $packagesCount = min(array_map(function ($size) {
-                return $size->getQuantity();
-            }, $this->sizes));
-            return $packagesCount;
-        }
-        return 0;
-    }
-
-    /**
-     * @return int
-     */
     public function getPackagePrice()
     {
         return array_sum(array_map(function (ProductModelSpecificSize $size) {
@@ -233,41 +212,6 @@ class CartItem
     public function getSingleItemsQuantity()
     {
         return $this->sumSizesQuantity($this->getSingleItems());
-    }
-
-    /**
-     * @return array[int]
-     */
-    public function getSingleItems()
-    {
-        $availableSizesIds = $this->productModel->getSizes()->map(function ($size) {
-            return $size->getId();
-        })->toArray();
-        $currentSizesIds = array_keys($this->sizes);
-
-        $singleSizes = [];
-        // If array equals in cart all available model sizes.
-        if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
-            // Packages count - is minimal amount of concrete size.
-            // When we have only one size "52-54" - we can`n have more then one package.
-            $packagesCount = min(array_map(function ($size) {
-                return $size->getQuantity();
-            }, $this->sizes));
-            // All product sizes after $packagesCount - is single items
-            foreach ($this->sizes as $sizeId => $size) {
-                $singleSizeCount = $size->getQuantity() - $packagesCount;
-                if ($singleSizeCount) {
-                    // Create new size object for new quantity
-                    $newSize = new CartSize($size->getSize(), $this->pricesCalculator);
-                    $newSize->setQuantity($singleSizeCount);
-                    $singleSizes[$sizeId] = $newSize;
-                }
-            }
-        } else {
-            return $this->sizes;
-        }
-
-        return $singleSizes;
     }
 
     /**
@@ -338,10 +282,23 @@ class CartItem
      */
     public function hasPreOrderSize()
     {
+        return (bool)$this->getPreOrderSizesQuantity();
+    }
 
-        return (bool)array_filter($this->sizes, function (CartSize $size) {
-            return $size->getSize()->getPreOrderFlag();
-        });
+    /**
+     * @return integer
+     */
+    public function getPreOrderSizesQuantity()
+    {
+        return Arr::sumProperty($this->sizes, 'preOrderQuantity');
+    }
+
+    /**
+     * @return integer
+     */
+    public function getStandardSizesQuantity()
+    {
+        return Arr::sumProperty($this->sizes, 'standardQuantity');
     }
 
     /**
@@ -352,6 +309,107 @@ class CartItem
         return !(bool)array_filter($this->sizes, function (CartSize $size) {
             return !$size->getSize()->getPreOrderFlag();
         });
+    }
+
+    /**
+     * @return float
+     */
+    public function getStandardPackagesQuantity()
+    {
+        return $this->getPackagesQuantity();
+    }
+
+    /**
+     * @return float
+     */
+    public function getPreOrderPackagesQuantity()
+    {
+        return $this->getPackagesQuantity(true);
+    }
+
+    /**
+     * @return float
+     */
+    public function getAllPackagesQuantity()
+    {
+        return $this->getStandardPackagesQuantity() + $this->getPreOrderPackagesQuantity();
+    }
+
+    /**
+     * @param bool $preOrderFlag
+     * @return float
+     */
+    protected function getPackagesQuantity($preOrderFlag = false)
+    {
+        $availableSizesIds = $this->productModel->getSizes()->map(function ($size) {
+            return $size->getId();
+        })->toArray();
+        $currentSizesIds = array_keys($this->sizes);
+
+        // If array equals in cart all available model sizes.
+        if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
+            // Packages count - is minimal amount of concrete size.
+            // When we have only one size "52-54" - we can`n have more then one package.
+            $packagesCount = min(array_map(function (CartSize $size) use($preOrderFlag) {
+                return $preOrderFlag ? $size->getPreOrderQuantity() : $size->getStandardQuantity();
+            }, $this->sizes));
+            return $packagesCount;
+        }
+        return 0;
+    }
+
+    /**
+     * @return CartSize[]
+     */
+    public function getStandardSingleItems()
+    {
+        return $this->getSingleItems();
+    }
+
+    /**
+     * @return CartSize[]
+     */
+    public function getPreOrderSingleItems()
+    {
+        return $this->getSingleItems(true);
+    }
+
+    /**
+     * @param bool $preOrderFlag
+     * @return CartSize[]
+     */
+    protected function getSingleItems($preOrderFlag = false)
+    {
+        $availableSizesIds = $this->productModel->getSizes()->map(function ($size) {
+            return $size->getId();
+        })->toArray();
+        $currentSizesIds = array_keys($this->sizes);
+
+        $quantityGetter = $preOrderFlag ? 'getPreOrderQuantity' : 'getStandardQuantity';
+
+        $singleSizes = [];
+        // If array equals in cart all available model sizes.
+        if (empty(array_diff($availableSizesIds, $currentSizesIds))) {
+            // Packages count - is minimal amount of concrete size.
+            // When we have only one size "52-54" - we can`n have more then one package.
+            $packagesCount = min(array_map(function ($size) use($quantityGetter) {
+                return $size->$quantityGetter();
+            }, $this->sizes));
+            // All product sizes after $packagesCount - is single items
+            foreach ($this->sizes as $sizeId => $size) {
+                $singleSizeCount = $size->$quantityGetter() - $packagesCount;
+                if ($singleSizeCount) {
+                    // Create new size object for new quantity
+                    $newSize = new CartSize($size->getSize(), $this->pricesCalculator);
+                    $newSize->setQuantity($singleSizeCount);
+                    $singleSizes[$sizeId] = $newSize;
+                }
+            }
+        } else {
+            return $this->sizes;
+        }
+
+        return $singleSizes;
     }
 
 }

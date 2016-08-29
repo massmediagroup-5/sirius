@@ -14,6 +14,7 @@
                             <th>Цвет</th>
                             <th>Размер</th>
                             <th>Количество</th>
+                            <th>Доступно</th>
                             <th>
                                 {% if admin.subject.preOrderFlag %}
                                     В заказ
@@ -42,11 +43,20 @@
                             <td class="control-group">{{ size.size.model.products.name }}</td>
                             <td class="control-group">{{ size.size.model.productColors.name }}</td>
                             <td class="control-group">{{ size.size }}</td>
-                            <td class="control-group">{{ size.quantity }}</td>
+                            <td class="control-group">{{ size.quantity }}
+                                {% if admin.subject.status.code == 'new' or admin.subject.status.code == 'canceled' %}
+                                    (не перечислено)
+                                {% else %}
+                                    (перечислено)
+                                {% endif %}
+                            </td>
+                            <td class="control-group">{{ size.size.quantity }}</td>
                             <th class="editable-cell">
-                                <input type="number" name="move_size" min="1" max="{{ size.quantity }}"
-                                       value="{{ size.quantity }}"/>
-                                <i class="fa fa-check-square js_submit_move_size"></i>
+                                {% if size.size.preOrderFlag %}
+                                    <input type="number" name="move_size" min="1" max="{{ size.quantity }}"
+                                           value="{{ size.quantity }}"/>
+                                    <i class="fa fa-check-square js_submit_move_size"></i>
+                                {% endif %}
                             </th>
                             <td class="control-group">{{ size.totalPrice }}</td>
                             <td class="control-group">{{ size.discountedTotalPrice }}</td>
@@ -60,26 +70,26 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="7" class="text-right">Всего</td>
+                            <td colspan="9" class="text-right">Всего</td>
                             <th colspan="2" id="totalPrice">{{ admin.subject.totalPrice }}</th>
                         </tr>
                         <tr>
-                            <td colspan="7" class="text-right">Цена со скидкой</td>
+                            <td colspan="9" class="text-right">Цена со скидкой</td>
                             <th colspan="2" id="discountedTotalPrice">{{ admin.subject.discountedTotalPrice }}</th>
                         </tr>
                         <tr>
-                            <td colspan="7" class="text-right">Оплачено бонусами</td>
+                            <td colspan="9" class="text-right">Оплачено бонусами</td>
                             <th colspan="2" id="bonuses">{{ admin.subject.bonuses }}</th>
                         </tr>
                         <tr>
-                            <td colspan="7" class="text-right">Погасить</td>
+                            <td colspan="9" class="text-right">Погасить</td>
                             <th colspan="2">
                                 <input type="text" value="{{ admin.subject.individualDiscount }}"
                                        name="individualDiscount" class="table-input js_order_update"/>
                             </th>
                         </tr>
                         <tr>
-                            <td colspan="7" class="text-right">
+                            <td colspan="9" class="text-right">
                                 <input type="text" value="{{ admin.subject.additionalSolarDescription }}"
                                        name="additionalSolarDescription" class="table-input text-right js_order_update"/>
                             </td>
@@ -89,7 +99,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <td colspan="7" class="text-right">К оплате</td>
+                            <td colspan="9" class="text-right">К оплате</td>
                             <th colspan="2" id="individualDiscountedTotalPrice">{{ admin.subject.individualDiscountedTotalPrice }}</th>
                         </tr>
                     </tfoot>

@@ -5,6 +5,7 @@ namespace AppAdminBundle\Admin;
 use AppBundle\Entity\CallBack;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\Orders;
+use AppBundle\Validator\OrderStatusConstraint;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Arr;
 use Sonata\AdminBundle\Admin\Admin;
@@ -187,7 +188,8 @@ class OrdersAdmin extends Admin
                     'property' => 'name',
                     'label' => 'Сатус заказа',
                     'empty_value' => 'Выберите статус заказа',
-                    'query_builder' => $this->getStatusQuery()
+                    'query_builder' => $this->getStatusQuery(),
+                    'constraints' => [new OrderStatusConstraint()]
                 ]
             )
             ->add('payStatus', 'entity',

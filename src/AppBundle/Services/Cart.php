@@ -7,7 +7,7 @@ use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Model\CartItem;
 use AppBundle\Model\CartSize;
 use Doctrine\ORM\EntityManager;
-use Illuminate\Support\Arr;
+use AppBundle\Helper\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -55,11 +55,16 @@ class Cart
     protected $backup = null;
 
     /**
+     * Cart constructor.
      * @param EntityManager $em
      * @param ContainerInterface $container
      * @param Session $session
      */
-    public function __construct(EntityManager $em, ContainerInterface $container, Session $session)
+    public function __construct(
+        EntityManager $em,
+        ContainerInterface $container,
+        Session $session
+    )
     {
         $this->em = $em;
         $this->container = $container;
@@ -73,21 +78,15 @@ class Cart
      */
     public function addItemToCard(ProductModelSpecificSize $size, $quantity)
     {
-        // Forbid adding to cart more products then exists
-        if ($quantity > $size->getQuantity()) {
-            $quantity = $size->getQuantity();
+        if (isset($this->items[$size->getModel()->getId()])) {
+            // Each size quantity
+            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
+        } else {
+            $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(),
+                $this->container->get('prices_calculator'));
+            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
         }
-        if ($quantity > 0) {
-            if (isset($this->items[$size->getModel()->getId()])) {
-                // Each size quantity
-                $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
-            } else {
-                $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(),
-                    $this->container->get('prices_calculator'));
-                $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
-            }
-            $this->saveInSession();
-        }
+        $this->saveInSession();
     }
 
     /**
@@ -263,7 +262,7 @@ class Cart
      */
     public function getItemPackagesQuantity(ProductModels $model)
     {
-        return isset($this->items[$model->getId()]) ? $this->items[$model->getId()]->getPackagesQuantity() : 0;
+        return isset($this->items[$model->getId()]) ? $this->items[$model->getId()]->getAllPackagesQuantity() : 0;
     }
 
     /**
@@ -280,47 +279,17 @@ class Cart
     /**
      * @return CartItem[]
      */
-    public function getPreOrderItems()
+    public function hasPreOrderSizes()
     {
-        return array_filter($this->items, function (CartItem $item) {
-            return $item->hasPreOrderSize();
-        });
-    }
+        foreach ($this->items as $item) {
+            foreach ($item->getSizes() as $size) {
+                if ($size->getPreOrderQuantity()) {
+                    return true;
+                }
+            }
+        }
 
-    /**
-     * @return CartItem[]
-     */
-    public function getPreOrderSizes()
-    {
-        $sizes = array_map(function (CartItem $item) {
-            return array_filter($item->getSizes(), function (CartSize $size) {
-                return $size->getSize()->getPreOrderFlag();
-            });
-        }, $this->items);
-        return $sizes ? call_user_func_array('array_merge', $sizes) : [];
-    }
-
-    /**
-     * @return CartItem[]
-     */
-    public function getStandardItems()
-    {
-        return array_filter($this->items, function (CartItem $item) {
-            return !$item->hasPreOrderSize();
-        });
-    }
-
-    /**
-     * @return CartItem[]
-     */
-    public function getStandardSizes()
-    {
-        $items = array_map(function (CartItem $item) {
-            return array_filter($item->getSizes(), function (CartSize $size) {
-                return !$size->getSize()->getPreOrderFlag();
-            });
-        }, $this->items);
-        return $items ? call_user_func_array('array_merge', $items) : [];
+        return false;
     }
 
     /**
@@ -328,9 +297,7 @@ class Cart
      */
     public function getTotalCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getQuantity();
-        }, $this->items));
+        return Arr::sumProperty($this->items, 'quantity');
     }
 
     /**
@@ -338,9 +305,7 @@ class Cart
      */
     public function getStandardCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getQuantity();
-        }, $this->getStandardItems()));
+        return Arr::sumProperty($this->items, 'standardSizesQuantity');
     }
 
     /**
@@ -348,9 +313,7 @@ class Cart
      */
     public function getPreOrderCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getQuantity();
-        }, $this->getPreOrderItems()));
+        return Arr::sumProperty($this->items, 'preOrderSizesQuantity');
     }
 
     /**
@@ -358,9 +321,7 @@ class Cart
      */
     public function getStandardPrice()
     {
-        return array_sum(array_map(function (CartSize $item) {
-            return $item->getPrice();
-        }, $this->getStandardSizes()));
+        return Arr::sumProperty($this->getSizes(), 'standardPrice');
     }
 
     /**
@@ -368,9 +329,7 @@ class Cart
      */
     public function getStandardDiscountedPrice()
     {
-        return array_sum(array_map(function (CartSize $item) {
-            return $item->getDiscountedPrice();
-        }, $this->getStandardSizes()));
+        return Arr::sumProperty($this->getSizes(), 'standardDiscountedPrice');
     }
 
     /**
@@ -378,9 +337,7 @@ class Cart
      */
     public function getPreOrderPrice()
     {
-        return array_sum(array_map(function (CartSize $item) {
-            return $item->getPrice();
-        }, $this->getPreOrderSizes()));
+        return Arr::sumProperty($this->getSizes(), 'preOrderPrice');
     }
 
     /**
@@ -388,9 +345,7 @@ class Cart
      */
     public function getPreOrderDiscountedPrice()
     {
-        return array_sum(array_map(function (CartSize $item) {
-            return $item->getDiscountedPrice();
-        }, $this->getPreOrderSizes()));
+        return Arr::sumProperty($this->getSizes(), 'preOrderDiscountedPrice');
     }
 
     /**
@@ -398,9 +353,7 @@ class Cart
      */
     public function getTotalPrice()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getPrice();
-        }, $this->items));
+        return Arr::sumProperty($this->items, 'price');
     }
 
     /**
@@ -418,9 +371,7 @@ class Cart
      */
     public function getDiscountedIntermediatePrice()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getDiscountedPrice();
-        }, $this->items));
+        return Arr::sumProperty($this->items, 'discountedPrice');
     }
 
     /**
@@ -485,7 +436,7 @@ class Cart
         foreach ($this->items as $item) {
             $array[$item->getProductModel()->getId()] = [
                 'id' => $item->getProductModel()->getId(),
-                'packagesAmount' => $item->getPackagesQuantity()
+                'packagesAmount' => $item->getAllPackagesQuantity()
             ];
             $sizes = [];
             foreach ($item->getSizes() as $size) {

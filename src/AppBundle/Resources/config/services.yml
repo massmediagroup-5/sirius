@@ -33,7 +33,7 @@ services:
         tags:
             - { name: kernel.event_subscriber }
     decrement_sizes_quantity:
-        class: AppBundle\Listener\DecrementSizesQuantity
+        class: AppBundle\Listener\ChangeSizesQuantity
         arguments: [@service_container]
         tags:
             - { name: kernel.event_subscriber }

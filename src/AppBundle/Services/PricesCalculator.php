@@ -264,15 +264,17 @@ class PricesCalculator
 
     /**
      * @param CartSize $object
+     * @param bool $quantity
      * @return float
      */
-    public function getProductModelSpecificSizeInCartDiscountedPrice(CartSize $object)
+    public function getProductModelSpecificSizeInCartDiscountedPrice(CartSize $object, $quantity = false)
     {
         /** @var $cart Cart */
         $cart = $this->container->get('cart');
 
         $shareGroup = $object->getSize()->getShareGroup();
         $share = $shareGroup ? $shareGroup->getShare() : null;
+        $quantity = $quantity === false ? $object->getQuantity() : $quantity;
         if ($this->container->get('share')->isActualUpSellShare($share)) {
             $otherSizesInShare = [];
             foreach ($share->getSizesGroups() as $group) {
@@ -322,13 +324,13 @@ class PricesCalculator
                 $pricePerItem = $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true);
 
                 $price = ($pricePerItem - ceil($shareGroup->getDiscount() * $pricePerItem) * 0.01) * $minSizesCount
-                    + $pricePerItem * ($object->getQuantity() - $minSizesCount);
+                    + $pricePerItem * ($quantity - $minSizesCount);
 
                 return $price;
             }
         }
 
-        return $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true) * $object->getQuantity();
+        return $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true) * $quantity;
     }
 
     /**
