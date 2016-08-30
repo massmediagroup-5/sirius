@@ -103,12 +103,12 @@ class Products implements CharacteristicableInterface
     private $features;
 
     /**
-     * @var string
+     * @var integer
      */
     private $price = 0;
 
     /**
-     * @var string
+     * @var integer
      */
     private $wholesalePrice = 0;
 

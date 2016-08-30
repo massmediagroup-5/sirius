@@ -25,7 +25,7 @@ class ImportController extends CoreController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->startImport($form);
+            return $this->startImport($form);
         }
 
         return $this->render('AppAdminBundle:admin:import.html.twig', [
@@ -45,14 +45,28 @@ class ImportController extends CoreController
     protected function startImport(Form $form)
     {
         $formData = $form->getData();
+        
+        $data = [
+            'base_template' => $this->getBaseTemplate(),
+            'admin_pool' => $this->container->get('sonata.admin.pool'),
+            'blocks' => $this->container->getParameter('sonata.admin.configuration.dashboard_blocks'),
+            'form' => $form->createView()
+        ];
+        
+        $validation = $this->get('app.admin.import')->validateImport($formData['file'], $formData);
 
-        $this->get('app.admin.import')->import($formData['file'], $formData);
+        $data['validation'] = $validation;
 
-        $this->addFlash('sonata_flash_success', 'Успешно импортировано');
+        if ($validation['errors']->count() == 0) {
+            $this->get('app.admin.import')->import($formData['file'], $formData);
 
-        return new RedirectResponse(
-            $this->generateUrl('sonata_admin_dashboard')
-        );
+            $this->addFlash('sonata_flash_success', 'Успешно импортировано');
+        } else {
+            $this->addFlash('sonata_flash_error', "Ошибка валидации (с ошибками {$validation['errors']->count()} с " .
+                "{$validation['data']->count()})");
+        }
+        
+        return $this->render('AppAdminBundle:admin:import.html.twig', $data);
     }
 
 }

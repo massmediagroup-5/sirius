@@ -14,8 +14,7 @@ class ImportForm extends AbstractType
             ->add('type', 'choice', [
                 'label' => 'Тип',
                 'choices' => [
-                    (string)ImportAdmin::ACTUALIZE_TYPE => 'Актуализация',
-                    (string)ImportAdmin::APPEND_TYPE => 'Приход',
+                    (string)ImportAdmin::APPEND_TYPE => 'Обновление',
                 ]
             ])
             ->add('file', 'file', ['required' => true])

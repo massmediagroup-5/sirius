@@ -61,6 +61,7 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('size', $size)
             ->setParameter('model', $productModel)
             ->getQuery()
+            ->setMaxResults(1)
             ->getOneOrNullResult();
     }
 
