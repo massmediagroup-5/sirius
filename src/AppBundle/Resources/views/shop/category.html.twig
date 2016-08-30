@@ -20,7 +20,8 @@
             <div class="content__i">
                 {{ widget('breadcrumbs.render')|raw }}
                 <h2 class="catalog-title">
-                    {{ data.category.name }} <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
+                    {{ data.category.name }}
+                    <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
                 </h2>
                 {% if data.share %}
                     <div class="catalog-action">
@@ -214,6 +215,14 @@
                         </div>
                     </div>
                 </div>
+                {% if data.share %}
+                    <div class="share-text">
+                        <div class="share-text__i">
+                            <h2>Подробнее об акции</h2>
+                            {{ data.share.terms|raw }}
+                        </div>
+                    </div>
+                {% endif %}
                 {{ widget('products.recentlyReviewed')|raw }}
             </div>
         </div>

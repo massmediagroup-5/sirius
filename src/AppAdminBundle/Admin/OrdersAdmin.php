@@ -227,6 +227,13 @@ class OrdersAdmin extends Admin
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
                 ]
             ])
+            ->add('carriers', 'entity', [
+                'class' => 'AppBundle:Carriers',
+                'label' => 'Служба доставки',
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
+                'empty_value' => 'Выберите службу доставки',
+            ])
             ->add('cities', 'entity', [
                 'class' => 'AppBundle:Cities',
                 'label' => 'Город',
@@ -255,6 +262,7 @@ class OrdersAdmin extends Admin
                         ->setParameter('id', $cityId);
                 }
             ])
+            ->add('customDelivery', null, ['label' => 'Адрес доставки'])
             ->add('clientSmsId', null, [
                 'label' => 'Идентификатор смс клиента',
                 'read_only' => true,

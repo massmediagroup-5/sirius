@@ -41,6 +41,7 @@ class ProductModelsAdmin extends Admin
         $datagridMapper
             ->add('alias', null, ['label' => 'Ссылка'])
             ->add('products', null, ['label' => 'Модель'])
+            ->add('products.article', null, ['label' => 'Артикул'])
             ->add('products.baseCategory', null, ['label' => 'Категория'])
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
@@ -205,5 +206,24 @@ class ProductModelsAdmin extends Admin
     public function getFormTheme()
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_type_models_list.html.twig']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getExportFields()
+    {
+        return $this->getModelManager()->getExportFields($this->getClass());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDataSourceIterator()
+    {
+        $datagrid = $this->getDatagrid();
+        $datagrid->buildPager();
+
+        return $this->getModelManager()->getDataSourceIterator($datagrid, $this->getExportFields());
     }
 }

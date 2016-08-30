@@ -373,11 +373,14 @@ class AjaxController extends Controller
         if ($request->get('phone')) {
             $data = $this->getDoctrine()->getRepository('AppBundle:Orders')->findOneBy(array(
                 'phone' => $request->get('phone'),
-                'type' => 'Обычный заказ'
+                'type' => '0'
             ));
 
             if ($data) {
-                $this->result['info']['fio'] = $data->getFio();
+                list($name, $surname) = explode(' ', $data->getFio());
+                $this->result['info']['name'] = $name;
+                $this->result['info']['surname'] = $surname;
+                $this->result['info']['email'] = $data->getEmail();
                 $this->result['info']['pay'] = $data->getPay();
                 $this->result['info']['carriers'] = $data->getCarriers()->getId();
                 if (!$data->getCustomDelivery()) {

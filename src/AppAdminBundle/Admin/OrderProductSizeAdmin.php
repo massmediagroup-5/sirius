@@ -29,16 +29,35 @@ class OrderProductSizeAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('order.type', 'doctrine_orm_choice', array('label' => 'Тип заказа'),
-                'choice',
+            ->add('createTime',
+                'doctrine_orm_datetime_range',
+                array('label'=>'Время заказа','field_type' => 'sonata_type_datetime_range_picker'),
+                null,
+                array(
+                    'widget' => 'single_text',
+                    'format' => 'dd-MM-yyyy H:m',
+                    'required' => false,
+                    'attr' => ['class' => 'date_time_selector']
+                )
+            )
+            ->add('order', null,
+                ['label'=>'Заказ'],
+                null,
                 [
-                    'choices' => [
-                        '' => 'Не указанно',
-                        (string)Orders::TYPE_NORMAL => 'Обычный',
-                        (string)Orders::TYPE_QUICK => 'Быстрый',
-                    ]
+                    'property'=>'StringForFilter',
+                    'multiple' => true
                 ]
             )
+//            ->add('order.type', 'doctrine_orm_choice', array('label' => 'Тип заказа'),
+//                'choice',
+//                [
+//                    'choices' => [
+//                        '' => 'Не указанно',
+//                        (string)Orders::TYPE_NORMAL => 'Обычный',
+//                        (string)Orders::TYPE_QUICK => 'Быстрый',
+//                    ]
+//                ]
+//            )
             ->add('order.status', null, [
                 'label' => 'Статус заказа'
             ])
@@ -55,7 +74,7 @@ class OrderProductSizeAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-//            ->add('id')
+            ->add('order.identifier', null,['label'=>'Заказ №'])
             ->add('order.type', 'choice', [
                 'label' => 'Тип заказа',
                 'choices' => [
@@ -67,7 +86,8 @@ class OrderProductSizeAdmin extends Admin
             ->add('order.status.name', null, [
                 'label' => 'Статус заказа'
             ])
-            ->add('size.model.products.article', null, ['label' => 'Размер'])
+            ->add('size.size', null, ['label' => 'Размер'])
+            ->add('size.model.products.article', null, ['label' => 'Артикул'])
             ->add('size.model.products.name', null, ['label' => 'Название'])
             ->add('size.model.productColors.name', null, ['label' => 'Цвет'])
             ->add('quantity', null, ['label' => 'Количество'])
@@ -113,4 +133,19 @@ class OrderProductSizeAdmin extends Admin
             ->add('totalPrice', null, ['label' => 'Цена', 'required' => true])
             ->add('discountedTotalPrice', null, ['label' => 'Цена со скидкой']);
     }
+
+    public function getExportFields()
+    {
+        $exportFields["Заказ №"] = 'order.identifier';
+        $exportFields["Статус заказа"] = 'order.status.name';
+        $exportFields["Название товара"] = 'size.model.products.name';
+        $exportFields["Цвет"] = 'size.model.productColors.name';
+        $exportFields["Артикул"] = 'size.model.products.article';
+        $exportFields["Размер"] = 'size.size';
+        $exportFields["Количество"] = 'quantity';
+        $exportFields["Цена"] = 'totalPrice';
+        $exportFields["Цена со скидкой"] = 'discountedTotalPrice';
+        return $exportFields;
+    }
+
 }

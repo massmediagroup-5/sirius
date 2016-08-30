@@ -739,18 +739,23 @@ class Orders
         return $this->getDiscountedTotalPrice() - $this->individualDiscount + $this->additionalSolar - $this->getBonuses();
     }
 
+    public function getStringForFilter()
+    {
+        return '№ заказа: ' . $this->getIdentifier() . ', ' . ( $this->fio ? 'Обычный, '.$this->fio : 'Быстрый заказ' ) . ', ' . $this->phone . ', ' . $this->createTime->format('d-m-Y H:i:s');
+    }
+
     /**
      * @return string
      */
     public function __toString()
     {
-        return (string)$this->getId();
+        return (string) $this->getId();
     }
 
     /**
      * Add size
      *
-         * @param \AppBundle\Entity\OrderProductSize $size
+     * @param \AppBundle\Entity\OrderProductSize $size
      *
      * @return Orders
      */
@@ -921,14 +926,15 @@ class Orders
     public function getIdentifier()
     {
         if ($this->preOrderFlag) {
-            return ($this->relatedOrder ? $this->relatedOrder->id : $this->id) . '/п';
+            return ( $this->relatedOrder ? $this->relatedOrder->id : $this->id ) . '/п';
         }
+
         return $this->id;
     }
 
     public function __clone()
     {
-        $this->id = null;
+        $this->id    = null;
         $this->sizes = new ArrayCollection();
     }
 

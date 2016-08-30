@@ -20,6 +20,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
+
 class CreateOrderType extends AbstractType
 {
     /**
@@ -60,13 +63,11 @@ class CreateOrderType extends AbstractType
         }
         $user = Arr::get($options, 'user');
         $authenticated = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY');
-//        dump($authenticated);exit;
 
         $paymentTypes = [
             Orders::PAY_TYPE_BANK_CARD,
             Orders::PAY_TYPE_COD,
         ];
-
         $builder
             ->add('phone', TextType::class, [
                 'required' => true,
@@ -104,14 +105,26 @@ class CreateOrderType extends AbstractType
                 },
                 'placeholder' => ''
             ])
-            ->add('delivery_type', ChoiceType::class, [
-                'choices' => [
-                    'np' => 'np',
-                ],
-                'required' => true,
-                'data' => 'np',
+            ->add('delivery_type', EntityType::class, array(
+                'class' => 'AppBundle:Carriers',
+                'query_builder' => function (EntityRepository $er) use ($city) {
+                    return $er->createQueryBuilder('c')->where('c.active = :active')
+                              ->setParameter('active', 1);
+                },
+                'choice_label' => 'name',
                 'expanded' => true,
+            ))
+            ->add('customDelivery', TextType::class, [
+                'label'=>'Адресс доставки',
             ])
+//            ->add('delivery_type', ChoiceType::class, [
+//                'choices' => [
+//                    'np' => 'np',
+//                ],
+//                'required' => true,
+//                'data' => 'np',
+//                'expanded' => true,
+//            ])
             ->add('pay', ChoiceType::class, [
                 'choices' => array_combine($paymentTypes, $paymentTypes),
                 'required' => true,

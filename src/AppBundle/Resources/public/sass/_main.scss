@@ -3605,6 +3605,30 @@ input[type="checkbox"] {
 	}
 }
 
+.share-text {
+  	h2 {
+		color: #050505;
+		font-size: 32px;
+		line-height: 34px;
+		padding-bottom: 45px;
+		font-weight: 400;
+		font-family: $latoBold;
+		text-align: center;
+	}
+	p {
+		font-size: 14px;
+		line-height: 16px;
+		font-weight: 400;
+		font-family: $lato;
+		//color: #9a9b9b;
+		padding-bottom: 25px;
+		strong {
+			font-weight: 400;
+			font-family: $latoBlack;
+		}
+	}
+}
+
 .last-viewed {
 	padding-bottom: 112px;
 	position: relative;
