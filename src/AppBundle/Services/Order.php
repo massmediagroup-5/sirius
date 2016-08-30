@@ -712,7 +712,7 @@ class Order
         $order->setStatus($this->em->getRepository('AppBundle:OrderStatus')->findOneBy(['code' => 'new']));
         $order->setUsers($user ?: null);
         $order->setPhone(Arr::get($data, 'phone'));
-        
+
         foreach ($sizes as $size) {
             $quantity = $preOrderFlag ? $size->getPreOrderQuantity() : $size->getStandardQuantity();
             if ($quantity) {

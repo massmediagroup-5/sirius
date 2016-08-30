@@ -60,11 +60,7 @@ class Cart
      * @param ContainerInterface $container
      * @param Session $session
      */
-    public function __construct(
-        EntityManager $em,
-        ContainerInterface $container,
-        Session $session
-    )
+    public function __construct(EntityManager $em, ContainerInterface $container, Session $session)
     {
         $this->em = $em;
         $this->container = $container;

@@ -4,6 +4,7 @@ namespace AppBundle\Services;
 
 
 use AppBundle\Helper\Arr;
+use AppBundle\Model\CartSize;
 
 /**
  * Class WholesalerCart
@@ -61,7 +62,7 @@ class WholesalerCart extends Cart
     }
 
     /**
-     * @return int
+     * @return CartSize[]
      */
     public function getStandardSingleItems()
     {
@@ -70,7 +71,7 @@ class WholesalerCart extends Cart
     }
 
     /**
-     * @return int
+     * @return CartSize[]
      */
     public function getPreOrderSingleItems()
     {
