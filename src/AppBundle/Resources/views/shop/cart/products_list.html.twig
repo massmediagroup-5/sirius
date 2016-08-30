@@ -18,7 +18,7 @@
                         </div>
                         <div class="main-cart-list__i">
 
-                            {% for size in cart.sizes%}
+                            {% for size in cart.sizes %}
                                 {% if size.standardQuantity%}
                                     {{ include('AppBundle:shop:product/cart_item.html.twig', {size: size, preOrderMode: false}) }}
                                 {% endif %}

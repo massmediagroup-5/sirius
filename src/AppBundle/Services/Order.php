@@ -447,12 +447,13 @@ class Order
             if ($response) {
                 // Раскодируем ответ API-сервера
                 $jsonObj = json_decode($response);
+
                 if (null === $jsonObj) {
                     // Ошибка в полученном ответе
                     $result['error'] = "Invalid JSON";
-                } elseif (isset($jsonObj->error)) {
+                } elseif (isset($jsonObj->result->error)) {
                     // Ошибка отправки сообщения
-                    $result['error'] = "An error occured: {$jsonObj->error} (code: {$jsonObj->code})";
+                    $result['error'] = "An error occured: {$jsonObj->result->error} (code: {$jsonObj->result->error})";
                 } else {
                     // Сообщение успешно отправлено
                     $result['sms_id'] = $jsonObj->result->sms_id;

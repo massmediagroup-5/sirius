@@ -154,7 +154,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder, 'size');
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
 
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters);

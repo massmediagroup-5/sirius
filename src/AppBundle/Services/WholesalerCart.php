@@ -25,7 +25,7 @@ class WholesalerCart extends Cart
      */
     public function getSingleItemsCount()
     {
-        return Arr::sumProperty($this->items, 'singleItemsQuantity');
+        return $this->getStandardSingleItemsCount() + $this->getPreOrderSingleItemsCount();
     }
 
     /**
@@ -49,7 +49,7 @@ class WholesalerCart extends Cart
      */
     public function getStandardSingleItemsCount()
     {
-        return Arr::sumProperty($this->items, 'standardSingleItems');
+        return Arr::sumProperty($this->getStandardSingleItems(), 'quantity');
     }
 
     /**
@@ -57,6 +57,24 @@ class WholesalerCart extends Cart
      */
     public function getPreOrderSingleItemsCount()
     {
-        return Arr::sumProperty($this->items, 'preOrderSingleItems');
+        return Arr::sumProperty($this->getPreOrderSingleItems(), 'quantity');
+    }
+
+    /**
+     * @return int
+     */
+    public function getStandardSingleItems()
+    {
+        $items = Arr::mapProperty($this->items, 'standardSingleItems');
+        return $items ? call_user_func_array('array_merge', $items) : [];
+    }
+
+    /**
+     * @return int
+     */
+    public function getPreOrderSingleItems()
+    {
+        $items = Arr::mapProperty($this->items, 'preOrderSingleItems');
+        return $items ? call_user_func_array('array_merge', $items) : [];
     }
 }
