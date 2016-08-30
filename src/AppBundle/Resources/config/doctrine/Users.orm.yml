@@ -1,6 +1,7 @@
 AppBundle\Entity\Users:
     type: entity
     table: users
+    repositoryClass: AppBundle\Entity\Repository\UserRepository
     uniqueConstraints:
         id_UNIQUE:
             columns:
