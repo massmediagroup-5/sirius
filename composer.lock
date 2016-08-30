@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "67d10de0186d84fe28be7f7d774fe7ee",
-    "content-hash": "79815dd6ebb5ec2a5573ea79f5fc148f",
+    "hash": "09d36f5cb8d2df93760629db4c357723",
+    "content-hash": "a723ac93ff573bfdf65370e3b3416b5e",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -1994,7 +1994,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.2.43",
+            "version": "v5.2.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -2036,7 +2036,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.2.43",
+            "version": "v5.2.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",

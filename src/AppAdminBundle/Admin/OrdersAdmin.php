@@ -26,9 +26,9 @@ use NovaPoshta\ApiModels\InternetDocument;
 class OrdersAdmin extends Admin
 {
     protected $datagridValues = [
-        '_page' => 1,            // display the first page (default = 1)
+        '_page'       => 1,            // display the first page (default = 1)
         '_sort_order' => 'DESC', // reverse order (default = 'ASC')
-        '_sort_by' => 'createTime'  // name of the ordered field
+        '_sort_by'    => 'createTime'  // name of the ordered field
 
         // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
     ];
@@ -51,6 +51,7 @@ class OrdersAdmin extends Admin
 
     /**
      * @param string $context
+     *
      * @return \Sonata\AdminBundle\Datagrid\ProxyQueryInterface
      */
     public function createQuery($context = 'list')
@@ -59,6 +60,7 @@ class OrdersAdmin extends Admin
         $alias = $query->getRootAliases()[0];
         $query->innerJoin("$alias.status", 'status');
         $query->andWhere('status.code = :status')->setParameter('status', $this->statusName);
+
         return $query;
     }
 
@@ -96,15 +98,15 @@ class OrdersAdmin extends Admin
             $collection->add('ajax_create_waybill', $this->getRouterIdParameter() . '/ajax_create_waybill', [], [], [
                 'expose' => true
             ])
-                ->add('ajax_update_waybill', $this->getRouterIdParameter() . '/ajax_update_waybill', [], [], [
-                    'expose' => true
-                ])
-                ->add('ajax_print_waybill', $this->getRouterIdParameter() . '/ajax_print_waybill', [], [], [
-                    'expose' => true
-                ])
-                ->add('ajax_delete_waybill', $this->getRouterIdParameter() . '/ajax_delete_waybill', [], [], [
-                    'expose' => true
-                ]);
+                       ->add('ajax_update_waybill', $this->getRouterIdParameter() . '/ajax_update_waybill', [], [], [
+                           'expose' => true
+                       ])
+                       ->add('ajax_print_waybill', $this->getRouterIdParameter() . '/ajax_print_waybill', [], [], [
+                           'expose' => true
+                       ])
+                       ->add('ajax_delete_waybill', $this->getRouterIdParameter() . '/ajax_delete_waybill', [], [], [
+                           'expose' => true
+                       ]);
         }
     }
 
@@ -115,10 +117,55 @@ class OrdersAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('type', null, ['label' => 'Тип заказа'])
-            ->add('fio', null, ['label' => 'Ф.И.О.'])
+            ->add('type', 'doctrine_orm_choice', array('label' => 'Тип заказа'),
+                'choice',
+                array(
+                    'choices' => array(
+                        ''                           => 'Не указанно',
+                        (string) Orders::TYPE_NORMAL => 'Обычный',
+                        (string) Orders::TYPE_QUICK  => 'Быстрый',
+                    )
+                )
+            )
+            ->add('fio', 'doctrine_orm_callback',
+                [
+                    'label'       => 'Ф.И.О.',
+                    'show_filter' => true,
+                    'callback'    => function ($queryBuilder, $alias, $field, $value) {
+                        if ( ! $value['value']) {
+                            return false;
+                        }
+                        $queryBuilder
+                            ->andWhere($alias . '.fio LIKE :value')
+                            ->setParameter('value', '%' . $value['value']->getFio() . '%');
+
+                        return true;
+                    },
+                ],
+                'entity',
+                [
+                    'class'         => 'AppBundle:Orders',
+                    'property'      => 'fio',
+                    'query_builder' =>
+                        function ($er) {
+                            $qb = $er->createQueryBuilder('o');
+                            $qb->select('o')->groupBy('o.fio');
+
+                            return $qb;
+                        }
+                ]
+            )
             ->add('phone', null, ['label' => 'Телефон'])
-            ->add('pay', null, ['label' => 'Способ оплаты'])
+            ->add('pay', 'doctrine_orm_choice', array('label' => 'Способ оплаты'),
+                'choice',
+                array(
+                    'choices' => array(
+                        ''                                  => 'Не выбрано',
+                        (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
+                        (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
+                    )
+                )
+            )
             ->add('createTime', null, ['label' => 'Время оформления'])
             ->add('updateTime', null, ['label' => 'Время последнего редактирования заказа']);
     }
@@ -132,28 +179,28 @@ class OrdersAdmin extends Admin
         $listMapper
             ->add('identifier', null, ['label' => 'ID'])
             ->addIdentifier('type', 'choice', [
-                'label' => 'Тип заказа',
-                'route' => ['name' => 'edit'],
+                'label'   => 'Тип заказа',
+                'route'   => ['name' => 'edit'],
                 'choices' => [
-                    '' => 'Не указанно',
-                    (string)Orders::TYPE_NORMAL => 'Обычный',
-                    (string)Orders::TYPE_QUICK => 'Быстрый',
+                    ''                           => 'Не указанно',
+                    (string) Orders::TYPE_NORMAL => 'Обычный',
+                    (string) Orders::TYPE_QUICK  => 'Быстрый',
                 ]
             ])
             ->addIdentifier('fio', null, ['label' => 'Ф.И.О.', 'route' => ['name' => 'edit']])
             ->addIdentifier('phone', null, ['label' => 'Телефон', 'route' => ['name' => 'edit']])
             ->add('pay', 'choice', [
-                'label' => 'Способ оплаты',
+                'label'   => 'Способ оплаты',
                 'choices' => [
-                    '' => 'Не выбрано',
-                    (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
-                    (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
+                    ''                                  => 'Не выбрано',
+                    (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
+                    (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
                 ]
             ])
 //            ->add('users.roles', null, ['label' => 'Тип пользователя'])
             ->add('users.roles', null,
                 [
-                    'label' => 'Тип пользователя',
+                    'label'    => 'Тип пользователя',
                     'template' => 'AppAdminBundle:list:list.template.roles.html.twig'
                 ]
             )
@@ -183,95 +230,97 @@ class OrdersAdmin extends Admin
                 ])
             ->add('status', 'entity',
                 [
-                    'class' => 'AppBundle:OrderStatus',
-                    'property' => 'name',
-                    'label' => 'Сатус заказа',
-                    'empty_value' => 'Выберите статус заказа',
+                    'class'         => 'AppBundle:OrderStatus',
+                    'property'      => 'name',
+                    'label'         => 'Сатус заказа',
+                    'empty_value'   => 'Выберите статус заказа',
                     'query_builder' => $this->getStatusQuery()
                 ]
             )
             ->add('payStatus', 'entity',
                 [
-                    'class' => 'AppBundle:OrderStatusPay',
-                    'property' => 'name',
-                    'label' => 'Сатус оплаты заказа',
+                    'class'       => 'AppBundle:OrderStatusPay',
+                    'property'    => 'name',
+                    'label'       => 'Сатус оплаты заказа',
                     'empty_value' => 'Выберите статус оплаты'
                 ]
             )
             ->add('type', 'choice', [
-                'label' => 'Тип заказа',
+                'label'     => 'Тип заказа',
                 'read_only' => true,
-                'disabled' => true,
-                'choices' => [
-                    (string)Orders::TYPE_NORMAL => 'Обычный',
-                    (string)Orders::TYPE_QUICK => 'Быстрый',
+                'disabled'  => true,
+                'choices'   => [
+                    (string) Orders::TYPE_NORMAL => 'Обычный',
+                    (string) Orders::TYPE_QUICK  => 'Быстрый',
                 ]
             ])
             ->add('fio', null, [
-                'label' => 'Ф.И.О.',
+                'label'     => 'Ф.И.О.',
                 'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
+                'disabled'  => $this->disableEdit,
             ])
             ->add('phone', null, [
-                'label' => 'Телефон',
+                'label'     => 'Телефон',
                 'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
+                'disabled'  => $this->disableEdit,
             ])
             ->add('pay', 'choice', [
-                'label' => 'Способ оплаты',
+                'label'     => 'Способ оплаты',
                 'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
-                'choices' => [
-                    '' => 'Не выбрано',
-                    (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
-                    (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
+                'disabled'  => $this->disableEdit,
+                'choices'   => [
+                    ''                                  => 'Не выбрано',
+                    (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
+                    (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
                 ]
             ])
             ->add('carriers', 'entity', [
-                'class' => 'AppBundle:Carriers',
-                'label' => 'Служба доставки',
-                'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
+                'class'       => 'AppBundle:Carriers',
+                'label'       => 'Служба доставки',
+                'read_only'   => $this->disableEdit,
+                'disabled'    => $this->disableEdit,
                 'empty_value' => 'Выберите службу доставки',
             ])
             ->add('cities', 'entity', [
-                'class' => 'AppBundle:Cities',
-                'label' => 'Город',
-                'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
+                'class'         => 'AppBundle:Cities',
+                'label'         => 'Город',
+                'read_only'     => $this->disableEdit,
+                'disabled'      => $this->disableEdit,
                 'query_builder' => function (EntityRepository $er) {
                     $carrier = $this->getSubject()->getCarriers();
+
                     return $er->createQueryBuilder('s')
-                        ->where('s.carriers = :id')
-                        ->setParameter('id', $carrier ? $carrier->getId() : null);
+                              ->where('s.carriers = :id')
+                              ->setParameter('id', $carrier ? $carrier->getId() : null);
                 },
-                'empty_value' => 'Выберите город',
+                'empty_value'   => 'Выберите город',
             ])
             ->add('stores', 'sonata_stores_list', [
-                'class' => 'AppBundle:Stores',
-                'label' => 'Склад',
-                'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
+                'class'         => 'AppBundle:Stores',
+                'label'         => 'Склад',
+                'read_only'     => $this->disableEdit,
+                'disabled'      => $this->disableEdit,
                 'query_builder' => function (EntityRepository $er) {
-                    if (!$cityId = Arr::get($this->request->request->get($this->getUniqid()), 'cities')) {
-                        $city = $this->getSubject()->getCities();
+                    if ( ! $cityId = Arr::get($this->request->request->get($this->getUniqid()), 'cities')) {
+                        $city   = $this->getSubject()->getCities();
                         $cityId = $city ? $city->getId() : null;
                     }
+
                     return $er->createQueryBuilder('s')
-                        ->where('s.cities = :id')
-                        ->setParameter('id', $cityId);
+                              ->where('s.cities = :id')
+                              ->setParameter('id', $cityId);
                 }
             ])
             ->add('customDelivery', null, ['label' => 'Адрес доставки'])
             ->add('clientSmsId', null, [
-                'label' => 'Идентификатор смс клиента',
+                'label'     => 'Идентификатор смс клиента',
                 'read_only' => true,
-                'disabled' => true,
+                'disabled'  => true,
             ])
             ->add('clientSmsStatus', null, [
-                'label' => 'Статус смс клиента',
+                'label'     => 'Статус смс клиента',
                 'read_only' => true,
-                'disabled' => true,
+                'disabled'  => true,
             ])
 //            ->add('managerSmsId', null, [
 //                'label' => 'Идентификатор смс менеджера',
@@ -323,18 +372,18 @@ class OrdersAdmin extends Admin
 
             $formMapper->tab('ТТН', [
                 'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
-                'object' => $this->getSubject(),
-                'ttn' => $ttn,
-                'date' => $date
+                'object'       => $this->getSubject(),
+                'ttn'          => $ttn,
+                'date'         => $date
             ])->end();
         }
         if ($otherOrders) {
             $formMapper->tab('Другие заказы покупателя', [
                 'tab_template' => 'AppAdminBundle:admin:order_other_sizes.html.twig',
-                'otherOrders' => $otherOrders,
-                'totalSum' => $this->getOtherOrdersTotalSum()
+                'otherOrders'  => $otherOrders,
+                'totalSum'     => $this->getOtherOrdersTotalSum()
             ])
-                ->end();
+                       ->end();
         }
     }
 
@@ -369,10 +418,10 @@ class OrdersAdmin extends Admin
             ->add('id')
             ->add('status', 'entity',
                 [
-                    'class' => 'AppBundle:OrderStatus',
+                    'class'               => 'AppBundle:OrderStatus',
                     'associated_property' => 'name',
-                    'label' => 'Сатус заказа',
-                    'empty_value' => 'Выберите статус заказа'
+                    'label'               => 'Сатус заказа',
+                    'empty_value'         => 'Выберите статус заказа'
                 ]
             )
             ->add('type', null, ['label' => 'Тип заказа'])
@@ -396,11 +445,11 @@ class OrdersAdmin extends Admin
                     'class' => 'col-md-12',
                 ])
             ->add('cart', 'sonata_type_collection', [
-                'label' => 'Модель',
-                'required' => false,
-                'cascade_validation' => true,
+                'label'               => 'Модель',
+                'required'            => false,
+                'cascade_validation'  => true,
                 'associated_property' => 'skuProducts.name',
-                'by_reference' => false
+                'by_reference'        => false
             ], ['edit' => 'inline', 'inline' => 'table'])
             ->end()
             ->end();
@@ -416,14 +465,15 @@ class OrdersAdmin extends Admin
 
     /**
      * @param array $filters
+     *
      * @return array
      */
     public function paginateModels($filters = [])
     {
         $container = $this->getConfigurationPool()->getContainer();
-        $models = $container->get('doctrine')
-            ->getRepository("AppBundle:ProductModels")
-            ->getAdminSearchQuery($filters);
+        $models    = $container->get('doctrine')
+                               ->getRepository("AppBundle:ProductModels")
+                               ->getAdminSearchQuery($filters);
 
         $models = $container->get('knp_paginator')->paginate(
             $models,
@@ -437,6 +487,7 @@ class OrdersAdmin extends Admin
 
     /**
      * @param array $newFilters
+     *
      * @return array
      */
     public function paramsToGetSizes($newFilters)
@@ -452,6 +503,7 @@ class OrdersAdmin extends Admin
     public function getNewInstance()
     {
         $object = parent::getNewInstance();
+
         return $this->setDefaults($object);
     }
 
@@ -461,6 +513,7 @@ class OrdersAdmin extends Admin
     public function getObject($id)
     {
         $object = parent::getObject($id);
+
         return $this->setDefaults($object);
     }
 
@@ -469,7 +522,7 @@ class OrdersAdmin extends Admin
      */
     protected function setDefaults($object)
     {
-        if (!$object->getAdditionalSolarDescription()) {
+        if ( ! $object->getAdditionalSolarDescription()) {
             $object->setAdditionalSolarDescription('Доставка');
         }
 
@@ -483,32 +536,35 @@ class OrdersAdmin extends Admin
     {
         return function (EntityRepository $er) {
             $status = $this->getSubject()->getStatus();
+
             return $er->createQueryBuilder('s')
-                ->addOrderBy('FIELD(s.code, \'canceled\')', 'DESC')
-                ->addOrderBy('s.priority', 'ASC')
-                ->where('s.priority >= :priority')
-                ->orWhere('s.code = :code')
-                ->setParameter('code', 'canceled')
-                ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(3);
+                      ->addOrderBy('FIELD(s.code, \'canceled\')', 'DESC')
+                      ->addOrderBy('s.priority', 'ASC')
+                      ->where('s.priority >= :priority')
+                      ->orWhere('s.code = :code')
+                      ->setParameter('code', 'canceled')
+                      ->setParameter('priority', $status ? $status->getPriority() : null)->setMaxResults(3);
         };
     }
 
     public function getHistoryItemLabel(OrderHistory $historyItem)
     {
         $historyManager = $this->getConfigurationPool()->getContainer()->get('history_manager');
-        $history = $historyManager->createFromHistoryItem($historyItem);
+        $history        = $historyManager->createFromHistoryItem($historyItem);
+
         return $history->label();
     }
 
     /**
      * @param $callback
+     *
      * @return Orders
      */
     public function createFromCallback($callback)
     {
         $em = $this->getConfigurationPool()
-            ->getContainer()
-            ->get('doctrine.orm.entity_manager');
+                   ->getContainer()
+                   ->get('doctrine.orm.entity_manager');
 
         $callback = $em->getRepository('AppBundle:CallBack')->find($callback);
 
@@ -541,18 +597,21 @@ class OrdersAdmin extends Admin
     /**
      * @param int $currentPage
      * @param int $perPage
+     *
      * @return array
      */
     public function paginateOtherOrders($currentPage = 1, $perPage = 10)
     {
         if ($user = $this->getSubject()->getUsers()) {
             $otherOrdersQuery = $this->modelManager->getEntityManager('AppBundle:Orders')
-                ->getRepository('AppBundle:Orders')
-                ->otherOrdersByUser($user, $this->subject);
+                                                   ->getRepository('AppBundle:Orders')
+                                                   ->otherOrdersByUser($user, $this->subject);
+
             return $this->getConfigurationPool()->getContainer()->get('knp_paginator')->paginate(
                 $otherOrdersQuery, $currentPage, $perPage, ['wrap-queries' => true]
             );
         }
+
         return [];
     }
 
@@ -560,9 +619,10 @@ class OrdersAdmin extends Admin
     {
         if ($user = $this->getSubject()->getUsers()) {
             return $this->modelManager->getEntityManager('AppBundle:Orders')
-                ->getRepository('AppBundle:Orders')
-                ->otherOrdersSum($user, $this->subject);
+                                      ->getRepository('AppBundle:Orders')
+                                      ->otherOrdersSum($user, $this->subject);
         }
+
         return 0;
     }
 
@@ -572,6 +632,7 @@ class OrdersAdmin extends Admin
     protected function getSizeFromHistory($historyItem)
     {
         $em = $this->getConfigurationPool()->getContainer()->get('doctrine.orm.entity_manager');
+
         return $em->getRepository('AppBundle:ProductModelSpecificSize')->find($historyItem->getAdditional('sizeId'));
     }
 }
