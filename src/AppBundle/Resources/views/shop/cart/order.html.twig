@@ -42,7 +42,7 @@
                                 <div class="top">
                                     <p>Итого</p>
                                 </div>
-                                {% if not cart.standardItems is empty %}
+                                {% if cart.standardCount %}
                                     <div class="mid">
                                         <h2>
                                             Основной заказ
@@ -66,7 +66,7 @@
                                     </div>
                                 {% endif %}
                                 
-                                {% if not cart.preOrderItems is empty %}
+                                {% if not cart.preOrderCount is empty %}
                                     <div class="mid">
                                         <h2>
                                             Предзаказ

@@ -84,6 +84,26 @@ class CartSize
     }
 
     /**
+     * @return integer
+     */
+    public function getStandardQuantity()
+    {
+        // If order quantity bigger than exists and pre order allowed
+        return $this->getQuantity() > $this->size->getQuantity() && $this->size->getPreOrderFlag()
+            ? $this->size->getQuantity() : $this->getQuantity();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getPreOrderQuantity()
+    {
+        // If order quantity bigger than exists and pre order allowed
+        return $this->getQuantity() > $this->size->getQuantity() && $this->size->getPreOrderFlag()
+            ? $this->getQuantity() - $this->size->getQuantity() : 0;
+    }
+
+    /**
      * @return ProductModelSpecificSize
      */
     public function getSize()
@@ -100,7 +120,41 @@ class CartSize
     }
 
     /**
-     * @return ProductModelSpecificSize
+     * @return float
+     */
+    public function getPreOrderPrice()
+    {
+        return $this->pricesCalculator->getPrice($this->size) * $this->getPreOrderQuantity();
+    }
+
+    /**
+     * @return float
+     */
+    public function getStandardPrice()
+    {
+        return $this->pricesCalculator->getPrice($this->size) * $this->getStandardQuantity();
+    }
+
+    /**
+     * @return float
+     */
+    public function getPreOrderDiscountedPrice()
+    {
+        return $this->pricesCalculator->getProductModelSpecificSizeInCartDiscountedPrice($this,
+            $this->getPreOrderQuantity());
+    }
+
+    /**
+     * @return float
+     */
+    public function getStandardDiscountedPrice()
+    {
+        return $this->pricesCalculator->getProductModelSpecificSizeInCartDiscountedPrice($this,
+            $this->getStandardQuantity());
+    }
+
+    /**
+     * @return float
      */
     public function getDiscountedPrice()
     {

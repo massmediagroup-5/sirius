@@ -246,17 +246,17 @@ class Products
     }
 
     /**
-     * @param $selectedSize
+     * @param CartSize $selectedSize
+     * @param bool $preOrderFlag
      * @return mixed
-     * @throws \Doctrine\ORM\ORMException
      */
-    public function changeProductSizeCount(CartSize $selectedSize)
+    public function changeProductSizeCount(CartSize $selectedSize, $preOrderFlag = false)
     {
         $form = $this->container->get('form.factory')->create(ChangeProductSizeQuantityType::class, null, [
             'action' => $this->container->get('router')->generate('cart_change_size_count',
                 ['id' => $selectedSize->getSize()->getId()]),
             'size' => $selectedSize->getSize(),
-            'selected' => $selectedSize->getQuantity(),
+            'selected' => $preOrderFlag ? $selectedSize->getPreOrderQuantity() : $selectedSize->getStandardQuantity(),
         ])->createView();
 
         return $this->templating->render('AppBundle:widgets/product/change_product_size_count.html.twig', [

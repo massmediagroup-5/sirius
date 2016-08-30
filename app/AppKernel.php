@@ -82,7 +82,7 @@ class AppKernel extends Kernel
         require_once $cache->getPath();
 
         $this->container = new $class();
-        if (PHP_SAPI == 'cli') {
+        if (PHP_SAPI == 'cli' &&  $this->getEnvironment() != 'test') {
             $this->getContainer()->enterScope('request');
             $this->getContainer()->set('request', new \Symfony\Component\HttpFoundation\Request(), 'request');
         }
