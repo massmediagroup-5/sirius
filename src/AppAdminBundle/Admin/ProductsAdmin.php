@@ -183,4 +183,17 @@ class ProductsAdmin extends Admin
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
 
+    public function getExportFields()
+    {
+        $exportFields["Название модели"] = 'name';
+        $exportFields["Артикул"] = 'article';
+        $exportFields["Модель"] = 'products.name';
+        $exportFields["Категория"] = 'baseCategory.name';
+        return $exportFields;
+    }
+
+    public function getExportFormats()
+    {
+        return ['xls'];
+    }
 }

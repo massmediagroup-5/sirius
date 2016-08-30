@@ -209,14 +209,6 @@ class ProductModelsAdmin extends Admin
     }
 
     /**
-     * @return array
-     */
-    public function getExportFields()
-    {
-        return $this->getModelManager()->getExportFields($this->getClass());
-    }
-
-    /**
      * @return mixed
      */
     public function getDataSourceIterator()
@@ -225,5 +217,24 @@ class ProductModelsAdmin extends Admin
         $datagrid->buildPager();
 
         return $this->getModelManager()->getDataSourceIterator($datagrid, $this->getExportFields());
+    }
+
+    public function getExportFields()
+    {
+        $exportFields["Ссылка"] = 'alias';
+        $exportFields["Артикул"] = 'products.article';
+        $exportFields["Модель"] = 'products.name';
+        $exportFields["Цвет"] = 'productColors.name';
+        $exportFields["Категория"] = 'products.baseCategory.name';
+        $exportFields["Цена"] = 'price';
+        $exportFields["Оптовая цена"] = 'wholesalePrice';
+        $exportFields["Приоритет"] = 'priority';
+        $exportFields["Опубликованно"] = 'published';
+        return $exportFields;
+    }
+
+    public function getExportFormats()
+    {
+        return ['xls'];
     }
 }
