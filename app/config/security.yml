@@ -8,6 +8,7 @@ security:
         ROLE_ADMIN: []
         ROLE_WHOLESALER: []
         ROLE_SUPER_ADMIN: []
+        ROLE_GRAY_LIST: []
         ROLE_BLACK_LIST: []
 
     providers:

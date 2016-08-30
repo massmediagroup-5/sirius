@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Form\Type;
 
+use AppBundle\Entity\Carriers;
 use AppBundle\Entity\Orders;
 use AppBundle\Services\PricesCalculator;
 use Doctrine\ORM\EntityRepository;
@@ -57,7 +58,7 @@ class CreateOrderType extends AbstractType
         $delivery = $request ? $request->get('create_order')['delivery_type'] : false;
         $city = false;
         if ($delivery) {
-            if ($delivery == 'np') {
+            if ($delivery == Carriers::NP_ID) {
                 $city = $request->get('create_order')['np_delivery_city'];
             }
         }
@@ -92,13 +93,13 @@ class CreateOrderType extends AbstractType
             ->add('np_delivery_city', 'entity', [
                 'class' => 'AppBundle:Cities',
                 'required' => true,
-                'constraints' => $delivery == 'np' ? [new NotBlank] : [],
+                'constraints' => $delivery == Carriers::NP_ID ? [new NotBlank] : [],
                 'placeholder' => ''
             ])
             ->add('np_delivery_store', 'entity', [
                 'class' => 'AppBundle:Stores',
                 'required' => true,
-                'constraints' => $delivery == 'np' ? [new NotBlank] : [],
+                'constraints' => $delivery == Carriers::NP_ID ? [new NotBlank] : [],
                 'query_builder' => function (EntityRepository $er) use ($city) {
                     return $er->createQueryBuilder('s')->orderBy('s.name', 'ASC')->where('s.cities = :city')
                         ->setParameter('city', $city);

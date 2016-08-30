@@ -7,6 +7,8 @@ namespace AppBundle\Entity;
  */
 class Carriers
 {
+    const NP_ID = 1;
+    
     /**
      * @var integer
      */
