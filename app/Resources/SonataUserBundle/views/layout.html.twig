@@ -1,0 +1,18 @@
+{% extends "@App/base.html.twig" %}
+
+{% block out_class %}out_sub{% endblock %}
+
+{% block body %}
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+                <div class="main-contacts">
+                    <div class="main-contacts__i">
+                        {% block fos_user_content %}
+                        {% endblock fos_user_content %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

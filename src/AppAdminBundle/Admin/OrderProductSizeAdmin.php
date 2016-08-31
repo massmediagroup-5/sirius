@@ -86,10 +86,10 @@ class OrderProductSizeAdmin extends Admin
             ->add('order.status.name', null, [
                 'label' => 'Статус заказа'
             ])
-            ->add('size.size', null, ['label' => 'Размер'])
             ->add('size.model.products.article', null, ['label' => 'Артикул'])
             ->add('size.model.products.name', null, ['label' => 'Название'])
             ->add('size.model.productColors.name', null, ['label' => 'Цвет'])
+            ->add('size.size', null, ['label' => 'Размер'])
             ->add('quantity', null, ['label' => 'Количество'])
             ->add('totalPrice', 'text', ['label' => 'Цена'])
             ->add('discountedTotalPrice', 'text', ['label' => 'Цена со скидкой'])

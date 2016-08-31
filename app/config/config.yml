@@ -240,8 +240,15 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: AppBundle\Entity\Users
+    from_email:
+        address:        noreply@sirius-sport.com
+        sender_name:    Sirius
     group:
         group_class: Sonata\UserBundle\Entity\BaseGroup
+#    change_password:
+#        form:
+#            type: boutique_user_change_password
+#            name: boutique_user_change_password
     registration:
         form:
             type: app_user_registration
