@@ -5,15 +5,14 @@
 {% block cabinet_content %}
     {% if app.session.flashBag.has('success') %} 
         {% for msg in app.session.flashBag.get('success') %}
-        <div class="flash-success" id="flash-success">
-            <div class="text-popup">
-               <div class="text-popup__i">
-                  <p>{{ msg }}</p>
-               </div>
-            </div> 
-         </div>  
+            <div class="flash-success" id="flash-success">
+                <div class="text-popup">
+                   <div class="text-popup__i">
+                      <p>{{ msg }}</p>
+                   </div>
+                </div>
+             </div>
          {% endfor %}
-        </div>
     {% endif %}
     <div class="user-form">
         {{ form_start(form, {'attr': {'class': 'user-form__i'}}) }}
