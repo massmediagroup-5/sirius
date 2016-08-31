@@ -7,7 +7,6 @@ use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
 use AppBundle\FileReader\Transformer\PriceImportTransformer;
 use AppBundle\FileReader\XlsReader;
-use AppBundle\Validator\UniqueFieldConstraint;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Arr;
