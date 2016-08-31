@@ -118,6 +118,7 @@ class CharacteristicValuesRepository extends BaseRepository
         $productsQueryBuilder->from('AppBundle:Products', 'products')
             ->innerJoin('products.characteristicValues', 'productCharacteristicValues')
             ->innerJoin('products.productModels', 'productModels')
+            ->innerJoin('productModels.sizes', 'sizes')
             ->innerJoin('products.baseCategory', 'baseCategory')
             ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->andWhere($qb->expr()->eq('products.baseCategory', $category->getId()))
@@ -142,6 +143,7 @@ class CharacteristicValuesRepository extends BaseRepository
         $productsQueryBuilder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($productsQueryBuilder, $filters);
 
         $productsQueryBuilder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($productsQueryBuilder);
+        $productsQueryBuilder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($productsQueryBuilder);
 
         $builder->addSelect("({$productsQueryBuilder->getDQL()}) as products_count")
 //            ->having("products_count > 0")

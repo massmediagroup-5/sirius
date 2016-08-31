@@ -25,7 +25,7 @@
 
                 <div class="price price_new">
                     <p>
-                        {{ widget('products.prices', size)|raw }}
+                        {{ widget('products.prices', size.size)|raw }}
                     </p>
                 </div>
 
@@ -39,7 +39,7 @@
                 </p>
 
                 <div class="amount-select">
-                    {{ widget('products.changeProductSizeCount', size)|raw }}
+                    {{ widget('products.changeProductSizeCount', size, preOrderMode)|raw }}
                 </div>
             </td>
             <td>
@@ -47,7 +47,9 @@
                     <p class="name">Сумма</p>
 
                     <p class="total-price">
-                        <span class="js_item_price" data-id="{{ size.size.id }}">{{ size.discountedPrice }}</span> грн.
+                        <span class="js_item_price" data-id="{{ size.size.id }}">
+                            {{ preOrderMode ? size.preOrderDiscountedPrice : size.standardDiscountedPrice }}
+                        </span> грн.
                     </p>
 
                     {{ widget('products.removeProductFromCart', size)|raw }}

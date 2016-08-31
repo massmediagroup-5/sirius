@@ -1,6 +1,8 @@
 {# Display package and call self to display single size items #}
 
-{% if item.packagesQuantity or currentSize is defined %}
+{% set packagesQuantity = preOrderMode ? item.preOrderPackagesQuantity : item.standardPackagesQuantity %}
+
+{% if packagesQuantity or currentSize is defined %}
     <div class="item js_cart_item" data-package="{{ currentSize is defined ? '1' : '0' }}"
          data-id="{{ currentSize is defined ? currentSize.size.id : item.productModel.id }}">
         <div class="item__i">
@@ -39,7 +41,7 @@
                         <div class="amount-control">
                             <a href="#" class="minus"></a>
                             <input type="text" class="js_amounts_changer" data-min=1
-                                   value="{{ currentSize is defined ? currentSize.quantity : item.packagesQuantity }}"/>
+                                   value="{{ currentSize is defined ? currentSize.quantity : packagesQuantity }}"/>
                             <a href="#" class="plus"></a>
                         </div>
                     </td>
@@ -64,7 +66,7 @@
 {% endif %}
 
 {% if not currentSize is defined %}
-    {% for sizeId, size in item.singleItems %}
+    {% for sizeId, size in (preOrderMode ? item.preOrderSingleItems : item.standardSingleItems) %}
         {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig', {'currentSize': size}) }}
     {% endfor %}
 {% endif %}

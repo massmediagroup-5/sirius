@@ -45,11 +45,5 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-    app.doctrine.listener:
-        class: AppBundle\Listener\EntityEventsSubscriber
-        arguments: [@service_container]
-        tags:
-            - { name: doctrine.event_subscriber }
-
     cache:
         class: Doctrine\Common\Cache\ApcCache

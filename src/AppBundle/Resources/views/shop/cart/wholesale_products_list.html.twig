@@ -15,7 +15,7 @@
 
             <div class="col floating-box-wr">
 
-                {% if not cart.standardItems is empty %}
+                {% if cart.standardCount %}
 
                     <div class="main-cart-list">
                         <div class="title">
@@ -50,8 +50,10 @@
 
                             <div class="opt-list">
                                 <div class="opt-list__i">
-                                    {% for item in cart.standardItems %}
-                                        {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig') }}
+                                    {% for item in cart.items %}
+                                        {% if item.standardSizesQuantity %}
+                                            {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig', {preOrderMode: false}) }}
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>
@@ -67,7 +69,7 @@
 
                 {% endif %}
 
-                {% if not cart.preOrderItems is empty %}
+                {% if cart.preOrderCount %}
 
                     <div class="preorder-cart-list">
                         <div class="title">
@@ -103,8 +105,10 @@
 
                             <div class="opt-list">
                                 <div class="opt-list__i">
-                                    {% for item in cart.preOrderItems %}
-                                        {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig') }}
+                                    {% for item in cart.items %}
+                                        {% if item.preOrderSizesQuantity %}
+                                            {{ include('AppBundle:shop/cart/partials/wholesale_product.html.twig', {preOrderMode: true}) }}
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>

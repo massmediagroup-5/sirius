@@ -306,7 +306,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     {
         $cacheKey = "get_product_by_alias_$modelAlias";
 
-        return $this->createQueryBuilder('prod')
+        $builder = $this->createQueryBuilder('prod')
             ->select('prod')
             ->leftJoin('prod.actionLabels', 'act')->addselect('act')
             ->innerJoin('prod.productModels', 'prodMod')->addselect('prodMod')
@@ -319,10 +319,12 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('prodMod.sizes', 'specific_sizes')->addselect('specific_sizes')
             ->leftJoin('specific_sizes.size', 'sizes')->addselect('sizes')
             ->where('prod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
-            ->setParameter('alias', $modelAlias)
-            ->getQuery()
-            ->useResultCache(true, 3600, $cacheKey)
-            ->getSingleResult();
+            ->setParameter('alias', $modelAlias);
+
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder,
+            'specific_sizes');
+
+        return $builder->getQuery()->useResultCache(true, 3600, $cacheKey)->getSingleResult();
     }
 
     /**
@@ -374,6 +376,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->select('prod')
             ->innerJoin('prod.actionLabels', 'act')->addselect('act')
             ->innerJoin('prod.productModels', 'prodMod')->addselect('prodMod')
+            ->innerJoin('prodMod.sizes', 'sizes')->addselect('sizes')
             //->innerJoin('prod.characteristicValues', 'prodChVal')->addselect('prodChVal')
             ->innerJoin('prod.baseCategory', 'catb')->addselect('catb')
             //->innerJoin('catb.characteristicValues', 'catbChVal')->addselect('catbChVal')
@@ -382,6 +385,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('prodMod.images', 'prodImg')->addselect('prodImg')
             ->where('prod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
             ->setParameter('alias', $productModelAlias);
+
+        $query_obj = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($query_obj);
+
         return $query_obj->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 
@@ -461,6 +467,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->addFiltersToQuery($builder, $filters);
 
         $builder = $this->addActiveConditionsToQuery($builder);
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
 
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters);

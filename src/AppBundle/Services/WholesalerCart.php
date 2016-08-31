@@ -2,7 +2,8 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Model\CartItem;
+
+use AppBundle\Helper\Arr;
 use AppBundle\Model\CartSize;
 
 /**
@@ -17,9 +18,7 @@ class WholesalerCart extends Cart
      */
     public function getPackagesCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getPackagesQuantity();
-        }, $this->items));
+        return Arr::sumProperty($this->items, 'allPackagesQuantity');
     }
 
     /**
@@ -27,9 +26,7 @@ class WholesalerCart extends Cart
      */
     public function getSingleItemsCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getSingleItemsQuantity();
-        }, $this->items));
+        return $this->getStandardSingleItemsCount() + $this->getPreOrderSingleItemsCount();
     }
 
     /**
@@ -37,9 +34,7 @@ class WholesalerCart extends Cart
      */
     public function getStandardPackagesCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getPackagesQuantity();
-        }, $this->getStandardItems()));
+        return Arr::sumProperty($this->items, 'standardPackagesQuantity');
     }
 
     /**
@@ -47,9 +42,7 @@ class WholesalerCart extends Cart
      */
     public function getPreOrderPackagesCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getPackagesQuantity();
-        }, $this->getPreOrderItems()));
+        return Arr::sumProperty($this->items, 'preOrderPackagesQuantity');
     }
 
     /**
@@ -57,9 +50,7 @@ class WholesalerCart extends Cart
      */
     public function getStandardSingleItemsCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getSingleItemsQuantity();
-        }, $this->getStandardItems()));
+        return Arr::sumProperty($this->getStandardSingleItems(), 'quantity');
     }
 
     /**
@@ -67,51 +58,24 @@ class WholesalerCart extends Cart
      */
     public function getPreOrderSingleItemsCount()
     {
-        return array_sum(array_map(function (CartItem $item) {
-            return $item->getSingleItemsQuantity();
-        }, $this->getPreOrderItems()));
+        return Arr::sumProperty($this->getPreOrderSingleItems(), 'quantity');
     }
 
     /**
-     * @return CartItem[]
+     * @return CartSize[]
      */
-    public function getStandardItems()
+    public function getStandardSingleItems()
     {
-        return array_filter($this->items, function (CartItem $item) {
-            return !$item->getProductModel()->isAllSizesPreOrder();
-        });
-    }
-
-    /**
-     * @return CartItem[]
-     */
-    public function getPreOrderItems()
-    {
-        return array_filter($this->items, function (CartItem $item) {
-            return $item->getProductModel()->isAllSizesPreOrder();
-        });
-    }
-
-    /**
-     * @return CartItem[]
-     */
-    public function getPreOrderSizes()
-    {
-        $sizes = array_map(function (CartItem $item) {
-            return $item->getSizes();
-        }, $this->getPreOrderItems());
-        return $sizes ? call_user_func_array('array_merge', $sizes) : [];
-    }
-
-    /**
-     * @return CartItem[]
-     */
-    public function getStandardSizes()
-    {
-        $items = array_map(function (CartItem $item) {
-            return $item->getSizes();
-        }, $this->getStandardItems());
+        $items = Arr::mapProperty($this->items, 'standardSingleItems');
         return $items ? call_user_func_array('array_merge', $items) : [];
     }
 
+    /**
+     * @return CartSize[]
+     */
+    public function getPreOrderSingleItems()
+    {
+        $items = Arr::mapProperty($this->items, 'preOrderSingleItems');
+        return $items ? call_user_func_array('array_merge', $items) : [];
+    }
 }
