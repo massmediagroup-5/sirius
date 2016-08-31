@@ -125,16 +125,18 @@ class Share
      */
     public function getSingleDiscount($entity)
     {
-        $shareGroup = false;
+        if (!$this->container->get('security.context')->isGranted('ROLE_WHOLESALER')) {
+            $shareGroup = false;
 
-        if ($entity instanceof ProductModels) {
-            $shareGroup = $entity->getSizesShareGroup();
-        } elseif ($entity instanceof ProductModelSpecificSize) {
-            $shareGroup = $entity->getShareGroup();
-        }
+            if ($entity instanceof ProductModels) {
+                $shareGroup = $entity->getSizesShareGroup();
+            } elseif ($entity instanceof ProductModelSpecificSize) {
+                $shareGroup = $entity->getShareGroup();
+            }
 
-        if ($shareGroup && $this->isActualSingleShare($shareGroup->getShare())) {
-            return $shareGroup->getDiscount();
+            if ($shareGroup && $this->isActualSingleShare($shareGroup->getShare())) {
+                return $shareGroup->getDiscount();
+            }
         }
 
         return 0;
