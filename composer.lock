@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a502706aad2094bd75857ea788dab875",
-    "content-hash": "79815dd6ebb5ec2a5573ea79f5fc148f",
+    "hash": "28fc1608eddebb04f4e419ae43200259",
+    "content-hash": "8b2371882618acf8ce923c90053e9b09",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -4451,16 +4451,16 @@
         },
         {
             "name": "serj1chen/nova-poshta-sdk-php",
-            "version": "2.0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serj1chen/nova-poshta-sdk-php.git",
-                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb"
+                "reference": "ee4092574ddb22fb77ccc96f04c0cb9a94e80628"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serj1chen/nova-poshta-sdk-php/zipball/978ff3c99e729f547ab8ba3f696f19977838a5fb",
-                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb",
+                "url": "https://api.github.com/repos/serj1chen/nova-poshta-sdk-php/zipball/ee4092574ddb22fb77ccc96f04c0cb9a94e80628",
+                "reference": "ee4092574ddb22fb77ccc96f04c0cb9a94e80628",
                 "shasum": ""
             },
             "require": {
@@ -4492,7 +4492,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2016-02-28 09:30:14"
+            "time": "2016-07-14 08:17:41"
         },
         {
             "name": "sonata-project/admin-bundle",
@@ -7538,6 +7538,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/user-bundle": 20,
+        "serj1chen/nova-poshta-sdk-php": 20,
         "comur/image-bundle": 20,
         "hautelook/alice-bundle": 20
     },
