@@ -11,6 +11,7 @@
   "devDependencies": {
     "u": "^0.1.0",
     "uglify-js": "^2.6.2",
-    "uglifycss": "0.0.20"
+    "uglifycss": "0.0.20",
+    "bower": "1.7.9"
   }
 }
