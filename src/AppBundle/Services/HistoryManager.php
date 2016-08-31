@@ -2,19 +2,8 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\History;
 use AppBundle\Entity\OrderHistory;
-use AppBundle\Entity\OrderProductSize;
-use AppBundle\Entity\Orders;
-use AppBundle\Entity\OrderStatusPay;
-use AppBundle\Entity\Unisender;
-use AppBundle\Entity\Users as UsersEntity;
-use AppBundle\Exception\CartEmptyException;
-use AppBundle\Exception\UserInGrayListException;
 use AppBundle\HistoryItem\AbstractHistoryItem;
-use AppBundle\HistoryItem\OrderHistoryMoveSizeCommand;
-use AppBundle\HistoryItem\OrderHistoryMoveToSizeItem;
-use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
 

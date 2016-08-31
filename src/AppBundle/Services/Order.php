@@ -2,10 +2,10 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\Carriers;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
-use AppBundle\Entity\OrderStatus;
 use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Unisender;
@@ -13,7 +13,7 @@ use AppBundle\Entity\Users as UsersEntity;
 use AppBundle\Event\CancelOrderEvent;
 use AppBundle\Event\OrderEvent;
 use AppBundle\Exception\CartEmptyException;
-use AppBundle\Exception\UserInGrayListException;
+use AppBundle\Exception\BuyerAccessDeniedException;
 use AppBundle\HistoryItem\OrderHistoryChangedItem;
 use AppBundle\HistoryItem\OrderHistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryMergedWithRelatedItem;
@@ -70,12 +70,12 @@ class Order
      *
      * @return Orders
      * @throws CartEmptyException
-     * @throws UserInGrayListException
+     * @throws BuyerAccessDeniedException
      */
-    public function orderFromCart($data, $user, $quickFlag = false)
+    public function orderFromCart($data, UsersEntity $user, $quickFlag = false)
     {
-        if (( $user ) && ( $user->getGrayListFlag() )) {
-            throw new UserInGrayListException;
+        if (($user) && ($this->container->get('security.authorization_checker')->isGranted('ROLE_BLACK_LIST'))) {
+            throw new BuyerAccessDeniedException;
         }
 
         $cart = $this->container->get('cart');
@@ -684,7 +684,7 @@ class Order
         $order = new Orders();
 
         if ( ! $quickFlag) {
-            if ($data['delivery_type'] == 'np') {
+            if ($data['delivery_type']->getId() == Carriers::NP_ID) {
                 // Nova poshta
                 $prefix = 'np_';
             } else {

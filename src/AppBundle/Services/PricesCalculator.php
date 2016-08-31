@@ -193,6 +193,12 @@ class PricesCalculator
             $user = $this->container->get('security.context')->getToken()->getUser();
 
             $price = $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
+
+            // Not subtract discount when user in gray list
+            if ($this->authorizationChecker->isGranted('ROLE_GRAY_LIST')) {
+                return $price;
+            }
+
             $wholesalePrice = $object->getWholesalePrice() ?: $this->getProductModelDiscountedPrice($object->getModel());
 
             $cart = $this->container->get('cart');

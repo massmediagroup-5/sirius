@@ -290,6 +290,7 @@ class OrdersAdmin extends Admin
                 'disabled'      => $this->disableEdit,
                 'query_builder' => function (EntityRepository $er) {
                     $carrier = $this->getSubject()->getCarriers();
+
                     return $er->createQueryBuilder('s')
                               ->where('s.carriers = :id')
                               ->setParameter('id', $carrier ? $carrier->getId() : null);

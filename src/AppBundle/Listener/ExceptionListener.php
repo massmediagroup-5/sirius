@@ -3,7 +3,7 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Exception\CartEmptyException;
-use AppBundle\Exception\UserInGrayListException;
+use AppBundle\Exception\BuyerAccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
@@ -17,13 +17,12 @@ class ExceptionListener
     {
         $exception = $event->getException();
         if ($exception instanceof CartEmptyException) {
-            if($event->getRequest()->isXmlHttpRequest()) {
+            if ($event->getRequest()->isXmlHttpRequest()) {
                 $event->setResponse(new JsonResponse(['messages' => ['Корзина пуста!']], 422));
             }
-        } elseif ($exception instanceof UserInGrayListException) {
+        } elseif ($exception instanceof BuyerAccessDeniedException) {
             if ($event->getRequest()->isXmlHttpRequest()) {
-                $event->setResponse(new JsonResponse(['messages' => ['Вы в сером списке, вам запрещено делать заказы!']],
-                    422));
+                $event->setResponse(new JsonResponse(['messages' => ['Вам запрещено делать заказы!']], 422));
             } else {
 
             }

@@ -7,6 +7,6 @@ namespace AppBundle\Exception;
  * @package AppBundle\Exception
  * @author Zimm
  */
-class UserInGrayListException extends \Exception implements UserExceptionInterface
+class BuyerAccessDeniedException extends \Exception implements UserExceptionInterface
 {
 }
