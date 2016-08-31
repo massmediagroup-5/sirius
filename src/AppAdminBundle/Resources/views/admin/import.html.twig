@@ -1,7 +1,7 @@
 {% extends 'AppAdminBundle::sonata_base_layout.html.twig' %}
 
 {% block content %}
-    <h1>Import</h1>
+    <h1>Импорт</h1>
     {{ form_start(form, {'attr': {'class': 'search__i'}}) }}
         {{ form_errors(form) }}
         <table class="table table-hover">
@@ -15,7 +15,7 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        {{ form_widget(form.submit) }}
+                        {{ form_widget(form.submit, { 'label': 'Выполнить' }) }}
                     </div>
                 </td>
             </tr>

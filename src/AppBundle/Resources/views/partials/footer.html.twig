@@ -108,7 +108,12 @@
                                 <ul>
 
                                     {% for icon in options.socialIcons %}
-                                    <li><a href="{{ icon.link }}"><img title="{{ icon.name }}" alt="{{ icon.name }}" src="{{ '/img/social/'~icon.picture }}"></a></li>
+                                        <li class="imageMy">
+                                            <a href="{{ icon.link }}">
+                                                <img title="{{ icon.name }}" alt="{{ icon.name }}"
+                                                     src="{{ '/img/social/'~icon.picture }}">
+                                            </a>
+                                        </li>
                                     {% endfor %}
 
                                     {% if options.params.fb_link.value is defined and options.params.fb_link.active == true %}
