@@ -88,11 +88,6 @@ class Users extends BaseUser
     /**
      * @var boolean
      */
-    protected $grayListFlag = false;
-
-    /**
-     * @var boolean
-     */
     protected $discount = 0;
 
     /**
@@ -459,30 +454,6 @@ class Users extends BaseUser
     public function getBonuses()
     {
         return $this->bonuses;
-    }
-
-    /**
-     * Set grayListFlag
-     *
-     * @param boolean $grayListFlag
-     *
-     * @return Users
-     */
-    public function setGrayListFlag($grayListFlag)
-    {
-        $this->grayListFlag = $grayListFlag;
-
-        return $this;
-    }
-
-    /**
-     * Get grayListFlag
-     *
-     * @return boolean
-     */
-    public function getGrayListFlag()
-    {
-        return $this->grayListFlag;
     }
 
     /**

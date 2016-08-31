@@ -1,6 +1,7 @@
 AppBundle\Entity\Users:
     type: entity
     table: users
+    repositoryClass: AppBundle\Entity\Repository\UserRepository
     uniqueConstraints:
         id_UNIQUE:
             columns:
@@ -80,10 +81,6 @@ AppBundle\Entity\Users:
             options:
                 unsigned: true
                 default: 0
-        grayListFlag:
-            type: boolean
-            options:
-                default: false
         createTime:
             type: datetime
             nullable: false

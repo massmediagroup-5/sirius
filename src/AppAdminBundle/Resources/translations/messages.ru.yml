@@ -3,7 +3,9 @@ ROLE_USER: Пользователь
 ROLE ADMIN: Администратор
 ROLE_ADMIN: Администратор
 ROLE WHOLESALER: Оптовый покупатель
-ROLE_WHOLESALER: Оптовый покупатель
+ROLE GRAY LIST: Серый список
+ROLE BLACK LIST: Черный список
+ROLE SUPER ADMIN: Суперадминистратор
 ROLE_SUPER_ADMIN: Суперадминистратор
 ROLE_SUPER_ADMIN: Суперадминистратор
 ROLE_SONATA_ADMIN: Суперадминистратор

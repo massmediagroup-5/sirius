@@ -30,7 +30,7 @@ This code manage the many-to-[one|many] association field popup
         - if the parent has NO object then an ajax request is made to refresh the popup
     #}
 
-    $(document).on('update_select_btn{{ id }}', 'table tr td', function(event) {
+    $(document).on('update_select_btn{{ id }}', 'table tbody tr td', function(event) {
         var newSelected = $('#{{ id }}').val() || [],
                 $this = $(this);
 

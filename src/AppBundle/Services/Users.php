@@ -84,4 +84,14 @@ class Users extends BaseFOSUBProvider
         $this->userManager->updateUser($user);
         return $user;
     }
+
+    /**
+     * @param UserEntity $user
+     */
+    public function toGrayList(\AppBundle\Entity\Users $user)
+    {
+        $user->addRole('ROLE_GRAY_LIST');
+        
+        $this->userManager->updateUser($user);
+    }
 }

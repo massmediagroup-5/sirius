@@ -92,19 +92,23 @@
 
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') and not is_granted('ROLE_WHOLESALER') %}
                                     <div class="mid order-bonuses">
-                                        <h2>
-                                            Бонусный счет
-                                            <span>{{ 'labels.user_bonuses_count'|transchoice(app.user.bonuses, {'%count%': app.user.bonuses}) }}</span>
-                                        </h2>
-                                        <table>
-                                            <tr>
-                                                <td>Использовать баллов</td>
-                                                <td>
-                                                    <input type="number" class="js_user_bonuses_count" value="0" min="0"
-                                                           max="{{ prices.maxAllowedBonuses }}"/>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        {% if is_granted('ROLE_GRAY_LIST') %}
+                                            <h2>Вам запрещено использовать бонусы</h2>
+                                        {% else %}
+                                            <h2>
+                                                Бонусный счет
+                                                <span>{{ 'labels.user_bonuses_count'|transchoice(app.user.bonuses, {'%count%': app.user.bonuses}) }}</span>
+                                            </h2>
+                                            <table>
+                                                <tr>
+                                                    <td>Использовать баллов</td>
+                                                    <td>
+                                                        <input type="number" class="js_user_bonuses_count" value="0" min="0"
+                                                               max="{{ prices.maxAllowedBonuses }}"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        {% endif %}
                                     </div>
                                 {% endif %}
 

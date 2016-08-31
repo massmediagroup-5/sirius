@@ -23,9 +23,14 @@ class UsersAdmin extends BaseUserAdmin
     {
         $query = parent::createQuery($context);
 
-        $role = $this->userRole ?: 'a:0:{}';
-
-        $query->andWhere('o.roles LIKE :role')->setParameter('role', "%$role%");
+        if ($this->userRole) {
+            $query->andWhere('o.roles LIKE :role')->setParameter('role', "%$this->userRole%");
+        } else {
+            $query->andWhere('o.roles NOT LIKE :role_wholesaler')
+                ->andWhere('o.roles NOT LIKE :role_admin')
+                ->setParameter('role_wholesaler', '%ROLE_WHOLESALER%')
+                ->setParameter('role_admin', '%ROLE_ADMIN%');
+        }
         return $query;
     }
 
@@ -86,7 +91,6 @@ class UsersAdmin extends BaseUserAdmin
                     'required' => false
                 ])
                 ->add('locked', null, ['required' => false])
-                ->add('grayListFlag', null, ['required' => false])
                 ->add('enabled', null, ['required' => false])
                 ->end();
         }
