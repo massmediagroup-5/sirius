@@ -47,9 +47,11 @@ AppBundle\Entity\ProductModels:
         textLabel:
             type: string
             length: 255
+            nullable: true
         textLabelColor:
             type: string
             length: 255
+            nullable: true
         price:
             type: decimal
             nullable: true
