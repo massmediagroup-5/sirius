@@ -156,7 +156,35 @@ class OrdersAdmin extends Admin
                         }
                 ]
             )
-            ->add('phone', null, ['label' => 'Телефон'])
+            ->add('phone', 'doctrine_orm_callback',
+                [
+                    'label'       => 'Телефон',
+                    'show_filter' => true,
+                    'callback'    => function ($queryBuilder, $alias, $field, $value) {
+                        if ( ! $value['value']) {
+                            return false;
+                        }
+                        $queryBuilder
+                            ->andWhere($alias . '.phone LIKE :value')
+                            ->setParameter('value', '%' . $value['value']->getPhone() . '%');
+
+                        return true;
+                    },
+                ],
+                'entity',
+                [
+                    'class'         => 'AppBundle:Orders',
+                    'property'      => 'phone',
+                    'query_builder' =>
+                        function ($er) {
+                            $qb = $er->createQueryBuilder('o');
+                            $qb->select('o')->groupBy('o.phone');
+
+                            return $qb;
+                        }
+                ]
+            )
+//            ->add('phone', null, ['label' => 'Телефон'])
             ->add('pay', 'doctrine_orm_choice', array('label' => 'Способ оплаты'),
                 'choice',
                 array(
