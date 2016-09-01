@@ -85,6 +85,11 @@ class CharacteristicsAdmin extends Admin
     {
         $formMapper
             ->add('name', null, array('label' => 'Название'))
+            ->add('characteristicValues', 'sonata_type_models_list', [
+                'label' => 'Значения характеристики',
+                'class' => 'AppBundle:CharacteristicValues',
+                'model_manager' => $this->getModelManager()
+            ])
 //            ->add('renderType', null, array('label' => 'Тип отображения'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
         ;
@@ -101,5 +106,13 @@ class CharacteristicsAdmin extends Admin
             ->add('createTime', null, array('label' => 'Дата создания'))
             ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
         ;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormTheme()
+    {
+        return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_type_models_list.html.twig']);
     }
 }
