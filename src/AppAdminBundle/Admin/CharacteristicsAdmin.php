@@ -16,10 +16,45 @@ class CharacteristicsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name', null, array('label' => 'Название'))
-            ->add('inFilter', null, array('label' => 'В фильтре'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
+            ->add('name', 'doctrine_orm_callback',
+                [
+                    'label'       => 'Название',
+                    'show_filter' => true,
+                    'callback'    => function ($queryBuilder, $alias, $field, $value) {
+                        if ( ! $value['value']) {
+                            return false;
+                        }
+                        $queryBuilder
+                            ->andWhere($alias . '.name LIKE :value')
+                            ->setParameter('value', '%' . $value['value']->getName() . '%');
+
+                        return true;
+                    },
+                ],
+                'entity',
+                [
+                    'class'         => 'AppBundle:Characteristics',
+                    'property'      => 'name',
+                    'query_builder' =>
+                        function ($er) {
+                            $qb = $er->createQueryBuilder('o');
+                            $qb->select('o')->groupBy('o.name');
+
+                            return $qb;
+                        }
+                ]
+            )
+            ->add('inFilter', 'doctrine_orm_choice', ['label' => 'В фильтре'],
+                'choice',
+                [
+                    'choices' => [
+                        '1'                           => 'Да',
+                        '0'                           => 'Нет',
+                    ]
+                ]
+            )
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
         ;
     }
 
