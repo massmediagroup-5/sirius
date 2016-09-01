@@ -72,7 +72,7 @@ class Order
      * @throws CartEmptyException
      * @throws BuyerAccessDeniedException
      */
-    public function orderFromCart($data, UsersEntity $user, $quickFlag = false)
+    public function orderFromCart($data, UsersEntity $user = null, $quickFlag = false)
     {
         if (($user) && ($this->container->get('security.authorization_checker')->isGranted('ROLE_BLACK_LIST'))) {
             throw new BuyerAccessDeniedException;
