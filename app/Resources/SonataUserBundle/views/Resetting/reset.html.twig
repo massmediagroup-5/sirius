@@ -1,0 +1,17 @@
+{% extends "AppBundle::base.html.twig" %}
+
+{% block body %}
+    {% block fos_user_content %}
+        <section class="content">
+            <div class="wrap">
+                <div class="content__i">
+                    <div class="main-contacts">
+                        <div class="main-contacts__i">
+                            {% include "FOSUserBundle:Resetting:reset_content.html.twig" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock fos_user_content %}
+{% endblock %}
