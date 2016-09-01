@@ -53,7 +53,35 @@ class ProductsAdmin extends Admin
     {
         $datagridMapper
             ->add('article', null, ['label' => 'Артикул'])
-            ->add('name', null, ['label' => 'Название модели'])
+//            ->add('name', null, ['label' => 'Название модели'])
+            ->add('name', 'doctrine_orm_callback',
+                [
+                    'label'       => 'Название модели',
+                    'show_filter' => true,
+                    'callback'    => function ($queryBuilder, $alias, $field, $value) {
+                        if ( ! $value['value']) {
+                            return false;
+                        }
+                        $queryBuilder
+                            ->andWhere($alias . '.name LIKE :value')
+                            ->setParameter('value', '%' . $value['value']->getName() . '%');
+
+                        return true;
+                    },
+                ],
+                'entity',
+                [
+                    'class'         => 'AppBundle:Products',
+                    'property'      => 'name',
+                    'query_builder' =>
+                        function ($er) {
+                            $qb = $er->createQueryBuilder('o');
+                            $qb->select('o')->groupBy('o.name');
+
+                            return $qb;
+                        }
+                ]
+            )
             ->add('content', null, ['label' => 'Описание модели'])
             ->add('active', null, ['label' => 'Активный'])
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])

@@ -184,7 +184,6 @@ class OrdersAdmin extends Admin
                         }
                 ]
             )
-//            ->add('phone', null, ['label' => 'Телефон'])
             ->add('pay', 'doctrine_orm_choice', array('label' => 'Способ оплаты'),
                 'choice',
                 array(
