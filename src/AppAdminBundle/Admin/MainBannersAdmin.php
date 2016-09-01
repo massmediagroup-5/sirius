@@ -16,12 +16,18 @@ class MainBannersAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
-            ->add('title')
-            ->add('alias')
-            ->add('picture')
-            ->add('priority')
-            ->add('active')
+            ->add('title', null, array('label' => 'Название'))
+            ->add('alias', null, array('label' => 'Ссылка'))
+            ->add('priority', null, array('label' => 'Приоритет'))
+            ->add('active', 'doctrine_orm_choice', ['label' => 'Активность(вкл/выкл)'],
+                'choice',
+                [
+                    'choices' => [
+                        '1'                           => 'Вкл',
+                        '0'                           => 'Выкл',
+                    ]
+                ]
+            )
             ->add('createTime', null, array('label' => 'Время создания'))
             ->add('updateTime', null, array('label' => 'Время последнего обновления'))
         ;
