@@ -86,7 +86,7 @@ class CharacteristicValuesAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('characteristics', null, array('label' => 'Характеристика'))
+            ->add('characteristics', 'sonata_type_model_list', array('label' => 'Характеристика'))
             ->add('name', null, array('label' => 'Значение'))
             ->add('inFilter', null, array('label' => 'В фильтре'))
         ;
