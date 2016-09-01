@@ -1,0 +1,22 @@
+AppBundle\Entity\SmsInfo:
+  type: entity
+  inheritanceType: SINGLE_TABLE
+  discriminatorColumn:
+    name: discr
+    type: string
+  discriminatorMap:
+    order_sms_info: OrderSmsInfo
+    distribution_sms_infoy: DistributionSmsInfo
+  fields:
+    smsId:
+      type: string
+      nullable: true
+      length: 255
+      options:
+        fixed: false
+    smsStatus:
+      type: string
+      nullable: true
+      length: 255
+      options:
+        fixed: false

@@ -1067,4 +1067,33 @@ class Orders
     {
         return $this->doneTime;
     }
+    /**
+     * @var \AppBundle\Entity\OrderSmsInfo
+     */
+    private $smsInfo;
+
+
+    /**
+     * Set smsInfo
+     *
+     * @param \AppBundle\Entity\OrderSmsInfo $smsInfo
+     *
+     * @return Orders
+     */
+    public function setSmsInfo(\AppBundle\Entity\OrderSmsInfo $smsInfo = null)
+    {
+        $this->smsInfo = $smsInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get smsInfo
+     *
+     * @return \AppBundle\Entity\OrderSmsInfo
+     */
+    public function getSmsInfo()
+    {
+        return $this->smsInfo;
+    }
 }

@@ -1,0 +1,61 @@
+AppBundle\Entity\EmailAndSmsDistribution:
+    type: entity
+    table: email_and_sms_distribution
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+            options:
+                fixed: false
+        sendSms:
+            type: boolean
+            options:
+                default: false
+        smsText:
+            type: text
+            nullable: true
+        sendEmail:
+            type: boolean
+            options:
+                default: false
+        emailTitle:
+            type: string
+            length: 255
+            nullable: true
+            options:
+                fixed: false
+        emailText:
+            type: text
+            nullable: true
+        createTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: create_time
+        updateTime:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            column: update_time
+    manyToMany:
+        users:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            inversedBy: orders
+            joinColumns:
+                users_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToOne:
+        smsInfos:
+            targetEntity: DistributionSmsInfo
+
+    lifecycleCallbacks: {  }

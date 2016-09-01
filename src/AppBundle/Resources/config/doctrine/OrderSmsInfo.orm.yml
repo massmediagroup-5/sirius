@@ -1,0 +1,17 @@
+AppBundle\Entity\OrderSmsInfo:
+    type: entity
+    fields:
+        type:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+    manyToOne:
+        order:
+            targetEntity: Orders
+            cascade: { }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: smsInfo
+            orphanRemoval: false
