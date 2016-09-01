@@ -1,0 +1,10 @@
+AppBundle\Entity\DistributionSmsInfo:
+    type: entity
+    manyToOne:
+        distribution:
+            targetEntity: EmailAndSmsDistribution
+            cascade: { }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: smsInfos
+            orphanRemoval: false

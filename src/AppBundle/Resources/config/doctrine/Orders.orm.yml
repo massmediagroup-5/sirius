@@ -229,4 +229,6 @@ AppBundle\Entity\Orders:
                 stores_id:
                     referencedColumnName: id
             orphanRemoval: false
+        smsInfo:
+            targetEntity: OrderSmsInfo
     lifecycleCallbacks: {  }
