@@ -19,14 +19,22 @@
         <div class="wrap">
             <div class="content__i">
                 {{ widget('breadcrumbs.render')|raw }}
-                <h2 class="catalog-title">
-                    {{ data.category.name }}
-                    <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
-                </h2>
                 {% if data.share %}
                     <div class="catalog-action">
                         {{ include('AppBundle:share/partials/_item.html.twig', { share: data.share, hideMore: true }) }}
                     </div>
+                {% endif %}
+                {% if data.share %}
+                    <h2 class="catalog-title">
+                        Товары участвующие в акции
+                        <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
+                        <a href="#share-detail-text">Подробнее об акции</a>
+                    </h2>
+                {% else %}
+                    <h2 class="catalog-title">
+                        {{ data.category.name }}
+                        <span>({{ 'labels.products_count'|transchoice(data.products.getTotalItemCount, {'%count%': data.products.getTotalItemCount}) }})</span>
+                    </h2>
                 {% endif %}
                 <div class="catalog">
                     <div class="catalog__i">
@@ -216,7 +224,7 @@
                     </div>
                 </div>
                 {% if data.share %}
-                    <div class="share-text">
+                    <div id="share-detail-text" class="share-text">
                         <div class="share-text__i">
                             <h2>Подробнее об акции</h2>
                             {{ data.share.terms|raw }}
