@@ -112,8 +112,62 @@ class UsersAdmin extends BaseUserAdmin
     {
         $filterMapper
             ->add('id')
-            ->add('name')
-            ->add('surname')
+            ->add('name', 'doctrine_orm_callback',
+                [
+                    'label'       => 'Имя',
+                    'show_filter' => true,
+                    'callback'    => function ($queryBuilder, $alias, $field, $value) {
+                        if ( ! $value['value']) {
+                            return false;
+                        }
+                        $queryBuilder
+                            ->andWhere($alias . '.name LIKE :value')
+                            ->setParameter('value', '%' . $value['value']->getName() . '%');
+
+                        return true;
+                    },
+                ],
+                'entity',
+                [
+                    'class'         => 'AppBundle:Users',
+                    'property'      => 'name',
+                    'query_builder' =>
+                        function ($er) {
+                            $qb = $er->createQueryBuilder('o');
+                            $qb->select('o')->groupBy('o.name');
+
+                            return $qb;
+                        }
+                ]
+            )
+            ->add('surname', 'doctrine_orm_callback',
+                [
+                    'label'       => 'Фамилия',
+                    'show_filter' => true,
+                    'callback'    => function ($queryBuilder, $alias, $field, $value) {
+                        if ( ! $value['value']) {
+                            return false;
+                        }
+                        $queryBuilder
+                            ->andWhere($alias . '.surname LIKE :value')
+                            ->setParameter('value', '%' . $value['value']->getSurname() . '%');
+
+                        return true;
+                    },
+                ],
+                'entity',
+                [
+                    'class'         => 'AppBundle:Users',
+                    'property'      => 'surname',
+                    'query_builder' =>
+                        function ($er) {
+                            $qb = $er->createQueryBuilder('o');
+                            $qb->select('o')->groupBy('o.surname');
+
+                            return $qb;
+                        }
+                ]
+            )
             ->add('locked')
             ->add('email');
     }
