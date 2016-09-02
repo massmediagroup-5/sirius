@@ -253,6 +253,11 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             $this->_em->getRepository('AppBundle:Share')->addHasGroupExceptGivenCondition($builder, $group);
         }
 
+        if (Arr::get($filters, 'actual')) {
+            $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+                ->addPriceToQuery($builder, $filters);
+        }
+
         return $builder->getQuery();
     }
 

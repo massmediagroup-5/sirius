@@ -2,7 +2,6 @@
 
 namespace AppAdminBundle\Admin;
 
-use AppBundle\Entity\CallBack;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\Orders;
 use AppBundle\Validator\OrderStatusConstraint;
@@ -473,6 +472,7 @@ class OrdersAdmin extends Admin
     public function paginateModels($filters = [])
     {
         $container = $this->getConfigurationPool()->getContainer();
+        $filters['actual'] = true;
         $models    = $container->get('doctrine')
                                ->getRepository("AppBundle:ProductModels")
                                ->getAdminSearchQuery($filters);
@@ -627,6 +627,13 @@ class OrdersAdmin extends Admin
 
         return 0;
     }
+    
+    public function getWholesalerCart()
+    {
+        $wholesalerCart = $this->getConfigurationPool()->getContainer()->get('admin.wholesaler_cart');
+        $wholesalerCart->setOrder($this->subject);
+        return $wholesalerCart;
+    }
 
     /**
      * @param $historyItem
@@ -638,4 +645,3 @@ class OrdersAdmin extends Admin
         return $em->getRepository('AppBundle:ProductModelSpecificSize')->find($historyItem->getAdditional('sizeId'));
     }
 }
-

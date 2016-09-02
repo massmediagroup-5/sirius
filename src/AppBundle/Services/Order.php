@@ -302,15 +302,21 @@ class Order
     /**
      * @param $order
      * @param $size
+     * @param $quantity
      *
      * @return Orders
      * @throws CartEmptyException
      */
-    public function removeSize(Orders $order, $size)
+    public function removeSize(Orders $order, OrderProductSize $size, $quantity)
     {
-        $this->em->remove($size);
+        if ($quantity >= $size->getQuantity()) {
+            $this->em->remove($size);
+        } else {
+            $size->setQuantity($size->getQuantity() - $quantity);
+            $this->em->persist($size);
+        }
 
-        (new OrderHistoryRelationRemovedItem($this->container))->createHistoryItem($order, 'sizes', $size,
+        (new OrderHistoryRelationRemovedItem($this->container))->createHistoryItem($order, 'sizes', $size, $quantity,
             $this->getUser());
 
         $this->em->persist($order);

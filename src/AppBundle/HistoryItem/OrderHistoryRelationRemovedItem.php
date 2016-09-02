@@ -20,7 +20,7 @@ class OrderHistoryRelationRemovedItem extends AbstractHistoryItem
      * @param Users $user
      * @return OrderHistory
      */
-    public function createHistoryItem(Orders $order, $relationName, $entity, Users $user)
+    public function createHistoryItem(Orders $order, $relationName, $entity, $quantity,  Users $user)
     {
         $historyItem = new OrderHistory();
         $historyItem->setChangeType(get_called_class());
@@ -30,7 +30,7 @@ class OrderHistoryRelationRemovedItem extends AbstractHistoryItem
         if ($relationName == 'sizes') {
             $historyItem->setAdditional([
                 'entityId' => $entity->getSize()->getId(),
-                'quantity' => $entity->getQuantity()
+                'quantity' => $quantity
             ]);
         }
         $order->addHistory($historyItem);
