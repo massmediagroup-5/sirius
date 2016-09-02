@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "09d36f5cb8d2df93760629db4c357723",
-    "content-hash": "a723ac93ff573bfdf65370e3b3416b5e",
+    "hash": "c1247559a43a765521ce5aa25333d18e",
+    "content-hash": "0088235931e5fec1783a7c494c3df004",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -297,12 +297,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/comur/ComurImageBundle.git",
-                "reference": "cc90461fb48c247a9c1ccaa1063f480b36bd89df"
+                "reference": "2548e5cd78df984c51a18b21a392231afc58d0a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/comur/ComurImageBundle/zipball/cc90461fb48c247a9c1ccaa1063f480b36bd89df",
-                "reference": "cc90461fb48c247a9c1ccaa1063f480b36bd89df",
+                "url": "https://api.github.com/repos/comur/ComurImageBundle/zipball/2548e5cd78df984c51a18b21a392231afc58d0a0",
+                "reference": "2548e5cd78df984c51a18b21a392231afc58d0a0",
                 "shasum": ""
             },
             "require": {
@@ -352,7 +352,7 @@
                 "jquery upload",
                 "upload"
             ],
-            "time": "2016-04-07 08:52:35"
+            "time": "2016-08-31 13:36:44"
         },
         {
             "name": "container-interop/container-interop",
@@ -900,23 +900,26 @@
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
-            "version": "1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "303a576e2124efb07ec215e34ea2480b841cf5e4"
+                "reference": "0b89ee55bceb53c60bc4ba32924ac5053e377abb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/303a576e2124efb07ec215e34ea2480b841cf5e4",
-                "reference": "303a576e2124efb07ec215e34ea2480b841cf5e4",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/0b89ee55bceb53c60bc4ba32924ac5053e377abb",
+                "reference": "0b89ee55bceb53c60bc4ba32924ac5053e377abb",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "~1.0",
-                "doctrine/migrations": "~1.0",
-                "php": ">=5.3.2",
+                "doctrine/migrations": "^1.1",
+                "php": ">=5.4.0",
                 "symfony/framework-bundle": "~2.3|~3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -954,7 +957,7 @@
                 "migrations",
                 "schema"
             ],
-            "time": "2015-11-04 13:45:30"
+            "time": "2016-06-30 19:26:35"
         },
         {
             "name": "doctrine/inflector",
@@ -1658,16 +1661,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.21",
+            "version": "v2.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "dcaab46a25e1baeb5142c3e25d5b6fd495ced504"
+                "reference": "b8188801bafc420b86908ee5229a5e92143ce514"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/dcaab46a25e1baeb5142c3e25d5b6fd495ced504",
-                "reference": "dcaab46a25e1baeb5142c3e25d5b6fd495ced504",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/b8188801bafc420b86908ee5229a5e92143ce514",
+                "reference": "b8188801bafc420b86908ee5229a5e92143ce514",
                 "shasum": ""
             },
             "require": {
@@ -1733,7 +1736,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2016-08-17 16:52:00"
+            "time": "2016-08-30 18:42:36"
         },
         {
             "name": "herrera-io/json",
@@ -2914,7 +2917,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -4451,16 +4454,16 @@
         },
         {
             "name": "serj1chen/nova-poshta-sdk-php",
-            "version": "2.0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serj1chen/nova-poshta-sdk-php.git",
-                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb"
+                "reference": "ee4092574ddb22fb77ccc96f04c0cb9a94e80628"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serj1chen/nova-poshta-sdk-php/zipball/978ff3c99e729f547ab8ba3f696f19977838a5fb",
-                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb",
+                "url": "https://api.github.com/repos/serj1chen/nova-poshta-sdk-php/zipball/ee4092574ddb22fb77ccc96f04c0cb9a94e80628",
+                "reference": "ee4092574ddb22fb77ccc96f04c0cb9a94e80628",
                 "shasum": ""
             },
             "require": {
@@ -4492,7 +4495,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2016-02-28 09:30:14"
+            "time": "2016-07-14 08:17:41"
         },
         {
             "name": "sonata-project/admin-bundle",
@@ -6273,16 +6276,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.24.1",
+            "version": "v1.24.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512"
+                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3566d311a92aae4deec6e48682dc5a4528c4a512",
-                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
+                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
                 "shasum": ""
             },
             "require": {
@@ -6330,7 +6333,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-05-30 09:11:59"
+            "time": "2016-09-01 17:50:53"
         },
         {
             "name": "willdurand/jsonp-callback-validator",
@@ -6951,16 +6954,16 @@
         },
         {
             "name": "zendframework/zend-servicemanager",
-            "version": "2.7.6",
+            "version": "2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-servicemanager.git",
-                "reference": "a6db4d13b9141fccce5dcb553df0295d6ad7d477"
+                "reference": "eeecb78945c2a9f653caded36ba5274e8a8f5468"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-servicemanager/zipball/a6db4d13b9141fccce5dcb553df0295d6ad7d477",
-                "reference": "a6db4d13b9141fccce5dcb553df0295d6ad7d477",
+                "url": "https://api.github.com/repos/zendframework/zend-servicemanager/zipball/eeecb78945c2a9f653caded36ba5274e8a8f5468",
+                "reference": "eeecb78945c2a9f653caded36ba5274e8a8f5468",
                 "shasum": ""
             },
             "require": {
@@ -6999,7 +7002,7 @@
                 "servicemanager",
                 "zf2"
             ],
-            "time": "2016-04-27 19:07:40"
+            "time": "2016-09-01 19:03:15"
         },
         {
             "name": "zendframework/zend-stdlib",
@@ -7538,6 +7541,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/user-bundle": 20,
+        "serj1chen/nova-poshta-sdk-php": 20,
         "comur/image-bundle": 20,
         "hautelook/alice-bundle": 20
     },
