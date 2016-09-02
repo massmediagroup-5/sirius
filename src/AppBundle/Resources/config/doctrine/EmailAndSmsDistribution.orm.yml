@@ -34,6 +34,10 @@ AppBundle\Entity\EmailAndSmsDistribution:
         emailText:
             type: text
             nullable: true
+        active:
+            type: boolean
+            options:
+                default: false
         createTime:
             type: datetime
             nullable: false

@@ -43,6 +43,11 @@ class EmailAndSmsDistribution
     private $emailText;
 
     /**
+     * @var boolean
+     */
+    private $active = false;
+
+    /**
      * @var \DateTime
      */
     private $createTime;
@@ -333,5 +338,29 @@ class EmailAndSmsDistribution
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return EmailAndSmsDistribution
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }

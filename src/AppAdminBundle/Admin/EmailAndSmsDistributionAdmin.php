@@ -22,6 +22,7 @@ class EmailAndSmsDistributionAdmin extends Admin
             ->add('sendEmail', null, ['label'=>'Отправлять Email'])
             ->add('emailTitle', null, ['label'=>'Название Email'])
             ->add('emailText', null, ['label'=>'Текст Email'])
+            ->add('active', null, ['label'=>'Активность(вкл/выкл)'])
             ->add('createTime', null, ['label'=>'Время создания'])
             ->add('updateTime', null, ['label'=>'Время последнего обновления'])
         ;
@@ -36,6 +37,7 @@ class EmailAndSmsDistributionAdmin extends Admin
             ->addIdentifier('name', null, ['label'=>'Название рассылки'])
             ->add('sendSms', null, ['label'=>'Отправка смс', 'editable'=>true])
             ->add('sendEmail', null, ['label'=>'Отправлять Email', 'editable'=>true])
+            ->add('active', null, ['label'=>'Активность(вкл/выкл)', 'editable'=>true])
             ->add('emailTitle', null, ['label'=>'Название Email'])
             ->add('createTime', null, ['label'=>'Время создания'])
             ->add('updateTime', null, ['label'=>'Время последнего обновления'])
@@ -56,6 +58,7 @@ class EmailAndSmsDistributionAdmin extends Admin
         $formMapper
             ->tab('Общая информация о рассылке')
                 ->with('Общая информация о рассылке', ['class' => 'col-md-12',])
+                    ->add('active', null, ['label'=>'Активность(вкл/выкл)'])
                     ->add('name', null, ['label'=>'Название рассылки'])
                     ->add('sendSms', null, ['label'=>'Отправка смс'])
                     ->add('smsText', null, ['label'=>'Текст смс'])
