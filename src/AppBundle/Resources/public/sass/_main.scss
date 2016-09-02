@@ -7491,7 +7491,6 @@ input[type="checkbox"] {
 }
 
 .chief-contact {
-<<<<<<< HEAD
 	padding-top: 70px;
 	padding-bottom: 70px;
 
@@ -7609,117 +7608,6 @@ input[type="checkbox"] {
 			padding-right: 80px;
 		}
 	}
-=======
-    padding-top: 70px;
-    padding-bottom: 70px;
-
-    h2 {
-        color: #050505;
-        text-align: center;
-        font-weight: 400;
-        font-family: $latoBold;
-        font-size: 26px;
-        line-height: 28px;
-        padding-bottom: 10px;
-    }
-    p {
-        text-align: center;
-        font-size: 18px;
-        line-height: 20px;
-        font-weight: 400;
-        font-family: $latoBold;
-        padding-bottom: 20px;
-        color: #c8cbcc;
-
-        a {
-            color: #050505;
-            position: relative;
-            padding-left: 25px;
-            &:after {
-                content: "";
-                @include sized-sprite($icons, mail-blue);
-                left: -20px;
-                top: 3px;
-                position: absolute;
-            }
-
-        }
-    }
-
-    form {
-        max-width: 555px;
-        margin: 0 auto;
-    }
-
-    .inp {
-        padding-bottom: 15px;
-        position: relative;
-
-        label.error {
-            display: none;
-        }
-
-        &.inp_error {
-            input {
-                border-color: #f24841;
-
-            }
-
-            textarea {
-                border-color: #f24841;
-
-            }
-        }
-
-        input {
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 400;
-            font-family: $lato;
-            color: #000;
-            padding: 5px 10px;
-            width: 100%;
-            @include border-box();
-            border: 1px solid #c8cbcc;
-            @include transition(border-color, 250ms, ease);
-            &:focus {
-                border-color: $blue;
-            }
-        }
-    }
-
-    textarea {
-        font-size: 16px;
-        line-height: 18px;
-        font-weight: 400;
-        font-family: $lato;
-        color: #c8cbcc;
-        padding: 5px 10px;
-        width: 100%;
-        @include border-box();
-        border: 1px solid #c8cbcc;
-        @include transition(border-color, 250ms, ease);
-        height: 110px;
-        resize: none;
-        &:focus {
-            border-color: $blue;
-        }
-    }
-
-    .captcha-wrap {
-        padding-bottom: 20px;
-    }
-
-    .btn-row {
-        text-align: center;
-
-        input {
-            display: inline-block;
-            padding-left: 80px;
-            padding-right: 80px;
-        }
-    }
->>>>>>> customize reset password template and fix shares title(on shares page)
 }
 
 .work-time {
