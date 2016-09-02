@@ -299,3 +299,9 @@ services:
         arguments: [~, AppBundle\Entity\Carriers, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Службы доставки"}
+
+    app_admin.admin.email_and_sms_distribution:
+        class: AppAdminBundle\Admin\EmailAndSmsDistributionAdmin
+        arguments: [~, AppBundle\Entity\EmailAndSmsDistribution, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Рассылка email и смс"}

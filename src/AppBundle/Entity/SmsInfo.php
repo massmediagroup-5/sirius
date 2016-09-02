@@ -5,8 +5,13 @@ namespace AppBundle\Entity;
 /**
  * SmsInfo
  */
-class SmsInfo
+abstract class SmsInfo
 {
+    /**
+     * @var integer
+     */
+    private $id;
+
     /**
      * @var string
      */
@@ -17,6 +22,16 @@ class SmsInfo
      */
     private $smsStatus;
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set smsId
@@ -66,4 +81,3 @@ class SmsInfo
         return $this->smsStatus;
     }
 }
-

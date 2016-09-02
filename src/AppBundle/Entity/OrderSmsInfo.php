@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Orders
  */
-class OrderSmsInfo
+class OrderSmsInfo extends SmsInfo
 {
 
     /**

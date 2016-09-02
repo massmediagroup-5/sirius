@@ -7,6 +7,12 @@ AppBundle\Entity\SmsInfo:
   discriminatorMap:
     order_sms_info: OrderSmsInfo
     distribution_sms_infoy: DistributionSmsInfo
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
   fields:
     smsId:
       type: string

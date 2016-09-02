@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 
-class DistributionSmsInfo
+class DistributionSmsInfo extends SmsInfo
 {
 
     /**
