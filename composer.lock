@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "28fc1608eddebb04f4e419ae43200259",
-    "content-hash": "8b2371882618acf8ce923c90053e9b09",
+    "hash": "09d36f5cb8d2df93760629db4c357723",
+    "content-hash": "a723ac93ff573bfdf65370e3b3416b5e",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -1658,16 +1658,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.22",
+            "version": "v2.4.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "b8188801bafc420b86908ee5229a5e92143ce514"
+                "reference": "dcaab46a25e1baeb5142c3e25d5b6fd495ced504"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/b8188801bafc420b86908ee5229a5e92143ce514",
-                "reference": "b8188801bafc420b86908ee5229a5e92143ce514",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/dcaab46a25e1baeb5142c3e25d5b6fd495ced504",
+                "reference": "dcaab46a25e1baeb5142c3e25d5b6fd495ced504",
                 "shasum": ""
             },
             "require": {
@@ -1733,7 +1733,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2016-08-30 18:42:36"
+            "time": "2016-08-17 16:52:00"
         },
         {
             "name": "herrera-io/json",
@@ -2914,7 +2914,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -4451,16 +4451,16 @@
         },
         {
             "name": "serj1chen/nova-poshta-sdk-php",
-            "version": "dev-master",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serj1chen/nova-poshta-sdk-php.git",
-                "reference": "ee4092574ddb22fb77ccc96f04c0cb9a94e80628"
+                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serj1chen/nova-poshta-sdk-php/zipball/ee4092574ddb22fb77ccc96f04c0cb9a94e80628",
-                "reference": "ee4092574ddb22fb77ccc96f04c0cb9a94e80628",
+                "url": "https://api.github.com/repos/serj1chen/nova-poshta-sdk-php/zipball/978ff3c99e729f547ab8ba3f696f19977838a5fb",
+                "reference": "978ff3c99e729f547ab8ba3f696f19977838a5fb",
                 "shasum": ""
             },
             "require": {
@@ -4492,7 +4492,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2016-07-14 08:17:41"
+            "time": "2016-02-28 09:30:14"
         },
         {
             "name": "sonata-project/admin-bundle",
@@ -7538,7 +7538,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/user-bundle": 20,
-        "serj1chen/nova-poshta-sdk-php": 20,
         "comur/image-bundle": 20,
         "hautelook/alice-bundle": 20
     },
