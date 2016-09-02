@@ -121,7 +121,7 @@ class ProductModelsAdmin extends Admin
             ->tab('Размеры')
                 ->with('Размеры', ['class' => 'col-md-12'])
                     ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
-                        'admin_code' => 'app.admin.product_model_specific_size',
+                            'admin_code' => 'app.admin.product_model_specific_size',
                             'edit' => 'inline',
                             'inline' => 'table',
                         ]
