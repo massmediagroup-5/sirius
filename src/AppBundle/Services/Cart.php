@@ -2,6 +2,8 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Cart\Store\CartStoreInterface;
+use AppBundle\Cart\Store\StoreModel;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Model\CartItem;
@@ -9,7 +11,6 @@ use AppBundle\Model\CartSize;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Helper\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 
 /**
@@ -34,11 +35,11 @@ class Cart
     protected $container;
 
     /**
-     * session
+     * CartStoreInterface
      *
      * @var mixed
      */
-    private $session;
+    private $store;
 
     /**
      * Items objects list
@@ -58,14 +59,15 @@ class Cart
      * Cart constructor.
      * @param EntityManager $em
      * @param ContainerInterface $container
-     * @param Session $session
+     * @param CartStoreInterface $store
      */
-    public function __construct(EntityManager $em, ContainerInterface $container, Session $session)
+    public function __construct(EntityManager $em, ContainerInterface $container, CartStoreInterface $store)
     {
         $this->em = $em;
         $this->container = $container;
-        $this->session = $session;
-        $this->initCartFromSession();
+        $this->store = $store;
+        $this->pricesCalculator = $this->container->get('prices_calculator');
+        $this->initCartFromStore();
     }
 
     /**
@@ -74,15 +76,8 @@ class Cart
      */
     public function addItemToCard(ProductModelSpecificSize $size, $quantity)
     {
-        if (isset($this->items[$size->getModel()->getId()])) {
-            // Each size quantity
-            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
-        } else {
-            $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(),
-                $this->container->get('prices_calculator'));
-            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
-        }
-        $this->saveInSession();
+        $this->addItem($size, $quantity);
+        $this->saveInStore();
     }
 
     /**
@@ -92,7 +87,7 @@ class Cart
     public function removeItem(ProductModels $model)
     {
         unset($this->items[$model->getId()]);
-        $this->saveInSession();
+        $this->saveInStore();
         return $this;
     }
 
@@ -102,7 +97,7 @@ class Cart
     public function clear()
     {
         $this->items = [];
-        $this->saveInSession();
+        $this->saveInStore();
         return $this;
     }
 
@@ -117,7 +112,7 @@ class Cart
             if (!$this->items[$size->getModel()->getId()]->getQuantity()) {
                 $this->removeItem($size->getModel());
             }
-            $this->saveInSession();
+            $this->saveInStore();
         }
         return $this;
     }
@@ -130,7 +125,7 @@ class Cart
     public function changeItemSize(ProductModelSpecificSize $oldSize, ProductModelSpecificSize $newSize)
     {
         $this->items[$oldSize->getModel()->getId()]->changeSize($oldSize, $newSize);
-        $this->saveInSession();
+        $this->saveInStore();
         return $this;
     }
 
@@ -142,7 +137,7 @@ class Cart
     public function changeItemSizeCount(ProductModelSpecificSize $size, $quantity)
     {
         $this->items[$size->getModel()->getId()]->setSize($size, $quantity);
-        $this->saveInSession();
+        $this->saveInStore();
         return $this;
     }
 
@@ -357,7 +352,7 @@ class Cart
      */
     public function getDiscountedTotalPrice()
     {
-        return $this->container->get('prices_calculator')->getLoyaltyDiscounted($this->getDiscountedIntermediatePrice());
+        return $this->pricesCalculator->getLoyaltyDiscounted($this->getDiscountedIntermediatePrice());
     }
 
     /**
@@ -392,9 +387,9 @@ class Cart
     /**
      * @return void
      */
-    public function saveInSession()
+    public function saveInStore()
     {
-        $this->session->set('cart_items', $this->toArray());
+        $this->store->setSizes($this->toSizesArray());
     }
 
     /**
@@ -426,6 +421,18 @@ class Cart
     /**
      * @return array
      */
+    public function toSizesArray()
+    {
+        $array = [];
+        foreach ($this->getSizes() as $item) {
+            $array[] = new StoreModel($item->getSize()->getId(), $item->getQuantity());
+        }
+        return $array;
+    }
+
+    /**
+     * @return array
+     */
     public function toArrayWithExtraInfo()
     {
         $array = [];
@@ -449,20 +456,22 @@ class Cart
     /**
      * @return void
      */
-    protected function initCartFromSession()
+    protected function initCartFromStore()
     {
-        $sessionArray = $this->session->get('cart_items', []);
+        $storeArray = $this->store->getSizes();
         $ids = [];
-        foreach ($sessionArray as $item) {
-            foreach ($item['sizes'] as $size) {
-                $ids[] = $size['id'];
-            }
+        foreach ($storeArray as $storeItem) {
+            $ids[] = $storeItem->getSizeId();
         }
         $sizes = $this->em->getRepository('AppBundle:ProductModelSpecificSize')->findWithModels($ids);
         foreach ($sizes as $size) {
-            $this->addItemToCard($size, $sessionArray[$size->getModel()->getId()]['sizes'][$size->getId()]['quantity']);
+            $storeItem = Arr::first($storeArray, function ($key, $storeItem) use ($size) {
+                return $storeItem->getSizeId() == $size->getId();
+            });
+            if ($storeItem) {
+                $this->addItem($size, $storeItem->getQuantity());
+            }
         }
-        $this->session->set('cart_items', $sessionArray);
     }
 
     /**
@@ -480,7 +489,22 @@ class Cart
     {
         $this->items = $this->backup;
         unset($this->backup);
-        $this->saveInSession();
+        $this->saveInStore();
+    }
+
+    /**
+     * @param ProductModelSpecificSize $size
+     * @param $quantity
+     */
+    protected function addItem(ProductModelSpecificSize $size, $quantity)
+    {
+        if (isset($this->items[$size->getModel()->getId()])) {
+            // Each size quantity
+            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
+        } else {
+            $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(), $this->pricesCalculator);
+            $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
+        }
     }
 
 }

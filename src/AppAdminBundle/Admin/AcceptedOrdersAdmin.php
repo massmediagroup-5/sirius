@@ -23,6 +23,8 @@ class AcceptedOrdersAdmin extends OrdersAdmin
 
     protected $statusName = 'accepted';
 
+    protected $disableEdit = false;
+
     /**
      * @inheritdoc
      */

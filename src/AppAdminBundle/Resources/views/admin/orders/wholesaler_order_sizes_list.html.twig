@@ -1,0 +1,88 @@
+{% for item in admin.wholesalerCart.models %}
+    {% set itemPackagesCount = admin.wholesalerCart.getPackagesCount(item) %}
+    {% set modelSizes = admin.wholesalerCart.getModelSizes(item) %}
+    {% set singleSizes = admin.wholesalerCart.getSingleSizes(item) %}
+    {% set rowSpanLength = singleSizes|length + (itemPackagesCount ? modelSizes|length : 0) + 1 %}
+    <tr>
+        <td class="control-group" rowspan="{{ rowSpanLength }}">{{ item.products.article }}</td>
+        <td class="control-group" rowspan="{{ rowSpanLength }}">
+            {% if item.images.0 is defined %}
+                <a data-lightbox="model-{{ item.id }}" href="{{ item.images.0.link }}">
+                    <img src="{{ item.images.0.link | imagine_filter('small') }}"/>
+                </a>
+            {% else %}
+                <img src="{{ param('no_image') | imagine_filter('small') }}"/>
+            {% endif %}
+        </td>
+        <td class="control-group" rowspan="{{ rowSpanLength }}">{{ item.products.name }}</td>
+        <td class="control-group" rowspan="{{ rowSpanLength }}">{{ item.productColors.name }}</td>
+        <td class="control-group hidden"></td>
+        <td class="control-group hidden"></td>
+        <td class="control-group hidden"></td>
+        <th class="editable-cell hidden"></th>
+        <td class="control-group hidden"></td>
+        <td class="control-group hidden"></td>
+        <td class="control-group hidden"></td>
+    </tr>
+    {% if itemPackagesCount %}
+        {% for key, size in modelSizes %}
+            <tr data-size-id="{{ size.id }}" data-quantity="{{ itemPackagesCount }}">
+                {#miss first 4 colls - it will be rowspaned#}
+                <td class="control-group">{{ size.size }}</td>
+                {% if key == 0 %}
+                    <td class="control-group vertical-middle-cell" rowspan="{{ loop.length }}" valign="middle">
+                        {{ itemPackagesCount }} пач.
+                        {% if admin.subject.status.code == 'new' or admin.subject.status.code == 'canceled' %}
+                            (не перечислено)
+                        {% else %}
+                            (перечислено)
+                        {% endif %}
+                    </td>
+                {% endif %}
+                <td class="control-group">{{ size.size.quantity }}</td>
+                <th class="editable-cell">
+                    {% if size.size.preOrderFlag %}
+                        <input type="number" name="move_size" min="1" max="{{ itemPackagesCount }}"
+                               value="{{ itemPackagesCount }}"/>
+                        <i class="fa fa-check-square js_submit_move_size"></i>
+                    {% endif %}
+                </th>
+                <td class="control-group">{{ size.totalPrice }}</td>
+                <td class="control-group">{{ size.discountedTotalPrice}}</td>
+                <td class="control-group">
+                    <button class="btn btn-danger btn-xs js_size_remove">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    {% for size in singleSizes %}
+        <tr data-size-id="{{ size.entity.id }}" data-quantity="{{ size.quantity }}">
+            {#miss first 4 colls - it will be rowspaned#}
+            <td class="control-group">{{ size.entity.size }}</td>
+            <td class="control-group" valign="middle">{{ size.quantity }}
+                {% if admin.subject.status.code == 'new' or admin.subject.status.code == 'canceled' %}
+                    (не перечислено)
+                {% else %}
+                    (перечислено)
+                {% endif %}
+            </td>
+            <td class="control-group">{{ size.entity.size.quantity }}</td>
+            <th class="editable-cell vertical-middle-cell">
+                {% if size.entity.size.preOrderFlag %}
+                    <input type="number" name="move_size" min="1" max="{{ size.quantity }}"
+                           value="{{ size.quantity }}"/>
+                    <i class="fa fa-check-square js_submit_move_size"></i>
+                {% endif %}
+            </th>
+            <td class="control-group">{{ size.entity.totalPrice }}</td>
+            <td class="control-group">{{ size.entity.discountedTotalPrice}}</td>
+            <td class="control-group">
+                <button class="btn btn-danger btn-xs js_size_remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+{% endfor %}

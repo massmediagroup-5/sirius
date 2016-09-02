@@ -3,6 +3,7 @@
 namespace AppBundle\Factory;
 
 
+use AppBundle\Cart\Store\SessionCartStore;
 use AppBundle\Services\Cart;
 use AppBundle\Services\WholesalerCart;
 use Doctrine\ORM\EntityManager;
@@ -34,9 +35,10 @@ class CartFactory
     public function createCart(EntityManager $em, Session $session)
     {
         $security = $this->container->get('security.context');
+        $sessionStore = new SessionCartStore($session);
         if ($security->getToken() && $security->isGranted('ROLE_WHOLESALER')) {
-            return new WholesalerCart($em, $this->container, $session);
+            return new WholesalerCart($em, $this->container, $sessionStore);
         }
-        return new Cart($em, $this->container, $session);
+        return new Cart($em, $this->container, $sessionStore);
     }
 }

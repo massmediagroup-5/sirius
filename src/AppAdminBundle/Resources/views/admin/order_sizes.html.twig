@@ -28,45 +28,11 @@
                         </tr>
                     </thead>
                     <tbody class="sonata-ba-tbody">
-                    {% for size in admin.subject.sizes %}
-                        <tr data-size-id="{{ size.id }}">
-                            <td class="control-group">{{ size.size.model.products.article }}</td>
-                            <td class="control-group">
-                                {% if size.size.model.images.0 is defined %}
-                                    <a data-lightbox="size-{{ size.id }}" href="{{ size.size.model.images.0.link }}">
-                                        <img src="{{ size.size.model.images.0.link | imagine_filter('small') }}"/>
-                                    </a>
-                                {% else %}
-                                    <img src="{{ param('no_image') | imagine_filter('small') }}"/>
-                                {% endif %}
-                            </td>
-                            <td class="control-group">{{ size.size.model.products.name }}</td>
-                            <td class="control-group">{{ size.size.model.productColors.name }}</td>
-                            <td class="control-group">{{ size.size }}</td>
-                            <td class="control-group">{{ size.quantity }}
-                                {% if admin.subject.status.code == 'new' or admin.subject.status.code == 'canceled' %}
-                                    (не перечислено)
-                                {% else %}
-                                    (перечислено)
-                                {% endif %}
-                            </td>
-                            <td class="control-group">{{ size.size.quantity }}</td>
-                            <th class="editable-cell">
-                                {% if size.size.preOrderFlag %}
-                                    <input type="number" name="move_size" min="1" max="{{ size.quantity }}"
-                                           value="{{ size.quantity }}"/>
-                                    <i class="fa fa-check-square js_submit_move_size"></i>
-                                {% endif %}
-                            </th>
-                            <td class="control-group">{{ size.totalPrice }}</td>
-                            <td class="control-group">{{ size.discountedTotalPrice }}</td>
-                            <td class="control-group">
-                                <button class="btn btn-danger btn-xs js_size_remove">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                        {% if admin.subject.users.hasRole('ROLE_WHOLESALER') %}
+                            {% include 'AppAdminBundle:admin/orders/wholesaler_order_sizes_list.html.twig'%}
+                        {% else %}
+                            {% include 'AppAdminBundle:admin/orders/order_sizes_list.html.twig'%}
+                        {% endif %}
                     </tbody>
                     <tfoot>
                         <tr>

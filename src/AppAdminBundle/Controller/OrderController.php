@@ -48,9 +48,9 @@ class OrderController extends BaseController
         $object = $this->admin->getSubject();
 
         $size = $this->getDoctrine()
-                     ->getManager()
-                     ->getRepository('AppBundle:OrderProductSize')
-                     ->find($request->get('size'));
+            ->getManager()
+            ->getRepository('AppBundle:OrderProductSize')
+            ->find($request->get('size'));
 
         $this->get('order')->moveSize($object, $size, $request->get('quantity'));
 
@@ -68,7 +68,8 @@ class OrderController extends BaseController
 
         $this->get('order')->removeSize(
             $this->admin->getSubject(),
-            $em->getRepository('AppBundle:OrderProductSize')->find($request->get('size'))
+            $em->getRepository('AppBundle:OrderProductSize')->find($request->get('size')),
+            $request->get('quantity')
         );
 
         return $this->renderJson($this->renderPartials());

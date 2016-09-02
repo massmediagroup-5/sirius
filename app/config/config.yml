@@ -26,6 +26,7 @@ imports:
     - { resource: "@AppBundle/Resources/config/widgets.yml" }
     - { resource: "@UserBundle/Resources/config/config.yml" }
     - { resource: "@AppAdminBundle/Resources/config/admin.yml" }
+    - { resource: "@AppAdminBundle/Resources/config/services.yml" }
     - { resource: mysql.yml }
 
 framework:

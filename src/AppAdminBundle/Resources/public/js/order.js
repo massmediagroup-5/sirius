@@ -30,7 +30,7 @@ var OrderSize = (function () {
 
     OrderSize.prototype.removeSize = function (e) {
         e.preventDefault();
-        this.request('remove_size', {size: this.$size.data('size-id')});
+        this.request('remove_size', {size: this.$size.data('size-id'), quantity: this.$size.data('quantity')});
     };
 
     mix(OrderSize, requestMixin);
