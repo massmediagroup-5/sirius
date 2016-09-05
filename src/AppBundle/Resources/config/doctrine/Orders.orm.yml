@@ -231,4 +231,11 @@ AppBundle\Entity\Orders:
             orphanRemoval: false
         smsInfo:
             targetEntity: OrderSmsInfo
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: order
+            joinColumns:
+                order_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -51,6 +51,7 @@ class Distribution
                     $DistributionSmsInfo = new DistributionSmsInfo();
                     $DistributionSmsInfo->setDistribution($distribution);
                     $DistributionSmsInfo->setSmsId($result['sms_id']);
+                    $DistributionSmsInfo->setSmsStatus('Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки');
                     $DistributionSmsInfo->setUsers($user);
                     $this->em->persist($DistributionSmsInfo);
                     $this->em->flush($DistributionSmsInfo);
@@ -129,7 +130,7 @@ class Distribution
     public function checkSmsStatus()
     {
         $DistributionSmsInfos = $this->em
-            ->createQuery('SELECT d FROM AppBundle\Entity\DistributionSmsInfo d WHERE d.smsId != :where AND d.smsStatus NOT LIKE :like')
+            ->createQuery('SELECT s FROM AppBundle\Entity\SmsInfo s WHERE s.smsId != :where AND s.smsStatus NOT LIKE :like')
             ->setParameter('where', 'null')
             ->setParameter('like', '%Статус окончательный%')
             ->getResult();
@@ -154,9 +155,10 @@ class Distribution
                 $message = $status_arr[$result->result->status];
             }
             $DistributionSmsInfo->setSmsStatus($message);
-            $this->em->persist($DistributionSmsInfo);
-            $this->em->flush($DistributionSmsInfo);
-            $count++;
+            if($this->em->persist($DistributionSmsInfo) && $this->em->flush($DistributionSmsInfo)){
+                $count++;
+            }
+
         }
 
         return $count;
@@ -170,7 +172,7 @@ class Distribution
     public function sendCheckSmsStatus($sms_id)
     {
         if ($curl = curl_init()) {
-            $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '0']);
+            $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
             // массив передаваемых параметров
             $parameters_array = array(
                 'api_key' => $uniSender->getApiKey(),

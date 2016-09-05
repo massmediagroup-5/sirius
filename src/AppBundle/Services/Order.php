@@ -516,7 +516,7 @@ class Order
     public function sendCheckSmsStatus($sms_id)
     {
         if ($curl = curl_init()) {
-            $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '0']);
+            $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
             // массив передаваемых параметров
             $parameters_array = array(
                 'api_key' => $uniSender->getApiKey(),
