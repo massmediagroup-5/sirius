@@ -6,7 +6,7 @@ AppBundle\Entity\SmsInfo:
     type: string
   discriminatorMap:
     order_sms_info: OrderSmsInfo
-    distribution_sms_infoy: DistributionSmsInfo
+    distribution_sms_info: DistributionSmsInfo
   id:
     id:
       type: integer

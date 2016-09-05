@@ -19,7 +19,7 @@ class CheckSmsStatusCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $count = $this->getContainer()->get('order')->checkSmsStatus();
+        $count = $this->getContainer()->get('distribution')->checkSmsStatus();
 
         $output->writeln($count . ' sms statuses was updated');
     }

@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-success">
+            <div class="box-header">
+                <h4 class="box-title">{{ form_tab.name }}</h4>
+            </div>
+            <div class="box-body">
+                {#{% for sms in admin.subject.smsInfos %}#}
+                {#{{ dump(sms) }}#}
+                {#{% endfor %}#}
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>ID смс</th>
+                        <th>Статус смс</th>
+                    </tr>
+                    </thead>
+                    <tbody class="sonata-ba-tbody">
+                    {% for sms in admin.subject.smsInfos %}
+                        <tr>
+                            <td class="control-group">{{ sms.users.name }}</td>
+                            <td class="control-group">{{ sms.users.surname }}</td>
+                            <td class="control-group">{{ sms.smsId }}</td>
+                            <td class="control-group">{{ sms.smsStatus }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

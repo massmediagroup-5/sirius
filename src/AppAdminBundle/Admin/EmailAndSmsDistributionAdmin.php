@@ -81,12 +81,22 @@ class EmailAndSmsDistributionAdmin extends Admin
                     )
                 ->end()
             ->end()
-            ->tab('Информация по смс')
-                ->with('Информация по смс', ['class' => 'col-md-12',])
-                        ->add('smsInfos', null, ['label'=>'Информация о смс'])
-                ->end()
+            ->tab('Информация по смс',['tab_template'=>'AppAdminBundle:admin:sms_info.html.twig'])
             ->end()
         ;
+    }
+
+    public function getTemplate($name)
+    {
+        switch ($name) {
+            case 'edit':
+                return 'AppAdminBundle:admin:distribution_edit.html.twig';
+                break;
+
+            default:
+                return parent::getTemplate($name);
+                break;
+        }
     }
 
     /**

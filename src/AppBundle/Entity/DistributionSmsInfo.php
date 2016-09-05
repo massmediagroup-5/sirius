@@ -13,6 +13,18 @@ class DistributionSmsInfo extends SmsInfo
      */
     private $distribution;
 
+    /**
+     * @var \AppBundle\Entity\Users
+     */
+    private $users;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 
     /**
      * Set distribution
@@ -36,5 +48,30 @@ class DistributionSmsInfo extends SmsInfo
     public function getDistribution()
     {
         return $this->distribution;
+    }
+
+
+    /**
+     * Set users
+     *
+     * @param \AppBundle\Entity\Users $users
+     *
+     * @return DistributionSmsInfo
+     */
+    public function setUsers(\AppBundle\Entity\Users $users = null)
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * Get users
+     *
+     * @return \AppBundle\Entity\Users
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }
