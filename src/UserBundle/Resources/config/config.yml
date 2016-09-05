@@ -4,7 +4,7 @@ fos_user:
     registration:
         form:
             type: acme_user_registration
-            validation_groups: [AppRegistration]
+            validation_groups: [UserRegistration]
     profile:
         form:
             type: acme_user_profile

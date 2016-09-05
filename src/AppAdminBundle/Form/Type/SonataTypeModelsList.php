@@ -20,6 +20,8 @@ use Symfony\Component\OptionsResolver\Options;
  */
 class SonataTypeModelsList extends AbstractType
 {
+    const TEMPLATE = 'AppAdminBundle:admin:orm_form_admin_fields.html.twig';
+    
     /**
      * {@inheritdoc}
      */

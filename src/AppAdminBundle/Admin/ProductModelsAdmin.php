@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use AppAdminBundle\Form\Type\SonataTypeModelsList;
 use Cocur\Slugify\Slugify;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -105,9 +106,10 @@ class ProductModelsAdmin extends Admin
             ])
             ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
             ->add('textLabel', 'text', ['label' => 'Метка', 'required' => false])
-            ->add('textLabelColor', 'text', ['label' => 'Цвет метки', 'required' => false, 'attr' => ['class' => 'js_color_picker']])
+            ->add('textLabelColor', 'text',
+                ['label' => 'Цвет метки', 'required' => false, 'attr' => ['class' => 'js_color_picker']])
             ->add('products', 'sonata_type_model_list', ['label' => 'Модель'])
-            ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара', ])
+            ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара',])
             ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])
             ->add('price', null, ['label' => 'Цена'])
             ->add('oldPrice', null, ['label' => 'Старая цена'])
@@ -119,34 +121,34 @@ class ProductModelsAdmin extends Admin
             ->end()
             ->end()
             ->tab('Размеры')
-                ->with('Размеры', ['class' => 'col-md-12'])
-                    ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
-                            'admin_code' => 'app.admin.product_model_specific_size',
-                            'edit' => 'inline',
-                            'inline' => 'table',
-                        ]
-                    )
-                ->end()
+            ->with('Размеры', ['class' => 'col-md-12'])
+            ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
+                    'admin_code' => 'app.admin.product_model_specific_size',
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                ]
+            )
+            ->end()
             ->end()
             ->tab('Рекомендуем')
-                ->with('Рекомендуем', ['class' => 'col-md-12'])
-                    ->add('recommended', 'sonata_type_models_list',
-                        [
-                            'class' => 'AppBundle:ProductModels',
-                            'model_manager' => $this->getModelManager()
-                        ]
-                    )
-                ->end()
+            ->with('Рекомендуем', ['class' => 'col-md-12'])
+            ->add('recommended', 'sonata_type_models_list',
+                [
+                    'class' => 'AppBundle:ProductModels',
+                    'model_manager' => $this->getModelManager()
+                ]
+            )
+            ->end()
             ->end();
         if (!$this->hasParentFieldDescription()) {
-            if($this->getSubject()->getId()){
+            if ($this->getSubject()->getId()) {
                 $formMapper->tab('Изображения товара')
                     ->with('Изображения товара', ['class' => 'col-md-12'])
-                        ->add('images', 'sonata_type_collection',
-                           ['label' => 'Изображения'], ['edit' => 'inline']
-                        )
-                   ->end()
-                ->end();
+                    ->add('images', 'sonata_type_collection',
+                        ['label' => 'Изображения'], ['edit' => 'inline']
+                    )
+                    ->end()
+                    ->end();
             }
         }
     }
@@ -170,7 +172,8 @@ class ProductModelsAdmin extends Admin
      * @param mixed $model
      * @return void
      */
-    public function prePersist($model) {
+    public function prePersist($model)
+    {
         $this->preUpdate($model);
     }
 
@@ -180,9 +183,10 @@ class ProductModelsAdmin extends Admin
      */
     public function preUpdate($model)
     {
-        if(!$model->getAlias()) {
+        if (!$model->getAlias()) {
             $slugify = new Slugify();
-            $alias = rand(1,99999) . ' ' . $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
+            $alias = rand(1,
+                    99999) . ' ' . $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
             $alias = $slugify->slugify($alias);
             $model->setAlias($alias);
         }
@@ -197,7 +201,7 @@ class ProductModelsAdmin extends Admin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('clone', $this->getRouterIdParameter().'/clone');
+        $collection->add('clone', $this->getRouterIdParameter() . '/clone');
     }
 
     /**
@@ -236,5 +240,14 @@ class ProductModelsAdmin extends Admin
     public function getExportFormats()
     {
         return ['xls'];
+    }
+
+    public function getBatchActions()
+    {
+        // Not show batch actions when rendered select many modal
+        if (in_array($this->formTheme, [SonataTypeModelsList::TEMPLATE])) {
+            return [];
+        }
+        return parent::getBatchActions();
     }
 }

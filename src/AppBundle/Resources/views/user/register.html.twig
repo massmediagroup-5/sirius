@@ -39,13 +39,13 @@
                             </div>
 							<div class="inp">
                                 <div class="col">
-									<div class="inp {{ add_error(form, ['name', 'surname']) }}">
-                                    {{ form_widget(form.name, {'attr': {'placeholder': 'Введите Имя', 'class': form.name.vars.errors|length > 0 ? 'error' : ''}}) }}
+									<div class="inp {{ add_error(form, ['name']) }}">
+                                    {{ form_widget(form.name, {'attr': {'placeholder': 'Введите Имя'}}) }}
 									</div>
 								</div>							
                                 <div class="col">
-									<div class="inp {{ add_error(form, ['name', 'surname']) }}">
-                                    {{ form_widget(form.surname, {'attr': {'placeholder': 'Введите Фамилию', 'class': form.surname.vars.errors|length > 0 ? 'error' : ''}}) }}
+									<div class="inp {{ add_error(form, ['surname']) }}">
+                                    {{ form_widget(form.surname, {'attr': {'placeholder': 'Введите Фамилию'}}) }}
 									</div>
 								</div>
                             </div>
@@ -55,7 +55,14 @@
                                 <label>Ваш E-mail<sup>*</sup></label>
                             </div>
                             <div class="inp {{ add_error(form, ['email']) }}">
-                                {{ form_widget(form.email, {'attr': {'placeholder': 'Введите E-mail адрес', 'class': form.email.vars.errors|length > 0 ? 'error' : ''}}) }}
+                                {{ form_widget(form.email, {'attr': {'placeholder': 'Введите E-mail адрес'}}) }}
+                                {% if form.email.vars.errors|length > 0 %}
+                                    <label id="fos_user_registration_form_email-error" class="error" for="fos_user_registration_form_email">
+                                        {% for error in form.email.vars.errors %}
+                                            {{ error.message }}
+                                        {% endfor %}
+                                    </label>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="row">
@@ -63,7 +70,7 @@
                                 <label>Пароль<sup>*</sup></label>
                             </div>
                             <div class="inp">
-                                {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'Подтвердите пароль', 'class': form.plainPassword.first.vars.errors|length > 0 ? 'error' : ''}}) }}
+                                {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'Подтвердите пароль'}}) }}
                             </div>
                         </div>
                         <div class="row">

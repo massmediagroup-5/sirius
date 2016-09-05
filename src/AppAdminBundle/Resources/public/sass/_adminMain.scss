@@ -406,3 +406,9 @@ input#image_upload_file {
     overflow-y: scroll;
     margin-bottom: 25px;
 }
+
+.modal-models-list {
+    td.sonata-ba-list-field.sonata-ba-list-field-select a {
+        visibility: visible;
+    }
+}
