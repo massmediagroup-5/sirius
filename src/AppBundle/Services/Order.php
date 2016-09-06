@@ -6,6 +6,7 @@ use AppBundle\Entity\Carriers;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
+use AppBundle\Entity\OrderSmsInfo;
 use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Unisender;
@@ -372,13 +373,19 @@ class Order
                                 $order->getId(),
                                 $orderStatus->getSendClientText()
                             );
+                            $OrderSmsInfo = new OrderSmsInfo();
+                            $OrderSmsInfo->setOrder($order);
+                            $OrderSmsInfo->setType(sprintf($orderStatus->getSendClientText(),$order->getId()));
                             if ($client_sms_status['error'] == false) {
                                 // если без ошибок то сохраняем идентификатор смс
-                                $order->setClientSmsId($client_sms_status['sms_id']);
+//                                $order->setClientSmsId($client_sms_status['sms_id']);
+                                $OrderSmsInfo->setSmsId($client_sms_status['sms_id']);
                             } else {
                                 // если ошибка то сохраняем текст ошибки
-                                $order->setClientSmsStatus($client_sms_status['error']);
+//                                $order->setClientSmsStatus($client_sms_status['error']);
+                                $OrderSmsInfo->setSmsStatus($client_sms_status['error']);
                             }
+                            $this->em->persist($OrderSmsInfo);
                         }
                         if (( $orderStatus->getSendManager() ) && ( ! empty( $orderStatus->getSendManagerText() ) )) {
                             $phones = explode(',', $uniSender->getPhones());
@@ -697,7 +704,7 @@ class Order
 
             $order->setCities($cities);
             $order->setStores($stores);
-            $order->setCarriers($cities->getCarriers());
+            $order->setCarriers($data['delivery_type']);
             $order->setComment(Arr::get($data, 'comment'));
             $order->setBonuses($bonuses);
             $order->setPay(Arr::get($data, 'pay'));

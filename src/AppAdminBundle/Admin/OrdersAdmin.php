@@ -341,16 +341,21 @@ class OrdersAdmin extends Admin
                 }
             ])
             ->add('customDelivery', null, ['label' => 'Адрес доставки'])
-            ->add('clientSmsId', null, [
-                'label'     => 'Идентификатор смс клиента',
-                'read_only' => true,
-                'disabled'  => true,
-            ])
-            ->add('clientSmsStatus', null, [
-                'label'     => 'Статус смс клиента',
-                'read_only' => true,
-                'disabled'  => true,
-            ])
+//            ->add('clientSmsId', null, [
+//                'label'     => 'Идентификатор смс клиента',
+//                'read_only' => true,
+//                'disabled'  => true,
+//            ])
+//            ->add('clientSmsStatus', null, [
+//                'label'     => 'Статус смс клиента',
+//                'read_only' => true,
+//                'disabled'  => true,
+//            ])
+//            ->add('smsInfo', 'sonata_type_collection', array(), array(
+//                'edit' => 'inline',
+//                'inline' => 'table',
+//                'sortable'  => 'position'
+//            ))
 //            ->add('managerSmsId', null, [
 //                'label' => 'Идентификатор смс менеджера',
 //                'read_only' => true,

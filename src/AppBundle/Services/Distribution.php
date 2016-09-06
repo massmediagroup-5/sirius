@@ -155,10 +155,9 @@ class Distribution
                 $message = $status_arr[$result->result->status];
             }
             $DistributionSmsInfo->setSmsStatus($message);
-            if($this->em->persist($DistributionSmsInfo) && $this->em->flush($DistributionSmsInfo)){
+            if ($this->em->persist($DistributionSmsInfo) && $this->em->flush($DistributionSmsInfo)) {
                 $count++;
             }
-
         }
 
         return $count;

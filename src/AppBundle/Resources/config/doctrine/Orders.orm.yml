@@ -168,6 +168,12 @@ AppBundle\Entity\Orders:
             mappedBy: order
             inversedBy: null
             orderBy: {id: DESC}
+        smsInfo:
+            targetEntity: OrderSmsInfo
+            cascade: [ all ]
+            fetch: LAZY
+            mappedBy: order
+            orphanRemoval: true
     manyToOne:
         relatedOrder:
             targetEntity: Orders
@@ -227,15 +233,6 @@ AppBundle\Entity\Orders:
             inversedBy: null
             joinColumns:
                 stores_id:
-                    referencedColumnName: id
-            orphanRemoval: false
-        smsInfo:
-            targetEntity: OrderSmsInfo
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: order
-            joinColumns:
-                order_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }
