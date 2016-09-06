@@ -121,14 +121,14 @@ class ProductModelsAdmin extends Admin
             ->end()
             ->end()
             ->tab('Размеры')
-            ->with('Размеры', ['class' => 'col-md-12'])
-            ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
-                    'admin_code' => 'app.admin.product_model_specific_size',
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                ]
-            )
-            ->end()
+                ->with('Размеры', ['class' => 'col-md-12'])
+                    ->add('sizes', 'sonata_type_collection', ['label' => 'Размеры', 'by_reference' => false], [
+                            'admin_code' => 'app.admin.product_model_specific_size',
+                            'edit' => 'inline',
+                            'inline' => 'table',
+                        ]
+                    )
+                ->end()
             ->end()
             ->tab('Рекомендуем')
             ->with('Рекомендуем', ['class' => 'col-md-12'])

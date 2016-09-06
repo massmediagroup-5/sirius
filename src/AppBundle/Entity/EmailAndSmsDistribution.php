@@ -58,7 +58,7 @@ class EmailAndSmsDistribution
     private $updateTime;
 
     /**
-     * @var \AppBundle\Entity\DistributionSmsInfo
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $smsInfos;
 
@@ -72,6 +72,7 @@ class EmailAndSmsDistribution
      */
     public function __construct()
     {
+        $this->smsInfos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -284,16 +285,25 @@ class EmailAndSmsDistribution
 
     /**
      * Set smsInfos
-     *
-     * @param \AppBundle\Entity\DistributionSmsInfo $smsInfos
+     * @param \AppBundle\Entity\DistributionSmsInfo $smsInfo
      *
      * @return EmailAndSmsDistribution
      */
-    public function setSmsInfos(\AppBundle\Entity\DistributionSmsInfo $smsInfos = null)
+    public function addSmsInfo(\AppBundle\Entity\DistributionSmsInfo $smsInfo)
     {
-        $this->smsInfos = $smsInfos;
+        $this->smsInfos[] = $smsInfo;
 
         return $this;
+    }
+
+    /**
+     * Remove smsInfo
+     *
+     * @param \AppBundle\Entity\DistributionSmsInfo $smsInfo
+     */
+    public function removeSmsInfo(\AppBundle\Entity\DistributionSmsInfo $smsInfo)
+    {
+        $this->smsInfos->removeElement($smsInfo);
     }
 
     /**

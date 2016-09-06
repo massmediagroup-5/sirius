@@ -14,7 +14,6 @@
                         {% if form_group.description != false %}
                             <p>{{ form_group.description|raw }}</p>
                         {% endif %}
-
                         <div class="col-md-6">
                             {{ form_row(form.type)}}
                             {{ form_row(form.status)}}
@@ -22,8 +21,8 @@
                             {{ form_row(form.phone)}}
                             {{ form_row(form.payStatus)}}
 
-                            {{ form_row(form.clientSmsId)}}
-                            {{ form_row(form.clientSmsStatus)}}
+                            {#{{ form_row(form.clientSmsId)}}#}
+                            {#{{ form_row(form.clientSmsStatus)}}#}
                         </div>
 
                         <div class="col-md-6">
@@ -32,7 +31,14 @@
                             {% if form.carriers.vars.value == 1 %}
                             {{ form_row(form.cities)}}
                             {{ form_row(form.stores)}}
+                            <div style="display: none">
+                                {{ form_row(form.customDelivery)}}
+                            </div>
                             {% else %}
+                            <div style="display: none;">
+                                {{ form_row(form.cities)}}
+                                {{ form_row(form.stores)}}
+                            </div>
                             {{ form_row(form.customDelivery)}}
                             {% endif %}
                             <div class="form-group">
@@ -57,6 +63,25 @@
                 </div>
             </div>
         </div>
+    <div class="col-md-12 {{ form_group.class }}">
+        <div class="box box-success">
+            <div class="box-header">
+                <h4 class="box-title">
+                    Статусы смс
+                </h4>
+            </div>
+            <div class="box-body">
+                <div class="sonata-ba-collapsed-fields">
+                    <ul>
+                    {% for sms in admin.subject.smsInfo %}
+                        {#{{ dump(sms) }}#}
+                        <li>Текст смс: {{ sms.type }}</br>ID смс: {{ sms.smsId }}</br>Статус смс: {{ sms.smsStatus }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
     {% if has_tab %}</div>{% endif %}
 {% endmacro %}

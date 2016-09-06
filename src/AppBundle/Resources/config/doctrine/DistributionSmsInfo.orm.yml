@@ -8,3 +8,11 @@ AppBundle\Entity\DistributionSmsInfo:
             mappedBy: null
             inversedBy: smsInfos
             orphanRemoval: false
+        users:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            joinColumns:
+                users_id:
+                    referencedColumnName: id
+            orphanRemoval: false

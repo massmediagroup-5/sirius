@@ -193,6 +193,7 @@ class Orders
     public function __construct()
     {
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->smsInfo = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1067,30 +1068,41 @@ class Orders
     {
         return $this->doneTime;
     }
+
     /**
-     * @var \AppBundle\Entity\OrderSmsInfo
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $smsInfo;
 
 
     /**
-     * Set smsInfo
+     * Add smsInfo
      *
      * @param \AppBundle\Entity\OrderSmsInfo $smsInfo
      *
      * @return Orders
      */
-    public function setSmsInfo(\AppBundle\Entity\OrderSmsInfo $smsInfo = null)
+    public function addSmsInfo(\AppBundle\Entity\OrderSmsInfo $smsInfo)
     {
-        $this->smsInfo = $smsInfo;
+        $this->smsInfo[] = $smsInfo;
 
         return $this;
     }
 
     /**
+     * Remove smsInfo
+     *
+     * @param \AppBundle\Entity\OrderSmsInfo $smsInfo
+     */
+    public function removeSmsInfo(\AppBundle\Entity\OrderSmsInfo $smsInfo)
+    {
+        $this->smsInfo->removeElement($smsInfo);
+    }
+
+    /**
      * Get smsInfo
      *
-     * @return \AppBundle\Entity\OrderSmsInfo
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSmsInfo()
     {

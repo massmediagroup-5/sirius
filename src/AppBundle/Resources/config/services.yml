@@ -49,6 +49,9 @@ services:
     search:
         class: AppBundle\Services\Search
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    distribution:
+        class: AppBundle\Services\Distribution
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
     update_all:
         class: AppBundle\Services\UpdateAll
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]

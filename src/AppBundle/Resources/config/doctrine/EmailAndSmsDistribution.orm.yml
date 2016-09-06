@@ -58,8 +58,15 @@ AppBundle\Entity\EmailAndSmsDistribution:
                 users_id:
                     referencedColumnName: id
             orphanRemoval: false
-    manyToOne:
+    oneToMany:
         smsInfos:
             targetEntity: DistributionSmsInfo
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: distribution
+            joinColumns:
+                distribution_id:
+                    referencedColumnName: id
+            orphanRemoval: false
 
     lifecycleCallbacks: {  }
