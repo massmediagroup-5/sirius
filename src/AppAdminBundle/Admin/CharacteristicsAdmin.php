@@ -115,4 +115,18 @@ class CharacteristicsAdmin extends Admin
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_type_models_list.html.twig']);
     }
+
+    public function prePersist($object)
+    {
+        foreach ($object->getCharacteristicValues() as $cv) {
+            $cv->setCharacteristics($object);
+        }
+    }
+
+    public function preUpdate($object)
+    {
+        foreach ($object->getCharacteristicValues() as $cv) {
+            $cv->setCharacteristics($object);
+        }
+    }
 }

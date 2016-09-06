@@ -152,9 +152,6 @@ class ProductsAdmin extends Admin
                 [
                     'class'    => 'AppBundle:CharacteristicValues',
                     'label' => 'Значения характеристик',
-                    'expanded' => true,
-                    'multiple' => true,
-                    'by_reference' => false
                 ]
             )
             ->end()
@@ -167,15 +164,42 @@ class ProductsAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
+            ->tab('Модель')
+            ->with('Модель',
+                [
+                    'class' => 'col-md-12',
+                ])
             ->add('name', null, ['label' => 'Название модели'])
             ->add('article', null, ['label' => 'Артикул'])
-            ->add('content', null, ['label' => 'Описание модели'])
+            ->add('content', null, ['label' => 'О модели', 'attr' => ['class' => 'ckeditor']])
+            ->add('characteristics', null, ['label' => 'Характеристики', 'attr' => ['class' => 'ckeditor']])
+            ->add('features', null, ['label' => 'Особенности', 'attr' => ['class' => 'ckeditor']])
+            ->add('active', null, ['label' => 'Активный'])
+            ->add('baseCategory', 'sonata_type_model',[],['admin_code' => 'app.admin.categories'])
+            ->add('price', null, ['label' => 'Цена'])
+            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
-            ->add('active', null, ['label' => 'Активный'])
-            ->add('createTime', null, ['label' => 'Дата создания'])
-            ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
+            ->end()
+            ->end()
+            ->tab('Характеристики')
+            ->with('Характеристики модели',
+                [
+                    'class' => 'col-md-12',
+                ])
+            ->add('characteristicValues',
+                'entity',
+                [
+                    'class'    => 'AppBundle:CharacteristicValues',
+                    'label' => 'Значения характеристик',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'by_reference' => false
+                ]
+            )
+            ->end()
+            ->end();
     }
 
     /**
