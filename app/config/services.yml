@@ -46,4 +46,4 @@ services:
             - { name: doctrine.event_subscriber }
 
     cache:
-        class: Doctrine\Common\Cache\ApcCache
+        class: "%doctrine_cache_class%"

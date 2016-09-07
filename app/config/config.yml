@@ -145,9 +145,9 @@ doctrine:
             default:
                 #connection:       local
                 connection:       default
-                metadata_cache_driver: apc
-                result_cache_driver: apc
-                query_cache_driver: apc
+                metadata_cache_driver: "%doctrine_cache_driver%"
+                result_cache_driver: "%doctrine_cache_driver%"
+                query_cache_driver: "%doctrine_cache_driver%"
                 mappings:
                     AppBundle: ~
                     AppAdminBundle: ~
