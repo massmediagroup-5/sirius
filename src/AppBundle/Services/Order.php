@@ -467,6 +467,9 @@ class Order
                 } elseif (isset($jsonObj->result->error)) {
                     // Ошибка отправки сообщения
                     $result['error'] = "An error occured: {$jsonObj->result->error} (code: {$jsonObj->result->error})";
+                } elseif (isset($jsonObj->error)) {
+                    // Ошибка отправки сообщения
+                    $result['error'] = "An error occured: {$jsonObj->error}";
                 } else {
                     // Сообщение успешно отправлено
                     $result['sms_id'] = $jsonObj->result->sms_id;
