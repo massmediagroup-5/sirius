@@ -152,6 +152,9 @@ class ProductsAdmin extends Admin
                 [
                     'class'    => 'AppBundle:CharacteristicValues',
                     'label' => 'Значения характеристик',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'by_reference' => false
                 ]
             )
             ->end()
