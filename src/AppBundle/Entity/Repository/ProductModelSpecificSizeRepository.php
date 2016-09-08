@@ -104,4 +104,16 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         return $builder->getQuery()->getResult();
     }
 
+    public function isProductModelsIsOrdered($ids)
+    {
+        return $this->createQueryBuilder('sizes')
+            ->innerJoin('sizes.orderedSizes', 'orderedSizes')
+            ->innerJoin('sizes.model', 'model')
+            ->where('model.id IN (:modelIds)')
+            ->setParameter('modelIds', $ids)
+            ->select('COUNT(sizes)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 }
