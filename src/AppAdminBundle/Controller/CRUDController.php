@@ -76,7 +76,7 @@ class CRUDController extends BaseController
             ->isProductModelsIsOrdered($selectedIds)){
             return true;
         }
-        return $this->admin->trans( 'flash_delete_not_ordered_error1', [ ], 'AppAdminBundle' );
+        return $this->admin->trans( 'flash_delete_not_ordered_error1', [], 'AppAdminBundle' );
     }
 
     /**
@@ -206,7 +206,7 @@ class CRUDController extends BaseController
             }elseif ($object instanceof Products) {
                 $this->addFlash(
                     'sonata_flash_error',
-                    $this->admin->trans( 'flash_delete_not_empty_error1', [ ], 'AppAdminBundle' )
+                    $this->admin->trans( 'flash_delete_not_empty_error1', [], 'AppAdminBundle' )
                 );
             }
 
@@ -215,7 +215,7 @@ class CRUDController extends BaseController
          if ($this->get('product')->checkProductsIsOrdered($object)){
              $this->addFlash(
                  'warning',
-                 $this->admin->trans( 'flash_delete_not_ordered_error1', [ ], 'AppAdminBundle' )
+                 $this->admin->trans( 'flash_delete_not_ordered_error1', [], 'AppAdminBundle' )
              );
              return $this->redirectTo($object);
          }
