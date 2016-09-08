@@ -104,7 +104,7 @@
                 </div>
             {% endif %}
 
-            <div class="sonata-ba-list col-md-12">
+            <div class="sonata-ba-list col-md-12" style="overflow-x: scroll">
                 {{ _list_table|raw }}
             </div>
         </div>
@@ -115,7 +115,7 @@
     {% endif %}
 
     {% if _content is not empty %}
-        <div class="sonata-ba-content">{{ _content|raw }}</div>
+        <div class="sonata-ba-content" style="overflow-x: scroll">{{ _content|raw }}</div>
     {% endif %}
 
     {% if _show is not empty %}

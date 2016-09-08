@@ -121,16 +121,16 @@ class ImportAdmin
     {
         $this->reader = new XlsReader($file, new PriceImportTransformer());
         $result = [
-            'errors' => new \Illuminate\Support\Collection(),
+            'errors' => [],
             'total' => 0,
             'data' => $this->reader
         ];
 
-        foreach ($this->reader as $row) {
+        foreach ($this->reader as $key => $row) {
             $result['total']++;
             $errors = $this->validator->validate($row, $this->validationRules());
             if ($errors->count()) {
-                $result['errors']->push($errors);
+                $result['errors'][$key] = $errors;
             }
         }
 
