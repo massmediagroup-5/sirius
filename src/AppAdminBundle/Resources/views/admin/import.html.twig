@@ -23,11 +23,11 @@
         </table>
     {{ form_end(form) }}
 
-    {% if validation is defined and validation.errors.count() > 0 %}
+    {% if validation is defined and validation.errors|length  > 0 %}
         <div class="import-errors">
-            {% for errors in validation.errors %}
+            {% for key, errors in validation.errors %}
                 {% for error in errors %}
-                    <div class="import-error">{{ error.propertyPath }} {{ error.message }}</div>
+                    <div class="import-error">{{ error.propertyPath }} {{ error.message }} ({{ key+1 }} строка)</div>
                 {% endfor %}
             {% endfor %}
         </div>
@@ -35,6 +35,7 @@
         <table class="table table-bordered table-striped">
             <thead>
             <tr class="sonata-ba-list-field-header">
+                <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">№</th>
                 {% for head in validation.data.getFields() %}
                     <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
                         {{ head }}
@@ -44,10 +45,16 @@
             </thead>
 
             <tbody>
-            {% for items in validation.data %}
+            {% for key, items in validation.data %}
+                {% if key in validation.errors|keys %}
+                    {% set bg = ' style="background-color: #ff9900;"' %}
+                {% else %}
+                    {% set bg = '' %}
+                {% endif %}
                 <tr>
+                    <td class="sonata-ba-list-field"{{ bg|raw }}>{{ key + 1 }}</td>
                     {% for item in items %}
-                        <td class="sonata-ba-list-field">{{ item }}</td>
+                        <td class="sonata-ba-list-field"{{ bg|raw }}>{{ item }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}

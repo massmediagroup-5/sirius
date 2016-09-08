@@ -57,12 +57,12 @@ class ImportController extends CoreController
 
         $data['validation'] = $validation;
 
-        if ($validation['errors']->count() == 0) {
+        if (count($validation['errors']) == 0) {
             $this->get('app.admin.import')->import($formData['file'], $formData);
 
             $this->addFlash('sonata_flash_success', 'Успешно импортировано');
         } else {
-            $this->addFlash('sonata_flash_error', "Ошибка валидации (с ошибками {$validation['errors']->count()} с " .
+            $this->addFlash('sonata_flash_error', "Ошибка валидации (с ошибками ".count($validation['errors'])." с " .
                 "{$validation['data']->count()})");
         }
         
