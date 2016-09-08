@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody class="sonata-ba-tbody">
-                        {% if admin.subject.users.hasRole('ROLE_WHOLESALER') %}
+                        {% if admin.subject.users and admin.subject.users.hasRole('ROLE_WHOLESALER') %}
                             {% include 'AppAdminBundle:admin/orders/wholesaler_order_sizes_list.html.twig'%}
                         {% else %}
                             {% include 'AppAdminBundle:admin/orders/order_sizes_list.html.twig'%}

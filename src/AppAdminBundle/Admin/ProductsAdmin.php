@@ -52,6 +52,7 @@ class ProductsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('baseCategory', null, ['label' => 'Категория'])
             ->add('article', null, ['label' => 'Артикул'])
 //            ->add('name', null, ['label' => 'Название модели'])
             ->add('name', 'doctrine_orm_callback',
