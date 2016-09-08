@@ -4,6 +4,7 @@ namespace AppBundle\Services;
 
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
+use AppBundle\Entity\ProductModels;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -81,6 +82,18 @@ class Product
         if ($flush) {
             $this->em->flush();
         }
+    }
+
+    public function checkProductsIsOrdered(ProductModels $productModel){
+
+        return $this->em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->createQueryBuilder('sizes')
+            ->innerJoin('sizes.orderedSizes', 'orderedSizes')
+            ->where('sizes.model = :model')
+            ->setParameter('model', $productModel)
+            ->select('COUNT(sizes)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
 }
