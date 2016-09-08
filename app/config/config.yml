@@ -254,6 +254,8 @@ fos_user:
         form:
             type: app_user_registration
             handler: app_user.form.handler.registration
+        confirmation:
+            enabled: true
 
 fos_elastica:
     clients:
