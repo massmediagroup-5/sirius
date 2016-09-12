@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use AppBundle\Validator\ProductPriceConstraint;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -64,7 +65,11 @@ class ProductModelSpecificSizeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('price', null, ['label' => 'Цена', 'required' => true])
+            ->add('price', null, ['label' => 'Цена',
+                'required' => true,
+                'constraints' => [new ProductPriceConstraint()]
+
+            ])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('quantity', null, ['label' => 'Количество'])
             ->add('preOrderFlag', null, ['label' => 'Предзаказ'])
