@@ -74,6 +74,11 @@ class Distribution
                         $this->container->get('mailer')->send($message);
                     }
                 }
+
+                $distribution->setActive(false);
+                $this->em->persist($distribution);
+                $this->em->flush($distribution);
+
                 $count++;
             }
         }

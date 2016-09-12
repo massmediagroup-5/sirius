@@ -33,6 +33,7 @@ GEM
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   capistrano (= 3.6.1)
@@ -42,4 +43,4 @@ DEPENDENCIES
   capistrano-symfony (~> 1.0.0.rc1)
 
 BUNDLED WITH
-   1.10.6
+   1.12.5
