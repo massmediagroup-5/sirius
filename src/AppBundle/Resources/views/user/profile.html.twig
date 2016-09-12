@@ -46,6 +46,7 @@
                 </div>
                 <div class="inp {{ add_error(form, 'email') }}">
                     {{ form_widget(form.email, {'attr': {'placeholder': 'Введите E-mail адрес'}}) }}
+                    {{ form_errors(form.email, {'attr': {'style': 'list-style: none;'}}) }}
                 </div>
             </div>
             <div class="rw mb20">
