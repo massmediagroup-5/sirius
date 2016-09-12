@@ -71,3 +71,4 @@ set :composer_install_flags, '--prefer-dist --no-interaction --optimize-autoload
 
 server '185.43.223.172', user: 'sirius-sport', port: 22, roles: %w{app db web} # edit IP / Port and SSH user of your production server
 SSHKit.config.command_map[:composer] = "php #{shared_path.join("composer.phar")}"
+set :ssh_options, forward_agent: false
