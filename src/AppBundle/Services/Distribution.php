@@ -39,38 +39,56 @@ class Distribution
         $this->container = $container;
     }
 
+    /**
+     * @return int
+     */
     public function sendDistribution()
     {
+        $count = 0;
         $distributions = $this->em->getRepository('AppBundle:EmailAndSmsDistribution')->findBy(['active' => true]);
         $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
-        foreach ($distributions as $distribution) {
-            $users = $distribution->getUsers();
-            if ($distribution->getSendSms() && $uniSender) {
-                foreach ($users as $user) {
-                    $result = $this->sendSmsRequest($uniSender, $user->getPhone(), $distribution->getSmsText());
-                    $DistributionSmsInfo = new DistributionSmsInfo();
-                    $DistributionSmsInfo->setDistribution($distribution);
-                    $DistributionSmsInfo->setSmsId($result['sms_id']);
-                    $DistributionSmsInfo->setSmsStatus('Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки');
-                    $DistributionSmsInfo->setUsers($user);
-                    $this->em->persist($DistributionSmsInfo);
-                    $this->em->flush($DistributionSmsInfo);
-                }
-            }
+        if (!empty($distributions)) {
+            foreach ($distributions as $distribution) {
+                $users = $distribution->getUsers();
+                if ($distribution->getSendSms() && $uniSender) {
+                    foreach ($users as $user) {
+                        $result = $this->sendSmsRequest($uniSender, $user->getPhone(), $distribution->getSmsText());
+                        $DistributionSmsInfo = new DistributionSmsInfo();
+                        $DistributionSmsInfo->setDistribution($distribution);
+                        if(isset($result['sms_id'])){
+                            $DistributionSmsInfo->setSmsId($result['sms_id']);
+                            $DistributionSmsInfo->setSmsStatus('Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки');
+                        }else{
+                            $DistributionSmsInfo->setSmsStatus($result['error']);
+                        }
 
-            if ($distribution->getSendEmail()) {
-                foreach ($users as $user) {
-                    $message = \Swift_Message::newInstance()
-                        ->setSubject($distribution->getEmailTitle())
-                        ->setFrom('mo-reply@sirius-sport.com')
-                        ->addTo($user->getEmail())
-                        ->setBody($distribution->getEmailText())
-                        ->setContentType("text/html");
-                    $this->container->get('mailer')->send($message);
+                        $DistributionSmsInfo->setUsers($user);
+                        $this->em->persist($DistributionSmsInfo);
+                        $this->em->flush($DistributionSmsInfo);
+                    }
                 }
-            }
 
+                if ($distribution->getSendEmail()) {
+                    foreach ($users as $user) {
+                        $message = \Swift_Message::newInstance()
+                            ->setSubject($distribution->getEmailTitle())
+                            ->setFrom('no-reply@sirius-sport.com')
+                            ->addTo($user->getEmail())
+                            ->setBody($distribution->getEmailText())
+                            ->setContentType("text/html");
+                        $this->container->get('mailer')->send($message);
+                    }
+                }
+
+                $distribution->setActive(false);
+                $this->em->persist($distribution);
+                $this->em->flush($distribution);
+
+                $count++;
+            }
         }
+
+        return $count;
     }
 
     /**
