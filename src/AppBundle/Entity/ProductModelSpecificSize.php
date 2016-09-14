@@ -48,6 +48,11 @@ class ProductModelSpecificSize
     private $shareGroup;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $history;
+
+    /**
      * Get id
      *
      * @return integer
@@ -327,6 +332,21 @@ class ProductModelSpecificSize
     public function inShareGroup(ShareSizesGroup $shareGroup)
     {
         return $this->shareGroup && $this->shareGroup->getId() == $shareGroup->getId();
+    }
+
+    public function addHistory($history)
+    {
+        $this->history[] = $history;
+
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistory()
+    {
+        return $this->history;
     }
 
 }
