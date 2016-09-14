@@ -55,8 +55,13 @@ class Distribution
                         $result = $this->sendSmsRequest($uniSender, $user->getPhone(), $distribution->getSmsText());
                         $DistributionSmsInfo = new DistributionSmsInfo();
                         $DistributionSmsInfo->setDistribution($distribution);
-                        $DistributionSmsInfo->setSmsId($result['sms_id']);
-                        $DistributionSmsInfo->setSmsStatus('Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки');
+                        if(isset($result['sms_id'])){
+                            $DistributionSmsInfo->setSmsId($result['sms_id']);
+                            $DistributionSmsInfo->setSmsStatus('Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки');
+                        }else{
+                            $DistributionSmsInfo->setSmsStatus($result['error']);
+                        }
+
                         $DistributionSmsInfo->setUsers($user);
                         $this->em->persist($DistributionSmsInfo);
                         $this->em->flush($DistributionSmsInfo);
@@ -67,13 +72,18 @@ class Distribution
                     foreach ($users as $user) {
                         $message = \Swift_Message::newInstance()
                             ->setSubject($distribution->getEmailTitle())
-                            ->setFrom('mo-reply@sirius-sport.com')
+                            ->setFrom('no-reply@sirius-sport.com')
                             ->addTo($user->getEmail())
                             ->setBody($distribution->getEmailText())
                             ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
                     }
                 }
+
+                $distribution->setActive(false);
+                $this->em->persist($distribution);
+                $this->em->flush($distribution);
+
                 $count++;
             }
         }
