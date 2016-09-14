@@ -9581,3 +9581,7 @@ body {
   -moz-transform: scale(1.1);
   -o-transform: scale(1.1);
 }
+
+.new-buyer input[name="create_order[customDelivery]"] {
+    margin-top: 5px;
+}
