@@ -38,6 +38,10 @@ class ContactsController extends Controller
                     ->setContentType("text/html")
                 ;
                 $this->container->get('mailer')->send($message);
+                $this->addFlash(
+                    'success',
+                    'Спасибо, в ближайшее время с вами свяжется наш менеджер'
+                );
             }
         }
 

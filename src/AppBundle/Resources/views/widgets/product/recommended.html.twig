@@ -4,7 +4,7 @@
     <div class="last-viewed__i">
         {% for item in recommended %}
             <div class="item">
-                <a href="#">
+                <a href="{{ url('product', {'category': item.products.baseCategory.alias,'product': item.alias}) }}">
                     <div class="item__i">
                         <div class="img">
                             <img src="{{ (item.images.0.link ?: param('no_image')) | imagine_filter('medium') }}" alt="#"/>
