@@ -1,5 +1,5 @@
 <div class="search-drop-results__i">
-    {% if result is defined and result.products|length != 0 %}
+    {% if result.products is defined and result.products|length != 0 %}
     <h2>Товары</h2>
     <div class="list">
         {% for item in result.products|slice(0, 4) %}

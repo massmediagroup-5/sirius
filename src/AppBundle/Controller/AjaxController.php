@@ -63,8 +63,6 @@ class AjaxController extends Controller
         if ($request->get('search')) {
             $slug = $request->get('search');
 
-            $finder = $this->get('fos_elastica.finder.app.products');
-
             $boolQuery = new \Elastica\Query\BoolQuery();
 
             $productQuery = new \Elastica\Query\Match();
@@ -125,6 +123,7 @@ class AjaxController extends Controller
                 ))->getContent();
 
                 $this->result['status'] = 'OK';
+                return new JsonResponse($this->result);
             }
 
             $filters = $request->query->all();
