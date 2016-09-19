@@ -104,6 +104,7 @@ class ProductsAdmin extends Admin
             ])
             ->add('baseCategory.name', null, ['label' => 'Категория'])
             ->add('active', 'boolean', ['label' => 'Активный', 'editable' => true])
+            ->add('characteristicValues', null, ['label' => 'Значения характеристик'])
             ->add('createTime', null, ['label' => 'Дата создания'])
             ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', [
