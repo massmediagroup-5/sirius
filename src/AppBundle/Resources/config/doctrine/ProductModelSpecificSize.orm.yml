@@ -45,4 +45,11 @@ AppBundle\Entity\ProductModelSpecificSize:
             mappedBy: size
             inversedBy: null
             orphanRemoval: true
+        history:
+            targetEntity: ProductModelSpecificSizeHistory
+            cascade: [ all ]
+            fetch: LAZY
+            mappedBy: productModelSpecificSize
+            inversedBy: null
+            orderBy: {id: DESC}
     lifecycleCallbacks: {  }

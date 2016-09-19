@@ -4,14 +4,13 @@ namespace AppAdminBundle\Admin;
 
 use AppAdminBundle\Form\Type\SonataTypeModelsList;
 use Cocur\Slugify\Slugify;
+use Illuminate\Support\Collection;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Validator\ErrorElement;
-
 
 /**
  * Class ProductModelsAdmin
@@ -111,7 +110,7 @@ class ProductModelsAdmin extends Admin
             ->add('products', 'sonata_type_model_list', ['label' => 'Модель'])
             ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара',])
             ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])
-            ->add('price', null, ['label' => 'Цена'])
+            ->add('price', 'number', ['label' => 'Цена', 'precision' => 2])
             ->add('oldPrice', null, ['label' => 'Старая цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('quantity', null, ['label' => 'Количество'])
@@ -201,7 +200,8 @@ class ProductModelsAdmin extends Admin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('clone', $this->getRouterIdParameter() . '/clone');
+        $collection->add('clone', $this->getRouterIdParameter() . '/clone')
+        ->add('cancel_product_model_change', $this->getRouterIdParameter() . '/cancel_product_model_change/{history_id}');
     }
 
     /**
@@ -249,5 +249,30 @@ class ProductModelsAdmin extends Admin
             return [];
         }
         return parent::getBatchActions();
+    }
+
+    public function getHistoryItemLabel($historyItem)
+    {
+        $historyManager = $this->getConfigurationPool()->getContainer()->get('history_manager');
+        $history        = $historyManager->createFromHistoryItem($historyItem);
+
+        return $history->label();
+    }
+
+    public function getHistory()
+    {
+        $historyItems = new Collection($this->subject->getHistory()->getValues());
+
+        foreach ($this->subject->getSizes() as $size) {
+            $historyItems = $historyItems->merge($size->getHistory()->getValues());
+        }
+
+        return $historyItems->sort(function ($a, $b) {
+            if ($a->getCreateTime() == $b->getCreateTime()) {
+                return 0;
+            }
+
+            return ($a->getCreateTime() > $b->getCreateTime()) ? -1 : 1;
+        });
     }
 }

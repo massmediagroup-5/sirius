@@ -1,0 +1,11 @@
+AppBundle\Entity\ProductModelSpecificSizeHistory:
+    type: entity
+    repositoryClass: AppBundle\Entity\Repository\ProductModelSpecificSizeHistoryRepository
+    manyToOne:
+        productModelSpecificSize:
+            targetEntity: ProductModelSpecificSize
+            cascade: { }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: history
+            orphanRemoval: false
