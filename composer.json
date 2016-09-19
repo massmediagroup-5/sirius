@@ -30,7 +30,7 @@
         "symfony/assetic-bundle": "^2.7",
         "friendsofsymfony/jsrouting-bundle": "^1.5",
         "liip/imagine-bundle": "^1.3",
-        "friendsofsymfony/elastica-bundle": "^3.1",
+        "friendsofsymfony/elastica-bundle": "dev-master",
         "illuminate/support": "^5.2",
         "liuggio/excelbundle": "^2.0",
 
@@ -52,7 +52,6 @@
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
         "symfony/phpunit-bridge": "~2.7",
-        "hautelook/alice-bundle": "dev-master#a810c303c2fbec1078020f7786ea27387b4bf6ab",
         "doctrine/doctrine-fixtures-bundle": "^2.2"
     },
     "scripts": {

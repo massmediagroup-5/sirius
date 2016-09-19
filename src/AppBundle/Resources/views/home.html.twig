@@ -1,6 +1,20 @@
 {% extends 'AppBundle:base.html.twig' %}
 
 {% block body %}
+    {% if app.session.flashBag.has('success') %}
+        {% for msg in app.session.flashBag.get('success') %}
+            <div class="flash-success" id="flash-success">
+                <div class="text-popup">
+                    <div class="text-popup__i">
+                        <p>{{ msg }}</p>
+                        <div class="btn-row">
+                            <a href="#" class="btn btn_blue close-popup">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
     {{ widget('sliders.home')|raw }}
     <section class="content">
         <div class="wrap">

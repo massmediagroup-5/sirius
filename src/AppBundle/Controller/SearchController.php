@@ -111,16 +111,7 @@ class SearchController extends Controller
         $productColorsQuery->setFieldParam('productModels.productColors.name', 'type', 'phrase_prefix');
         $boolQuery->addShould($productColorsQuery);
 
-        $boolFilter = new \Elastica\Filter\Bool();
-        $boolFilter->addMust(
-            new \Elastica\Filter\Terms('active', array(1))
-        );
-        $boolFilter->addMust(
-            new \Elastica\Filter\Terms('productModels.published', array(1))
-        );
-
-        $filtered = new \Elastica\Query\Filtered($boolQuery, $boolFilter);
-        $query = \Elastica\Query::create($filtered);
+        $query = \Elastica\Query::create($boolQuery);
         $client = new \Elastica\Client();
 
         $resultSet = $client->getIndex('app')->search($query);

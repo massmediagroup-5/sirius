@@ -63,8 +63,6 @@ class AjaxController extends Controller
         if ($request->get('search')) {
             $slug = $request->get('search');
 
-            $finder = $this->get('fos_elastica.finder.app.products');
-
             $boolQuery = new \Elastica\Query\BoolQuery();
 
             $productQuery = new \Elastica\Query\Match();
@@ -109,23 +107,37 @@ class AjaxController extends Controller
             $productColorsQuery->setFieldParam('productModels.productColors.name', 'type', 'phrase_prefix');
             $boolQuery->addShould($productColorsQuery);
 
-            $boolFilter = new \Elastica\Filter\Bool();
+            $query = \Elastica\Query::create($boolQuery);
+            $client = new \Elastica\Client();
 
-            $boolFilter->addMust(
-                new \Elastica\Filter\Terms('active', array(1))
-            );
+            $resultSet = $client->getIndex('app')->search($query);
 
-            $boolFilter->addMust(
-                new \Elastica\Filter\Terms('productModels.published', array(1))
-            );
+            $ids = array_map(function ($res) {
+                return $res->getId();
+            }, $resultSet->getResults());
 
-            $filtered = new \Elastica\Query\Filtered($boolQuery, $boolFilter);
-            $query = \Elastica\Query::create($filtered);
+            if (!$ids) {
+                $this->result['html'] = $this->render('AppBundle:partials:search_drop_results.html.twig', array(
+                    'result' => null,
+                    'slug' => $slug
+                ))->getContent();
 
-            $result = $finder->find($query,9999);
+                $this->result['status'] = 'OK';
+                return new JsonResponse($this->result);
+            }
+
+            $filters = $request->query->all();
+
+            try {
+                $data = $this->get('entities')
+                    ->getCollectionsByCategoriesAlias('all', $filters, 9999, 1,
+                        'Products', $ids);
+            } catch (\Doctrine\Orm\NoResultException $e) {
+                $data = null;
+            }
 
             $this->result['html'] = $this->render('AppBundle:partials:search_drop_results.html.twig', array(
-                'result' => $result,
+                'result' => $data,
                 'slug' => $slug
             ))->getContent();
 

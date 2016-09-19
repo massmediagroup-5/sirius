@@ -31,7 +31,7 @@ imports:
 
 framework:
     #esi:             ~
-    translator:      { fallbacks: ["ru"] }
+    translator:      { fallback: '%locale%' }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -43,7 +43,7 @@ framework:
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
-    default_locale:  "ru"
+    default_locale:  '%locale%'
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
@@ -215,8 +215,8 @@ sonata_admin:
         handler: sonata.admin.security.handler.role
 
 sonata_translation:
-    locales: [ru]
-    default_locale: ru
+    locales: ['%locale%']
+    default_locale: '%locale%'
     # here enable the types you need
     gedmo:
         enabled: true
@@ -230,7 +230,7 @@ sonata_intl:
 
         # locale specific overrides
         locales:
-            fr: Europe/Kiev
+            ru: Europe/Kiev
 
 sonata_doctrine_orm_admin:
     templates:
