@@ -35,8 +35,7 @@ class RegistrationController extends BaseController
                 $route = 'fos_user_registration_confirmed';
             }
 
-
-            $this->setFlash('fos_user_success', 'registration.flash.user_created');
+            $this->setFlash('success', 'Спасибо за регистрацию, проверьте Вашу почту и активируйте аккаунт');
             $url = $this->container->get('router')->generate('user_profile');
 
             $response = new RedirectResponse($url);
