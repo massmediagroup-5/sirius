@@ -312,6 +312,7 @@ class OrdersAdmin extends Admin
             ->add('cities', 'entity', [
                 'class'         => 'AppBundle:Cities',
                 'label'         => 'Город',
+                'required'      => false,
                 'read_only'     => $this->disableEdit,
                 'disabled'      => $this->disableEdit,
                 'query_builder' => function (EntityRepository $er) {
@@ -326,6 +327,7 @@ class OrdersAdmin extends Admin
             ->add('stores', 'sonata_stores_list', [
                 'class'         => 'AppBundle:Stores',
                 'label'         => 'Склад',
+                'required'      => false,
                 'read_only'     => $this->disableEdit,
                 'disabled'      => $this->disableEdit,
                 'query_builder' => function (EntityRepository $er) {
