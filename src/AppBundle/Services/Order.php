@@ -713,7 +713,8 @@ class Order
 
             $order->setCities($cities);
             $order->setStores($stores);
-            $order->setCarriers($data['delivery_type']);
+            $order->setCarriers(Arr::get($data, 'delivery_type'));
+            $order->setCustomDelivery(Arr::get($data, 'customDelivery'));
             $order->setComment(Arr::get($data, 'comment'));
             $order->setBonuses($bonuses);
             $order->setPay(Arr::get($data, 'pay'));

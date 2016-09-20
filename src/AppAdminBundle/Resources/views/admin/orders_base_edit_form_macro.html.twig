@@ -28,18 +28,19 @@
                         <div class="col-md-6">
                             {{ form_row(form.pay)}}
                             {{ form_row(form.carriers)}}
+
                             {% if form.carriers.vars.value == 1 %}
-                            {{ form_row(form.cities)}}
-                            {{ form_row(form.stores)}}
-                            <div style="display: none">
-                                {{ form_row(form.customDelivery)}}
-                            </div>
-                            {% else %}
-                            <div style="display: none;">
                                 {{ form_row(form.cities)}}
                                 {{ form_row(form.stores)}}
-                            </div>
-                            {{ form_row(form.customDelivery)}}
+                                <div style="display: none">
+                                    {{ form_row(form.customDelivery)}}
+                                </div>
+                            {% else %}
+                                <div style="display: none;">
+                                    {{ form_row(form.cities)}}
+                                    {{ form_row(form.stores)}}
+                                </div>
+                                {{ form_row(form.customDelivery)}}
                             {% endif %}
                             <div class="form-group">
                                 <label class="control-label">
