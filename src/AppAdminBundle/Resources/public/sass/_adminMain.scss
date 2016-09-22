@@ -402,8 +402,8 @@ input#image_upload_file {
 }
 
 .import-errors {
-    height: 300px;
-    overflow-y: scroll;
+    max-height: 300px;
+    overflow-y: auto;
     margin-bottom: 25px;
 }
 
@@ -412,7 +412,19 @@ input#image_upload_file {
         visibility: visible;
     }
 }
-.modal-list-container {
+
+.tablewrap {
+    position: relative;
+    overflow: auto;
+    &-head {
+        position: absolute;
+        background: #f9f9f9;
+        table {
+            table-layout: fixed;
+            margin-bottom: 0;
+        }
+    }
+}.modal-list-container {
     width: 100%;
 }
 .modal-list-content {
