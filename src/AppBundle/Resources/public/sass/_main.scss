@@ -9592,3 +9592,27 @@ body {
 .new-buyer input[name="create_order[customDelivery]"] {
     margin-top: 5px;
 }
+
+.fos_user_resetting_request{
+    input[type="text"] {
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        color: #656565;
+        border: 1px solid #c8cbcc;
+        padding: 9px 10px;
+        font-size: 16px;
+        line-height: 18px;
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+    input[type="submit"] {
+        @extend .btn;
+        @extend .btn_blue;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+}
