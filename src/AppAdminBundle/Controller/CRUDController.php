@@ -189,10 +189,10 @@ class CRUDController extends BaseController
         }
 
         if ($object instanceof Categories) {
-            $disallowDelete = (bool)($object->getBasedProducts()->count() + $object->getChildren()->count());
-            $params = ['count'=>$object->getBasedProducts()->count(),'count1'=>$object->getChildren()->count()];
+            $disallowDelete = (bool)(count($object->getBasedProducts()) + count($object->getChildren()));
+            $params = ['count'=>count($object->getBasedProducts()),'count1'=>count($object->getChildren())];
         } elseif($object instanceof Products) {
-            $disallowDelete = (bool)$object->getProductModels()->count();
+            $disallowDelete = (bool)count($object->getProductModels());
         } else {
             $disallowDelete = false;
         }
@@ -212,13 +212,15 @@ class CRUDController extends BaseController
 
             return $this->redirectTo($object);
         }
-         if ($this->get('product')->checkProductsIsOrdered($object)){
-             $this->addFlash(
-                 'warning',
-                 $this->admin->trans( 'flash_delete_not_ordered_error1', [], 'AppAdminBundle' )
-             );
-             return $this->redirectTo($object);
-         }
+        if ($object instanceof ProductModels) {
+            if ($this->get('product')->checkProductsIsOrdered($object)) {
+                $this->addFlash(
+                    'warning',
+                    $this->admin->trans('flash_delete_not_ordered_error1', [], 'AppAdminBundle')
+                );
+                return $this->redirectTo($object);
+            }
+        }
         return parent::deleteAction($id);
     }
 }
