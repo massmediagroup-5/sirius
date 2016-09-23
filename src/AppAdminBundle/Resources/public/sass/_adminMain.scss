@@ -412,3 +412,11 @@ input#image_upload_file {
         visibility: visible;
     }
 }
+.modal-list-container {
+    width: 100%;
+}
+.modal-list-content {
+    .box {
+        overflow-x: scroll;
+    }
+}

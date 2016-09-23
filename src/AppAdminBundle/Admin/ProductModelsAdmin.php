@@ -55,6 +55,9 @@ class ProductModelsAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
+        dump($this->getTemplates());
+        $this->setTemplate('ajax', 'AppAdminBundle::ajax_layout.html.twig');
+
         $listMapper
             ->addIdentifier('alias', null, [
                 'label' => 'Ссылка',
