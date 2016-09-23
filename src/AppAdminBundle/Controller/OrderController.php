@@ -2,6 +2,8 @@
 
 namespace AppAdminBundle\Controller;
 
+use AppBundle\Exception\ImpossibleMoveToPreOrder;
+use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
@@ -95,7 +97,11 @@ class OrderController extends BaseController
             ];
         }
 
-        $this->get('order')->addSizes($object, $sizes);
+        try {
+            $this->get('order')->addSizes($object, $sizes);
+        } catch (ImpossibleToAddSizeToOrder $e) {
+            return $this->renderJson(['message' => 'Невозможно добавить выбранные размеры']);
+        }
 
         return $this->renderJson($this->renderPartials());
     }
@@ -107,7 +113,11 @@ class OrderController extends BaseController
     {
         $object = $this->admin->getSubject();
 
-        $object = $this->get('order')->changePreOrderFlag($object);
+        try {
+            $object = $this->get('order')->changePreOrderFlag($object);
+        } catch (ImpossibleMoveToPreOrder $e) {
+            $this->addFlash('sonata_flash_error', 'flash_impossible_to_change_pre_order_flag');
+        }
 
         return $this->redirectTo($object);
     }

@@ -5,6 +5,9 @@ requestMixin.successSubmit = function (responce) {
     if (responce.history) {
         $('#orderHistoryItems').replaceWith($(responce.history));
     }
+    if (responce.message) {
+        alert(responce.message);
+    }
 };
 
 /**

@@ -15,6 +15,8 @@ use AppBundle\Event\CancelOrderEvent;
 use AppBundle\Event\OrderEvent;
 use AppBundle\Exception\CartEmptyException;
 use AppBundle\Exception\BuyerAccessDeniedException;
+use AppBundle\Exception\ImpossibleMoveToPreOrder;
+use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use AppBundle\HistoryItem\OrderHistoryChangedItem;
 use AppBundle\HistoryItem\OrderHistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryMergedWithRelatedItem;
@@ -189,11 +191,20 @@ class Order
 
     /**
      * @param Orders $order
-     *
      * @return Orders
+     * @throws ImpossibleMoveToPreOrder
      */
     public function changePreOrderFlag(Orders $order)
     {
+        // When is not pre order and order contain not pre-ordered sizes - forbid to change flag
+        if (!$order->getPreOrderFlag()) {
+            foreach ($order->getSizes() as $size) {
+                if (!$size->getSize()->getPreOrderFlag()) {
+                    throw new ImpossibleMoveToPreOrder;
+                }
+            }
+        }
+
         if ($relatedOrder = $order->getRelatedOrder()) {
             $this->mergeSizesToOrder($relatedOrder, $order->getSizes());
             $relatedOrder->setRelatedOrder(null);
@@ -223,17 +234,21 @@ class Order
     }
 
     /**
-     * @param $order
-     * @param $sizes
-     *
+     * @param Orders $order
+     * @param array $sizes
      * @return Orders
-     * @throws CartEmptyException
+     * @throws ImpossibleToAddSizeToOrder
      */
     public function addSizes(Orders $order, array $sizes)
     {
         foreach ($sizes as $size) {
-            list( $size, $quantity ) = $size;
+            if (!$this->canAddSizeToOrder($order, $size[0])) {
+                throw new ImpossibleToAddSizeToOrder;
+            }
+        }
 
+        foreach ($sizes as $size) {
+            list($size, $quantity) = $size;
             $this->changeSizeCount($order, $size, $quantity);
         }
 
@@ -247,8 +262,9 @@ class Order
     /**
      * @param Orders $order
      * @param ProductModelSpecificSize $size
-     * @param boolean $flushFlag
      * @param $quantity
+     * @param bool $flushFlag
+     * @throws ImpossibleToAddSizeToOrder
      */
     public function changeSizeCount(Orders $order, ProductModelSpecificSize $size, $quantity, $flushFlag = false)
     {
@@ -310,7 +326,7 @@ class Order
      */
     public function removeSize(Orders $order, OrderProductSize $size, $quantity)
     {
-        if ($quantity >= $size->getQuantity()) {
+        if ($quantity === null || $quantity >= $size->getQuantity()) {
             $this->em->remove($size);
         } else {
             $size->setQuantity($size->getQuantity() - $quantity);
@@ -762,6 +778,16 @@ class Order
                         ->setParameter('user', $user)
                         ->getQuery()
                         ->getResult();
+    }
+
+    /**
+     * @param Orders $order
+     * @param ProductModelSpecificSize $size
+     * @return bool
+     */
+    public function canAddSizeToOrder(Orders $order, ProductModelSpecificSize $size)
+    {
+        return !($order->getPreOrderFlag() && !$size->getPreOrderFlag());
     }
 
     /**
