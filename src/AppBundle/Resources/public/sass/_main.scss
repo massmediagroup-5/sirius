@@ -4379,6 +4379,16 @@ input[type="checkbox"] {
     text-align: left;
     max-width: 190px;
     margin-right: 30px;
+	a {
+		font-size: 12px;
+		display: block;
+		color: #4ca7ed;
+		font-weight: 400;
+		font-family: "LatoWeb", sans-serif;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
 }
 
 .product-info-size-price {

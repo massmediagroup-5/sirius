@@ -65,12 +65,12 @@
                                     <div class="product-info__i">
                                         {% if share.isActualSingleShare(current_model.share) %}
                                             <div class="product-info-share discount">
-                                                <div class="product-info-share-title">{{ current_model.share.name }}</div>
-                                                <div>
-                                                    <a href="{{ path('category', {'category': 'all','share': current_model.share.id}) }}">
+                                                <div class="product-info-share-title">
+													{{ current_model.share.name }}
+												    <a href="{{ path('category', {'category': 'all','share': current_model.share.id}) }}">
                                                         Подробнее об акции
                                                     </a>
-                                                </div>
+												</div>                                                
                                                 {{ include('AppBundle:share/counter.html.twig', {share: current_model.share}) }}
                                             </div>
                                         {% endif %}
