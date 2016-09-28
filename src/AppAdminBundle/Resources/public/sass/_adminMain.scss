@@ -413,6 +413,10 @@ input#image_upload_file {
     }
 }
 
+.table-responsive {
+    overflow: auto;
+}
+
 .tablewrap {
     position: relative;
     overflow: auto;
