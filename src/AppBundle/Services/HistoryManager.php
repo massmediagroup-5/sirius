@@ -2,7 +2,7 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\OrderHistory;
+use AppBundle\Entity\History;
 use AppBundle\HistoryItem\AbstractHistoryItem;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
@@ -37,9 +37,9 @@ class HistoryManager
     }
 
     /**
-     * @param OrderHistory $history
+     * @param History $history
      */
-    public function add(OrderHistory $history)
+    public function add(History $history)
     {
         $this->em->persist($history);
         $this->em->flush();
@@ -51,14 +51,14 @@ class HistoryManager
      */
     public function createFromId($id)
     {
-        return $this->createFromHistoryItem($this->em->getRepository('AppBundle:OrderHistory')->find($id));
+        return $this->createFromHistoryItem($this->em->getRepository('AppBundle:History')->find($id));
     }
 
     /**
-     * @param OrderHistory $history
+     * @param History $history
      * @return AbstractHistoryItem
      */
-    public function createFromHistoryItem(OrderHistory $history)
+    public function createFromHistoryItem(History $history)
     {
         $itemClassName = $history->getChangeType();
         return new $itemClassName($this->container, $history);

@@ -6,6 +6,7 @@ use AppBundle\Traits\ProcessHasMany;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 
 /**
@@ -130,6 +131,11 @@ class ProductModels
      * @var \AppBundle\Entity\ShareSizesGroup
      */
     private $shareGroup;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $history;
 
     /**
      * Constructor
@@ -831,4 +837,29 @@ class ProductModels
     {
         return $this->textLabelColor;
     }
+
+    /**
+     * Get history
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    /**
+     * Add history
+     *
+     * @param ProductModelsHistory $history
+     *
+     * @return ProductModels
+     */
+    public function addHistory(ProductModelsHistory $history)
+    {
+        $this->history[] = $history;
+
+        return $this;
+    }
+
 }

@@ -5,6 +5,8 @@ namespace AppBundle\Services;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
+use AppBundle\HistoryItem\HistoryChangedItem;
+use AppBundle\HistoryItem\HistoryCreatedItem;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -84,7 +86,8 @@ class Product
         }
     }
 
-    public function checkProductsIsOrdered(ProductModels $productModel){
+    public function checkProductsIsOrdered(ProductModels $productModel)
+    {
 
         return $this->em->getRepository('AppBundle:ProductModelSpecificSize')
             ->createQueryBuilder('sizes')
@@ -96,4 +99,30 @@ class Product
             ->getSingleScalarResult();
     }
 
+    public function processProductModelsChanges($product)
+    {
+        $allowedFields = [
+            'price',
+        ];
+        $uow = $this->em->getUnitOfWork();
+
+        if ($product->getId() === null) {
+            (new HistoryCreatedItem($this->container))->createHistoryItem($product);
+        } else {
+            $productChanges = $uow->getEntityChangeSet($product);
+
+            foreach ($productChanges as $fieldName => $productChange) {
+                if ($productChange[0] != $productChange[1]) {
+                    if (in_array($fieldName, $allowedFields)) {
+                        (new HistoryChangedItem($this->container))
+                            ->createHistoryItem($product, $fieldName,
+                                $productChange[0], $productChange[1], $this->container->get('security.token_storage')->getToken()->getUser());
+                    }
+                }
+            }
+
+        }
+
+
+    }
 }

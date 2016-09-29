@@ -129,6 +129,13 @@ AppBundle\Entity\ProductModels:
             inversedBy: null
             orphanRemoval: true
             orderBy: {priority: ASC}
+        history:
+            targetEntity: ProductModelsHistory
+            cascade: [ all ]
+            fetch: LAZY
+            mappedBy: productModel
+            inversedBy: null
+            orderBy: {id: DESC}
     manyToOne:
         productColors:
             targetEntity: ProductColors
