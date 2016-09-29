@@ -212,15 +212,13 @@ class CRUDController extends BaseController
 
             return $this->redirectTo($object);
         }
-        if ($object instanceof ProductModels) {
-            if ($this->get('product')->checkProductsIsOrdered($object)) {
-                $this->addFlash(
-                    'warning',
-                    $this->admin->trans('flash_delete_not_ordered_error1', [], 'AppAdminBundle')
-                );
-                return $this->redirectTo($object);
-            }
-        }
+         if ($this->get('product')->checkProductsIsOrdered($object)){
+             $this->addFlash(
+                 'warning',
+                 $this->admin->trans( 'flash_delete_not_ordered_error1', [], 'AppAdminBundle' )
+             );
+             return $this->redirectTo($object);
+         }
         return parent::deleteAction($id);
     }
 }

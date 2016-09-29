@@ -80,6 +80,7 @@ link_to_cancel_order: Отменить заказ
 history:
   field_changed_from_to_by_user: :field_changed изменено с «:before» на «:after» пользователем :user
   order_created: Заказ создан
+  product_created: Товар создан
   order_new_size: Добавлен новый размер :size :count шт. пользователем :user.
   order_update_size: "Изменено количество размера «:size» товара «:name», артикул «:article», цвет «:color» с :before на :after шт. пользователем :user."
   order_remove_size: "Удалено :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» пользователем :user."
@@ -94,6 +95,7 @@ history:
   size_moved_from_order: :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» перемещено с заказа пользователем :user.
   size_removed: Размер :size удален пользователем :user.
   fio: ФИО
+  price: Цена
   status: Статус
   phone: Телефон
   email: Емейл

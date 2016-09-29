@@ -1,0 +1,20 @@
+<div class="col-sm-12" id="orderHistoryItems">
+    <div class="box box-success">
+        <div class="box-header">
+            <h4 class="box-title">История</h4>
+        </div>
+        <div class="box-body order-history">
+            <ul>
+                {% for historyItem in admin.history %}
+                    <li>
+                        {{ admin.getHistoryItemLabel(historyItem) }}
+                        {% if history_manager.createFromHistoryItem(historyItem).canRollback() %}
+                            <a href="{{ path(admin.baseRouteName ~ '_cancel_product_model_change', {id: admin.subject.id, history_id: historyItem.id}) }}">
+                                Отменить</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

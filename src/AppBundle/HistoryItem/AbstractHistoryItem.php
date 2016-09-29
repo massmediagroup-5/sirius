@@ -3,7 +3,7 @@
 namespace AppBundle\HistoryItem;
 
 
-use AppBundle\Entity\OrderHistory;
+use AppBundle\Entity\History;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Translation\DataCollectorTranslator;
@@ -20,7 +20,7 @@ abstract class AbstractHistoryItem
     protected $container;
 
     /**
-     * @var OrderHistory
+     * @var History
      */
     protected $history;
 
@@ -35,11 +35,16 @@ abstract class AbstractHistoryItem
     protected $translator;
 
     /**
+     * @var string
+     */
+    protected $nameRepository;
+
+    /**
      * AbstractHistoryItem constructor.
      * @param ContainerInterface $container
-     * @param OrderHistory $history
+     * @param History $history
      */
-    public function __construct(ContainerInterface $container, OrderHistory $history = null)
+    public function __construct(ContainerInterface $container, History $history = null)
     {
         $this->history = $history;
         $this->container = $container;
@@ -71,11 +76,11 @@ abstract class AbstractHistoryItem
     public function canRollback()
     {
         // Can rollback only when not have newest updates with same types
-        return $this->em->getRepository('AppBundle:OrderHistory')->countOfNewest($this->history) == 0;
+        return $this->em->getRepository($this->getNameRepository())->countOfNewest($this->history) == 0;
     }
 
     /**
-     * @return OrderHistory
+     * @return History
      */
     public function getEntity()
     {
@@ -86,4 +91,14 @@ abstract class AbstractHistoryItem
      * @return mixed
      */
     abstract protected function makeRollback();
+
+    /**
+     * @return string
+     */
+    public function getNameRepository()
+    {
+        $this->nameRepository = get_class();
+        return $this->nameRepository;
+    }
+
 }

@@ -11,6 +11,8 @@ use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
 use AppBundle\Entity\SiteParams;
+use AppBundle\HistoryItem\ProductModelsHistoryRelationAddedItem;
+use AppBundle\HistoryItem\ProductModelsHistoryRelationChangedItem;
 use Doctrine\Common\EventSubscriber;
 use AppBundle\Entity\Orders;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -65,6 +67,12 @@ class EntityEventsSubscriber implements EventSubscriber
             if ($entity instanceof Orders) {
                 $this->container->get('order')->sendStatusInfo($entity);
                 $this->container->get('order')->processOrderChanges($entity);
+            }
+            if ($entity instanceof ProductModels) {
+                $this->container->get('product')->processProductModelsChanges($entity);
+            }
+            if ($entity instanceof ProductModelSpecificSize) {
+                $this->container->get('product')->processProductModelsChanges($entity);
             }
             $this->clearCache($entity);
         }

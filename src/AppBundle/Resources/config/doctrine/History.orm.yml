@@ -7,8 +7,8 @@ AppBundle\Entity\History:
     discriminatorMap:
       history: History
       order_history: OrderHistory
-      product_model_specific_size_history: ProductModelSpecificSizeHistory
       product_models_history: ProductModelsHistory
+      product_models_specific_size_history: ProductModelSpecificSizeHistory
     id:
         id:
             type: integer
