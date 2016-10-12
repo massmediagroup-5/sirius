@@ -587,7 +587,7 @@ class Order
 
         $uow = $this->em->getUnitOfWork();
         if ($order->getId() === null) {
-            (new OrderHistoryCreatedItem($this->container))->createHistoryItem($order);
+            (new HistoryCreatedItem($this->container, null, self::HISTORY_PREFIX))->createHistoryItem($order);
         } else {
             $orderChanges = $uow->getEntityChangeSet($order);
             foreach ($orderChanges as $fieldName => $orderChange) {

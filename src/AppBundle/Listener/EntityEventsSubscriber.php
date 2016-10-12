@@ -10,7 +10,10 @@ use AppBundle\Entity\ProductModelImage;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
+use AppBundle\Entity\ReturnedSizes;
+use AppBundle\Entity\ReturnProduct;
 use AppBundle\Entity\SiteParams;
+use AppBundle\Factory\ChangeProcessorFactory;
 use AppBundle\HistoryItem\ProductModelsHistoryRelationAddedItem;
 use AppBundle\HistoryItem\ProductModelsHistoryRelationChangedItem;
 use Doctrine\Common\EventSubscriber;
@@ -73,6 +76,12 @@ class EntityEventsSubscriber implements EventSubscriber
             }
             if ($entity instanceof ProductModelSpecificSize) {
                 $this->container->get('product')->processProductModelsChanges($entity);
+            }
+            if ($entity instanceof ReturnProduct) {
+                $this->container->get('return_product')->processProductModelsChanges($entity);
+            }
+            if ($entity instanceof ReturnedSizes) {
+                $this->container->get('returned_sizes')->processProductModelsChanges($entity);
             }
             $this->clearCache($entity);
         }

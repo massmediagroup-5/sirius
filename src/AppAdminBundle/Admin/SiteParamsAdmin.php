@@ -64,12 +64,27 @@ class SiteParamsAdmin extends Admin
                         1 => 'Сайт выключен',
                     ]
                 ]);
+            } elseif ($param->getParamName() == 'return_invoice') {
+                $formMapper->add('paramValue', 'file', [
+                    'data' => null
+                ]);
             } else {
                 $formMapper->add('paramValue', 'text', array('label' => 'Значение параметра'));
             }
 
             $formMapper->add('active', null, array('label' => 'Активность(вкл/выкл)'))
                 ->add('editor', null, array('label' => 'Редактор(вкл/выкл)'));
+        }
+    }
+
+    public function preUpdate($object)
+    {
+        $container = $this->getConfigurationPool()->getContainer();
+        if($object->getParamName() == 'return_invoice'){
+            $link = $container->get('uploader')->upload(
+                $container->getParameter('upload_return_invoice'), $object->getParamValue()
+            );
+            $object->setParamValue($link);
         }
     }
 }

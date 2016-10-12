@@ -24,6 +24,12 @@ services:
     product:
         class: AppBundle\Services\Product
         arguments: [@doctrine.orm.entity_manager, @service_container]
+    return_product:
+        class: AppBundle\Services\ReturnProduct
+        arguments: [@doctrine.orm.entity_manager, @service_container]
+    returned_sizes:
+        class: AppBundle\Services\ReturnedSizes
+        arguments: [@doctrine.orm.entity_manager, @service_container]
     share:
         class: AppBundle\Services\Share
         arguments: [@service_container, @doctrine.orm.entity_manager]
@@ -107,3 +113,15 @@ services:
         arguments: ['@prices_calculator', '@service_container']
         tags:
             - { name: form.type }
+
+    return_validator1:
+        class: AppBundle\Validator\ReturnOrderNumConstraintValidator
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: validator.constraint_validator }
+
+    return_validator2:
+            class: AppBundle\Validator\ReturnUserPhoneConstraintValidator
+            arguments: ["@doctrine.orm.entity_manager"]
+            tags:
+                - { name: validator.constraint_validator }

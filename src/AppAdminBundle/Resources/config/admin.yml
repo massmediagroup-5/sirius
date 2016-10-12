@@ -305,3 +305,11 @@ services:
         arguments: [~, AppBundle\Entity\EmailAndSmsDistribution, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Рассылка email и смс"}
+
+    app_admin.admin.return_product:
+        class: AppAdminBundle\Admin\ReturnProductAdmin
+        arguments: [~, AppBundle\Entity\ReturnProduct, AppAdminBundle:ReturnProduct]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Возврат товара"}
+        calls:
+            - [ setTemplate, [edit, AppAdminBundle:admin:return_product_edit.html.twig]]

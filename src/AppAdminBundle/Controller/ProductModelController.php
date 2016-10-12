@@ -22,8 +22,6 @@ class ProductModelController extends BaseController
     {
         $object = $this->admin->getSubject();
 
-        //dd($request->get('history_id'));
-
         $historyItem = $this->get('history_manager')->createFromId($request->get('history_id'));
 
         if ($historyItem->rollback()) {

@@ -9,6 +9,8 @@ AppBundle\Entity\History:
       order_history: OrderHistory
       product_models_history: ProductModelsHistory
       product_models_specific_size_history: ProductModelSpecificSizeHistory
+      return_history: ReturnProductHistory
+      returned_sizes: ReturnedSizesHistory
     id:
         id:
             type: integer

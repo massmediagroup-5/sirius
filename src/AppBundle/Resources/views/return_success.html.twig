@@ -1,0 +1,30 @@
+{% extends 'AppBundle:base.html.twig' %}
+{% block out_class %}out_sub{% endblock %}
+{% block meta %}
+<title></title>
+    <meta name="title" content="Возврат товара" />
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+{% endblock %}
+{% block body %}
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs__i">
+                        <ul>
+                            <li><a href="{{ url('homepage') }}">На главную</a></li>
+                            <li>Возврат товара</li>
+                        </ul>
+                    </div>
+                </div>
+                <h2 class="page-title">
+                    Возврат товара
+                </h2>
+            </div>
+        </div>
+    </section>
+    <h3>{{ options.getParamValue('return_success_text') }}</h3>
+    <a href="{{ asset(options.getParamValue('return_invoice')) }}" class="btn btn-primary">Получить форму</a>
+{% endblock %}
