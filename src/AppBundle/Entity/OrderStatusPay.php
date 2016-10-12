@@ -45,6 +45,11 @@ class OrderStatusPay
     private $sendClientText;
 
     /**
+     * @var string
+     */
+    private $sendClientNightText;
+
+    /**
      * @var boolean
      */
     private $sendManager;
@@ -227,6 +232,30 @@ class OrderStatusPay
     public function getSendClientText()
     {
         return $this->sendClientText;
+    }
+
+    /**
+     * Set sendClientNightText
+     *
+     * @param string $sendClientNightText
+     *
+     * @return OrderStatusPay
+     */
+    public function setSendClientNightText($sendClientNightText)
+    {
+        $this->sendClientNightText = $sendClientNightText;
+
+        return $this;
+    }
+
+    /**
+     * Get sendClientNightText
+     *
+     * @return string
+     */
+    public function getSendClientNightText()
+    {
+        return $this->sendClientNightText;
     }
 
     /**
