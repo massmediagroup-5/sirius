@@ -67,6 +67,10 @@ class OrderStatusAdmin extends Admin
                 'label' => 'Текст смс клиенту',
                 'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
             ))
+            ->add('sendClientNightText', null, array(
+                'label' => 'Текст смс клиенту(ночь)',
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
+            ))
             ->add('sendClientEmail', null, array('label' => 'Отправлять клиенту Email'))
             ->add('sendClientEmailText', null, array(
                 'label' => 'Текст Email клиенту',

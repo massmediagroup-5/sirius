@@ -16,11 +16,10 @@ class ProductColorsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-//            ->add('id')
             ->add('name', null, array('label' => 'Название цвета'))
             ->add('hex', null, array('label' => 'HEX код цвета'))
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
         ;
     }
 
@@ -30,17 +29,15 @@ class ProductColorsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-//            ->add('id')
             ->add('name', null, array('label' => 'Название цвета'))
             ->add('hex', null, array(
                 'label' => 'Цвет и HEX код',
                 'template' => 'AppAdminBundle:list:list.template.modelcolor.html.twig'
             ))
-            ->add('createTime')
-            ->add('updateTime')
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
             ->add('_action', 'actions', array(
                 'actions' => array(
-//                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )

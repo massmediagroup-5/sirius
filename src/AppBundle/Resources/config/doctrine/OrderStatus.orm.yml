@@ -29,6 +29,10 @@ AppBundle\Entity\OrderStatus:
             type: string
             length: 255
             nullable: true
+        sendClientNightText:
+            type: string
+            length: 255
+            nullable: true
         sendClientEmail:
             type: boolean
             column: send_client_email

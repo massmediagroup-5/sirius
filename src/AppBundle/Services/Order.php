@@ -60,9 +60,9 @@ class Order
      */
     public function __construct(EntityManager $em, ContainerInterface $container)
     {
-        $this->container      = $container;
-        $this->em             = $em;
-        $this->translator     = $this->container->get('translator');
+        $this->container = $container;
+        $this->em = $em;
+        $this->translator = $this->container->get('translator');
         $this->historyManager = $this->container->get('history_manager');
     }
 
@@ -149,11 +149,11 @@ class Order
         (new OrderHistoryMoveToSizeItem($this->container))->createHistoryItem($order, $size, $quantity,
             $this->getUser());
 
-        if ( ! $relatedOrder) {
+        if (!$relatedOrder) {
             $relatedOrder = clone $order;
             $relatedOrder->setRelatedOrder($order);
             $order->setRelatedOrder($relatedOrder);
-            $relatedOrder->setPreOrderFlag(! $relatedOrder->getPreOrderFlag());
+            $relatedOrder->setPreOrderFlag(!$relatedOrder->getPreOrderFlag());
         }
 
         $relatedSizes = $relatedOrder->getSizes();
@@ -168,7 +168,7 @@ class Order
                 break;
             }
         }
-        if ( ! $foundedFlag) {
+        if (!$foundedFlag) {
             $relatedSize = clone $size;
             $relatedSize->setOrder($relatedOrder);
             $relatedSize->setQuantity($quantity);
@@ -222,7 +222,7 @@ class Order
             return $relatedOrder;
         }
 
-        $order->setPreOrderFlag(! $order->getPreOrderFlag());
+        $order->setPreOrderFlag(!$order->getPreOrderFlag());
 
         (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($order, $this->getUser());
 
@@ -269,7 +269,7 @@ class Order
     public function changeSizeCount(Orders $order, ProductModelSpecificSize $size, $quantity, $flushFlag = false)
     {
         $availableSizes = $order->getSizes();
-        $foundedFlag    = false;
+        $foundedFlag = false;
 
         foreach ($availableSizes as $key => $availableSize) {
             if ($availableSize->getSize()->getId() == $size->getId()) {
@@ -291,7 +291,7 @@ class Order
             }
         }
 
-        if ( ! $foundedFlag) {
+        if (!$foundedFlag) {
             if ($quantity > 0) {
                 $orderSize = new OrderProductSize();
                 $orderSize->setSize($size);
@@ -355,11 +355,11 @@ class Order
         );
 
         $message = \Swift_Message::newInstance()
-                                 ->setSubject('Order from orders@sirius.com.ua')
-                                 ->setFrom('orders@sirius-sport.com')
-                                 ->setTo($this->container->get('options')->getParamValue('email'))
-                                 ->setBody($body)
-                                 ->setContentType("text/html");
+            ->setSubject('Order from orders@sirius.com.ua')
+            ->setFrom('orders@sirius-sport.com')
+            ->setTo($this->container->get('options')->getParamValue('email'))
+            ->setBody($body)
+            ->setContentType("text/html");
         $this->container->get('mailer')->send($message);
 
         return $order;
@@ -374,7 +374,7 @@ class Order
             'payStatus',
             'status'
         ];
-        $orderChanges  = $this->em->getUnitOfWork()->getEntityChangeSet($order);
+        $orderChanges = $this->em->getUnitOfWork()->getEntityChangeSet($order);
         foreach ($orderChanges as $fieldName => $orderChange) {
             if (in_array($fieldName, $allowedFields)) {
                 switch ($fieldName) {
@@ -388,16 +388,23 @@ class Order
                 $uniSender = $this->em->getRepository('AppBundle:Unisender')->findOneBy(['active' => '1']);
                 if ($orderStatus) {
                     if ($uniSender) {
-                        if (( $orderStatus->getSendClient() ) && ( ! empty( $orderStatus->getSendClientText() ) )) {
+                        if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
+                            $now = time();
+                            $hour = date('G', $now);
+                            if ($hour >= 21 or $hour <= 8) {
+                                $smsText = $orderStatus->getSendClientNightText();
+                            } else {
+                                $smsText = $orderStatus->getSendClientText();
+                            }
                             $client_sms_status = $this->sendSmsRequest(
                                 $uniSender,
                                 $order->getPhone(),
                                 $order->getId(),
-                                $orderStatus->getSendClientText()
+                                $smsText
                             );
                             $OrderSmsInfo = new OrderSmsInfo();
                             $OrderSmsInfo->setOrder($order);
-                            $OrderSmsInfo->setType(sprintf($orderStatus->getSendClientText(),$order->getId()));
+                            $OrderSmsInfo->setType(sprintf($orderStatus->getSendClientText(), $order->getId()));
                             if ($client_sms_status['error'] == false) {
                                 // если без ошибок то сохраняем идентификатор смс
 //                                $order->setClientSmsId($client_sms_status['sms_id']);
@@ -409,7 +416,7 @@ class Order
                             }
                             $this->em->persist($OrderSmsInfo);
                         }
-                        if (( $orderStatus->getSendManager() ) && ( ! empty( $orderStatus->getSendManagerText() ) )) {
+                        if (($orderStatus->getSendManager()) && (!empty($orderStatus->getSendManagerText()))) {
                             $phones = explode(',', $uniSender->getPhones());
                             foreach ($phones as $phone) {
                                 $this->sendSmsRequest(
@@ -421,17 +428,17 @@ class Order
                             }
                         }
                     }
-                    if (( $orderStatus->getSendClientEmail() ) && ( ! empty( $orderStatus->getSendClientEmailText() ) ) && ( $order->getUsers() )) {
-                        $body    = sprintf(
+                    if (($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers())) {
+                        $body = sprintf(
                             $orderStatus->getSendClientEmailText(),
                             $orderStatus->getId() // %s
                         );
                         $message = \Swift_Message::newInstance()
-                                                 ->setSubject('Order from orders@sirius-sport.com')
-                                                 ->setFrom('orders@sirius-sport.com')
-                                                 ->addTo($order->getUsers()->getEmail())
-                                                 ->setBody($body)
-                                                 ->setContentType("text/html");
+                            ->setSubject('Order from orders@sirius-sport.com')
+                            ->setFrom('orders@sirius-sport.com')
+                            ->addTo($order->getUsers()->getEmail())
+                            ->setBody($body)
+                            ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
                     }
                 }
@@ -461,9 +468,9 @@ class Order
             // массив передаваемых параметров
             $parameters_array = array(
                 'api_key' => $uniSender->getApiKey(),
-                'phone'   => preg_replace("/[^0-9]/", '', strip_tags($phone)),
-                'sender'  => $uniSender->getSenderName(),
-                'text'    => $sms_body
+                'phone' => preg_replace("/[^0-9]/", '', strip_tags($phone)),
+                'sender' => $uniSender->getSenderName(),
+                'text' => $sms_body
             );
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -489,7 +496,7 @@ class Order
                 } else {
                     // Сообщение успешно отправлено
                     $result['sms_id'] = $jsonObj->result->sms_id;
-                    $result['error']  = false;
+                    $result['error'] = false;
                 }
             } else {
                 // Ошибка соединения с API-сервером
@@ -506,35 +513,35 @@ class Order
      */
     public function checkSmsStatus()
     {
-        $orders     = $this->em
+        $orders = $this->em
             ->createQuery('SELECT o FROM AppBundle\Entity\Orders o WHERE o.clientSmsId != :where AND o.clientSmsStatus NOT LIKE :like')
             ->setParameter('where', 'null')
             ->setParameter('like', '%Статус окончательный%')
             ->getResult();
-        $count      = 0;
+        $count = 0;
         $status_arr = [
-            'not_sent'            => 'Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки',
-            'ok_sent'             => 'Сообщение отправлено, но статус доставки пока неизвестен. Статус временный и может измениться',
-            'ok_delivered'        => 'Сообщение доставлено. Статус окончательный',
-            'err_src_invalid'     => 'Доставка невозможна, отправитель задан неправильно. Статус окончательный',
-            'err_dest_invalid'    => 'Доставка невозможна, указан неправильный номер. Статус окончательный',
-            'err_skip_letter'     => 'Доставка невозможна, т.к. во время отправки был изменён статус телефона, либо телефон был удалён из списка, либо письмо было удалено. Статус окончательный',
-            'err_not_allowed'     => 'Доставка невозможна, этот оператор связи не обслуживается. Статус окончательный',
+            'not_sent' => 'Сообщение пока не отправлено, ждёт отправки. Статус будет изменён после отправки',
+            'ok_sent' => 'Сообщение отправлено, но статус доставки пока неизвестен. Статус временный и может измениться',
+            'ok_delivered' => 'Сообщение доставлено. Статус окончательный',
+            'err_src_invalid' => 'Доставка невозможна, отправитель задан неправильно. Статус окончательный',
+            'err_dest_invalid' => 'Доставка невозможна, указан неправильный номер. Статус окончательный',
+            'err_skip_letter' => 'Доставка невозможна, т.к. во время отправки был изменён статус телефона, либо телефон был удалён из списка, либо письмо было удалено. Статус окончательный',
+            'err_not_allowed' => 'Доставка невозможна, этот оператор связи не обслуживается. Статус окончательный',
             'err_delivery_failed' => 'Доставка не удалась - обычно по причине указания формально правильного, но несуществующего номера или из-за выключенного телефона. Статус окончательный',
-            'err_lost'            => 'Сообщение было утеряно, отправитель должен переотправить сообщение самостоятельно, т.к. оригинал не сохранился. Статус окончательный',
-            'err_internal'        => 'внутренний сбой. Необходима переотправка сообщения. Статус окончательный',
+            'err_lost' => 'Сообщение было утеряно, отправитель должен переотправить сообщение самостоятельно, т.к. оригинал не сохранился. Статус окончательный',
+            'err_internal' => 'внутренний сбой. Необходима переотправка сообщения. Статус окончательный',
         ];
         foreach ($orders as $order) {
             $result = json_decode($this->sendCheckSmsStatus($order->getClientSmsId()));
-            if ( ! empty( $result->error )) {
-                $message = "An error occured: " . isset($result->error)?$result->error:' ' . "(code: " . isset($result->code)?$result->code:' ' . ") " . $status_arr[$result->result->status];
+            if (!empty($result->error)) {
+                $message = "An error occured: " . isset($result->error) ? $result->error : ' ' . "(code: " . isset($result->code) ? $result->code : ' ' . ") " . $status_arr[$result->result->status];
             } else {
                 $message = $status_arr[$result->result->status];
             }
             $order->setClientSmsStatus($message);
             $this->em->persist($order);
             $this->em->flush($order);
-            $count ++;
+            $count++;
         }
 
         return $count;
@@ -552,7 +559,7 @@ class Order
             // массив передаваемых параметров
             $parameters_array = array(
                 'api_key' => $uniSender->getApiKey(),
-                'sms_id'  => $sms_id
+                'sms_id' => $sms_id
             );
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -623,7 +630,7 @@ class Order
     public function cancelOrder(Orders $order)
     {
         $cancelStatus = $this->em->getRepository('AppBundle:OrderStatus')
-                                 ->findOneBy(['code' => 'canceled']);
+            ->findOneBy(['code' => 'canceled']);
 
         $order->setStatus($cancelStatus);
 
@@ -715,7 +722,7 @@ class Order
     {
         $order = new Orders();
 
-        if ( ! $quickFlag) {
+        if (!$quickFlag) {
             if ($data['delivery_type']->getId() == Carriers::NP_ID) {
                 // Nova poshta
                 $prefix = 'np_';
@@ -723,8 +730,8 @@ class Order
                 // Delivery
                 $prefix = 'del_';
             }
-            $cities  = Arr::get($data, $prefix . 'delivery_city', null);
-            $stores  = Arr::get($data, $prefix . 'delivery_store', null);
+            $cities = Arr::get($data, $prefix . 'delivery_city', null);
+            $stores = Arr::get($data, $prefix . 'delivery_store', null);
             $bonuses = Arr::get($data, 'bonuses', 0);
 
             $order->setCities($cities);
@@ -770,14 +777,14 @@ class Order
     public function getUserOrders(UsersEntity $user)
     {
         return $this->em->getRepository('AppBundle:Orders')
-                        ->createQueryBuilder('orders')
-                        ->select('orders')
-                        ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
-                        ->where('orders.users = :user')
-                        ->orderBy('orders.id', 'DESC')
-                        ->setParameter('user', $user)
-                        ->getQuery()
-                        ->getResult();
+            ->createQueryBuilder('orders')
+            ->select('orders')
+            ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
+            ->where('orders.users = :user')
+            ->orderBy('orders.id', 'DESC')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
