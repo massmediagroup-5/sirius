@@ -162,6 +162,34 @@ var OrderSizesDialog = (function () {
 /**
  * Order sizes partial control
  */
+var CarriersChanger = (function () {
+    function CarriersChanger() {
+        this.$select = $('select.js-custom-carriers');
+        this.$select.on('change', this.init.bind(this));
+        this.init();
+    }
+
+    /**
+     * Initialize sizes partial
+     */
+    CarriersChanger.prototype.init = function () {
+        if (this.$select.val() == '3'){
+            $('.js-custom-delivery').closest('.form-group').show();
+            $('.js-cities').closest('.form-group').hide();
+            $('.js-stores').closest('.form-group').hide();
+        } else {
+            $('.js-custom-delivery').closest('.form-group').hide();
+            $('.js-cities').closest('.form-group').show();
+            $('.js-stores').closest('.form-group').show();
+        }
+    };
+
+    return CarriersChanger;
+})();
+
+/**
+ * Order sizes partial control
+ */
 var OrderSizes = (function () {
     function OrderSizes($partial) {
         this.$partial = $partial;
@@ -276,4 +304,6 @@ $(document).ready(function () {
     new OrderSizes($sizes);
 
     new AjaxPagination($('.js_pagination_content'));
+
+    new CarriersChanger();
 });

@@ -308,6 +308,17 @@ class OrdersAdmin extends Admin
                 'read_only'   => $this->disableEdit,
                 'disabled'    => $this->disableEdit,
                 'empty_value' => 'Выберите службу доставки',
+                'attr' => [
+                    'class' => 'js-custom-carriers'
+                ]
+            ])
+            ->add('customDelivery', null, [
+                'label'       => 'Своя доставка',
+                'read_only'   => $this->disableEdit,
+                'disabled'    => $this->disableEdit,
+                'attr' => [
+                    'class' => 'js-custom-delivery'
+                ]
             ])
             ->add('cities', 'entity', [
                 'class'         => 'AppBundle:Cities',
@@ -323,6 +334,9 @@ class OrdersAdmin extends Admin
                               ->setParameter('id', $carrier ? $carrier->getId() : null);
                 },
                 'empty_value'   => 'Выберите город',
+                'attr' => [
+                    'class' => 'js-cities'
+                ]
             ])
             ->add('stores', 'sonata_stores_list', [
                 'class'         => 'AppBundle:Stores',
@@ -330,6 +344,9 @@ class OrdersAdmin extends Admin
                 'required'      => false,
                 'read_only'     => $this->disableEdit,
                 'disabled'      => $this->disableEdit,
+                'attr' => [
+                    'class' => 'js-stores'
+                ],
                 'query_builder' => function (EntityRepository $er) {
                     if ( ! $cityId = Arr::get($this->request->request->get($this->getUniqid()), 'cities')) {
                         $city   = $this->getSubject()->getCities();
@@ -341,7 +358,6 @@ class OrdersAdmin extends Admin
                               ->setParameter('id', $cityId);
                 }
             ])
-            ->add('customDelivery', null, ['label' => 'Адрес доставки'])
 //            ->add('clientSmsId', null, [
 //                'label'     => 'Идентификатор смс клиента',
 //                'read_only' => true,
@@ -455,7 +471,7 @@ class OrdersAdmin extends Admin
                 [
                     'class'               => 'AppBundle:OrderStatus',
                     'associated_property' => 'name',
-                    'label'               => 'Сатус заказа',
+                    'label'               => 'Статус заказа',
                     'empty_value'         => 'Выберите статус заказа'
                 ]
             )
