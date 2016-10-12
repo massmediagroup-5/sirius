@@ -4,6 +4,7 @@ namespace AppAdminBundle\Controller;
 
 use AppBundle\Entity\Categories;
 use AppBundle\Entity\Products;
+use AppBundle\Entity\ProductModels;
 use Illuminate\Support\Str;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -73,10 +74,11 @@ class CRUDController extends BaseController
     public function batchActionDeleteIsRelevant(array $selectedIds)
     {
         if (!$this->getDoctrine()->getRepository('AppBundle:ProductModelSpecificSize')
-            ->isProductModelsIsOrdered($selectedIds)){
+            ->isProductModelsIsOrdered($selectedIds)
+        ) {
             return true;
         }
-        return $this->admin->trans( 'flash_delete_not_ordered_error1', [], 'AppAdminBundle' );
+        return $this->admin->trans('flash_delete_not_ordered_error1', [], 'AppAdminBundle');
     }
 
     /**
@@ -181,7 +183,7 @@ class CRUDController extends BaseController
      */
     public function deleteAction($id)
     {
-        $id     = $this->get('request')->get($this->admin->getIdParameter());
+        $id = $this->get('request')->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);
 
         if (!$object) {
@@ -190,35 +192,35 @@ class CRUDController extends BaseController
 
         if ($object instanceof Categories) {
             $disallowDelete = (bool)(count($object->getBasedProducts()) + count($object->getChildren()));
-            $params = ['count'=>count($object->getBasedProducts()),'count1'=>count($object->getChildren())];
-        } elseif($object instanceof Products) {
+            $params = ['count' => count($object->getBasedProducts()), 'count1' => count($object->getChildren())];
+        } elseif ($object instanceof Products) {
             $disallowDelete = (bool)count($object->getProductModels());
         } else {
             $disallowDelete = false;
         }
 
-        if($disallowDelete) {
+        if ($disallowDelete) {
             if ($object instanceof Categories) {
                 $this->addFlash(
                     'sonata_flash_error',
-                    $this->admin->trans( 'flash_delete_not_empty_error', $params, 'AppAdminBundle' )
+                    $this->admin->trans('flash_delete_not_empty_error', $params, 'AppAdminBundle')
                 );
-            }elseif ($object instanceof Products) {
+            } elseif ($object instanceof Products) {
                 $this->addFlash(
                     'sonata_flash_error',
-                    $this->admin->trans( 'flash_delete_not_empty_error1', [], 'AppAdminBundle' )
+                    $this->admin->trans('flash_delete_not_empty_error1', [], 'AppAdminBundle')
                 );
             }
 
             return $this->redirectTo($object);
         }
-         if ($this->get('product')->checkProductsIsOrdered($object)){
-             $this->addFlash(
-                 'warning',
-                 $this->admin->trans( 'flash_delete_not_ordered_error1', [], 'AppAdminBundle' )
-             );
-             return $this->redirectTo($object);
-         }
+        if (($object instanceof ProductModels) && $this->get('product')->checkProductsIsOrdered($object)) {
+            $this->addFlash(
+                'warning',
+                $this->admin->trans('flash_delete_not_ordered_error1', [], 'AppAdminBundle')
+            );
+            return $this->redirectTo($object);
+        }
         return parent::deleteAction($id);
     }
 }
