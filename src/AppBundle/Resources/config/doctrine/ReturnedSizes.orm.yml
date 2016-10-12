@@ -1,0 +1,33 @@
+AppBundle\Entity\ReturnedSizes:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        count:
+            type: integer
+    oneToMany:
+        history:
+            targetEntity: ReturnedSizesHistory
+            cascade: [ all ]
+            fetch: LAZY
+            mappedBy: returnedSizes
+            inversedBy: null
+            orderBy: {id: DESC}
+    manyToOne:
+        size:
+            targetEntity: OrderProductSize
+            cascade: {  }
+            fetch: LAZY
+            orphanRemoval: false
+        returnProduct:
+            targetEntity: ReturnProduct
+            cascade: {  }
+            fetch: LAZY
+            inversedBy: returnedSizes
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,11 @@
+AppBundle\Entity\ReturnProductHistory:
+   type: entity
+   repositoryClass: AppBundle\Entity\Repository\ReturnProductHistoryRepository
+   manyToOne:
+       returnProduct:
+           targetEntity: ReturnProduct
+           cascade: { }
+           fetch: LAZY
+           mappedBy: null
+           inversedBy: history
+           orphanRemoval: false
