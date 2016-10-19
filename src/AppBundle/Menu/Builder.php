@@ -47,7 +47,6 @@ class Builder extends ContainerAware
 //                $onclick = "ga('send', 'event', '".$menu_name."', '".$value->getName()."', '".$value->getLink()."');";
 //                $onclick .= "yaCounterXXXXXX.reachGoal('".$value->getName()."');";
                 if ($value->getLinkType() == 'local') {
-                    dump($value);
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_WHOLESALER')){
                         if($value->getLink() == 'shares_index')
                             continue;
