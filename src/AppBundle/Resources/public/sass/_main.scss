@@ -9630,3 +9630,29 @@ body {
       margin-bottom: 10px;
     }
 }
+
+.return-main {
+    padding-top: 0;
+    padding-bottom: 0;
+    .btn.btn_blue {
+        line-height: 48px;
+        height: 45px;
+        box-sizing: border-box;
+        padding: 0;
+        border: 0;
+    }
+    .text {    
+        display: block;
+        margin-top: -5px;
+        p{
+            line-height: 30px;
+            padding-bottom: 13px;
+        }
+    }
+    ul {
+        padding-left: 17px;
+        li {
+            margin-bottom: 14px;
+        }
+    }
+}
