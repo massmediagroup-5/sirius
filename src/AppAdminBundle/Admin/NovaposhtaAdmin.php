@@ -18,7 +18,15 @@ class NovaposhtaAdmin extends Admin
         $datagridMapper
             ->add('id')
             ->add('apiKey', null, ['label' => 'Ключ API', 'editable'=>true])
-            ->add('active', null, ['label' => 'Активность(вкл/выкл)', 'editable'=>true])
+            ->add('active', 'doctrine_orm_choice', ['label' => 'Активность(вкл/выкл)'],
+                'choice',
+                [
+                    'choices' => [
+                        '1' => 'Да',
+                        '0' => 'Нет',
+                    ]
+                ]
+            )
         ;
     }
 

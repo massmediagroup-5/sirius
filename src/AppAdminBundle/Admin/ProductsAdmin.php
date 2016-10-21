@@ -84,7 +84,15 @@ class ProductsAdmin extends Admin
                 ]
             )
             ->add('content', null, ['label' => 'Описание модели'])
-            ->add('active', null, ['label' => 'Активный'])
+            ->add('active', 'doctrine_orm_choice', ['label' => 'Активность(вкл/выкл)'],
+                'choice',
+                [
+                    'choices' => [
+                        '1' => 'Да',
+                        '0' => 'Нет',
+                    ]
+                ]
+            )
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды']);
