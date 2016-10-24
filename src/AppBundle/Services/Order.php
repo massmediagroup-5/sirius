@@ -391,7 +391,7 @@ class Order
                         if (($orderStatus->getSendClient()) && (!empty($orderStatus->getSendClientText()))) {
                             $now = time();
                             $hour = date('G', $now);
-                            if ($hour >= 21 or $hour <= 8) {
+                            if ($hour >= 20 or $hour <= 8) {
                                 $smsText = $orderStatus->getSendClientNightText();
                             } else {
                                 $smsText = $orderStatus->getSendClientText();

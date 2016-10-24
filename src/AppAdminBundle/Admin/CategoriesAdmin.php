@@ -18,13 +18,28 @@ class CategoriesAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-//            ->add('id')
             ->add('name', null, ['label' => 'Название категории'])
             ->add('alias', null, ['label' => 'Ссылка'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('parrent', null, ['label' => 'Родительская категория'])
-            ->add('inMenu', null, ['label' => 'В меню'])
-            ->add('active', null, ['label' => 'Активная'])
+            ->add('inMenu', 'doctrine_orm_choice', ['label' => 'В меню'],
+                'choice',
+                [
+                    'choices' => [
+                        '1' => 'Да',
+                        '0' => 'Нет',
+                    ]
+                ]
+            )
+            ->add('active', 'doctrine_orm_choice', ['label' => 'Активность(вкл/выкл)'],
+                'choice',
+                [
+                    'choices' => [
+                        '1' => 'Да',
+                        '0' => 'Нет',
+                    ]
+                ]
+            )
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])

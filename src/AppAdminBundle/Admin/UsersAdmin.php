@@ -98,8 +98,8 @@ class UsersAdmin extends BaseUserAdmin
             ->end()
             ->tab('Заказы', ['tab_template' => 'AppAdminBundle:admin:users/orders_tab.html.twig'])
             ->end()
-            ->tab('Бонусы')
-            ->with('Бонусы')
+            ->tab('Скидки')
+            ->with('Скидки')
             ->add('discount', null, ['required' => false])
             ->add('bonuses', null, ['required' => false])
             ->end();
@@ -168,7 +168,15 @@ class UsersAdmin extends BaseUserAdmin
                         }
                 ]
             )
-            ->add('locked')
+            ->add('locked', 'doctrine_orm_choice', [],
+                'choice',
+                [
+                    'choices' => [
+                        '1' => 'Да',
+                        '0' => 'Нет',
+                    ]
+                ]
+            )
             ->add('email');
     }
 
