@@ -116,23 +116,6 @@
                                 {{ form_widget(form.submit, {'label': 'отправить', 'attr': {'class': 'btn btn_blue'}}) }}
                             </div>
                             {{ form_end(form) }}
-                            {#<form action="" method="post" class="chief-form">#}
-                                {#<div class="inp">#}
-                                    {#<input type="text" placeholder="Введите ваше имя" name="name"/>#}
-                                {#</div>#}
-                                {#<div class="inp">#}
-                                    {#<input type="email" placeholder="Введите ваш E-mail" name="email"/>#}
-                                {#</div>#}
-                                {#<div class="inp">#}
-                                    {#<textarea name="message" placeholder="Введите Ваше сообщение"></textarea>#}
-                                {#</div>#}
-                                {#<div class="captcha-wrap">#}
-                                    {#<img src="/img/demo/captcha.jpg" alt=""/>#}
-                                {#</div>#}
-                                {#<div class="btn-row">#}
-                                    {#<input type="submit" value="отправить"  onclick="$.fancybox.open({href: '#manager-contact', type: 'inline'});return false;" class="btn btn_blue"/>#}
-                                {#</div>#}
-                            {#</form>#}
                         </div>
                     </div>
                 </div>
@@ -197,6 +180,7 @@
                 </div>
             </div>
         </section>
+        {% if options.socialIcons is not empty  %}
         <section class="content">
             <div class="wrap">
                 <div class="content__i">
@@ -204,21 +188,21 @@
                         <div class="socials__i">
                             <h2>Узнавайте о всех новинках и акциях первыми</h2>
                             <ul>
-                                <li>
-                                    <a href="#"><i class="icon icon-fb"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="icon icon-vk"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="icon icon-gplus"></i></a>
-                                </li>
+                                {% for icon in options.socialIcons %}
+                                    <li>
+                                        <a href="{{ icon.link }}">
+                                            <img title="{{ icon.name }}" alt="{{ icon.name }}"
+                                                 src="{{ '/img/social/'~icon.picture }}">
+                                        </a>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        {% endif %}
         <section class="content">
             <div class="wrap">
                 <div class="content__i">
