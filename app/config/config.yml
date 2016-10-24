@@ -129,17 +129,6 @@ doctrine:
                 charset:  utf8
                 mapping_types:
                     enum: string
-            local:
-                driver_class: AppBundle\DBAL\Driver
-                driver:   pdo_mysql
-                host:     192.168.0.88
-                port:     "%database_port%"
-                dbname:   mytex.local
-                user:     mytex.local
-                password: rezXYFqA7n6e3WTY
-                charset:  utf8
-                mapping_types:
-                    enum: string
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         default_entity_manager:   default
