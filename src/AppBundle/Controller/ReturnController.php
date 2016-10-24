@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ReturnController extends Controller
 {
     /**
-     * @Route("/product/return/", name="product_return")
+     * @Route("/page/return/", name="product_return")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
