@@ -1,0 +1,49 @@
+AppBundle\Entity\ReturnProduct:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Entity\Repository\ReturnProductRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        createdAt:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: created_at
+        returnDescription:
+            type: text
+            nullable: true
+            column: return_description
+        status:
+            type: text
+            nullable: true
+            column: status
+    manyToOne:
+        order:
+            targetEntity: Orders
+            cascade: {  }
+            fetch: LAZY
+            orphanRemoval: false
+        user:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            orphanRemoval: false
+    oneToMany:
+        returnedSizes:
+            targetEntity: ReturnedSizes
+            cascade: [persist]
+            fetch: LAZY
+            mappedBy: returnProduct
+        history:
+            targetEntity: ReturnProductHistory
+            cascade: [ all ]
+            fetch: LAZY
+            mappedBy: returnProduct
+            inversedBy: null
+            orderBy: {id: DESC}
+    lifecycleCallbacks: {  }

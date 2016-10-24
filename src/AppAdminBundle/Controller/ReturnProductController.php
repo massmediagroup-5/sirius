@@ -6,20 +6,20 @@ use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-
 /**
  * Class: CRUDController
  *
  * @see BaseController
  */
-class ProductModelController extends BaseController
+class ReturnProductController extends BaseController
 {
     /**
      * @param Request $request
      * @return RedirectResponse
      */
-    public function cancelProductModelChangeAction(Request $request)
+    public function cancelReturnProductChangeAction(Request $request)
     {
+        //dd(12121212);
         $object = $this->admin->getSubject();
 
         $historyItem = $this->get('history_manager')->createFromId($request->get('history_id'));

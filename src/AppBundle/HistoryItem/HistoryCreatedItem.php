@@ -5,7 +5,9 @@ namespace AppBundle\HistoryItem;
 
 use AppBundle\Entity\History;
 use AppBundle\Entity\ProductModelsHistory;
+use AppBundle\Entity\ReturnProductHistory;
 use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\ProductModelSpecificSize;
 
 /**
@@ -20,14 +22,8 @@ class HistoryCreatedItem extends AbstractHistoryItem
      */
     public function createHistoryItem($historibleEntity)
     {
-        if ($historibleEntity instanceof ProductModels) {
-            $setter = 'setProductModels';
-        } elseif ($historibleEntity instanceof ProductModelSpecificSize) {
-            $setter = 'setProductModelSpecificSize';
-        } else {
-            throw new \InvalidArgumentException();
-        }
-        $historyInstanceName = get_class($historibleEntity).'History';
+        $setter = 'set' . ucfirst($this->historyPrefix);
+        $historyInstanceName = 'AppBundle\Entity\\' . ucfirst($this->historyPrefix) . 'History';
 
         $historyItem = new $historyInstanceName();
         $historyItem->setChangeType(get_called_class());
@@ -57,6 +53,6 @@ class HistoryCreatedItem extends AbstractHistoryItem
      */
     public function label()
     {
-        return $this->translator->trans('history.product_created', [], 'AppAdminBundle');
+        return $this->translator->trans('history.'.$this->getPrefixForLabel().'_created', [], 'AppAdminBundle');
     }
 }

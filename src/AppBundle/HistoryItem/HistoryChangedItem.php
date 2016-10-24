@@ -31,14 +31,8 @@ class HistoryChangedItem extends AbstractHistoryItem
      */
     public function createHistoryItem($historibleEntity, $fieldName, $from, $to, Users $user)
     {
-        if ($historibleEntity instanceof ProductModels) {
-            $setter = 'setProductModels';
-        } elseif ($historibleEntity instanceof ProductModelSpecificSize) {
-            $setter = 'setProductModelSpecificSize';
-        } else {
-            throw new \InvalidArgumentException();
-        }
-        $historyInstanceName = get_class($historibleEntity).'History';
+        $setter = 'set' . ucfirst($this->historyPrefix);
+        $historyInstanceName = 'AppBundle\Entity\\' . ucfirst($this->historyPrefix) . 'History';
 
         $historyItem = new $historyInstanceName();
         $historyItem->setChangeType(get_called_class());
@@ -57,18 +51,14 @@ class HistoryChangedItem extends AbstractHistoryItem
      */
     public function makeRollback()
     {
-        if ($this->history instanceof ProductModelsHistory) {
-            $getter = 'getProductModels';
-        } elseif ($this->history instanceof ProductModelSpecificSizeHistory) {
-            $getter = 'getProductModelSpecificSize';
-        } else {
-            throw new \InvalidArgumentException();
-        }
-        $productModel = $this->history->$getter();
-        $setter = 'set' . lcfirst($this->history->getChanged());
-        $productModel->$setter($this->history->getFrom());
+        $returnName = substr($this->getPrefixForRollBack(), 0 , -7);
+        $getter = 'get'.$returnName;
 
-        $this->em->persist($productModel);
+        $returnProduct = $this->history->$getter();
+        $setter = 'set'.lcfirst($this->history->getChanged());
+        $returnProduct->$setter($this->history->getFrom());
+
+        $this->em->persist($returnProduct);
         $this->em->flush();
     }
 
@@ -77,7 +67,7 @@ class HistoryChangedItem extends AbstractHistoryItem
      */
     public function label()
     {
-        $from = $this->history->getFrom();
+        $from = $this->history->getFrom() ? $this->history->getFrom() : '0';
         $to = $this->history->getTo();
 
         return $this->translator->trans('history.field_changed_from_to_by_user', [
@@ -96,17 +86,10 @@ class HistoryChangedItem extends AbstractHistoryItem
      */
     public function canRollback()
     {
-        //return true;
         // Can rollback only when not have newest updates with same types
-        if ($this->history instanceof ProductModelsHistory) {
-            $repo = 'AppBundle:ProductModelsHistory';
-        } elseif ($this->history instanceof ProductModelSpecificSizeHistory) {
-            $repo = 'AppBundle:ProductModelSpecificSizeHistory';
-        } else {
-            throw new \InvalidArgumentException();
-        }
+        $historyInstanceName = $this->getPrefixForRollBack();
 
-        return $this->em->getRepository($repo)->countOfNewestWithSameChanged($this->history) == 0;
+        return $this->em->getRepository('AppBundle:'.$historyInstanceName)->countOfNewestWithSameChanged($this->history) == 0;
     }
 
 }

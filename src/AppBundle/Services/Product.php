@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
  */
 class Product
 {
+    const HISTORY_PREFIX = 'product';
 
     /**
      * em
@@ -107,7 +108,7 @@ class Product
         $uow = $this->em->getUnitOfWork();
 
         if ($product->getId() === null) {
-            (new HistoryCreatedItem($this->container))->createHistoryItem($product);
+            (new HistoryCreatedItem($this->container, null, self::HISTORY_PREFIX))->createHistoryItem($product);
         } else {
             $productChanges = $uow->getEntityChangeSet($product);
 
@@ -120,9 +121,6 @@ class Product
                     }
                 }
             }
-
         }
-
-
     }
 }

@@ -1,0 +1,11 @@
+AppBundle\Entity\ReturnedSizesHistory:
+    type: entity
+    repositoryClass: AppBundle\Entity\Repository\ReturnedSizesHistoryRepository
+    manyToOne:
+        returnedSizes:
+            targetEntity: ReturnedSizes
+            cascade: { }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: history
+            orphanRemoval: false

@@ -4,6 +4,11 @@ namespace AppBundle\HistoryItem;
 
 
 use AppBundle\Entity\History;
+use AppBundle\Entity\OrderHistory;
+use AppBundle\Entity\ProductModelsHistory;
+use AppBundle\Entity\ReturnedSizesHistory;
+use AppBundle\Entity\ReturnProduct;
+use AppBundle\Entity\ReturnProductHistory;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Translation\DataCollectorTranslator;
@@ -40,16 +45,22 @@ abstract class AbstractHistoryItem
     protected $nameRepository;
 
     /**
+     * @var string
+     */
+    protected $historyPrefix;
+
+    /**
      * AbstractHistoryItem constructor.
      * @param ContainerInterface $container
      * @param History $history
      */
-    public function __construct(ContainerInterface $container, History $history = null)
+    public function __construct(ContainerInterface $container, History $history = null, $historyPrefix = null)
     {
         $this->history = $history;
         $this->container = $container;
         $this->em = $container->get('doctrine.orm.entity_manager');
         $this->translator = $container->get('translator');
+        $this->historyPrefix = $historyPrefix;
     }
 
     /**
@@ -101,4 +112,25 @@ abstract class AbstractHistoryItem
         return $this->nameRepository;
     }
 
+    protected function getPrefixForLabel(){
+
+        if($this->history instanceof ReturnProductHistory){
+            return 'return_product';
+        }
+        if($this->history instanceof ReturnedSizesHistory){
+            return 'return_product_size';
+        }
+        if($this->history instanceof OrderHistory){
+            return 'order';
+        }
+        if($this->history instanceof ProductModelsHistory){
+            return 'product_models';
+        }
+    }
+
+    protected function getPrefixForRollBack(){
+
+        $reflect = new \ReflectionClass($this->history);
+        return $reflect->getShortName();
+    }
 }

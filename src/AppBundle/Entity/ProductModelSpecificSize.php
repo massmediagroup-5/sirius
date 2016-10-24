@@ -248,6 +248,7 @@ class ProductModelSpecificSize
     public function __construct()
     {
         $this->orderedSizes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->history = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

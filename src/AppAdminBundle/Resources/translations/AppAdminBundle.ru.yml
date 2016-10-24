@@ -80,6 +80,7 @@ link_to_cancel_order: Отменить заказ
 history:
   field_changed_from_to_by_user: :field_changed изменено с «:before» на «:after» пользователем :user
   order_created: Заказ создан
+  return_product_created: Заявка на возврат создана
   product_created: Товар создан
   order_new_size: Добавлен новый размер :size :count шт. пользователем :user.
   order_update_size: "Изменено количество размера «:size» товара «:name», артикул «:article», цвет «:color» с :before на :after шт. пользователем :user."
@@ -99,6 +100,8 @@ history:
   status: Статус
   phone: Телефон
   email: Емейл
+  count: Количество товара
+  returnDescription: Причина возврата
   payStatus: Статус оплаты
   cities: Город доставки
   stores: Склад доставки
