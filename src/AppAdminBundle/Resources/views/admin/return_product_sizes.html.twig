@@ -8,7 +8,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Выбор товара</th>
                             <th>Артикул</th>
                             <th>Картинка</th>
                             <th>Модель</th>
@@ -38,10 +38,7 @@
                         </tr>
                         <tr>
                             <td colspan="8" class="text-right">Погасить</td>
-                            <th colspan="2">
-                                <input type="text" value="{{ admin.subject.order.individualDiscount }}"
-                                       name="individualDiscount" class="table-input js_order_update"/>
-                            </th>
+                            <th colspan="2" id="individualDiscount" class="js_order_update">{{ admin.subject.order.individualDiscount }}</th>
                         </tr>
                         <tr>
                             <td colspan="8" class="text-right">

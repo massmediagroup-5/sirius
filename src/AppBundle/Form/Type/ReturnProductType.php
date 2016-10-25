@@ -4,9 +4,7 @@ namespace AppBundle\Form\Type;
 use AppBundle\Validator\ReturnOrderNumConstraint;
 use AppBundle\Validator\ReturnUserPhoneConstraint;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -24,6 +22,7 @@ class ReturnProductType extends AbstractType
             ->add('user_phone', null, array('attr' => array(
                 'class' => 'form-control phone-inp',
                 'placeholder' => 'введите телефон',
+                'required' => true,
                 'value' => $options['user'] ? $options['user']->getPhone() : '',
             ),
                 'constraints' => array(new ReturnUserPhoneConstraint())
@@ -31,6 +30,8 @@ class ReturnProductType extends AbstractType
             ->add('order_id', null, array('attr' => array(
                 'class' => 'form-control',
                 'placeholder' => 'введите номер заказа',
+                'required' => true,
+
             ),
                 'constraints' => array(new ReturnOrderNumConstraint())
             ));
