@@ -9670,3 +9670,7 @@ body {
         }
     }
 }
+.return_btn_blue{
+    @extend .btn_blue;
+    padding: 0 15px!important;
+}
