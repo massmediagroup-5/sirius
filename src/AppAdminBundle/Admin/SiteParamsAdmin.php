@@ -81,9 +81,13 @@ class SiteParamsAdmin extends Admin
     {
         $container = $this->getConfigurationPool()->getContainer();
         if($object->getParamName() == 'return_invoice'){
-            $link = $container->get('uploader')->upload(
-                $container->getParameter('upload_return_invoice'), $object->getParamValue()
-            );
+            if ($object->getParamValue()) {
+                $link = $container->get('uploader')->upload(
+                    $container->getParameter('upload_return_invoice'), $object->getParamValue()
+                );
+            } else {
+                $link = '';
+            }
             $object->setParamValue($link);
         }
     }

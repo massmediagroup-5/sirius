@@ -56,8 +56,8 @@
                                 <div class="col-sm-3">
                                     {{ form_start(form) }}
                                         {{ form_errors(form.user_phone) }}
-                                        {{ form_errors(form.order_id) }}
                                         <div class="inp">{{ form_widget(form.user_phone) }}</div>
+                                        {{ form_errors(form.order_id) }}
                                         <div class="inp">{{ form_widget(form.order_id) }}</div>
                                         <div class="inp"><input type="submit" value="Возврат" /></div>
                                     {{ form_end(form) }}
@@ -68,7 +68,7 @@
                                         <p>Вы получили товар с дефектом или не тот, что заказывали? Тогда мы заберем его назад и вернем Вам за него все деньги. Для этого необходимо ввести следующие данные в форме слева:</p>
 
                                         <ul>
-                                            <li>Ваш email или номер телефона в первом поле</li>
+                                            <li>Ваш номер телефона в первом поле</li>
                                             <li>Ваш номер заказа во втором поле</li>
                                             <li>Нажать кнопку &laquo;Возврат&raquo;</li>
                                         </ul>

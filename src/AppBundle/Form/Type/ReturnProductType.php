@@ -22,8 +22,8 @@ class ReturnProductType extends AbstractType
     {
         $builder
             ->add('user_phone', null, array('attr' => array(
-                'class' => 'form-control',
-                'placeholder' => 'введите email или телефон',
+                'class' => 'form-control phone-inp',
+                'placeholder' => 'введите телефон',
                 'value' => $options['user'] ? $options['user']->getPhone() : '',
             ),
                 //'mapped' => false,
