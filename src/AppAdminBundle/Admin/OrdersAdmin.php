@@ -187,7 +187,7 @@ class OrdersAdmin extends Admin
                 'choice',
                 array(
                     'choices' => array(
-                        ''                                  => 'Не выбрано',
+                        (string) Orders::PAY_TYPE_EMPTY     => 'Не выбрано',
                         (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                         (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
                     )
@@ -297,7 +297,7 @@ class OrdersAdmin extends Admin
                 'read_only' => $this->disableEdit,
                 'disabled'  => $this->disableEdit,
                 'choices'   => [
-                    ''                                  => 'Не выбрано',
+                    (string) Orders::PAY_TYPE_EMPTY     => 'Не выбрано',
                     (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                     (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
                 ]

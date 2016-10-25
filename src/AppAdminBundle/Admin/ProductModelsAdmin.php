@@ -263,7 +263,7 @@ class ProductModelsAdmin extends Admin
 
     public function getHistory()
     {
-        $historyItems = new Collection($this->subject->getHistory()->getValues());
+        $historyItems = new Collection($this->subject->getHistory() ? $this->subject->getHistory()->getValues() : null);
 
         foreach ($this->subject->getSizes() as $size) {
             $historyItems = $historyItems->merge($size->getHistory()->getValues());

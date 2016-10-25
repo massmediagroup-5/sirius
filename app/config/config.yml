@@ -61,6 +61,8 @@ ewz_recaptcha:
     public_key:  6LcBThwTAAAAAONvtJ8-xxl78jy6hWFiKOiUSPjC
     private_key: 6LcBThwTAAAAAONvtJ8-xxl78jy6hWFiKOiUSPjC
     locale_key:  '%kernel.default_locale%'
+    enabled: true
+    ajax: false
 
 # Twig Configuration
 twig:
@@ -125,17 +127,6 @@ doctrine:
                 dbname:   "%database_name%"
                 user:     "%database_user%"
                 password: "%database_password%"
-                charset:  utf8
-                mapping_types:
-                    enum: string
-            local:
-                driver_class: AppBundle\DBAL\Driver
-                driver:   pdo_mysql
-                host:     192.168.0.88
-                port:     "%database_port%"
-                dbname:   mytex.local
-                user:     mytex.local
-                password: rezXYFqA7n6e3WTY
                 charset:  utf8
                 mapping_types:
                     enum: string

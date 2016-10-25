@@ -16,6 +16,8 @@ class Orders
 
     const PAY_TYPE_COD = 1;
 
+    const PAY_TYPE_EMPTY = 2;
+
     const TYPE_NORMAL = 0;
 
     const TYPE_QUICK = 1;
