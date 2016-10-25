@@ -32,8 +32,8 @@ class ReturnUserPhoneConstraintValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if($this->em->getRepository('AppBundle:Users')->findOneByPhone($value) or
-            $this->em->getRepository('AppBundle:Users')->findOneByEmail($value)){
+        if($this->em->getRepository('AppBundle:Users')->findOneByPhone($value))
+            {
             return true;
         }else{
             $this->context->addViolation($constraint->message);
