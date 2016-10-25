@@ -5112,6 +5112,11 @@ input[type="checkbox"] {
             label.error {
                 visibility: visible;
             }
+            .error-msg {
+                color: #f24841;
+                list-style: none;
+                margin-top: 5px;
+            }
         }
         label.error {
             position: absolute;
