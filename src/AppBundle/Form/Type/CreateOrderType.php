@@ -55,7 +55,10 @@ class CreateOrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $request = isset($options['request']) ? $options['request'] : false;
-        $delivery = $request ? $request->get('create_order')['delivery_type'] : false;
+        $delivery = false;
+        if (isset($request->get('create_order')['delivery_type'])){
+            $delivery = $request ? $request->get('create_order')['delivery_type'] : false;
+        }
         $city = false;
         if ($delivery) {
             if ($delivery == Carriers::NP_ID) {
@@ -108,6 +111,8 @@ class CreateOrderType extends AbstractType
             ])
             ->add('delivery_type', EntityType::class, array(
                 'class' => 'AppBundle:Carriers',
+                'required' => true,
+                'constraints' => [new NotBlank],
                 'query_builder' => function (EntityRepository $er) use ($city) {
                     return $er->createQueryBuilder('c')->where('c.active = :active')
                               ->setParameter('active', 1);
@@ -118,14 +123,6 @@ class CreateOrderType extends AbstractType
             ->add('customDelivery', TextType::class, [
                 'label'=>'Адресс доставки',
             ])
-//            ->add('delivery_type', ChoiceType::class, [
-//                'choices' => [
-//                    'np' => 'np',
-//                ],
-//                'required' => true,
-//                'data' => 'np',
-//                'expanded' => true,
-//            ])
             ->add('pay', ChoiceType::class, [
                 'choices' => array_combine($paymentTypes, $paymentTypes),
                 'required' => true,

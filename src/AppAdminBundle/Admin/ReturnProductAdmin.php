@@ -69,7 +69,7 @@ class ReturnProductAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id', null, ['label' => '№ Заявки'])
+            ->add('id', null, ['label' => '№ Заявки на возврат'])
             ->addIdentifier('order.type', 'choice', [
                 'label'   => 'Тип заказа',
                 'route'   => ['name' => 'edit'],
@@ -79,6 +79,7 @@ class ReturnProductAdmin extends Admin
                     (string) Orders::TYPE_QUICK  => 'Быстрый',
                 ]
             ])
+            ->add('order.id', null, ['label' => '№ Заказа'])
             ->addIdentifier('order.fio', null, ['label' => 'Ф.И.О.', 'route' => ['name' => 'edit']])
             ->addIdentifier('user.phone', null, ['label' => 'Телефон', 'route' => ['name' => 'edit']])
             ->addIdentifier('user.email', null, ['label' => 'Email', 'route' => ['name' => 'edit']])
@@ -90,7 +91,6 @@ class ReturnProductAdmin extends Admin
                     (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
                 ]
             ])
-            ->add('order.id', null, ['label' => '№ Заказа'])
             ->add('createdAt', null, ['label' => 'Время оформления'])
             ->add('_action', 'actions', [
                 'actions' => [

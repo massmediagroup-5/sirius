@@ -27,8 +27,8 @@ var ReturnSizes = (function () {
             price += $(this).find('.js-return-count').val() *
             $(this).find('.js-price').text();
         });
-        var reteurnedPrice = price - $('#bonuses').text();
-        $returnedPrice.text(reteurnedPrice);
+        var reteurnedPrice = price - $('#bonuses').text() - $('#individualDiscount').text();
+        $returnedPrice.text(reteurnedPrice > 0 ? reteurnedPrice : 0);
     };
 
     return ReturnSizes;
