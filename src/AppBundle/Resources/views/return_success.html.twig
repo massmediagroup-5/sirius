@@ -51,12 +51,11 @@
                     <div class="warranty-info__i">
                         <div class="profile-drop__i return-main">
                             <h2>Оформление возврата</h2>
-
                             <div class="row">
                                 <div class="container">
                                     <div class="col-md-offset-4 col-md-4">
                                         <h3>{{ options.getParamValue('return_success_text') }}</h3>
-                                        <a href="{{ asset(options.getParamValue('return_invoice')) }}" class="btn btn_blue">Получить форму</a>
+                                        <a href="{{ asset(options.getParamValue('return_invoice')) }}" download="download" class="btn return_btn_blue">Получить форму</a>
                                     </div>
                                 </div>
                             </div>
@@ -65,90 +64,40 @@
                 </div>
             </div>
         </div>
-
-        <div class="wrap">
-            <div class="content__i">
-                <h2>Преимущества возврата товара в нашей компании</h2>
-
-                <div class="warranty-info">
-                    <div class="warranty-info__i">
-                        <div class="item">
-                            <div class="item__i">
-                                <div class="img img_border"><img alt="" src="/img/demo/r2.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Вернуть товар можно на протяжении 14 дней с момента покупки</p>
+        </section>
+        <section class="content" id="wr1">
+            <div class="wrap">
+                <div class="content__i">
+                    <h2 class="warranty-title"><span>Преимущества возврата товара в нашей компании</span></h2>
+                    <div class="warranty-info">
+                        <div class="warranty-info__i">
+                            <div class="item">
+                                <div class="item__i">
+                                    <div class="img img_border"><img alt="" src="/img/demo/r2.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Вернуть товар можно на протяжении 14 дней с момента покупки</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="item__i">
-                                <div class="img img_border"><img alt="" src="/img/demo/r3.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Вернуть товар можно через любую удобную службу доставки или прямо у нас на складе</p>
+                            <div class="item">
+                                <div class="item__i">
+                                    <div class="img img_border"><img alt="" src="/img/demo/r3.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Вернуть товар можно через любую удобную службу доставки или прямо у нас на складе</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="item__i">
-                                <div class="img img_border"><img alt="" src="/img/demo/r4.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Звонок менеджеру ускоряет возврат товара минимум в 1.5 раза!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="wrap">
-            <div class="content__i">
-                <h2>Преимущества замены товара в нашей компании</h2>
-
-                <div class="warranty-info">
-                    <div class="warranty-info__i">
-                        <div class="item">
-                            <div class="item__i">
-                                <div class="img"><img alt="" src="/img/demo/r5.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Заменить товар можно на протяжении 14 дней с момента покупки</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="item__i">
-                                <div class="img"><img alt="" src="/img/demo/r6.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Можно заменить на любой товар, равный по стоимости, дешевле (разница вернется Вам), или дороже (тогда просто надо будет доплатить разницу стоимости)</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="item__i">
-                                <div class="img"><img alt="" src="/img/demo/r7.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>В отличии от варианта возврата денег, Вы не теряете время на поиск нового магазина и нового товара</p>
+                            <div class="item">
+                                <div class="item__i">
+                                    <div class="img img_border"><img alt="" src="/img/demo/r4.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Звонок менеджеру ускоряет возврат товара минимум в 1.5 раза!</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -156,65 +105,40 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="wrap">
-            <div class="content__i">
-                <h2>Как заменить или вернуть товар в 4 шага</h2>
-
-                <div class="warranty-info warranty-info_4">
-                    <div class="warranty-info__i">
-                        <div class="item">
-                            <div class="item__i">
-                                <h2>Шаг 1</h2>
-
-                                <div class="img img_border"><img alt="" src="/img/demo/r8.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Удостовертесь, что нету следов носки, механических повреждений, присутствует оригинальная упаковка и все бирки/ярлычки.</p>
+        </section>
+        <section class="content" id="wr2">
+            <div class="wrap">
+                <div class="content__i">
+                    <h2 class="warranty-title"><span>Преимущества замены товара в нашей компании</span></h2>
+                    <div class="warranty-info">
+                        <div class="warranty-info__i">
+                            <div class="item">
+                                <div class="item__i">
+                                    <div class="img"><img alt="" src="/img/demo/r5.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Заменить товар можно на протяжении 14 дней с момента покупки</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="item__i">
-                                <h2>Шаг 2</h2>
-
-                                <div class="img img_border"><img alt="" src="/img/demo/r9.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Свяжитесь с нашим менеджером по телефону и сообщите о замене или возврате товара</p>
+                            <div class="item">
+                                <div class="item__i">
+                                    <div class="img"><img alt="" src="/img/demo/r6.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Можно заменить на любой товар, равный по стоимости, дешевле (разница вернется Вам), или дороже (тогда просто надо будет доплатить разницу стоимости)</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="item__i">
-                                <h2>Шаг 3</h2>
-
-                                <div class="img img_border"><img alt="" src="/img/demo/r10.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Отправте товар по адресу, согласованному с менеджером</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="item__i">
-                                <h2>Шаг 4</h2>
-
-                                <div class="img img_border"><img alt="" src="/img/demo/r11.jpg" /></div>
-
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Получите деньги на свою банковскою карту или товар службой доставки</p>
+                            <div class="item">
+                                <div class="item__i">
+                                    <div class="img"><img alt="" src="/img/demo/r7.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>В отличии от варианта возврата денег, Вы не теряете время на поиск нового магазина и нового товара</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -222,57 +146,106 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="wrap">
-            <div class="content__i">
-                <h2>Возврат денежных средств</h2>
-
-                <div class="warranty-info warranty-info_cashback">
-                    <div class="warranty-info__i">
-                        <div class="col">
-                            <div class="col__i" style="height: 370px;"><img alt="" src="/img/demo/r12.jpg" /></div>
-                        </div>
-
-                        <div class="col">
-                            <div class="col__i" style="height: 370px;">
-                                <div class="text">
-                                    <div class="text__i">
-                                        <p>Возврат денежных средств осуществляется на Вашу банковскую карту или наличными, в случае возврата товара прямо на наш склад.</p>
-                                        &nbsp;
-
-                                        <p>Для получения средств за возвращенный товар необходимо:</p>
-
-                                        <ul>
-                                            <li>Название банка, в котором открыт Ваш карточный счет</li>
-                                            <li>Номер банковской карточки</li>
-                                            <li>ФИО получателя возвратных денег</li>
-                                        </ul>
+        </section>
+        <section class="content" id="wr3">
+            <div class="wrap">
+                <div class="content__i">
+                    <h2 class="warranty-title"><span>Как заменить или вернуть товар в 4 шага</span></h2>
+                    <div class="warranty-info warranty-info_4">
+                        <div class="warranty-info__i">
+                            <div class="item">
+                                <div class="item__i">
+                                    <h2 class="warranty-title">Шаг 1</h2>
+                                    <div class="img img_border"><img alt="" src="/img/demo/r8.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Удостовертесь, что нету следов носки, механических повреждений, присутствует оригинальная упаковка и все бирки/ярлычки.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="text">
-                            <div class="text__i">
-                                <h3><em>Обратите внимание !</em> У банков и курьерских служб есть свои сроки работы и регламенты, мы напрямую зависим от них, поэтому замена товара и возврат денег занимает в среднем от 4 до 10 дней.</h3>
+                            <div class="item">
+                                <div class="item__i">
+                                    <h2 class="warranty-title">Шаг 2</h2>
+                                    <div class="img img_border"><img alt="" src="/img/demo/r9.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Свяжитесь с нашим менеджером по телефону и сообщите о замене или возврате товара</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="warranty-info">
-                    <div class="warranty-info__i">
-                        <div class="text centered">
-                            <div class="text__i"><img alt="" src="/img/demo/r13.jpg" />
-                                <h3>Мы надеемся, что этот раздел сделает покупки товара <strong>ТМ Sirius</strong> комфортнее.</h3>
-
-                                <h3>Приятных покупок!</h3>
+                            <div class="item">
+                                <div class="item__i">
+                                    <h2 class="warranty-title">Шаг 3</h2>
+                                    <div class="img img_border"><img alt="" src="/img/demo/r10.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Отправте товар по адресу, согласованному с менеджером</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="item__i">
+                                    <h2 class="warranty-title">Шаг 4</h2>
+                                    <div class="img img_border"><img alt="" src="/img/demo/r11.jpg"></div>
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Получите деньги на свою банковскою карту или товар службой доставки</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+        <section class="content" id="wr4">
+            <div class="wrap">
+                <div class="content__i">
+                    <h2 class="warranty-title"><span>Возврат денежных средств</span></h2>
+                    <div class="warranty-info warranty-info_cashback">
+                        <div class="warranty-info__i">
+                            <div class="col">
+                                <div class="col__i" style="height: 370px;"><img alt="" src="/img/demo/r12.jpg"></div>
+                            </div>
+                            <div class="col">
+                                <div class="col__i" style="height: 370px;">
+                                    <div class="text">
+                                        <div class="text__i">
+                                            <p>Возврат денежных средств осуществляется на Вашу банковскую карту или наличными, в случае возврата товара прямо на наш склад.</p>
+                                            <p>Для получения средств за возвращенный товар необходимо:</p>
+                                            <ul>
+                                                <li>Название банка, в котором открыт Ваш карточный счет</li>
+                                                <li>Номер банковской карточки</li>
+                                                <li>ФИО получателя возвратных денег</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text">
+                                <div class="text__i">
+                                    <h3><em>Обратите внимание !</em> У банков и курьерских служб есть свои сроки работы и регламенты, мы напрямую зависим от них, поэтому замена товара и возврат денег занимает в среднем от 4 до 10 дней.</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="warranty-info">
+                        <div class="warranty-info__i">
+                            <div class="text centered">
+                                <div class="text__i">
+                                    <img alt="" src="/img/demo/r13.jpg">
+                                    <h3>Мы надеемся, что этот раздел сделает покупки товара <strong>ТМ Sirius</strong> комфортнее.</h3>
+                                    <h3>Приятных покупок!</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 {% endblock %}
