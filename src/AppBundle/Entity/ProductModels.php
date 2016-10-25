@@ -99,6 +99,7 @@ class ProductModels
 
     /**
      * @var \AppBundle\Entity\ProductColors
+     * @Assert\NotBlank()
      */
     private $productColors;
 
@@ -109,6 +110,7 @@ class ProductModels
 
     /**
      * @var \AppBundle\Entity\Products
+     * @Assert\NotBlank()
      */
     private $products;
 

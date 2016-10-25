@@ -50,7 +50,10 @@
                                         </div>
                                     </div>
                                 {% endfor %}
-                                {% include 'AppAdminBundle:admin:product_history_items.html.twig' %}
+                                {% if admin.subject.history is defined %}
+                                    {% include 'AppAdminBundle:admin:product_history_items.html.twig' %}
+                                    <div class="clearfix"></div>
+                                {% endif %}
                             </div>
                         </div>
                     {% else %}

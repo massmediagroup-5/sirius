@@ -17,7 +17,7 @@ use Doctrine\ORM\EntityManager;
  */
 class Product
 {
-    const HISTORY_PREFIX = 'product';
+    const HISTORY_PREFIX = 'productModels';
 
     /**
      * em
