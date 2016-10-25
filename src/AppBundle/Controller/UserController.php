@@ -48,7 +48,7 @@ class UserController extends Controller
      */
     public function wishListAction(Request $request)
     {
-        $wishList = $this->container->get('wishlist')->paginate($request->get('page', 1, $request->request->all()));
+        $wishList = $this->container->get('wishlist')->paginate($request->get('page', 1), 8, $request->query->all());
 
         if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->render('AppBundle:user/wish_list.html.twig', compact('wishList'));

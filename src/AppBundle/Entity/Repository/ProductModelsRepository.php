@@ -194,16 +194,18 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     {
         $builder = $this->createQueryBuilder('productModels')
             ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->leftJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->leftJoin('characteristicValues.categories', 'categories')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->where('productModels.id IN (:ids)')
-            ->setParameter('ids', $modelIds)
-            ->addOrderBy('FIELD(productModels.id, ' . implode(', ', $modelIds) . ')', 'DESC');
+            ->setParameter('ids', $modelIds);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
+
+        $builder->addOrderBy('FIELD(productModels.id, ' . implode(', ', $modelIds) . ')', 'DESC');
 
         return $builder->getQuery();
     }
