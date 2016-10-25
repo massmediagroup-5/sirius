@@ -26,14 +26,12 @@ class ReturnProductType extends AbstractType
                 'placeholder' => 'введите телефон',
                 'value' => $options['user'] ? $options['user']->getPhone() : '',
             ),
-                //'mapped' => false,
                 'constraints' => array(new ReturnUserPhoneConstraint())
             ))
             ->add('order_id', null, array('attr' => array(
                 'class' => 'form-control',
                 'placeholder' => 'введите номер заказа',
             ),
-                //'mapped' => false,
                 'constraints' => array(new ReturnOrderNumConstraint())
             ));
     }
