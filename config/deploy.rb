@@ -3,7 +3,7 @@ lock '3.6.1'
 set :application, 'Sirius'
 set :repo_url, 'git@bitbucket.org:massmediagroup/sirius.git'
 set :linked_files, %w{app/config/parameters.yml}
-set :linked_dirs, %w{app/logs vendor web/vendor node_modules web/bower_components web/css web/js web/img/banners web/img/products web/img/shares web/img/slider app/cache app/logs web/images web/media}
+set :linked_dirs, %w{app/logs vendor web/vendor web/uploads node_modules web/bower_components web/css web/js web/img/banners web/img/products web/img/shares web/img/slider app/cache app/logs web/images web/media}
 
 set :symfony_directory_structure, 2
 
