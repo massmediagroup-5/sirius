@@ -37,6 +37,7 @@ use Doctrine\ORM\EntityManager;
  */
 class Order
 {
+    const HISTORY_PREFIX = 'order';
 
     /**
      * em
