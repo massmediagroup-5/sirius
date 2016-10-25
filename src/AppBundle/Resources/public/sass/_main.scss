@@ -9648,11 +9648,25 @@ body {
             line-height: 30px;
             padding-bottom: 13px;
         }
+        ul {
+            padding-left: 17px;
+            li {
+                list-style: initial;
+            }
+        }
     }
     ul {
-        padding-left: 17px;
+        padding-left: 0;
         li {
             margin-bottom: 14px;
+        }
+    }
+    .return-error-message {
+        ul {
+            li {
+                color: #d45050;
+                line-height: 1.2;
+            }
         }
     }
 }
