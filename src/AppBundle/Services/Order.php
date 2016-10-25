@@ -17,6 +17,7 @@ use AppBundle\Exception\CartEmptyException;
 use AppBundle\Exception\BuyerAccessDeniedException;
 use AppBundle\Exception\ImpossibleMoveToPreOrder;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
+use AppBundle\HistoryItem\HistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryChangedItem;
 use AppBundle\HistoryItem\OrderHistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryMergedWithRelatedItem;
