@@ -1,7 +1,7 @@
 {% for size in admin.subject.order.sizes %}
     <tr class="js-row-size" data-size-id="{{ size.id }}">
         <td class="control-group">
-            <input type="checkbox" name="return_sizes[{{ size.id }}][return]" value="{{ size.id }}">
+            <input type="checkbox" name="return_sizes[{{ size.id }}][return]" value="{{ size.id }}" {% if admin.getReturnSizeBySizeCount(size.id) > 0 %}checked{% endif %}>
         </td>
         <td class="control-group">{{ size.size.model.products.article }}</td>
         <td class="control-group">

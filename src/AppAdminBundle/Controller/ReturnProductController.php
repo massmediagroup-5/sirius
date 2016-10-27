@@ -19,7 +19,6 @@ class ReturnProductController extends BaseController
      */
     public function cancelReturnProductChangeAction(Request $request)
     {
-        //dd(12121212);
         $object = $this->admin->getSubject();
 
         $historyItem = $this->get('history_manager')->createFromId($request->get('history_id'));
