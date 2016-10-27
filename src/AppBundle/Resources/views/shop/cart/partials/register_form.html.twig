@@ -42,19 +42,17 @@
         </div>
         <div class="pass-recovery hide">
             <h2>Смена пароля</h2>
-
             <div class="inner">
                 <div class="col">
                     <div class="col__i">
-                        <form method="post">
+                        <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="change-passw-form fos_user_resetting_request">
                             <div class="inp">
-                                <input type="text" placeholder="E-mail адрес"/>
+                                <input type="email" placeholder="E-mail адрес" id="username" name="username" />
                             </div>
                             <div class="inp">
                                 <input type="submit" class="btn btn_blue" value="ПОДТВЕРДИТЬ"/>
-
                             </div>
-                            <a href="#" class="back">Вернуться назад</a>
+                            <a href="#" class="close">Закрыть</a>
                         </form>
                     </div>
                 </div>
@@ -63,7 +61,7 @@
                         <div class="info">
                             <p>
                                 Укажите Ваш адрес электронной
-                                почты, и мы вышлем Ваш пароль в
+                                почты, и мы вышлем Ваш инструкцию по смене пароля в
                                 течение нескольких минут.
                             </p>
                         </div>

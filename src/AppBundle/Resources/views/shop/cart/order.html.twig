@@ -6,11 +6,7 @@
     <section class="content">
         <div class="wrap">
             <div class="content__i">
-
-                <h2 class="page-title">
-                    Оформление заказа
-                </h2>
-
+                <h2 class="page-title">Оформление заказа</h2>
                 <div class="order-info">
                     <div class="col">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -18,20 +14,16 @@
                         {% else %}
                             <div class="accordion">
                                 <div class="accordion__i">
-
                                     <div class="item opened">
                                         {{ include('AppBundle:shop/cart/partials/quick_order.html.twig', { 'form': quickOrderForm }) }}
                                     </div>
                                     <!--item end-->
-
                                     <div class="item">
                                         {{ include('AppBundle:shop/cart/partials/register_form.html.twig') }}
                                     </div>
-
                                     <div class="item">
                                         {{ include('AppBundle:shop/cart/partials/new_user.html.twig', { 'form': orderForm }) }}
                                     </div>
-
                                 </div>
                             </div>
                         {% endif %}
@@ -65,7 +57,6 @@
                                         </table>
                                     </div>
                                 {% endif %}
-                                
                                 {% if not cart.preOrderCount is empty %}
                                     <div class="mid">
                                         <h2>
@@ -89,7 +80,6 @@
                                         </table>
                                     </div>
                                 {% endif %}
-
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') and not is_granted('ROLE_WHOLESALER') %}
                                     <div class="mid order-bonuses">
                                         {% if is_granted('ROLE_GRAY_LIST') %}
@@ -111,7 +101,6 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
-
                                 <div class="bottom">
                                     <h2>Всего</h2>
                                     <table>
@@ -131,12 +120,10 @@
                                             </td>
                                         </tr>
                                     </table>
-
                                     <div class="row pb15">
                                         <a href="{{ path('cart_show') }}" class="edit">Редактировать заказ</a>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -149,23 +136,18 @@
 
 {% block bottom_assets %}
     {{ parent() }}
-
     <script>
         var orderFormSubmitFlag = {{ orderFormSubmitFlag ? 'true' : 'false' }};
     </script>
-
     {% javascripts '@AppBundle/Resources/public/js/order_create.js' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
-
 {% block popups %}
     {{ parent() }}
-
     <div class="text-popup text-popup_2" id="terms">
         <div class="text-popup__i">
             <h2>Пользовательское соглашение</h2>
-
             <p>Настоящим я выражаю свое согласие и разрешаю осуществлять обработку своих персональных данных (имя,
                 мобильный телефон, адрес электронной почты), включая сбор, систематизацию, накопление, хранение,
                 уточнение, использование, уничтожение персональных данных), в целях связанных с возможностью
@@ -173,7 +155,6 @@
                 и обработки статистической информации и проведения маркетинговых исследований. Я подтверждаю, что мне
                 известна цель использования моих персональных данных и настоящим выражаю свое согласие на
                 использование.</p>
-
             <div class="btn-row">
                 <a href="#" class="btn btn_blue close-popup">OK</a>
             </div>

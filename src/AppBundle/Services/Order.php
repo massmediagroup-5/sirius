@@ -433,7 +433,7 @@ class Order
                     if (($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers())) {
                         $body = sprintf(
                             $orderStatus->getSendClientEmailText(),
-                            $orderStatus->getId() // %s
+                            $order->getId() ? $order->getId() : date('G:i:s d-m-Y', time()) // %s
                         );
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Order from orders@sirius-sport.com')
@@ -458,7 +458,7 @@ class Order
      * @param string $dynamic_text
      * @param string $sms_text
      *
-     * return mixed
+     * @return mixed
      */
     public function sendSmsRequest($uniSender, $phone, $dynamic_text, $sms_text = null)
     {
