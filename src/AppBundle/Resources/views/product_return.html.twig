@@ -56,9 +56,12 @@
                                 <div class="col-sm-4">
                                     {{ form_start(form) }}
                                         <span class="return-error-message">{{ form_errors(form.user_phone) }}</span>
-                                        <div class="inp">{{ form_widget(form.user_phone) }}</div>
+                                        <div class="inp {% if has_error(form, 'user_phone') %} inp_error {% endif %}">
+                                            {{ form_widget(form.user_phone) }}
+                                        </div>
                                         <span class="return-error-message">{{ form_errors(form.order_id) }}</span>
-                                        <div class="inp">{{ form_widget(form.order_id) }}</div>
+                                        <div class="inp {% if has_error(form, 'order_id') %} inp_error {% endif %}">
+                                            {{ form_widget(form.order_id) }}</div>
                                         <div class="inp"><input type="submit" value="Возврат" /></div>
                                     {{ form_end(form) }}
                                     </form>
