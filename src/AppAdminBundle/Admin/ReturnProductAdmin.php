@@ -34,6 +34,17 @@ class ReturnProductAdmin extends Admin
     protected $disableEdit = true;
 
     /**
+     * Default Datagrid values
+     *
+     * @var array
+     */
+    protected $datagridValues = array(
+        '_page' => 1,            // display the first page (default = 1)
+        '_sort_order' => 'DESC', // reverse order (default = 'ASC')
+        '_sort_by' => 'createdAt'  // name of the ordered field
+    );
+
+    /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -194,7 +205,7 @@ class ReturnProductAdmin extends Admin
                 'read_only'     => $this->disableEdit,
                 'disabled'      => $this->disableEdit,
             ])
-            ->add('return_description', 'text', [
+            ->add('return_description', 'textarea', [
                 'label' => 'Причина возврата товара',
                 'required' => false,
             ])
