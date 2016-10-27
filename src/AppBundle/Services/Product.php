@@ -17,8 +17,6 @@ use Doctrine\ORM\EntityManager;
  */
 class Product
 {
-    const HISTORY_PREFIX = 'product';
-
     /**
      * em
      *
@@ -102,20 +100,21 @@ class Product
 
     public function processProductModelsChanges($product)
     {
+        $historyPrefix = (new \ReflectionClass($product))->getShortName();
         $allowedFields = [
             'price',
         ];
         $uow = $this->em->getUnitOfWork();
 
         if ($product->getId() === null) {
-            (new HistoryCreatedItem($this->container, null, self::HISTORY_PREFIX))->createHistoryItem($product);
+            (new HistoryCreatedItem($this->container, null, $historyPrefix))->createHistoryItem($product);
         } else {
             $productChanges = $uow->getEntityChangeSet($product);
 
             foreach ($productChanges as $fieldName => $productChange) {
                 if ($productChange[0] != $productChange[1]) {
                     if (in_array($fieldName, $allowedFields)) {
-                        (new HistoryChangedItem($this->container))
+                        (new HistoryChangedItem($this->container, null, $historyPrefix))
                             ->createHistoryItem($product, $fieldName,
                                 $productChange[0], $productChange[1], $this->container->get('security.token_storage')->getToken()->getUser());
                     }

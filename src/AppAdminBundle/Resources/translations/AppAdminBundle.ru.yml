@@ -107,3 +107,5 @@ history:
   stores: Склад доставки
   individualDiscount: Индивидуальная скидка
   additionalSolar: Дополнительные затраты
+  product_models_created: Продукт создан
+  product_model_specific_size_history_created: Размер продукта создан

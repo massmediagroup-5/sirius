@@ -1,5 +1,8 @@
 {% extends 'AppBundle:user/cabinet.html.twig' %}
 
+{% form_theme form _self %}
+{% use 'AppBundle:partials/form_errors.html.twig' %}
+
 {% block out_class %} out_sub {% endblock %}
 
 {% block cabinet_content %}
@@ -59,6 +62,7 @@
                     </div>
                     <div class="inp {{ add_error(form, 'plainPassword.first') }}">
                         {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'Введите пароль'}}) }}
+                        {{ form_errors(form.plainPassword.first) }}
                     </div>
                 </div>
                 <div class="rw">
@@ -67,6 +71,7 @@
                     </div>
                     <div class="inp {{ add_error(form, 'plainPassword.first') }}">
                         {{ form_widget(form.plainPassword.second, {'attr': {'placeholder': 'Подтвердите пароль'}}) }}
+                        {{ form_errors(form.plainPassword.first) }}
                     </div>
                 </div>
             </div>

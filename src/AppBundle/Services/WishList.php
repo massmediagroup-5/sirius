@@ -81,7 +81,7 @@ class WishList
             $models = [];
         }
 
-        $models = $this->container->get('knp_paginator')->paginate($models, $page, $perPage);
+        $models = $this->container->get('knp_paginator')->paginate($models, $page, $perPage, ['wrap-queries' => true]);
 
         return $models;
     }

@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Validator\Constraints\Required;
 
 /**
  * Class ProductModelsAdmin
@@ -110,7 +111,7 @@ class ProductModelsAdmin extends Admin
             ->add('textLabelColor', 'text',
                 ['label' => 'Цвет метки', 'required' => false, 'attr' => ['class' => 'js_color_picker']])
             ->add('products', 'sonata_type_model_list', ['label' => 'Модель'])
-            ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара',])
+            ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара'])
             ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])
             ->add('price', 'number', ['label' => 'Цена', 'precision' => 2])
             ->add('oldPrice', null, ['label' => 'Старая цена'])
@@ -185,11 +186,13 @@ class ProductModelsAdmin extends Admin
     public function preUpdate($model)
     {
         if (!$model->getAlias()) {
-            $slugify = new Slugify();
-            $alias = rand(1,
-                    99999) . ' ' . $model->getProducts()->getName() . ' ' . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
-            $alias = $slugify->slugify($alias);
-            $model->setAlias($alias);
+            if ($model->getProducts()) {
+                $slugify = new Slugify();
+                $alias = rand(1, 99999) . ' ' . $model->getProducts()->getName() . ' '
+                    . $model->getProducts()->getArticle() . ' ' . $model->getProductColors()->getName();
+                $alias = $slugify->slugify($alias);
+                $model->setAlias($alias);
+            }
         }
 
         foreach ($model->getSizes() as $size) {

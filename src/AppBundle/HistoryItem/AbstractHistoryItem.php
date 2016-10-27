@@ -10,12 +10,15 @@ use AppBundle\Entity\ReturnedSizesHistory;
 use AppBundle\Entity\ReturnProduct;
 use AppBundle\Entity\ReturnProductHistory;
 use Doctrine\ORM\EntityManager;
+use Illuminate\Support\Str;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Translation\DataCollectorTranslator;
 
 /**
  * Class AbstractHistoryItem
  * @package AppBundle\HistoryItem
+ * Todo remove $historyPrefix and get meta information using reflection.
+ * Todo And create "HistoryItemDecoratorInterface" for specific Entity behavior
  */
 abstract class AbstractHistoryItem
 {
@@ -126,6 +129,7 @@ abstract class AbstractHistoryItem
         if($this->history instanceof ProductModelsHistory){
             return 'product_models';
         }
+        return Str::snake((new \ReflectionClass($this->history))->getShortName());
     }
 
     protected function getPrefixForRollBack(){

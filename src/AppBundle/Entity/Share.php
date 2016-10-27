@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 /**
  * Share
  */
@@ -14,16 +16,19 @@ class Share
 
     /**
      * @var string
+     * @NotBlank()
      */
     private $name;
 
     /**
      * @var string
+     * @NotBlank()
      */
     private $description;
 
     /**
      * @var string
+     * @NotBlank()
      */
     private $terms;
 
