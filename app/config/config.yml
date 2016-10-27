@@ -275,9 +275,7 @@ fos_elastica:
                         name:
                             type: string
                             analyzer: my_analyzer
-                        article:
-                            type: string
-                            analyzer: my_analyzer
+                        article: ~
                         content:
                             type: string
                             analyzer: my_analyzer
