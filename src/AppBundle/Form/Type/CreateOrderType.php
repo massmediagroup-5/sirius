@@ -132,7 +132,7 @@ class CreateOrderType extends AbstractType
             ->add('bonuses', HiddenType::class, [
                 'constraints' => [
                     new GreaterThanOrEqual(0),
-                    new LessThanOrEqual($authenticated ? 0 : $this->pricesCalculator->getMaxAllowedBonuses())
+                    new LessThanOrEqual($authenticated ? $this->pricesCalculator->getMaxAllowedBonuses() : 0)
                 ],
                 'data' => 0
             ])
