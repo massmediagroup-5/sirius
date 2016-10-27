@@ -22,9 +22,9 @@ class ReturnProductType extends AbstractType
             ->add('user_phone', null, array('attr' => array(
                 'class' => 'form-control phone-inp',
                 'placeholder' => 'введите телефон',
-                'required' => true,
-                'value' => $options['user'] ? $options['user']->getPhone() : '',
+                'required' => true
             ),
+                'data' => $options['user'] ? $options['user']->getPhone() : null,
                 'constraints' => array(new ReturnUserPhoneConstraint())
             ))
             ->add('order_id', null, array('attr' => array(
