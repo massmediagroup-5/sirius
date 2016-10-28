@@ -25,7 +25,7 @@ var ReturnSizes = (function () {
 
         $('.js-row-size').each(function () {
             price += $(this).find('.js-return-count').val() *
-            $(this).find('.js-price').text();
+            $(this).find('.js-disc-price').text();
         });
         var reteurnedPrice = price - $('#bonuses').text() - $('#individualDiscount').text();
         $returnedPrice.text(reteurnedPrice > 0 ? reteurnedPrice : 0);
