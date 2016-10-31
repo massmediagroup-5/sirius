@@ -47,7 +47,7 @@
 
                                         <p>+38 093 000 39 88 (Life)</p>
 
-                                        <p>+38 099 000 39 88 (МТС)</p>
+                                        <p>+38 099 000 39 88 (Vodafone)</p>
                                     </div>
                                     <div class="emails">
                                         <p><a href="mailto:manager@sirius-sport.com">manager@sirius-sport.com</a></p>
@@ -115,6 +115,7 @@
                             <div class="btn-row">
                                 {{ form_widget(form.submit, {'label': 'отправить', 'attr': {'class': 'btn btn_blue'}}) }}
                             </div>
+                            {{ form_errors(form) }}
                             {{ form_end(form) }}
                         </div>
                     </div>
