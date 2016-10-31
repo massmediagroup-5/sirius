@@ -401,12 +401,12 @@ class Order
                             $client_sms_status = $this->sendSmsRequest(
                                 $uniSender,
                                 $order->getPhone(),
-                                $order->getId(),
+                                $order->getId() ? $order->getId() : date('G:i:s d-m-Y', time()),
                                 $smsText
                             );
                             $OrderSmsInfo = new OrderSmsInfo();
                             $OrderSmsInfo->setOrder($order);
-                            $OrderSmsInfo->setType(sprintf($orderStatus->getSendClientText(), $order->getId()));
+                            $OrderSmsInfo->setType(sprintf($orderStatus->getSendClientText(), ($order->getId() ? $order->getId() : date('G:i:s d-m-Y', time() )) ));
                             if ($client_sms_status['error'] == false) {
                                 // если без ошибок то сохраняем идентификатор смс
 //                                $order->setClientSmsId($client_sms_status['sms_id']);
