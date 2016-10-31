@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use EWZ\Bundle\RecaptchaBundle\Form\Type\RecaptchaType;
+use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,7 +20,7 @@ class ContactsController extends Controller
             ->add('name', 'text')
             ->add('email', 'email')
             ->add('message', 'textarea')
-            ->add('recaptcha', RecaptchaType::class,
+            ->add('recaptcha', EWZRecaptchaType::class,
                 [
                     'label'       => 'Captcha check:',
                     'mapped'      => false,
