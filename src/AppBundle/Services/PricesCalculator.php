@@ -398,10 +398,12 @@ class PricesCalculator
     {
         $bonusMaxPaidPercent = $this->container->get('options')->getParamValue('bonus_max_paid_percent', 0);
         $user = $this->container->get('security.context')->getToken()->getUser();
-
-        $allowedBonuses = ceil($this->container->get('cart')->getDiscountedTotalPrice() * $bonusMaxPaidPercent / 100);
-        $availableBonuses = ceil(($user->getBonuses() != 'anon.')?$user->getBonuses():0);
-        return $availableBonuses < $allowedBonuses ? $availableBonuses : $allowedBonuses;
+        if ($user != 'anon.') {
+            $allowedBonuses = ceil($this->container->get('cart')->getDiscountedTotalPrice() * $bonusMaxPaidPercent / 100);
+            $availableBonuses = ceil($user->getBonuses());
+            return $availableBonuses < $allowedBonuses ? $availableBonuses : $allowedBonuses;
+        }
+        return 0;
     }
 
 }

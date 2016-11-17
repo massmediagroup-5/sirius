@@ -1,3 +1,4 @@
+{% if app.request.get('_route') not in ['cart_order'] %}
 <a href="#" class="profile-btn">
     <i class="icon icon-profile"></i>
     <i class="icon icon-profile-hover hover"></i>
@@ -67,7 +68,6 @@
             <div class="inner">
                 <div class="col">
                     <div class="col__i">
-                        {#{{ render(controller('FOSUserBundle:Resetting:request')) }}#}
                         <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="change-passw-form fos_user_resetting_request">
                             <div class="inp">
                                 <input type="email" placeholder="E-mail адрес" id="username" name="username" />
@@ -94,4 +94,6 @@
         </div>
     </div>
 </div>
+{% endif %}
+
 {% endif %}

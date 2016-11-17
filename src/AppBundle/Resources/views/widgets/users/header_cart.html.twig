@@ -55,7 +55,7 @@
                         <div class="list">
                             <div class="list__i">
 
-                                {% for item in cart.items %}
+                                {% for item in cart.items|slice(0, 6) %}
                                     <div class="item">
                                         <a href=>
                                             <div class="item__i">
