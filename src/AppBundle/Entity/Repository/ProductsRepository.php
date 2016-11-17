@@ -525,9 +525,10 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param \Doctrine\ORM\QueryBuilder $builder
      * @param $filters
      * @param string $alias
+     * @param string $productAlias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function addFiltersToQuery($builder, $filters, $alias = 'productModels')
+    public function addFiltersToQuery($builder, $filters, $alias = 'productModels', $productAlias = 'products')
     {
         if ($colors = Arr::get($filters, 'colors')) {
             $colors = explode(',', $colors);
@@ -535,6 +536,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         }
         if ($share = Arr::get($filters, 'share')) {
             $builder->andWhere('share.id = :shareId')->setParameter('shareId', $share);
+        }
+        if ($slug = Arr::get($filters, 'search')) {
+            $builder->andWhere("$productAlias.name LIKE :slug")->setParameter('slug', "%$slug%");
         }
         if ($shares = Arr::get($filters, 'shares')) {
             $builder->andWhere('sizes.shareGroup IS NOT NULL')
