@@ -16,9 +16,7 @@
                         <div class="info">
                             <div class="info__i">
                                 <p><strong>{{ item.products.name }}</strong></p>
-                                {% for size in item.sizes %}
-                                    <p> {{ prices.getDiscountedPrice(size)|format_price }} грн.</p>
-                                {% endfor %}
+                                <p> {{ prices.getProductModelMinDiscountedPrice(item)|format_price }} грн.</p>
                             </div>
                         </div>
                     </div>
