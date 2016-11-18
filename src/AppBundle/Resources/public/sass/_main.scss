@@ -3324,11 +3324,19 @@ input[type="checkbox"] {
 
     .img {
         padding-bottom: 60px;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        height: 414px;
+        display: table;
+        width: 100%;
 
         img {
             max-width: 100%;
-            width: 100%;
             height: auto;
+        }
+        .js_main_alias {
+            display: table-cell;
+            vertical-align: middle;
         }
     }
 
