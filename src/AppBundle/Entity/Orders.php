@@ -28,6 +28,8 @@ class Orders
 
     const STATUS_REJECTED = 0;
 
+    const STATUS_DONE = 'done';
+
     /**
      * @var integer
      */
