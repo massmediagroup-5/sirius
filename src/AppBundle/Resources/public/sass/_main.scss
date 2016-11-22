@@ -3910,7 +3910,8 @@ input[type="checkbox"] {
     }
 }
 
-.product {
+.product {    
+    margin-bottom: 20px;
     .side {
         float: left;
         width: 216px;
@@ -3931,7 +3932,7 @@ input[type="checkbox"] {
     h1 {
         font-family: $latoBlack;
         text-align: center;
-        font-size: 48px;
+        font-size: 40px;
         line-height: 50px;
         padding-bottom: 21px;
         color: #050505;
