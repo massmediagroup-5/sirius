@@ -259,7 +259,7 @@ class OrdersAdmin extends Admin
                 [
                     'class' => 'AppBundle:OrderStatus',
                     'property' => 'name',
-                    'label' => 'Сатус заказа',
+                    'label' => 'Статус заказа',
                     'empty_value' => 'Выберите статус заказа',
                     'query_builder' => $this->getStatusQuery(),
                     'constraints' => [new OrderStatusConstraint()]
