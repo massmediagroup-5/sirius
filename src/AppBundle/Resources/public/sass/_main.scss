@@ -6810,7 +6810,7 @@ input[type="checkbox"] {
 }
 
 .warranty-info {
-    //display: table;
+    display: table;
 
     > p {
         text-align: center;
@@ -6825,8 +6825,10 @@ input[type="checkbox"] {
             font-family: $latoBold;
         }
     }
-    .col {
-        float: left;
+    .col {        
+        display: table-cell;
+        vertical-align: middle;
+        float: none;
         width: 50%;
         padding-left: 15px;
         @include border-box();
