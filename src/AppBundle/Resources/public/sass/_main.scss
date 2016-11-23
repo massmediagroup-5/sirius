@@ -8146,7 +8146,7 @@ input[type="checkbox"] {
             @include border-box();
             float: left;
             width: 45%;
-            padding: 10px 0 10px 15px;
+            padding: 10px 10px 10px 15px;
 			-ms-flex-align: stretch;
 			align-items: stretch;
             &:first-child {
@@ -8213,6 +8213,7 @@ input[type="checkbox"] {
         font-weight: 400;
         font-family: $latoBold;
         padding-bottom: 5px;
+        word-wrap: break-word;
     }
 
     ul {
