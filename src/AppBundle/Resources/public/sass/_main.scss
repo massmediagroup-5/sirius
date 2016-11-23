@@ -9688,7 +9688,15 @@ body {
     @extend .btn_blue;
     padding: 0 15px!important;
 }
-.warranty-info__i .text__i em{
+
+.ctable {
+    display: table;
+    table-layout: fixed;
+}
+.ctable .ctable-col{
+    display: table-cell; 
+    padding: 0 15px;    
+}.warranty-info__i .text__i em{
     color: red;
     font-style: normal;
 }
