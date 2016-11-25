@@ -9272,14 +9272,6 @@ input[type="checkbox"] {
 
     .inp {
         position: relative;
-        &:after {
-            content: "";
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            @include translate(0, -50%);
-            @include sized-sprite($icons, select-arr);
-        }
 
         &.dropActive {
             .amount-select-drop {
