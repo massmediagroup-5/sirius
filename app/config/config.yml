@@ -249,68 +249,6 @@ fos_user:
         confirmation:
             enabled: true
 
-fos_elastica:
-    clients:
-        default: { host: 127.0.0.1, port: 9200 }
-    indexes:
-        app:
-            client: default
-            finder:
-            settings:
-                index:
-                    analysis:
-                        analyzer:
-                            my_analyzer:
-                                type: custom
-                                tokenizer: lowercase
-#                                filter   : [my_ngram]
-#                        filter:
-#                            my_ngram:
-#                                type: "nGram"
-#                                min_gram: 3
-#                                max_gram: 10
-            types:
-                products:
-                    mappings:
-                        name:
-                            type: string
-                            analyzer: my_analyzer
-                        article: ~
-                        content:
-                            type: string
-                            analyzer: my_analyzer
-                        characteristics:
-                            type: string
-                            analyzer: my_analyzer
-                        features:
-                            type: string
-                            analyzer: my_analyzer
-                        active:
-                            type: boolean
-                        baseCategory:
-                            type: "object"
-                            properties:
-                                name:
-                                    type: string
-                                    analyzer: my_analyzer
-                        productModels:
-                            type: "object"
-                            properties:
-                                productColors:
-                                    type: "object"
-                                    properties:
-                                        name:
-                                            type: string
-                                            analyzer: my_analyzer
-                                published:
-                                    type: boolean
-                    persistence:
-                        driver: orm
-                        model: AppBundle\Entity\Products
-                        provider: ~
-#                        listener:
-#                            immediate: ~
-                        finder: ~
 
 liip_imagine:
     resolvers:

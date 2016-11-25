@@ -63,75 +63,12 @@ class AjaxController extends Controller
         if ($request->get('search')) {
             $slug = $request->get('search');
 
-            $boolQuery = new \Elastica\Query\BoolQuery();
-
-            $productQuery = new \Elastica\Query\Match();
-            $productQuery->setFieldQuery('name', $slug);
-            $productQuery->setFieldParam('name', 'boost', 3);
-            $productQuery->setFieldParam('name', 'type', 'phrase_prefix');
-            $boolQuery->addShould($productQuery);
-
-            $articleQuery = new \Elastica\Query\Match();
-            $articleQuery->setFieldQuery('article', $slug);
-            $articleQuery->setFieldParam('article', 'boost', 3);
-            $articleQuery->setFieldParam('article', 'type', 'phrase_prefix');
-            $boolQuery->addShould($articleQuery);
-
-            $contentQuery = new \Elastica\Query\Match();
-            $contentQuery->setFieldQuery('content', $slug);
-            $contentQuery->setFieldParam('content', 'boost', 3);
-            $contentQuery->setFieldParam('content', 'type', 'phrase_prefix');
-            $boolQuery->addShould($contentQuery);
-
-            $characteristicsQuery = new \Elastica\Query\Match();
-            $characteristicsQuery->setFieldQuery('characteristics', $slug);
-            $characteristicsQuery->setFieldParam('characteristics', 'boost', 3);
-            $characteristicsQuery->setFieldParam('characteristics', 'type', 'phrase_prefix');
-            $boolQuery->addShould($characteristicsQuery);
-
-            $featuresQuery = new \Elastica\Query\Match();
-            $featuresQuery->setFieldQuery('features', $slug);
-            $featuresQuery->setFieldParam('features', 'boost', 3);
-            $featuresQuery->setFieldParam('features', 'type', 'phrase_prefix');
-            $boolQuery->addShould($featuresQuery);
-
-            $baseCategoryQuery = new \Elastica\Query\Match();
-            $baseCategoryQuery->setFieldQuery('baseCategory.name', $slug);
-            $baseCategoryQuery->setFieldParam('baseCategory.name', 'boost', 3);
-            $baseCategoryQuery->setFieldParam('baseCategory.name', 'type', 'phrase_prefix');
-            $boolQuery->addShould($baseCategoryQuery);
-
-            $productColorsQuery = new \Elastica\Query\Match();
-            $productColorsQuery->setFieldQuery('productModels.productColors.name', $slug);
-            $productColorsQuery->setFieldParam('productModels.productColors.name', 'boost', 3);
-            $productColorsQuery->setFieldParam('productModels.productColors.name', 'type', 'phrase_prefix');
-            $boolQuery->addShould($productColorsQuery);
-
-            $query = \Elastica\Query::create($boolQuery);
-            $client = new \Elastica\Client();
-
-            $resultSet = $client->getIndex('app')->search($query);
-
-            $ids = array_map(function ($res) {
-                return $res->getId();
-            }, $resultSet->getResults());
-
-            if (!$ids) {
-                $this->result['html'] = $this->render('AppBundle:partials:search_drop_results.html.twig', array(
-                    'result' => null,
-                    'slug' => $slug
-                ))->getContent();
-
-                $this->result['status'] = 'OK';
-                return new JsonResponse($this->result);
-            }
-
             $filters = $request->query->all();
+            $filters['search'] = $slug;
 
             try {
                 $data = $this->get('entities')
-                    ->getCollectionsByCategoriesAlias('all', $filters, 9999, 1,
-                        'Products', $ids);
+                    ->getCollectionsByCategoriesAlias('all', $filters, 9999, 1, 'Products');
             } catch (\Doctrine\Orm\NoResultException $e) {
                 $data = null;
             }
