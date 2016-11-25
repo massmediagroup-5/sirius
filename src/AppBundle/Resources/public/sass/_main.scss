@@ -3324,11 +3324,19 @@ input[type="checkbox"] {
 
     .img {
         padding-bottom: 60px;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        height: 414px;
+        display: table;
+        width: 100%;
 
         img {
             max-width: 100%;
-            width: 100%;
             height: auto;
+        }
+        .js_main_alias {
+            display: table-cell;
+            vertical-align: middle;
         }
     }
 
@@ -3902,7 +3910,8 @@ input[type="checkbox"] {
     }
 }
 
-.product {
+.product {    
+    margin-bottom: 30px;
     .side {
         float: left;
         width: 216px;
@@ -3923,7 +3932,7 @@ input[type="checkbox"] {
     h1 {
         font-family: $latoBlack;
         text-align: center;
-        font-size: 48px;
+        font-size: 40px;
         line-height: 50px;
         padding-bottom: 21px;
         color: #050505;
@@ -4586,7 +4595,7 @@ input[type="checkbox"] {
 
     }
     p {
-        color: #c8cbcc;
+        color: #9a9b9b;
         font-family: $lato;
         font-size: 14px;
         line-height: 16px;
@@ -8137,7 +8146,7 @@ input[type="checkbox"] {
             @include border-box();
             float: left;
             width: 45%;
-            padding: 10px 0 10px 15px;
+            padding: 10px 10px 10px 15px;
 			-ms-flex-align: stretch;
 			align-items: stretch;
             &:first-child {
@@ -8204,6 +8213,7 @@ input[type="checkbox"] {
         font-weight: 400;
         font-family: $latoBold;
         padding-bottom: 5px;
+        word-wrap: break-word;
     }
 
     ul {
@@ -9679,7 +9689,15 @@ body {
     @extend .btn_blue;
     padding: 0 15px!important;
 }
-.warranty-info__i .text__i em{
+
+.ctable {
+    display: table;
+    table-layout: fixed;
+}
+.ctable .ctable-col{
+    display: table-cell; 
+    padding: 0 15px;    
+}.warranty-info__i .text__i em{
     color: red;
     font-style: normal;
 }
