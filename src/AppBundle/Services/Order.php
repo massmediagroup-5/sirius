@@ -604,8 +604,8 @@ class Order
                     (new OrderHistoryChangedItem($this->container))->createHistoryItem($order, $fieldName,
                         $orderChange[0], $orderChange[1], $this->getUser());
                 }
-                if ($fieldName == 'payStatus' && $orderChange[1]) {
-                    $doneDate = $orderChange[1]->getCode() == OrderStatusPay::CODE_PAID ? new \DateTime() : null;
+                if ($fieldName == 'status' && $orderChange[1]) {
+                    $doneDate = $orderChange[1]->getCode() == Orders::STATUS_DONE ? new \DateTime() : null;
                     $order->setDoneTime($doneDate);
                 }
                 if ($fieldName == 'status' && $orderChange[1]) {

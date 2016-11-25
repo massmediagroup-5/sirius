@@ -25,7 +25,7 @@ class AddInCartType extends AbstractType
                 'constraints' => [new NotBlank],
                 'choice_attr' => function ($val, $key, $index) {
                     return [
-                        'data-preorderflag' => (int)$val->getPreOrderFlag(),
+                        'data-preorderflag' => (int)$val->getCheckPreOrder(),
                         'data-id' => $val->getId(),
                     ];
                 },

@@ -12,16 +12,16 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
 /**
- * Class NewOrdersAdmin
+ * Class RefusedOrdersAdmin
  * @package AppAdminBundle\Admin
  */
-class SentOrdersAdmin extends OrdersAdmin
+class RefusedOrdersAdmin extends OrdersAdmin
 {
-    protected $baseRouteName = 'sent_orders';
+    protected $baseRouteName = 'refused_orders';
 
-    protected $baseRoutePattern = '/app/sent-orders';
+    protected $baseRoutePattern = '/app/refused-orders';
 
-    protected $statusName = 'sent';
+    protected $statusName = 'refused';
 
     /**
      * @inheritdoc
@@ -30,9 +30,8 @@ class SentOrdersAdmin extends OrdersAdmin
     {
         return function (EntityRepository $er) {
             return $er->createQueryBuilder('s')
-                ->where('s.code IN (:codes)')
-                ->setParameter('codes', ['sent', 'done', 'return', 'refused']);
+                ->where('s.code = :code')
+                ->setParameter('code', 'refused');
         };
     }
-
 }

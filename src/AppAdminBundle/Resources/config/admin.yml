@@ -35,6 +35,13 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отправленые заказы"}
 
+    app.admin.refused_orders:
+        class: AppAdminBundle\Admin\RefusedOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отказы"}
+
+
     app.admin.done_orders:
         class: AppAdminBundle\Admin\DoneOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]

@@ -45,7 +45,6 @@ class ReturnProduct
             'returnDescription'
         ];
         $uow = $this->em->getUnitOfWork();
-        //dd($uow);
 
         if ($product->getId() === null) {
             (new HistoryCreatedItem($this->container, null, self::HISTORY_PREFIX))->createHistoryItem($product);
@@ -54,6 +53,18 @@ class ReturnProduct
 
             foreach ($productChanges as $fieldName => $productChange) {
 
+                if ($productChange[1] == 'Заявка выполнена'){
+
+                    $returnedBonuses = $this->container->get('prices_calculator')->getBonusesToSum($this->getReturnedSum($product->getReturnedSizes()));
+                    $bonuses = $product->getUser()->getBonuses() - $returnedBonuses;
+                    $product->getUser()->setBonuses($bonuses);
+                }
+                if ($productChange[0] == 'Заявка выполнена'){
+
+                    $returnedBonuses = $this->container->get('prices_calculator')->getBonusesToSum($this->getReturnedSum($product->getReturnedSizes()));
+                    $bonuses = $product->getUser()->getBonuses() + $returnedBonuses;
+                    $product->getUser()->setBonuses($bonuses);
+                }
                 if ($productChange[0] != $productChange[1]) {
                     if (in_array($fieldName, $allowedFields)) {
                         (new HistoryChangedItem($this->container, null, self::HISTORY_PREFIX))
@@ -62,9 +73,15 @@ class ReturnProduct
                     }
                 }
             }
-
         }
+    }
 
+    private function getReturnedSum($returnedSizes){
 
+        $sum = 0;
+        foreach($returnedSizes as $size){
+            $sum += $size->getCount() * $size->getSize()->getDiscountedTotalPricePerItem();
+        }
+        return $sum;
     }
 }

@@ -135,6 +135,14 @@ class ProductModelSpecificSize
     }
 
     /**
+     * @return boolean
+     */
+    public function getCheckPreOrder()
+    {
+        return ($this->preOrderFlag and $this->quantity) ? false : true;
+    }
+
+    /**
      * Set quantity
      *
      * @param integer $quantity

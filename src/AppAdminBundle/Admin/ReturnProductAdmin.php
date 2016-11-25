@@ -91,6 +91,8 @@ class ReturnProductAdmin extends Admin
                 ]
             ])
             ->add('order.id', null, ['label' => '№ Заказа'])
+            ->add('order.createTime', null, ['label' => 'Время оформления заказа'])
+            ->add('order.doneTime', null, ['label' => 'Заказ был исполнен'])
             ->addIdentifier('order.fio', null, ['label' => 'Ф.И.О.', 'route' => ['name' => 'edit']])
             ->addIdentifier('user.phone', null, ['label' => 'Телефон', 'route' => ['name' => 'edit']])
             ->addIdentifier('user.email', null, ['label' => 'Email', 'route' => ['name' => 'edit']])
@@ -265,25 +267,8 @@ class ReturnProductAdmin extends Admin
             ->getContainer()
             ->get('doctrine.orm.entity_manager');
 
-        foreach ($this->request->request->get('return_sizes', []) as $return_size){
-            if(array_key_exists('return', $return_size)) {
-                $record = $object->getReturnedSizes()->filter(function ($size) use ($return_size) {
-                    return $size->getSize()->getId() == $return_size['return'];
-                })->first();
-                if (!$record) {
-                    $returnedSizes = new ReturnedSizes();
-                    $returnedSizes->setCount(0)
-                        ->setSize($em->getReference('AppBundle:OrderProductSize', $return_size['return']))
-                        ->setReturnProduct($this->getSubject());
-                    $this->getSubject()->addReturnedSizes($returnedSizes);
-                    $em->persist($returnedSizes);
-                    $em->flush();
-                }
-            }
-        }
-
         foreach ($this->request->request->all() as $key => $value) {
-            if($key == 'return_sizes'){
+            if($key == 'return_sizes') {
                 foreach ($value as $return_size){
                     if(array_key_exists('return', $return_size)) {
                         $orderProductSize = $em->getReference('AppBundle:OrderProductSize', $return_size['return']);
