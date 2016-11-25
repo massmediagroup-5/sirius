@@ -191,6 +191,7 @@ class PricesCalculator
     {
         if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
             $user = $this->container->get('security.context')->getToken()->getUser();
+            $optionsService = $this->container->get('options');
 
             $price = $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
 
@@ -208,14 +209,15 @@ class PricesCalculator
                 $totalPriceWithNewSize += $price;
             }
             if ($user->getOrders()->count() >= 1) {
-                if ($totalPriceWithNewSize > $this->container->get('options')->getParams('startWholesalerPriceAfterOrder')->getValue()) {
+                if ($totalPriceWithNewSize > $optionsService->getParamValue('startWholesalerPriceAfterOrder', 500)) {
                     $price = $wholesalePrice;
                 }
             } else {
-                if ($totalPriceWithNewSize > $this->container->get('options')->getParams('startWholesalerPrice')->getValue()) {
+                if ($totalPriceWithNewSize > $optionsService->getParamValue('startWholesalerPrice', 2500)) {
                     $price = $wholesalePrice;
-                } elseif ($price > $this->container->get('options')->getParams('startDiscountPct')->getValue()) {
-                    $price = $price - ceil($price * 0.1);
+                } elseif ($price > $optionsService->getParamValue('startPreWholesalerPrice', 500)) {
+                    $discountPct = $optionsService->getParamValue('startDiscountPct', 500) * 0.01;
+                    $price = $price - ceil($price * $discountPct);
                 }
             }
             $price -= $price * $user->getDiscount() * 0.01;
