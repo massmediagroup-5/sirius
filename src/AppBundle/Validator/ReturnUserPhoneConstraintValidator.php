@@ -32,7 +32,7 @@ class ReturnUserPhoneConstraintValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if ($this->em->getRepository('AppBundle:Order')->findOneByPhone($value)) {
+        if ($this->em->getRepository('AppBundle:Orders')->findOneByPhone($value)) {
             return true;
         } else {
             $this->context->addViolation($constraint->message);
