@@ -64,7 +64,7 @@ class PriceListAdmin extends Admin
             ->add('model.price', 'string', ['label' => 'Цена продукта'])
             ->add('model.wholesalePrice', 'string', ['label' => 'Оптовая цена продукта'])
             ->add('model.published', null, ['label' => 'Продукт опубликован'])
-            ->add('model.quantity', null, ['label' => 'Количество модели'])
+            ->add('model.quantity', null, ['label' => 'Количество товара'])
             ->add('size.size', 'text', ['label' => 'Размер'])
             ->add('price', 'string', ['label' => 'Цена размера', 'editable' => true])
             ->add('wholesalePrice', 'string', ['label' => 'Оптовая цена размера', 'editable' => true])
