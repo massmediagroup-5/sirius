@@ -92,6 +92,7 @@ class OrdersAdmin extends Admin
                 'expose' => true
             ])
             ->add('cancel_order', $this->getRouterIdParameter() . '/cancel_order')
+            ->add('get_invoice', $this->getRouterIdParameter() . '/get_invoice')
             ->add('cancel_order_change', $this->getRouterIdParameter() . '/cancel_order_change/{history_id}')
             ->add('create_from_callback', 'create_from_callback/{id}', [], []);
         if ($this->statusName == 'waiting_for_departure') {
@@ -202,7 +203,6 @@ class OrdersAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-
         $listMapper
             ->add('identifier', null, ['label' => 'ID'])
             ->addIdentifier('type', 'choice', [

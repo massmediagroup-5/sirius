@@ -195,6 +195,9 @@
     <div class="navbar-right">
         <ul class="nav navbar-nav">
             <li class="dropdown">
+                <a class="btn btn-success btn-invoice" href="{{ path(admin.baseRouteName ~ '_get_invoice', {id: admin.subject.id}) }}">{{ 'btn_invoice'|trans({}, 'SonataAdminBundle') }}</a>
+            </li>
+            <li class="dropdown">
                 <button style="margin-top: 7px" class="btn btn-primary js-filters-toggle"><i class="fa fa-filter"></i> {{ 'btn_filter'|trans({}, 'SonataAdminBundle') }}</button>
             </li>
             <li class="dropdown">

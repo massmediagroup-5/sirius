@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -26,6 +27,7 @@ use NovaPoshta\MethodParameters\MethodParameters;
 use NovaPoshta\MethodParameters\InternetDocument_getDocumentList;
 use NovaPoshta\Models\CounterpartyContact;
 use NovaPoshta\Models\OptionsSeat;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * END NOVAPOSHTA
@@ -491,5 +493,95 @@ class OrderController extends BaseController
                 'admin' => $this->admin
             ])
         ];
+    }
+
+    /**
+     *
+     *
+     */
+    public function getInvoiceAction(){
+
+        $orderObject = $this->admin->getSubject();
+
+        // ask the service for a Excel5
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        $phpExcelObject->getProperties()->setCreator("mmg")
+            ->setTitle("Office 2005 XLSX Test Document")
+            ->setSubject("Office 2005 XLSX Test Document")
+            ->setDescription("Test document for Office 2005 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2005 openxml php")
+            ->setCategory("Test result file");
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('C7', 'Поставщик')
+            ->setCellValue('D7', $this->getProviderName())
+            ->setCellValue('C9', 'sss')
+            ->setCellValue('D9', 'sss')
+            ->setCellValue('C10', 'sss')
+            ->setCellValue('D10', 'sss')
+            ->setCellValue('G13', 'Товарный чек')
+            ->setCellValue('B14', 'от')
+            ->setCellValue('C14', new \DateTime())
+            ->setCellValue('B16', 'N п/п')
+            ->setCellValue('C16', 'Артикул')
+            ->setCellValue('D16', 'Наименование')
+            ->setCellValue('E16', 'Размер')
+            ->setCellValue('F16', 'Цвет')
+            ->setCellValue('G16', 'ед.Измерения')
+            ->setCellValue('H16', 'Кол-во')
+            ->setCellValue('I16', 'Цена')
+            ->setCellValue('J16', 'Скидка')
+            ->setCellValue('K16', 'Цена со скидкой')
+            ->setCellValue('L16', 'Сумма');
+
+        $this->outputSizes($phpExcelObject);
+//        $phpExcelObject->setActiveSheetIndex(0)
+//            ->setCellValue('B17', $this->getProviderName());
+        $phpExcelObject->getActiveSheet()->setTitle('Simple');
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $phpExcelObject->setActiveSheetIndex(0);
+
+        // create the writer
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        // create the response
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // adding headers
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'invoice.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getProviderName(){
+
+        $arr = $this->container->get('options')->getParams('provider_name');
+        return $arr['providerName']['value'];
+    }
+
+
+    private function outputSizes($phpExcelObject){
+
+        $orderObject = $this->admin->getSubject();
+        $i = 17;
+        foreach ($orderObject->getSizes() as $size){
+            $phpExcelObject->getActiveSheet()
+                ->setCellValue("B$i", $size->getQuantity())
+                ->setCellValue('C'.$i, $size->getQuantity())
+                ->setCellValue('D'.$i, $size->getQuantity())
+                ->setCellValue('E'.$i, $size->getQuantity())
+                ->setCellValue('F'.$i, $size->getQuantity())
+                ->setCellValue('G'.$i, $size->getQuantity())
+                ->setCellValue('H'.$i, $size->getQuantity());
+            $i++;
+        }
     }
 }
