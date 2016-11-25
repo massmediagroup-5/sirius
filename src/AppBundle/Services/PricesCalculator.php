@@ -208,13 +208,13 @@ class PricesCalculator
                 $totalPriceWithNewSize += $price;
             }
             if ($user->getOrders()->count() >= 1) {
-                if ($totalPriceWithNewSize > 500) {
+                if ($totalPriceWithNewSize > $this->container->get('options')->getParams('startWholesalerPriceAfterOrder')->getValue()) {
                     $price = $wholesalePrice;
                 }
             } else {
-                if ($totalPriceWithNewSize > 2500) {
+                if ($totalPriceWithNewSize > $this->container->get('options')->getParams('startWholesalerPrice')->getValue()) {
                     $price = $wholesalePrice;
-                } elseif ($price > 500) {
+                } elseif ($price > $this->container->get('options')->getParams('startDiscountPct')->getValue()) {
                     $price = $price - ceil($price * 0.1);
                 }
             }

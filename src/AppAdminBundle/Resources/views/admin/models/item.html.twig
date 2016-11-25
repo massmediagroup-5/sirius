@@ -7,6 +7,11 @@
         От {{ prices.getProductModelMinDiscountedPrice(model)|format_price }}
         до {{ prices.getProductModelMaxDiscountedPrice(model)|format_price }}
     </td>
+    <td>
+        {% if model.quantity %}<span class="label label-success">Да</span>
+        {% else %}<span class="label label-danger">Нет</span>
+        {% endif %}
+    </td>
     <td class="size-count-cell"></td>
 </tr>
 {% for size in model.sizes %}

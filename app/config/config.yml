@@ -18,6 +18,7 @@ parameters:
     sonata.user.admin.user.entity:                      AppBundle\Entity\Users
     sonata.user.admin.user.class:                       AppAdminBundle\Admin\UsersAdmin
     orders.add_bonuses_days_interval:                   14
+    sonata.admin.configuration.filters.persist:         true
 
 imports:
     - { resource: parameters.yml }
