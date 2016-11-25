@@ -8,7 +8,7 @@
         до {{ prices.getProductModelMaxDiscountedPrice(model)|format_price }}
     </td>
     <td>
-        {% if model.quantity %}<span class="label label-success">Да</span>
+        {% if model.allSizesQuantity %}<span class="label label-success">Да</span>
         {% else %}<span class="label label-danger">Нет</span>
         {% endif %}
     </td>
