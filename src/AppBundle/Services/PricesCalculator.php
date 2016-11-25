@@ -216,7 +216,7 @@ class PricesCalculator
                 if ($totalPriceWithNewSize > $optionsService->getParamValue('startWholesalerPrice', 2500)) {
                     $price = $wholesalePrice;
                 } elseif ($price > $optionsService->getParamValue('startPreWholesalerPrice', 500)) {
-                    $discountPct = $optionsService->getParamValue('startDiscountPct', 500) * 0.01;
+                    $discountPct = $optionsService->getParamValue('startDiscountPct', 10) * 0.01;
                     $price = $price - ceil($price * $discountPct);
                 }
             }
