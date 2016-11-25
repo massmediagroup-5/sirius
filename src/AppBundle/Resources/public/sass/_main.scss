@@ -9296,7 +9296,6 @@ input[type="checkbox"] {
         width: 100%;
 
     }
-
     .amount-select-drop {
         position: absolute;
         left: 0;
@@ -9328,7 +9327,11 @@ input[type="checkbox"] {
             }
         }
     }
-
+    .dropActive + .amount-select-drop {
+        opacity: 1;
+        display: block;
+        visibility: visible;
+    }
 }
 
 .user-login-drop {
