@@ -216,10 +216,10 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 break;
             case 'cheap':
                 // TODO: replace with sql COALESCE
-                $query->addOrderBy("$sizeAlias.price", 'ASC');
+                $query->addOrderBy("COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", 'ASC');
                 break;
             case 'expensive':
-                $query->addOrderBy("$sizeAlias.price", 'DESC');
+                $query->addOrderBy("COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", 'DESC');
                 break;
             case 'novelty':
                 //$query->orderBy('prodSkuVnd.priority', 'ASC');
