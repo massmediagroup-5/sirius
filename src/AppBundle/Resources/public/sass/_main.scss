@@ -9458,6 +9458,7 @@ body {
 }
 
 .ctable {
+    width: 100%;
     @include respond-to(mobile) {
         display: block;
     }
@@ -9469,6 +9470,10 @@ body {
         @include respond-to(mobile) {
             display: block;
         }
+    }
+    &:before,
+    &:after {
+        content: none;
     }
 }
 
