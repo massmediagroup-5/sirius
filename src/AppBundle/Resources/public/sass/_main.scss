@@ -9571,6 +9571,12 @@ body {
             justify-content: center;
         }
     }
+    .price {
+        strong {
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+    }
 }
 
 .inform {
