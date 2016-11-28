@@ -390,7 +390,7 @@ class PricesCalculator
      */
     public function getBonusesToSum($sum)
     {
-        return $sum / 100;
+        return floor($sum / 100);
     }
 
     /**
