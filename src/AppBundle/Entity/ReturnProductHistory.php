@@ -28,5 +28,12 @@ class ReturnProductHistory extends History
         $this->returnProduct = $returnProduct;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getHistoriable()
+    {
+        return $this->returnProduct;
+    }
 }
 

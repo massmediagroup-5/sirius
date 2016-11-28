@@ -53,6 +53,8 @@ class HistoryCreatedItem extends AbstractHistoryItem
      */
     public function label()
     {
-        return $this->translator->trans('history.'.$this->getPrefixForLabel().'_created', [], 'AppAdminBundle');
+        return $this->translator->trans('history.' . $this->getPrefixForLabel() . '_created', [
+            ':name' => $this->history->getHistoriable()
+        ], 'AppAdminBundle');
     }
 }

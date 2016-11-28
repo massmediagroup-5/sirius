@@ -36,5 +36,13 @@ class ProductModelsHistory extends History
     {
         return $this->productModel;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHistoriable()
+    {
+        return $this->productModel;
+    }
 }
 
