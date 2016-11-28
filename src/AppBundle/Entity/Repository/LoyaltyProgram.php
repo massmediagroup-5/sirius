@@ -19,6 +19,6 @@ class LoyaltyProgram extends \Doctrine\ORM\EntityRepository
             ->where('loyalty.sumFrom <= :sum AND loyalty.sumTo >= :sum')
             ->setParameter('sum', $sum)
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
     }
 }
