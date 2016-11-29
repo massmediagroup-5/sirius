@@ -1,17 +1,18 @@
 {% extends 'AppBundle:product_return_base.html.twig' %}
 {% block return %}
-<section class="content">
-    <div class="wrap">
-        <div class="content__i">
-            <div class="warranty-info">
-                <div class="warranty-info__i">
-                    <div class="profile-drop__i return-main">
-                        <h2>Оформление возврата</h2>
-                        <div class="row">
-                            <div class="container">
-                                <h3 class="text-center">{{ options.getParamValue('return_success_text') }}</h3>
-                                <div style="text-align: center;">
-                                    <a href="{{ asset(options.getParamValue('return_invoice')) }}" download="return-invoice" class="btn return_btn_blue">Получить форму</a>
+    <section class="content">
+        <div class="wrap">
+            <div class="content__i">
+                <div class="warranty-info">
+                    <div class="warranty-info__i">
+                        <div class="profile-drop__i return-main">
+                            <h2>Оформление возврата</h2>
+                            <div class="row">
+                                <div class="container">
+                                    <h3 class="text-center">{{ options.getParamValue('return_success_text') }} в формате <em>.pdf</em></h3>
+                                    <div style="text-align: center;">
+                                        <a href="{{ asset(options.getParamValue('return_invoice')) }}" download="return-invoice" class="btn return_btn_blue">Получить форму</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -19,6 +20,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock %}

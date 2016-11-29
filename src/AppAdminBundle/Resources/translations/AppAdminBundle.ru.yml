@@ -79,9 +79,9 @@ link_to_cancel_order: Отменить заказ
 
 history:
   field_changed_from_to_by_user: :field_changed изменено с «:before» на «:after» пользователем :user
-  order_created: Заказ создан
+  order_created: Заказ :name создан
   return_product_created: Заявка на возврат создана
-  product_created: Товар создан
+  product_created: Товар :name создан
   order_new_size: Добавлен новый размер :size :count шт. пользователем :user.
   order_update_size: "Изменено количество размера «:size» товара «:name», артикул «:article», цвет «:color» с :before на :after шт. пользователем :user."
   order_remove_size: "Удалено :count шт. размера «:size» товара «:name», артикул «:article», цвет «:color» пользователем :user."
@@ -107,5 +107,5 @@ history:
   stores: Склад доставки
   individualDiscount: Индивидуальная скидка
   additionalSolar: Дополнительные затраты
-  product_models_created: Продукт создан
-  product_model_specific_size_history_created: Размер продукта создан
+  product_models_created: Продукт :name создан
+  product_model_specific_size_history_created: Размер :name продукта создан

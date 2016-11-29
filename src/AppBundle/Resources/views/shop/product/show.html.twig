@@ -242,14 +242,6 @@
                         </div>
                     </div>
                 </div>
-                {% if share.isActualSingleShare(current_model.share) %}
-                    <div class="share-text">
-                        <div class="share-text__i">
-                            <h2>Подробнее об акции</h2>
-                            {{ current_model.share.terms|raw }}
-                        </div>
-                    </div>
-                {% endif %}
                 {{ widget('products.upsell', current_model)|raw }}
                 {{ widget('products.recommended', current_model)|raw }}
                 {{ widget('products.recentlyReviewed')|raw }}

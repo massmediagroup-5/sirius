@@ -406,7 +406,11 @@ class CartItem
                 }
             }
         } else {
-            return $this->sizes;
+            foreach ($this->sizes as $sizeId => $size) {
+                if ($size->$quantityGetter()) {
+                    $singleSizes[$sizeId] = $size;
+                }
+            }
         }
 
         return $singleSizes;

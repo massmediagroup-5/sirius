@@ -36,5 +36,13 @@ class ProductModelSpecificSizeHistory extends History
     {
         return $this->productModelSpecificSize;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHistoriable()
+    {
+        return $this->productModelSpecificSize;
+    }
 }
 

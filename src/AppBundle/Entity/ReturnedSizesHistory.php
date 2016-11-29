@@ -36,5 +36,13 @@ class ReturnedSizesHistory extends History
     {
         return $this->returnedSizes;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHistoriable()
+    {
+        return $this->returnedSizes;
+    }
 }
 

@@ -3324,11 +3324,19 @@ input[type="checkbox"] {
 
     .img {
         padding-bottom: 60px;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        height: 414px;
+        display: table;
+        width: 100%;
 
         img {
             max-width: 100%;
-            width: 100%;
             height: auto;
+        }
+        .js_main_alias {
+            display: table-cell;
+            vertical-align: middle;
         }
     }
 
@@ -3671,6 +3679,21 @@ input[type="checkbox"] {
         padding-bottom: 15px;
         .img {
             margin-bottom: 45px;
+            height: 333px;
+            width: 100%;
+            display: table;
+            img {
+                display: inline-block;
+                vertical-align: middle;
+                width: 100%;
+                max-height: 100%;
+            }
+            &:after {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
         }
         .info {
             border-top: 1px solid;
@@ -3902,7 +3925,8 @@ input[type="checkbox"] {
     }
 }
 
-.product {
+.product {    
+    margin-bottom: 30px;
     .side {
         float: left;
         width: 216px;
@@ -3923,7 +3947,7 @@ input[type="checkbox"] {
     h1 {
         font-family: $latoBlack;
         text-align: center;
-        font-size: 48px;
+        font-size: 40px;
         line-height: 50px;
         padding-bottom: 21px;
         color: #050505;
@@ -4586,7 +4610,7 @@ input[type="checkbox"] {
 
     }
     p {
-        color: #c8cbcc;
+        color: #9a9b9b;
         font-family: $lato;
         font-size: 14px;
         line-height: 16px;
@@ -8137,7 +8161,7 @@ input[type="checkbox"] {
             @include border-box();
             float: left;
             width: 45%;
-            padding: 10px 0 10px 15px;
+            padding: 10px 10px 10px 15px;
 			-ms-flex-align: stretch;
 			align-items: stretch;
             &:first-child {
@@ -8204,6 +8228,7 @@ input[type="checkbox"] {
         font-weight: 400;
         font-family: $latoBold;
         padding-bottom: 5px;
+        word-wrap: break-word;
     }
 
     ul {
@@ -9262,14 +9287,6 @@ input[type="checkbox"] {
 
     .inp {
         position: relative;
-        &:after {
-            content: "";
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            @include translate(0, -50%);
-            @include sized-sprite($icons, select-arr);
-        }
 
         &.dropActive {
             .amount-select-drop {
@@ -9286,7 +9303,6 @@ input[type="checkbox"] {
         width: 100%;
 
     }
-
     .amount-select-drop {
         position: absolute;
         left: 0;
@@ -9318,7 +9334,11 @@ input[type="checkbox"] {
             }
         }
     }
-
+    .dropActive + .amount-select-drop {
+        opacity: 1;
+        display: block;
+        visibility: visible;
+    }
 }
 
 .user-login-drop {
@@ -9438,6 +9458,7 @@ body {
 }
 
 .ctable {
+    width: 100%;
     @include respond-to(mobile) {
         display: block;
     }
@@ -9449,6 +9470,10 @@ body {
         @include respond-to(mobile) {
             display: block;
         }
+    }
+    &:before,
+    &:after {
+        content: none;
     }
 }
 
@@ -9544,6 +9569,12 @@ body {
             align-items: center;
             -ms-flex-pack: center;
             justify-content: center;
+        }
+    }
+    .price {
+        strong {
+            text-decoration: line-through;
+            font-weight: 400;
         }
     }
 }
@@ -9679,7 +9710,18 @@ body {
     @extend .btn_blue;
     padding: 0 15px!important;
 }
-.warranty-info__i .text__i em{
+
+.ctable {
+    display: table;
+    table-layout: fixed;
+}
+.ctable .ctable-col{
+    display: table-cell; 
+    padding: 0 15px;    
+}.warranty-info__i .text__i em{
     color: red;
     font-style: normal;
+}
+.info__i p:last-child{
+    font-weight: bold;
 }

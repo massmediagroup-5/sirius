@@ -139,7 +139,7 @@ class ProductModelSpecificSize
      */
     public function getCheckPreOrder()
     {
-        return ($this->preOrderFlag and $this->quantity) ? false : true;
+        return $this->preOrderFlag and !$this->quantity;
     }
 
     /**

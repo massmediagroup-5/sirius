@@ -26,9 +26,9 @@ class ProductColorsRepository extends BaseRepository
             ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('characteristicValues.categories', 'categories')
-            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
-            ->leftJoin('sizes.shareGroup', 'shareGroup')->addselect('shareGroup')
-            ->leftJoin('shareGroup.share', 'share')->addselect('share')
+            ->innerJoin('productModels.sizes', 'sizes')
+            ->leftJoin('sizes.shareGroup', 'shareGroup')
+            ->leftJoin('shareGroup.share', 'share')
             ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
             ->innerJoin('characteristicValues.characteristics', 'characteristics')
             ->orderBy('colors.name', 'ASC');

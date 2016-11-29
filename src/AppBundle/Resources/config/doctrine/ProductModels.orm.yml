@@ -123,6 +123,7 @@ AppBundle\Entity\ProductModels:
             orphanRemoval: true
         images:
             targetEntity: ProductModelImage
+            orderBy: { 'priority': 'ASC' }
             cascade: ["persist"]
             fetch: LAZY
             mappedBy: model

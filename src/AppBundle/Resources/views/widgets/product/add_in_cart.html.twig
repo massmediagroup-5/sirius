@@ -1,4 +1,4 @@
-{{ form_start(form, {'attr': {'novalidate': true, 'class': 'item-buy-form js_model_form ' ~ (model.preOrderFlag ? 'js_preorder' : ''), 'data-model-id': model.id}}) }}
+{{ form_start(form, {'attr': {'novalidate': true, 'class': 'item-buy-form js_model_form ', 'data-model-id': model.id}}) }}
     <div class="sizes">
         <div class="sizes__i js_sizes">
 
@@ -17,7 +17,7 @@
             <a href="#" class="btn btn_blue btn_buy js_buy_btn">
                 <span>{{ 'Buy'|trans }}</span>
             </a>
-            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart btn_buy'}, 'label': model.preOrderFlag ? 'Pre-order' : 'Buy'}) }}
+            {{ form_widget(form.submit, {'attr': {'class': 'fake-over-btn js_add_in_cart btn_buy'}, 'label': ''}) }}
         </div>
     </div>
 {{ form_end(form) }}

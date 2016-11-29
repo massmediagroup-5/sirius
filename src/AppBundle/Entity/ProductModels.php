@@ -33,7 +33,7 @@ class ProductModels
     private $price = 0.0;
 
     /**
-     * @var string
+     * @var float
      */
     private $oldPrice = 0.0;
 
@@ -210,7 +210,7 @@ class ProductModels
     /**
      * Set oldPrice
      *
-     * @param string $oldPrice
+     * @param float $oldPrice
      *
      * @return ProductModels
      */
@@ -224,11 +224,11 @@ class ProductModels
     /**
      * Get oldPrice
      *
-     * @return string
+     * @return float
      */
     public function getOldPrice()
     {
-        return $this->oldPrice;
+        return (float)$this->oldPrice;
     }
 
     /**
@@ -340,6 +340,16 @@ class ProductModels
         return !(bool)$this->sizes->filter(function (ProductModelSpecificSize $size) {
             return !$size->getPreOrderFlag();
         });
+    }
+
+    /**
+     * @return integer
+     */
+    public function getAllSizesQuantity()
+    {
+        return array_sum(array_map(function ($size) {
+            return $size->getQuantity();
+        }, $this->sizes->toArray()));
     }
 
     /**
