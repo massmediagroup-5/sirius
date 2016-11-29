@@ -77,6 +77,11 @@
                     </div>
                 </div>
                 {% endif %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-success btn-sm btn-outline sonata-ba-action pull-right" href="{{ path(admin.baseRouteName ~ '_get_invoice', {id: admin.subject.id}) }}"><i class="fa fa-plus-circle"></i>{{ 'btn_invoice'|trans({}, 'SonataAdminBundle') }}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

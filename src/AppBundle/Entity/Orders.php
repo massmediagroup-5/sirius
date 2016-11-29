@@ -151,6 +151,11 @@ class Orders
     private $individualDiscount = 0;
 
     /**
+     * @var float
+     */
+    private $loyalityDiscount = 0;
+
+    /**
      * @var string
      */
     private $additionalSolarDescription;
@@ -190,6 +195,10 @@ class Orders
      */
     private $bonusesEnrolled = false;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $smsInfo;
 
     /**
      * Constructor
@@ -1074,9 +1083,20 @@ class Orders
     }
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @return float
      */
-    private $smsInfo;
+    public function getLoyalityDiscount()
+    {
+        return $this->loyalityDiscount;
+    }
+
+    /**
+     * @param float $loyalityDiscount
+     */
+    public function setLoyalityDiscount($loyalityDiscount)
+    {
+        $this->loyalityDiscount = $loyalityDiscount;
+    }
 
 
     /**

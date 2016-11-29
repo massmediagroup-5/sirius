@@ -376,6 +376,22 @@ class PricesCalculator
     }
 
     /**
+     * Subtract loyalty discount from sum when customer is not a wholesaler
+     *
+     * @param $sum
+     * @return number
+     */
+    public function getLoyaltyDiscount($sum)
+    {
+        $isWholesaler = $this->authorizationChecker->isGranted('ROLE_WHOLESALER');
+
+        if (!$isWholesaler && $loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
+            return ceil($loyaltyProgram->getDiscount() / 100 * $sum);
+        }
+        return 0;
+    }
+
+    /**
      * @param $sum
      * @return LoyaltyProgram|null
      */
