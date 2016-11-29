@@ -94,6 +94,11 @@ class Users extends BaseUser
     protected $discount = 0;
 
     /**
+     * @var \DateTime
+     */
+    protected $addBonusesAt = 0;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $orders;
@@ -405,6 +410,22 @@ class Users extends BaseUser
     public function getVkontakteAccessToken()
     {
         return $this->vkontakte_access_token;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getAddBonusesAt()
+    {
+        return $this->addBonusesAt;
+    }
+
+    /**
+     * @param \DateTime $addBonusesAt
+     */
+    public function setAddBonusesAt($addBonusesAt)
+    {
+        $this->addBonusesAt = $addBonusesAt;
     }
 
     /**
