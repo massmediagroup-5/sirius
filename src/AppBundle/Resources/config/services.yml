@@ -104,6 +104,7 @@ services:
         tags:
             - { name: twig.extension }
         arguments: ["@service_container"]
+
     novaposhta:
         class: AppBundle\Services\NovaPoshta
         arguments: ["@doctrine.orm.entity_manager"]
@@ -121,7 +122,11 @@ services:
             - { name: validator.constraint_validator }
 
     return_validator2:
-            class: AppBundle\Validator\ReturnUserPhoneConstraintValidator
-            arguments: ["@doctrine.orm.entity_manager"]
-            tags:
-                - { name: validator.constraint_validator }
+        class: AppBundle\Validator\ReturnUserPhoneConstraintValidator
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: validator.constraint_validator }
+
+    invoice_transformer:
+        class: AppBundle\Services\InvoiceTransformer
+        arguments: [@service_container]
