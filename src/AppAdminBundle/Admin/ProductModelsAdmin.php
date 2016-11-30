@@ -48,7 +48,8 @@ class ProductModelsAdmin extends Admin
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('createTime', null, ['label' => 'Дата создания'])
-            ->add('updateTime', null, ['label' => 'Дата последнего изменения']);
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('sizes.quantity', null, ['label' => 'Товар скоро закончится']);
     }
 
     /**

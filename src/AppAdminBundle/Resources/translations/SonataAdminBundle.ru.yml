@@ -3,3 +3,4 @@ flash_cancel_order: Заказ отменен
 flash_impossible_to_change_pre_order_flag: Невозможно изменить статус предзаказа (в заказе есть размеры для которых предзаказ выключен)
 flash_order_history_item_canceled: Изменения отменены
 flash_order_history_item_canceled_fail: Нельзя отменить данное изменение
+btn_invoice: Получить чек

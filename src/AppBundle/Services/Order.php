@@ -117,6 +117,9 @@ class Order
             $this->em->persist($user);
         }
 
+        $loyalityDiscount = $this->container->get('prices_calculator')->getLoyaltyDiscount($order->getDiscountedTotalPrice());
+        $order->setLoyalityDiscount($loyalityDiscount);
+
         $this->em->persist($order);
 
         $this->em->flush();
