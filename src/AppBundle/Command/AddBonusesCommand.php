@@ -28,7 +28,7 @@ class AddBonusesCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('orders:add_bonuses')
+            ->setName('orders:delete_bonuses')
             ->setDescription('Add bonuses to user');
     }
 
@@ -43,6 +43,7 @@ class AddBonusesCommand extends ContainerAwareCommand
         $this->ordersService = $this->getContainer()->get('order');
 
         $this->ordersService->appendBonusesToOrders();
+        $this->ordersService->deleteBonusesFromUsers();
 
         $output->writeln('Bonuses added!');
     }

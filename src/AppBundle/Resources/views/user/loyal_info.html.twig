@@ -8,23 +8,37 @@
 
         <div class="my-discount-info">
             <p>Состояние на: <strong>{{ 'now'|date('d.m.Y') }}</strong></p>
-
-            <div class="discount-size">
-                <table>
-                    <tbody>
-                    <tr>
-                        <td>
-                            Ваш бонусный счет
-                            <div class="discount-size-processing">
-                                {{ 'labels.user_bonuses_processed'|transchoice(bonusesInProcess, {'%count%': bonusesInProcess}) }}
-                            </div>
-                        </td>
-                        <td><span>{{ app.user.bonuses|round }}
-                                <strong>{{ 'labels.user_bonuses'|transchoice(app.user.bonuses|round) }}</strong></span></td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="">
+                <p>{{ 'labels.user_bonuses'|transchoice(app.user.bonuses|round) }}</p>
+                <p>{{ 'labels.user_bonuses_processed'|transchoice(bonusesInProcess, {'%count%': bonusesInProcess}) }}</p>
+                <button class="btn btn-primary toggle">Подробнее</button>
             </div>
+        </div>
+        <div class="bonuses-table">
+            <table>
+                <tr>
+                    <th colspan="2">Активированные бонусы</th>
+                </tr>
+                <tr>
+                    <td>Срок действия до</td>
+                    <td>Количество</td>
+                </tr>
+                <tr>
+                    <td>{{ deactivateBonusesTime | format_datetime}}</td>
+                    <td>{{ app.user.bonuses }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Неактивированные бонусы</th>
+                </tr>
+                <tr>
+                    <td>Дата активации</td>
+                    <td>Количество</td>
+                </tr>
+                <tr>
+                    <td>{{ dateActivationLastBonus | format_datetime }}</td>
+                    <td>{{ bonusesInProcess }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 {% endblock %}

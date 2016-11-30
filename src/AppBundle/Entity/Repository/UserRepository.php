@@ -22,4 +22,18 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    /**
+     * @param $interval
+     * @return array
+     */
+    public function deleteBonuses($interval)
+    {
+        return $this->_em->createQueryBuilder()
+            ->update($this->_entityName, 'users')
+            ->set('users.bonuses', 0)
+            ->where('users.addBonusesAt <= :dateDeletingBonuses')
+            ->setParameter('dateDeletingBonuses', (new \DateTime())->modify("-$interval days"))
+            ->getQuery()
+            ->execute();
+    }
 }

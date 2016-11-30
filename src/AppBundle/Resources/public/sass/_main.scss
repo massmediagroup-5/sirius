@@ -9725,3 +9725,21 @@ body {
 .info__i p:last-child{
     font-weight: bold;
 }
+.bonuses-table {
+    table {
+        width: 50%;
+        tr {
+            th {
+                border: 1px solid;
+                text-align: center;
+                padding: 10px;
+                background: rgba(34, 159, 255, 0.17);
+            }
+            td {
+
+                padding: 10px 20px;
+                border: 1px solid;
+            }
+        }
+    }
+}
