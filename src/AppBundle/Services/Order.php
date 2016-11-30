@@ -29,6 +29,7 @@ use AppBundle\HistoryItem\OrderHistoryRelationRemovedItem;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class Order
@@ -669,11 +670,23 @@ class Order
             $user->incrementBonuses($this->container->get('prices_calculator')->getBonusesToSum($sum));
 
             $order->setBonusesEnrolled(true);
+            $user->setAddBonusesAt(new \DateTime());
 
             $this->em->persist($order);
             $this->em->persist($user);
             $this->em->flush($user);
         }
+    }
+
+    /**
+     * Delete bonuses from users
+     */
+    public function deleteBonusesFromUsers()
+    {
+        // время из параметров на которое действительны бонусы
+        $paramDeactivateTime = $this->container->get('options')->getParamValue('deactivateBonusesTime');
+
+        $this->em->getRepository('AppBundle:Users')->deleteBonuses($paramDeactivateTime);
     }
 
     /**

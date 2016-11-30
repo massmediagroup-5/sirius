@@ -54,6 +54,19 @@ class OrdersRepository extends EntityRepository
             ->getSingleScalarResult();
     }
 
+
+    public function lastAddedBonusAt($user)
+    {
+        return $this->createQueryBuilder('orders')
+            ->select('orders.updateTime')
+            ->where('orders.users = :id')
+            ->setParameter('id', $user->getId())
+            ->orderBy('orders.updateTime', 'DESC')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getSingleResult();
+    }
+
     /**
      * @param Users $user
      * @param Orders $order
