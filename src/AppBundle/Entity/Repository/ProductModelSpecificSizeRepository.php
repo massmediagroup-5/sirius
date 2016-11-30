@@ -81,6 +81,33 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param $article
+     * @param $color
+     * @param $decorationColor
+     * @param $size
+     * @return mixed
+     */
+    public function findOneByProductArticleColorAndSizeName($article, $color, $decorationColor, $size)
+    {
+        $modelsRepository = $this->_em->getRepository('AppBundle:ProductModels');
+
+        return $this->createQueryBuilder('modelSizes')
+            ->innerJoin('modelSizes.size', 'size')
+            ->innerJoin('modelSizes.model', 'model')
+            ->innerJoin('model.products', 'product')
+            ->innerJoin('model.productColors', 'color')
+            ->leftJoin('model.decorationColor', 'decorationColor')
+            ->andWhere('product.article = :article AND color.name = :color AND size.size = :size')
+            ->addCriteria($modelsRepository->getDecorationColorCriteria($decorationColor))
+            ->setParameter('size', $size)
+            ->setParameter('article', $article)
+            ->setParameter('color', $color)
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult();
+    }
+
+    /**
      * @param ShareSizesGroup $group
      * @return \Doctrine\ORM\Query
      */
