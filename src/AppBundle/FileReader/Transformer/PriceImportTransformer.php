@@ -17,24 +17,18 @@ class PriceImportTransformer implements TransformerInterface
      * @var array
      */
     protected $convertFieldsMap = [
-        'Модель' => 'products.name',
-        'Активность' => 'products.active',
-        'Артикул' => 'products.article',
         'Категория' => 'products.baseCategory.name',
-        'Цена модели' => 'products.price',
-        'Оптовая цена модели' => 'products.wholesalePrice',
+        'Модель' => 'products.name',
         'Цвет' => 'color.name',
         'Цвет отдели' => 'decorationColor.name',
-        'Алиас' => 'model.alias',
-        'Цена продукта' => 'model.price',
-        'Оптовая цена продукта' => 'model.wholesalePrice',
-        'Продукт опубликован' => 'model.published',
-        'Количество модели' => 'model.quantity',
+        'Артикул' => 'products.article',
         'Размер' => 'size',
         'Цена размера' => 'price',
         'Оптовая цена размера' => 'wholesalePrice',
         'Предзаказ' => 'preOrderFlag',
         'Количество размера' => 'quantity',
+        'Активность' => 'products.active',
+        'Продукт опубликован' => 'model.published',
     ];
 
     /**
