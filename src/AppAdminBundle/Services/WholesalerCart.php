@@ -26,7 +26,7 @@ class WholesalerCart
     }
 
     /**
-     * @return array
+     * @return ProductModels[]
      */
     public function getModels()
     {
@@ -66,7 +66,7 @@ class WholesalerCart
 
     /**
      * @param ProductModels $model
-     * @return array
+     * @return OrderProductSize[]
      */
     public function getModelSizes($model)
     {
@@ -77,6 +77,53 @@ class WholesalerCart
             }
         }
         return $sizes;
+    }
+
+    /**
+     * @param ProductModels $model
+     * @return float
+     */
+    public function getModelDiscountedPackagePricePerItem($model)
+    {
+        return array_sum(array_map(function ($size) use ($model) {
+            if ($size->getSize()->getModel()->getId() == $model->getId()) {
+                return $size->getDiscountedTotalPricePerItem();
+            }
+            return 0;
+        }, $this->order->getSizes()->toArray()));
+    }
+
+    /**
+     * @param ProductModels $model
+     * @return float
+     */
+    public function getModelPackagePricePerItem($model)
+    {
+        return array_sum(array_map(function ($size) use ($model) {
+            if ($size->getSize()->getModel()->getId() == $model->getId()) {
+                return $size->getTotalPricePerItem();
+            }
+            return 0;
+        }, $this->order->getSizes()->toArray()));
+    }
+
+    /**
+     * @param ProductModels $model
+     * @return float
+     */
+    public function getModelPackageDiscount($model)
+    {
+        $diff = $this->getModelPackagePricePerItem($model) - $this->getModelDiscountedPackagePricePerItem($model);
+        return $diff / $this->getModelPackagePricePerItem($model) * 100;
+    }
+
+    /**
+     * @param ProductModels $model
+     * @return float
+     */
+    public function getModelDiscountedPackagesPrice($model)
+    {
+        return $this->getModelDiscountedPackagePricePerItem($model) * $this->getPackagesCount($model);
     }
 
     /**
