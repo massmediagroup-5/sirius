@@ -17,7 +17,7 @@
                             <div class="info__i">
                                 <p><strong>{{ item.products.name }}</strong></p>
                                 <p class="price">
-                                    {{ widget('products.prices', item)|raw }}
+                                    {{ prices.getProductModelLowestSpecificSizeDiscountedPrice(item) }} грн.
                                 </p>
                             </div>
                         </div>
