@@ -1,15 +1,6 @@
 {{ form_start(form, {'attr': {'novalidate': true, 'class': 'js_auto_ajax_form', 'data-id': size.id}}) }}
     <div class="inp">
-        {{ form_widget(form.quantity) }}
-        <div class="amount-select-drop">
-            <div class="amount-select-drop__i">
-                <ul>
-                    {% for i in 1..10 %}
-                        <li><a href="#">{{ i }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+        {{ form_widget(form.quantity, {'attr': {'data-placeholder': 'К-во', 'class': 'select'}}) }}
     </div>
     {{ form_widget(form.size, {'attr': {'class': 'js_item_size_id'}}) }}
 {{ form_end(form) }}

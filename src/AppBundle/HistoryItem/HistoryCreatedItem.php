@@ -9,6 +9,7 @@ use AppBundle\Entity\ReturnProductHistory;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\ProductModelSpecificSize;
+use AppBundle\Entity\Users;
 
 /**
  * Class HistoryCreatedItem
@@ -20,13 +21,14 @@ class HistoryCreatedItem extends AbstractHistoryItem
      * @param  $historibleEntity
      * @return History
      */
-    public function createHistoryItem($historibleEntity)
+    public function createHistoryItem($historibleEntity, Users $user = null)
     {
         $setter = 'set' . ucfirst($this->historyPrefix);
         $historyInstanceName = 'AppBundle\Entity\\' . ucfirst($this->historyPrefix) . 'History';
 
         $historyItem = new $historyInstanceName();
         $historyItem->setChangeType(get_called_class());
+        $historyItem->setUser($user);
         $historyItem->$setter($historibleEntity);
         $historibleEntity->addHistory($historyItem);
 
@@ -53,6 +55,9 @@ class HistoryCreatedItem extends AbstractHistoryItem
      */
     public function label()
     {
-        return $this->translator->trans('history.'.$this->getPrefixForLabel().'_created', [], 'AppAdminBundle');
+        return $this->translator->trans('history.' . $this->getPrefixForLabel() . '_created', [
+            ':name' => $this->history->getHistoriable()
+        ], 'AppAdminBundle').' '.$this->history->getUser();
+
     }
 }

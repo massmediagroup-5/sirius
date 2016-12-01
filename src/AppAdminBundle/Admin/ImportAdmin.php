@@ -24,11 +24,6 @@ class ImportAdmin
     const APPEND_TYPE = 1;
 
     /**
-     * Number of article row
-     */
-    const ARTICLE_ROW = 3;
-
-    /**
      * em
      *
      * @var mixed
@@ -92,23 +87,36 @@ class ImportAdmin
      *
      * @param $file
      * @param array $params
+     * @throws \Exception
      */
     public function import($file, $params = [])
     {
         $this->reader = new XlsReader($file, new PriceImportTransformer());
 
-        foreach ($this->reader as $row) {
-            // If valid data
-            if (count($this->validator->validate($row, $this->validationRules())) == 0) {
-                switch (Arr::get($params, 'type')) {
-                    case self::APPEND_TYPE:
-                        $this->updateProduct($row);
-                        break;
-                    case self::ACTUALIZE_TYPE:
-//                        Currently this not used
-//                        $this->actualizeProduct($row);
+        $this->em->getConnection()->beginTransaction();
+
+        try {
+            // Set to zero all quantity
+            if (Arr::get($params, 'type') == self::ACTUALIZE_TYPE) {
+                $this->em->createQueryBuilder()
+                    ->update('AppBundle\Entity\ProductModelSpecificSize', 's')
+                    ->set('s.quantity', '?1')
+                    ->setParameter(1, 0)
+                    ->getQuery()
+                    ->execute();
+            }
+
+            foreach ($this->reader as $row) {
+                // If valid data
+                if (count($this->validator->validate($row, $this->validationRules())) == 0) {
+                    $this->updateSize($row, Arr::get($params, 'type'));
                 }
             }
+
+            $this->em->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->em->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -142,105 +150,49 @@ class ImportAdmin
      *
      * @param integer array data
      */
-    protected function updateProduct($data)
-    {
-        // Process product
-        $product = $this->em->getRepository('AppBundle:Products')->findOneBy(['article' => $data['products.article']]);
-
-        if (!$product) {
-            $product = new Products();
-            $product->setArticle($data['products.article'])
-                ->setActive(true)
-                ->setName($data['products.name'])
-                ->setBaseCategory($this->getCategory($data['products.baseCategory.name']));
-
-            $this->em->persist($product);
-            $this->em->flush();
-        }
-
-        // Process product model
-        $productModel = $this->updateOrCreateProductModel($product, $data);
-
-        // Process product model sizes
-        $this->updateOrCreateSpecificSize($productModel, $data);
-
-        $this->em->flush();
-    }
-
-    /**
-     * @param $data
-     */
-    protected function actualizeProduct($data)
-    {
-        $product = $this->em->getRepository('AppBundle:Products')->findOneBy(['article' => $data['products.article']]);
-
-        $productModel = $this->em->getRepository('AppBundle:ProductModels')->getModelsByProductAndColors($product,
-            $data['color.name'], $data['decorationColor.name']);
-
-        if ($productModel) {
-            $productModel->setQuantity($data['model.quantity']);
-
-            $this->updateOrCreateSpecificSize($productModel, $data);
-
-            $this->em->persist($productModel);
-            $this->em->flush();
-        }
-    }
-
-    /**
-     * @param $product
-     * @param $data
-     * @return \AppBundle\Entity\Products
-     */
-    private function updateOrCreateProductModel($product, $data)
-    {
-        $model = $this->em->getRepository('AppBundle:ProductModels')->getModelsByProductAndColors($product,
-            $data['color.name'], $data['decorationColor.name']);
-
-        if (!$model) {
-            $model = new ProductModels();
-        }
-
-        $model->setAlias($this->getUniqalizedAlias($data['model.alias']))
-            ->setPublished(true)
-            ->setProducts($product)
-            ->setQuantity($data['model.quantity'])
-            ->setPrice($data['model.price'])
-            ->setWholesalePrice($data['model.wholesalePrice'])
-            ->setProductColors($this->getColor($data['color.name']))
-            ->setDecorationColor($this->getColor($data['decorationColor.name']));
-
-        $this->em->persist($model);
-        $this->em->flush();
-
-        return $model;
-    }
-
-    /**
-     * @param $productModel
-     * @param $data
-     * @return \AppBundle\Entity\Products
-     */
-    private function updateOrCreateSpecificSize($productModel, $data)
+    protected function updateSize($data, $importType)
     {
         $specificSize = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->findOneByProductModelAndSizeName($productModel, $data['size']);
+            ->findOneByProductArticleColorAndSizeName(
+                $data['products.article'],
+                $data['color.name'],
+                $data['decorationColor.name'],
+                $data['size']
+            );
 
         if (!$specificSize) {
+            $model = $this->em->getRepository('AppBundle:ProductModels')->getModelsByProductArticleAndColors(
+                $data['products.article'],
+                $data['color.name'],
+                $data['decorationColor.name']
+            );
+            if (!$model) {
+                return;
+            }
             $size = $this->em->getRepository('AppBundle:ProductModelSizes')->findOrCreate(['size' => $data['size']]);
 
             $specificSize = new ProductModelSpecificSize();
-            $specificSize->setSize($size);
+            $specificSize
+                ->setSize($size)
+                ->setModel($model);
         }
-        $specificSize->setQuantity($data['quantity'])
+
+        switch ($importType) {
+            case self::APPEND_TYPE:
+                $specificSize->incrementQuantity($data['quantity']);
+                break;
+            case self::ACTUALIZE_TYPE:
+                $specificSize->setQuantity($data['quantity']);
+        }
+
+        $specificSize
             ->setPrice($data['price'])
             ->setWholesalePrice($data['wholesalePrice'])
-            ->setPreOrderFlag($data['preOrderFlag'])
-            ->setModel($productModel);
+            ->setPreOrderFlag($data['preOrderFlag']);
 
         $this->em->persist($specificSize);
 
-        return $specificSize;
+        $this->em->flush();
     }
 
     /**
@@ -256,73 +208,20 @@ class ImportAdmin
         }
 
         return $this->validationRules = new Collection([
-            'products.name' => new NotBlank(),
-            'products.article' => new NotBlank(),
-            'products.price' => new NotBlank(),
-            'products.wholesalePrice' => new NotBlank(),
+            'products.baseCategory.name' => new Optional(),
+            'products.name' => new Optional(),
             'color.name' => new NotBlank(),
-            'model.alias' => new NotBlank(),
-            'model.price' => new NotBlank(),
-            'model.wholesalePrice' => new NotBlank(),
+            'decorationColor.name' => new Optional(),
+            'products.article' => new NotBlank(),
             'size' => new NotBlank(),
             'price' => new NotBlank(),
             'wholesalePrice' => new NotBlank(),
-            'quantity' => new NotBlank(),
-
             'preOrderFlag' => new Optional(),
+            'quantity' => new NotBlank(),
             'model.quantity' => new Optional(),
             'products.active' => new Optional(),
             'model.published' => new Optional(),
-            'products.baseCategory.name' => new Optional(),
-            'decorationColor.name' => new Optional(),
         ]);
-    }
-
-    /**
-     * Get color
-     *
-     * @param $colorStr
-     * @return mixed
-     */
-    private function getColor($colorStr)
-    {
-        return $colorStr ? $this->em->getRepository('AppBundle:ProductColors')->findOrCreate(['name' => $colorStr]) : null;
-    }
-
-    /**
-     * Get color
-     *
-     * @param $alias
-     * @return mixed
-     */
-    private function getUniqalizedAlias($alias)
-    {
-        if ($this->em->getRepository('AppBundle:ProductModels')->findOneByAlias($alias)) {
-            return $alias . '-' . uniqid();
-        }
-
-        return $alias;
-    }
-
-    /**
-     * Get color
-     *
-     * @param $categoryName
-     * @return mixed
-     */
-    private function getCategory($categoryName)
-    {
-        if ($category = $this->em->getRepository('AppBundle:Categories')->findOneBy(['name' => $categoryName])) {
-            return $category;
-        }
-
-        if ($this->baseCategory) {
-            return $this->baseCategory;
-        }
-
-        $this->baseCategory = $this->em->getRepository('AppBundle:Categories')->findOneBy(['alias' => 'all']);
-
-        return $this->baseCategory;
     }
 
 }

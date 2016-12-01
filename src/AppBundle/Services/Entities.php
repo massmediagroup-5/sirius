@@ -29,6 +29,11 @@ class Entities
     private $container;
 
     /**
+     * @var array
+     */
+    private $newRecentlyViewed = [];
+
+    /**
      * __construct
      *
      * @param EntityManager $em
@@ -211,6 +216,7 @@ class Entities
         }
         if (!isset($recently_viewed[$productModelsId])) {
             $recently_viewed[$productModelsId] = $productModelsId;
+            $this->newRecentlyViewed[$productModelsId] = $productModelsId;
         }
         $this->container->get('session')->set('recently_viewed', $recently_viewed);
     }
@@ -222,9 +228,16 @@ class Entities
      */
     public function getRecentlyViewed()
     {
-        $recently_viewed = $this->container->get('session')->get('recently_viewed');
-        if (isset($recently_viewed)) {
-            return $this->em->getRepository('AppBundle:ProductModels')->getActiveModelsByIds($recently_viewed);
+        $recentlyViewed = $this->container->get('session')->get('recently_viewed');
+        if ($recentlyViewed) {
+            // Skip item when it added by current object (not from session)
+            $newViewedCount = count($this->newRecentlyViewed);
+            // When last ids from session equals to new
+            if (array_slice($recentlyViewed, -$newViewedCount, $newViewedCount, true) == $this->newRecentlyViewed) {
+                $recentlyViewed = array_slice($recentlyViewed, 0, count($recentlyViewed) - $newViewedCount);
+            }
+
+            return $this->em->getRepository('AppBundle:ProductModels')->getActiveModelsByIds($recentlyViewed);
         }
         return [];
     }

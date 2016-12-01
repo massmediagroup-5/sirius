@@ -72,7 +72,23 @@ class UserController extends Controller
             ->getRepository('AppBundle:Orders')
             ->bonusesInProcess($this->getUser());
 
-        return $this->render('AppBundle:user/loyal_info.html.twig', compact('bonusesInProcess'));
+        $lastAddedBonus = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Orders')
+            ->lastAddedBonusAt($this->getUser());
+
+        // время добавления последнего бонуса (неактивированного)
+        $lastAddedBonusAt = $lastAddedBonus['updateTime'];
+
+        // время из параметров на которое действительны бонусы
+        $paramDeactivateTime = $this->container->get('options')->getParamValue('deactivateBonusesTime');
+        // дата активации самого свежего бонуса
+        $dateActivationLastBonus = clone $lastAddedBonusAt;
+        $dateActivationLastBonus->add(new \DateInterval('P14D'));
+
+        $deactivateBonusesTime = $lastAddedBonusAt->add(new \DateInterval('P'. $paramDeactivateTime .'D'));
+
+        return $this->render('AppBundle:user/loyal_info.html.twig', compact('bonusesInProcess', 'deactivateBonusesTime', 'dateActivationLastBonus'));
     }
 
     /**

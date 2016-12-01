@@ -70,9 +70,7 @@ AppBundle\Entity\Users:
                 fixed: false
             column: counterparty_ref
         bonuses:
-            type: decimal
-            precision: 10
-            scale: 2
+            type: integer
             options:
                 unsigned: true
                 default: 0
@@ -86,6 +84,11 @@ AppBundle\Entity\Users:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             column: create_time
+        addBonusesAt:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            column: add_bonuses_at
         updateTime:
             type: datetime
             nullable: false

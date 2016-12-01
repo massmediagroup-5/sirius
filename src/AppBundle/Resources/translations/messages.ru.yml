@@ -51,9 +51,9 @@ labels:
   products_count: '%count% товар|%count% товара|%count% товаров'
   cart_products_packages: 'упаковка|упаковки|упаковок'
   user_bonuses_count: '%count% балл|%count% балла|%count% баллов'
-  user_bonuses: 'балл|балла|баллов'
+  user_bonuses: 'Активные бонусы: %count%'
   cart_products: 'товар|товара|товаров'
-  user_bonuses_processed: 'В процессе обработки: %count% балл|В процессе обработки: %count% балла|В процессе обработки: %count% баллов'
+  user_bonuses_processed: 'Не активированные: %count%'
 
 messages:
   order success: Добавлено в корзину

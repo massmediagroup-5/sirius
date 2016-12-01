@@ -17,10 +17,14 @@ class ChangeProductSizeQuantityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $quantities = range(1, 10);
+
         $builder
-            ->add('quantity', TextType::class, [
+            ->add('quantity', ChoiceType::class, [
                 'required' => true,
                 'data' => isset($options['selected']) ? $options['selected'] : 1,
+                'choices' => array_combine($quantities, $quantities),
+                'placeholder' => '',
                 'constraints' => [new NotBlank]
             ])->add('size', HiddenType::class, [
                 'data' => $options['size'],

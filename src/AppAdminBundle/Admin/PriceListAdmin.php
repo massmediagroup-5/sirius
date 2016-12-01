@@ -74,24 +74,18 @@ class PriceListAdmin extends Admin
 
     public function getExportFields()
     {
-        $exportFields['Модель'] = 'model.products.name';
-        $exportFields['Активность'] = 'model.products.active';
-        $exportFields['Артикул'] = 'model.products.article';
         $exportFields['Категория'] = 'model.products.baseCategory.name';
-        $exportFields['Цена модели'] = 'model.products.price';
-        $exportFields['Оптовая цена модели'] = 'model.products.wholesalePrice';
+        $exportFields['Модель'] = 'model.products.name';
         $exportFields['Цвет'] = 'model.productColors.name';
         $exportFields['Цвет отдели'] = 'model.decorationColor.name';
-        $exportFields['Алиас'] = 'model.alias';
-        $exportFields['Цена продукта'] = 'model.price';
-        $exportFields['Оптовая цена продукта'] = 'model.wholesalePrice';
-        $exportFields['Продукт опубликован'] = 'model.published';
-        $exportFields['Количество модели'] = 'model.quantity';
+        $exportFields['Артикул'] = 'model.products.article';
         $exportFields['Размер'] = 'size.size';
         $exportFields['Цена размера'] = 'price';
         $exportFields['Оптовая цена размера'] = 'wholesalePrice';
         $exportFields['Предзаказ'] = 'preOrderFlag';
         $exportFields['Количество размера'] = 'quantity';
+        $exportFields['Активность'] = 'model.products.active';
+        $exportFields['Продукт опубликован'] = 'model.published';
 
         return $exportFields;
     }

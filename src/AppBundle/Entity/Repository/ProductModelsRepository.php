@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Repository;
 
 use AppBundle\Entity\ShareSizesGroup;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Illuminate\Support\Arr;
@@ -65,6 +66,28 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         } else {
             $builder->andWhere('decorationColor.name IS NULL');
         }
+
+        return $builder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Get product and category info by their aliases.
+     *
+     * @param $productArticle
+     * @param $color
+     * @param $decorationColor
+     * @return mixed
+     */
+    public function getModelsByProductArticleAndColors($productArticle, $color, $decorationColor)
+    {
+        $builder = $this->createQueryBuilder('models')
+            ->innerJoin('models.productColors', 'color')
+            ->leftJoin('models.decorationColor', 'decorationColor')
+            ->innerJoin('models.products', 'products')
+            ->where('products.article = :article AND color.name = :color')
+            ->addCriteria($this->getDecorationColorCriteria($decorationColor))
+            ->setParameter('article', $productArticle)
+            ->setParameter('color', $color);
 
         return $builder->getQuery()->getOneOrNullResult();
     }
@@ -178,10 +201,10 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('characteristicValues.categories', 'categories')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
-            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
-            ->leftJoin('sizes.shareGroup', 'shareGroup')->addselect('shareGroup')
-            ->leftJoin('shareGroup.share', 'share')->addselect('share')
-            ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
+            ->innerJoin('productModels.sizes', 'sizes')
+            ->leftJoin('sizes.shareGroup', 'shareGroup')
+            ->leftJoin('shareGroup.share', 'share')
+            ->innerJoin('sizes.size', 'modelSize')
             ->innerJoin('characteristicValues.characteristics', 'characteristics');
     }
 
@@ -284,4 +307,17 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         return $builder->getQuery();
     }
 
+    /**
+     * @param $decorationColor
+     * @param string $alias
+     * @return Criteria
+     */
+    public function getDecorationColorCriteria($decorationColor, $alias = 'decorationColor')
+    {
+        if ($decorationColor) {
+            return Criteria::create()->where(Criteria::expr()->eq("$alias.name", $decorationColor));
+        } else {
+            return Criteria::create()->where(Criteria::expr()->isNull("$alias.name"));
+        }
+    }
 }

@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 /**
  * History
  */
-class History
+abstract class History
 {
     /**
      * @var integer
@@ -231,4 +231,9 @@ class History
 
         return isset($args[0]) ? Arr::get($additional, $args[0]) : $additional;
     }
+
+    /**
+     * @return mixed
+     */
+    abstract public function getHistoriable();
 }

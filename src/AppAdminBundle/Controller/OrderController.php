@@ -26,6 +26,7 @@ use NovaPoshta\MethodParameters\MethodParameters;
 use NovaPoshta\MethodParameters\InternetDocument_getDocumentList;
 use NovaPoshta\Models\CounterpartyContact;
 use NovaPoshta\Models\OptionsSeat;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * END NOVAPOSHTA
@@ -491,5 +492,15 @@ class OrderController extends BaseController
                 'admin' => $this->admin
             ])
         ];
+    }
+
+    /**
+     *
+     *
+     */
+    public function getInvoiceAction(){
+
+        $orderObject = $this->admin->getSubject();
+        return $this->get('invoice_transformer')->createInvoice($orderObject);
     }
 }

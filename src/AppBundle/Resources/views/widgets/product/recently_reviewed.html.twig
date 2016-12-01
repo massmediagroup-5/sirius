@@ -16,8 +16,9 @@
                         <div class="info">
                             <div class="info__i">
                                 <p><strong>{{ item.products.name }}</strong></p>
-                                <p> {{ prices.getProductModelMinDiscountedPrice(item)|format_price }} грн.</p>
-                                <p>Старая цена: <s>{{ item.oldPrice|format_price }} грн.</s></p>
+                                <p class="price">
+                                    {{ prices.getProductModelLowestSpecificSizeDiscountedPrice(item) }} грн.
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -216,7 +216,7 @@ class PricesCalculator
                 if ($totalPriceWithNewSize > $optionsService->getParamValue('startWholesalerPrice', 2500)) {
                     $price = $wholesalePrice;
                 } elseif ($price > $optionsService->getParamValue('startPreWholesalerPrice', 500)) {
-                    $discountPct = $optionsService->getParamValue('startDiscountPct', 500) * 0.01;
+                    $discountPct = $optionsService->getParamValue('startDiscountPct', 10) * 0.01;
                     $price = $price - ceil($price * $discountPct);
                 }
             }
@@ -376,6 +376,22 @@ class PricesCalculator
     }
 
     /**
+     * Subtract loyalty discount from sum when customer is not a wholesaler
+     *
+     * @param $sum
+     * @return number
+     */
+    public function getLoyaltyDiscount($sum)
+    {
+        $isWholesaler = $this->authorizationChecker->isGranted('ROLE_WHOLESALER');
+
+        if (!$isWholesaler && $loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
+            return ceil($loyaltyProgram->getDiscount() / 100 * $sum);
+        }
+        return 0;
+    }
+
+    /**
      * @param $sum
      * @return LoyaltyProgram|null
      */
@@ -390,7 +406,7 @@ class PricesCalculator
      */
     public function getBonusesToSum($sum)
     {
-        return $sum / 100;
+        return floor($sum / 100);
     }
 
     /**

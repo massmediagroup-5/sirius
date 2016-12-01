@@ -107,7 +107,7 @@ class Product
         $uow = $this->em->getUnitOfWork();
 
         if ($product->getId() === null) {
-            (new HistoryCreatedItem($this->container, null, $historyPrefix))->createHistoryItem($product);
+            (new HistoryCreatedItem($this->container, null, $historyPrefix))->createHistoryItem($product, $this->container->get('security.token_storage')->getToken()->getUser());
         } else {
             $productChanges = $uow->getEntityChangeSet($product);
 

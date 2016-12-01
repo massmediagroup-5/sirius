@@ -36,4 +36,12 @@ class OrderHistory extends History
     {
         return $this->order;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHistoriable()
+    {
+        return $this->order;
+    }
 }

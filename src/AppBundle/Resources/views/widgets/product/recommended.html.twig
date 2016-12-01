@@ -7,12 +7,12 @@
                 <a href="{{ url('product', {'category': item.products.baseCategory.alias,'product': item.alias}) }}">
                     <div class="item__i">
                         <div class="img">
-                            <img src="{{ (item.images.0.link ?: param('no_image')) | imagine_filter('medium') }}" alt="#"/>
+                            <img src="{{ (item.images.0 is defined ? item.images.0.link : param('no_image')) | imagine_filter('medium') }}" alt="#"/>
                         </div>
                         <div class="info">
                             <div class="info__i">
                                 <p><strong>{{ item.products.name }}</strong></p>
-                                <p>{{ widget('products.prices', item)|raw }}</p>
+                                <p class="price">{{ widget('products.prices', item)|raw }}</p>
                             </div>
                         </div>
                     </div>

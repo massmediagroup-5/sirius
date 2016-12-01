@@ -78,3 +78,4 @@ doctrine:
                  soundex: DoctrineExtensions\Query\Mysql\Soundex
                  substring_index: DoctrineExtensions\Query\Mysql\SubstringIndex
                  uuid_short: DoctrineExtensions\Query\Mysql\UuidShort
+                 coalesce: AppBundle\Query\Coalesce

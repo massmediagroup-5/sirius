@@ -3679,6 +3679,21 @@ input[type="checkbox"] {
         padding-bottom: 15px;
         .img {
             margin-bottom: 45px;
+            height: 333px;
+            width: 100%;
+            display: table;
+            img {
+                display: inline-block;
+                vertical-align: middle;
+                width: 100%;
+                max-height: 100%;
+            }
+            &:after {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
         }
         .info {
             border-top: 1px solid;
@@ -9272,14 +9287,6 @@ input[type="checkbox"] {
 
     .inp {
         position: relative;
-        &:after {
-            content: "";
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            @include translate(0, -50%);
-            @include sized-sprite($icons, select-arr);
-        }
 
         &.dropActive {
             .amount-select-drop {
@@ -9451,6 +9458,7 @@ body {
 }
 
 .ctable {
+    width: 100%;
     @include respond-to(mobile) {
         display: block;
     }
@@ -9462,6 +9470,10 @@ body {
         @include respond-to(mobile) {
             display: block;
         }
+    }
+    &:before,
+    &:after {
+        content: none;
     }
 }
 
@@ -9557,6 +9569,12 @@ body {
             align-items: center;
             -ms-flex-pack: center;
             justify-content: center;
+        }
+    }
+    .price {
+        strong {
+            text-decoration: line-through;
+            font-weight: 400;
         }
     }
 }
@@ -9703,4 +9721,25 @@ body {
 }.warranty-info__i .text__i em{
     color: red;
     font-style: normal;
+}
+.info__i p:last-child{
+    font-weight: bold;
+}
+.bonuses-table {
+    table {
+        width: 50%;
+        tr {
+            th {
+                border: 1px solid;
+                text-align: center;
+                padding: 10px;
+                background: rgba(34, 159, 255, 0.17);
+            }
+            td {
+
+                padding: 10px 20px;
+                border: 1px solid;
+            }
+        }
+    }
 }
