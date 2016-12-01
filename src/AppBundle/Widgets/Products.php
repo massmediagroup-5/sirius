@@ -168,8 +168,10 @@ class Products
      */
     public function prices($object)
     {
+        $oldPrice = 0;
         if ($object instanceof ProductModels) {
             $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizePrice($object);
+            $oldPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeOldPrice($object);
             $discountedPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($object);
         } elseif ($object instanceof CartSize) {
             // CartSize instance contain right calculated prices
@@ -183,10 +185,26 @@ class Products
                 'object' => $object,
                 'price' => $price,
                 'discountedPrice' => $discountedPrice,
-                'oldPrice' => $discountedPrice * $this->container->get('options')->getParamValue('old_price_koef'),
+                'oldPrice' => $oldPrice,
             ]
         );
     }
+
+//    /**
+//     * Render old and new prices
+//     *
+//     * @param $object
+//     * @return mixed
+//     */
+//    public function oldPrices($object)
+//    {
+//        $oldPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeOldPrice($object);
+//
+//        return $this->templating->render('AppBundle:widgets/product/old_prices.html.twig', [
+//                'oldPrice' => $oldPrice,
+//            ]
+//        );
+//    }
 
     /**
      * @param $model

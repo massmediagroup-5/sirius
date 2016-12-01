@@ -78,7 +78,7 @@
                                         <h2 class="name">{{ current_model.products.name }}</h2>
                                         <div class="price price_new">
                                             <p class="js_product_price" data-model-id="{{ current_model.id }}">
-                                                {{ widget('products.prices', current_model)|raw }}
+                                                {{ price }}
                                             </p>
                                             {% for size in current_model.sizes %}
                                                 <p class="js_product_price product-info-size-price" data-size-id="{{ size.id }}">
@@ -86,11 +86,9 @@
                                                 </p>
                                             {% endfor %}
                                         </div>
-                                        {% if current_model.oldPrice != 0.00 %}
                                         <div class="price price_old">
-                                            Старая цена: <s>{{ current_model.oldPrice|format_price }} грн.</s>
+                                            Старая цена: <s>{{ oldPrice }} грн.</s>
                                         </div>
-                                        {% endif %}
                                         <div class="color-select">
                                             <div class="color-select__i">
                                                 <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ current_model.products.article }})</p>

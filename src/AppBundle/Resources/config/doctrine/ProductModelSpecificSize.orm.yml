@@ -17,6 +17,13 @@ AppBundle\Entity\ProductModelSpecificSize:
             type: boolean
         quantity:
             type: integer
+        oldPrice:
+            type: decimal
+            nullable: true
+            precision: 8
+            scale: 2
+            options:
+                default: 0.00
     manyToOne:
         model:
             targetEntity: ProductModels

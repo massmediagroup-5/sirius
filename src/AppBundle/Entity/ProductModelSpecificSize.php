@@ -18,6 +18,11 @@ class ProductModelSpecificSize
     private $price = 0;
 
     /**
+     * @var float
+     */
+    private $oldPrice = 0.0;
+
+    /**
      * @var string
      */
     private $wholesalePrice = 0;
@@ -293,6 +298,21 @@ class ProductModelSpecificSize
         return $this->orderedSizes;
     }
 
+    /**
+     * @return float
+     */
+    public function getOldPrice()
+    {
+        return (float)$this->oldPrice;
+    }
+
+    /**
+     * @param float $oldPrice
+     */
+    public function setOldPrice($oldPrice)
+    {
+        $this->oldPrice = $oldPrice;
+    }
 
     /**
      * @return string
