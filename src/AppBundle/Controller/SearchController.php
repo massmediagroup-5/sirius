@@ -34,13 +34,10 @@ class SearchController extends Controller
             ->add('search', 'text', array('label' => false))
             ->add('save', 'submit')
             ->getForm();
-        //dump($form, $request);
         if ($request->isMethod('POST')) {
             $form->submit($request);
-            //dump($form->getData(), $request);
             if ($form->isValid()) {
                 $search = base64_encode($form->getData()['search']);
-                //dump($search);
                 return $this->redirectToRoute(
                     'search',
                     array('search' => urlencode($search))
@@ -65,12 +62,15 @@ class SearchController extends Controller
         if(!$search){
             return $this->redirectToRoute('search', array('search' => urlencode($request->get('search'))), 301);
         }
+
         $slug = urldecode($search);
+        $subSlug = $this->searchTransformer($slug);
 
         $category = 'all';
         $current_page = $request->get('page') ? $request->get('page') : 1;
         $filters = $request->query->all();
         $filters['search'] = $slug;
+        $filters['sub_search'] = $subSlug;
 
         try {
             $entityName = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER') ? 'ProductModels' : 'Products';
@@ -95,4 +95,18 @@ class SearchController extends Controller
         }
     }
 
+    /**
+     * @param $search
+     * @return string
+     */
+    private function searchTransformer($search){
+
+        if (mb_strlen($search) == 4){
+            return mb_substr($search, 0, -1);
+        }
+        if (mb_strlen($search) > 4 ){
+            return mb_substr($search, 0, -2);
+        }
+        return $search;
+    }
 }

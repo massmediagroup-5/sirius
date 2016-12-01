@@ -538,10 +538,13 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             $builder->andWhere('share.id = :shareId')->setParameter('shareId', $share);
         }
         if ($slug = Arr::get($filters, 'search')) {
-            $builder->andWhere("$productAlias.name LIKE :slug")
+            $subSlug = Arr::get($filters, 'sub_search');
+            $builder->andWhere("$productAlias.name LIKE :sub_slug")
                     ->orWhere("$productAlias.article LIKE :slug")
                     ->orWhere("$alias.alias LIKE :slug")
-                    ->orWhere("$characteristicValueAlias.name LIKE :slug")->setParameter('slug', "%$slug%");
+                    ->orWhere("$characteristicValueAlias.name LIKE :sub_slug")
+                    ->setParameter('slug', "%$slug%")
+                    ->setParameter('sub_slug', "%$subSlug%");
         }
         if ($shares = Arr::get($filters, 'shares')) {
             $builder->andWhere('sizes.shareGroup IS NOT NULL')
