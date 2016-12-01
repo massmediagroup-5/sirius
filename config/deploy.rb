@@ -12,8 +12,8 @@ set :log_level, :debug
 set :keep_releases, 2
 
 after 'deploy:starting', 'composer:install_executable'
+after 'deploy:updated', 'doctrine:migrate'
 after 'deploy:updated', 'npm:install'
 after 'deploy:updated', 'bower:install'
 after 'deploy:updated', 'symfony:assets:install'
 after 'deploy:updated', 'assetic:dump'
-after 'deploy:updated', 'doctrine:migrate'
