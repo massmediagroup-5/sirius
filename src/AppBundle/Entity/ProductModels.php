@@ -33,11 +33,6 @@ class ProductModels
     private $price = 0.0;
 
     /**
-     * @var float
-     */
-    private $oldPrice = 0.0;
-
-    /**
      * @var integer
      */
     private $wholesalePrice = 0.0;
@@ -205,30 +200,6 @@ class ProductModels
     public function getPrice()
     {
         return $this->price;
-    }
-
-    /**
-     * Set oldPrice
-     *
-     * @param float $oldPrice
-     *
-     * @return ProductModels
-     */
-    public function setOldPrice($oldPrice)
-    {
-        $this->oldPrice = $oldPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get oldPrice
-     *
-     * @return float
-     */
-    public function getOldPrice()
-    {
-        return (float)$this->oldPrice;
     }
 
     /**

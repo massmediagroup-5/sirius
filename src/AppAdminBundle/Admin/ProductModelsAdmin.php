@@ -115,7 +115,6 @@ class ProductModelsAdmin extends Admin
             ->add('productColors', 'sonata_type_model_list', ['label' => 'Цвет товара'])
             ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])
             ->add('price', 'number', ['label' => 'Цена', 'precision' => 2])
-            ->add('oldPrice', null, ['label' => 'Старая цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('quantity', null, ['label' => 'Количество'])
             ->add('priority', null, ['label' => 'Приоритет'])

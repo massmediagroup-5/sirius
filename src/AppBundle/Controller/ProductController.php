@@ -30,6 +30,8 @@ class ProductController extends Controller
     public function productAction(Products $product, Request $request)
     {
         $currentModel = $product->getProductModels()->first();
+        $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizePrice($currentModel);
+        $oldPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeOldPrice($currentModel);
         $this->get('entities')->setRecentlyViewed($currentModel->getId());
 
         $category_list = $this->get('entities')->getAllActiveCategoriesForMenu();
@@ -53,7 +55,9 @@ class ProductController extends Controller
             'current_model' => $currentModel,
             'models' => $this->get('entities')->getModelsByProduct($product),
             'form' => $form,
-            'quickForm' => $quickForm
+            'quickForm' => $quickForm,
+            'price' => $price,
+            'oldPrice' => $oldPrice
         ]);
     }
 

@@ -70,6 +70,7 @@ class ProductModelSpecificSizeAdmin extends Admin
                 'constraints' => [new ProductPriceConstraint()],
                 'precision' => 2
             ])
+            ->add('oldPrice', null, ['label' => 'Старая цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('quantity', null, ['label' => 'Количество'])
             ->add('preOrderFlag', null, ['label' => 'Предзаказ'])
