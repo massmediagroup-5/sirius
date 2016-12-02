@@ -107,6 +107,10 @@ class ProductModelsAdmin extends Admin
             ->with('Товар', [
                 'class' => 'col-md-12',
             ])
+            ->add('products.article', null, [
+                'label' => 'Артикул',
+                'disabled' => true
+            ])
             ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
             ->add('textLabel', 'text', ['label' => 'Метка', 'required' => false])
             ->add('textLabelColor', 'text',

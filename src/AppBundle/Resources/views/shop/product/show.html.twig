@@ -78,7 +78,7 @@
                                         <h2 class="name">{{ current_model.products.name }}</h2>
                                         <div class="price price_new">
                                             <p class="js_product_price" data-model-id="{{ current_model.id }}">
-                                                {{ price }}
+                                                {{ price }} грн.
                                             </p>
                                             {% for size in current_model.sizes %}
                                                 <p class="js_product_price product-info-size-price" data-size-id="{{ size.id }}">
@@ -86,9 +86,11 @@
                                                 </p>
                                             {% endfor %}
                                         </div>
-                                        <div class="price price_old">
-                                            Старая цена: <s>{{ oldPrice }} грн.</s>
-                                        </div>
+                                        {% if oldPrice %}
+                                            <div class="price price_old">
+                                                Старая цена: <s>{{ oldPrice }} грн.</s>
+                                            </div>
+                                        {% endif %}
                                         <div class="color-select">
                                             <div class="color-select__i">
                                                 <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ current_model.products.article }})</p>
@@ -123,7 +125,7 @@
 
                                                 </div>
                                             </div>
-                                            {% if current_model.products.quantity < current_model.endCount %}
+                                            {% if current_model.getQuantityAllSizes < current_model.endCount %}
                                             <div class="product-message">
                                                     <p>Этот товар скоро закончится</p>
                                             </div>
