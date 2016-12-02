@@ -845,4 +845,13 @@ class ProductModels
         return $this;
     }
 
+    public function getQuantityAllSizes(){
+
+        $quantity = 0;
+        foreach ($this->getSizes() as $size){
+            $quantity += $size->getQuantity();
+        }
+        return $quantity;
+    }
+
 }
