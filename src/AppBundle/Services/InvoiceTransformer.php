@@ -88,6 +88,43 @@ class InvoiceTransformer
 
         //init styles
         $phpExcelObject->getActiveSheet()->getStyle("B16:L$rowCount")->applyFromArray($this->getBorder());
+
+
+        $phpExcelObject->getActiveSheet()->getStyle('D' . ($sizesCount + 24))->applyFromArray(
+            [
+                'borders' => [
+                    'bottom' => [
+                        'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                        'color' => [
+                            'rgb' => ''
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('F' . ($sizesCount + 24) . ':G' . ($sizesCount + 24))->applyFromArray(
+            [
+                'borders' => [
+                    'bottom' => [
+                        'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                        'color' => [
+                            'rgb' => ''
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('B14:C14')->applyFromArray(
+            [
+                'font' => [
+                    'bold' => true
+                ]
+            ]
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle("B16:L$rowCount")->applyFromArray($this->getBorder());
         $phpExcelObject
             ->getActiveSheet()
             ->getStyle('L' . ($sizesCount + 16))
@@ -114,13 +151,34 @@ class InvoiceTransformer
         $phpExcelObject->getActiveSheet()->getStyle('C7:C10')->applyFromArray(
             [
                 'font' => [
-                    'underline' => \PHPExcel_Style_Font::UNDERLINE_SINGLE,
                     'bold' => true
                 ],
                 'alignment' => [
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'horizontal' 	=> \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
                     'wrap' => true
                 ],
+            ]
+        );
+        $phpExcelObject->getActiveSheet()->getStyle('D7:D10')->getAlignment()->applyFromArray(
+            [
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+            ]
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('B' . ($sizesCount + 21))->getAlignment()->applyFromArray(
+            [
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+            ]
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('I' . ($sizesCount + 17).':I' . ($sizesCount + 19))->applyFromArray(
+            [
+                'alignment' => [
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+                ],
+                'font' => [
+                    'bold' => true
+                ]
             ]
         );
 
@@ -144,12 +202,18 @@ class InvoiceTransformer
             ]
         );
 
-        $phpExcelObject->getActiveSheet()->getStyle('B16:L16')->getAlignment()->applyFromArray(
+        $phpExcelObject->getActiveSheet()->getStyle('B16:L16')->applyFromArray(
             [
-                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                'wrap' => true
+                'alignment' => [
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'wrap' => true
+                ],
+                'font' => [
+                    'bold' => true
+                ]
             ]
         );
+
 
         $phpExcelObject->getActiveSheet()->setTitle('Simple');
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -191,12 +255,12 @@ class InvoiceTransformer
         foreach ($orderObject->getSizes() as $size) {
 
             $phpExcelObject->getActiveSheet()
-                ->setCellValue("B$i", $i)
+                ->setCellValue("B$i", $i - 16)
                 ->setCellValue("C$i", $size->getSize()->getModel()->getProducts()->getArticle())
                 ->setCellValue("D$i", $size->getSize()->getModel()->getProducts()->getName())
                 ->setCellValue("E$i", $size->getSize()->getSize())
                 ->setCellValue("F$i", $size->getSize()->getModel()->getProductColors()->getName())
-                ->setCellValue("G$i", 'TODO')
+                ->setCellValue("G$i", 'шт.')
                 ->setCellValue("H$i", $size->getQuantity())
                 ->setCellValue("I$i", $size->getTotalPricePerItem())
                 ->setCellValue("J$i", $this->getDiscount($size) ? $this->getDiscount($size) . ' %' : '')
@@ -251,7 +315,7 @@ class InvoiceTransformer
                     ->setCellValue("D$i", $model->getProducts()->getName())
                     ->setCellValue("E$i", $size['entity']->getSize()->getSize())
                     ->setCellValue("F$i", $model->getProductColors()->getName())
-                    ->setCellValue("G$i", 'пач.')
+                    ->setCellValue("G$i", 'шт.')
                     ->setCellValue("H$i", $size['quantity'])
                     ->setCellValue("I$i", $size['entity']->getTotalPricePerItem())
                     ->setCellValue("J$i", $discountPrc ? $discountPrc . ' %' : '')
@@ -306,8 +370,10 @@ class InvoiceTransformer
      */
     private function getLoyalityDiscount($orderObject)
     {
-
-        return ($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100;
+        if ($orderObject->getDiscountedTotalPrice()){
+            return ($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100;
+        }
+        return false;
     }
 
     private function getFinallyPrice($orderObject)
