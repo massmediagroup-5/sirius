@@ -106,11 +106,15 @@ class ProductModelsAdmin extends Admin
             ->tab('Товар')
             ->with('Товар', [
                 'class' => 'col-md-12',
-            ])
-            ->add('products.article', null, [
-                'label' => 'Артикул',
-                'disabled' => true
-            ])
+            ]);
+        if ($this->getSubject()->getProducts()){
+            $formMapper
+                ->add('products.article', null, [
+                    'label' => 'Артикул',
+                    'disabled' => true
+                ]);
+        }
+        $formMapper
             ->add('alias', null, ['label' => 'Ссылка', 'required' => false])
             ->add('textLabel', 'text', ['label' => 'Метка', 'required' => false])
             ->add('textLabelColor', 'text',
