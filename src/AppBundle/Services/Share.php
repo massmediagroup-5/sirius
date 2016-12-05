@@ -6,6 +6,7 @@ use AppBundle\Entity\CheckAvailability;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\ShareSizesGroup;
+use AppBundle\Entity\ShareSizesGroupDiscount;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -205,6 +206,58 @@ class Share
             return count($sizesGroups) > 1;
         }
         return false;
+    }
+
+    /**
+     * @param ShareSizesGroup $shareGroup
+     * @param ShareSizesGroup $shareGroupCompanion
+     * @return null|ShareSizesGroupDiscount
+     */
+    public function discountForShareGroupCompanion(ShareSizesGroup $shareGroup, ShareSizesGroup $shareGroupCompanion)
+    {
+        $discount = $shareGroup
+            ->getDiscounts()
+            ->filter(function (ShareSizesGroupDiscount $discount) use ($shareGroupCompanion) {
+                return $discount->getCompanion()->getId() == $shareGroupCompanion->getId();
+            })
+            ->first();
+
+        if (!$discount) {
+            $discount = $shareGroupCompanion
+                ->getDiscounts()
+                ->filter(function (ShareSizesGroupDiscount $discount) use ($shareGroup) {
+                    return $discount->getCompanion()->getId() == $shareGroup->getId();
+                })
+                ->first();
+        }
+
+        return $discount;
+    }
+
+    /**
+     * @param ShareSizesGroup $shareGroup
+     * @param ShareSizesGroup $shareGroupCompanion
+     * @param $discountNumber
+     * @return void
+     */
+    public function saveDiscountForCompanion(
+        ShareSizesGroup $shareGroup,
+        ShareSizesGroup $shareGroupCompanion,
+        $discountNumber
+    ) {
+        $discount = $this->discountForShareGroupCompanion($shareGroup, $shareGroupCompanion);
+
+        if (!$discount) {
+            $discount = new ShareSizesGroupDiscount();
+
+            $discount
+                ->setShareGroup($shareGroup)
+                ->setCompanion($shareGroupCompanion);
+        }
+
+        $discount->setDiscount($discountNumber);
+        $this->em->persist($discount);
+        $this->em->flush();
     }
 
 }

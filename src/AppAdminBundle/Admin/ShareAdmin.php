@@ -280,27 +280,18 @@ class ShareAdmin extends Admin
         return json_encode($parameters);
     }
 
-//    public function prePersist($object)
-//    {
-//        $this->uploadImage($object);
-//    }
-//
-//    public function preUpdate($object)
-//    {
-//        $this->uploadImage($object);
-//    }
-//
-//    /**
-//     * @param $object
-//     */
-//    protected function uploadImage($object)
-//    {
-//        $container = $this->getConfigurationPool()->getContainer();
-//
-//        $imagePath = $container->get('uploader')->upload($container->getParameter('upload_shares_img_directory'),
-//            $object->getImage());
-//
-//        $object->setImage($imagePath);
-//    }
+    /**
+     * @param ShareSizesGroup $shareGroup
+     * @param ShareSizesGroup $shareGroupCompanion
+     * @return mixed
+     */
+    public function discountForShareGroupCompanion(ShareSizesGroup $shareGroup, ShareSizesGroup $shareGroupCompanion)
+    {
+        $discount = $this->getConfigurationPool()
+            ->getContainer()
+            ->get('share')
+            ->discountForShareGroupCompanion($shareGroup, $shareGroupCompanion);
 
+        return $discount ? $discount->getDiscount() : 0;
+    }
 }

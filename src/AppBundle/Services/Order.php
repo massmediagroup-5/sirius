@@ -120,6 +120,7 @@ class Order
 
         $loyalityDiscount = $this->container->get('prices_calculator')->getLoyaltyDiscount($order->getDiscountedTotalPrice());
         $order->setLoyalityDiscount($loyalityDiscount);
+        $order->setUpSellDiscount($this->container->get('prices_calculator')->getUpSellShareDiscount($cart));
 
         $this->em->persist($order);
 

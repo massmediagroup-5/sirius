@@ -44,5 +44,28 @@ class ProductModelsHistory extends History
     {
         return $this->productModel;
     }
-}
 
+    /**
+     * Set productModel
+     *
+     * @param \AppBundle\Entity\ProductModels $productModel
+     *
+     * @return ProductModelsHistory
+     */
+    public function setProductModel(\AppBundle\Entity\ProductModels $productModel = null)
+    {
+        $this->productModel = $productModel;
+
+        return $this;
+    }
+
+    /**
+     * Get productModel
+     *
+     * @return \AppBundle\Entity\ProductModels
+     */
+    public function getProductModel()
+    {
+        return $this->productModel;
+    }
+}

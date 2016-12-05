@@ -1,0 +1,22 @@
+AppBundle\Entity\ShareSizesGroupDiscount:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        discount:
+            type: integer
+    manyToOne:
+        shareGroup:
+            targetEntity: ShareSizesGroup
+            fetch: EAGER
+            inversedBy: discounts
+        companion:
+            targetEntity: ShareSizesGroup
+            fetch: EAGER
+            inversedBy: discountCompanions
+    lifecycleCallbacks: {  }

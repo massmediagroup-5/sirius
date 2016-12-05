@@ -34,6 +34,8 @@ AppBundle\Entity\Share:
         endTime:
             type: datetime
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        discount:
+            type: decimal
     oneToMany:
         sizesGroups:
             targetEntity: ShareSizesGroup

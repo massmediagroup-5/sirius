@@ -156,6 +156,11 @@ class Orders
     private $loyalityDiscount = 0;
 
     /**
+     * @var float
+     */
+    private $upSellDiscount = 0;
+
+    /**
      * @var string
      */
     private $additionalSolarDescription;
@@ -750,7 +755,8 @@ class Orders
      */
     public function getIndividualDiscountedTotalPrice()
     {
-        return $this->getDiscountedTotalPrice() - $this->individualDiscount + $this->additionalSolar - $this->getBonuses() - $this->loyalityDiscount;
+        return $this->getDiscountedTotalPrice() - $this->individualDiscount + $this->additionalSolar
+            - $this->getBonuses() - $this->loyalityDiscount - $this->upSellDiscount;
     }
 
     public function getStringForFilter()
@@ -1131,5 +1137,29 @@ class Orders
     public function getSmsInfo()
     {
         return $this->smsInfo;
+    }
+
+    /**
+     * Set upSellDiscount
+     *
+     * @param string $upSellDiscount
+     *
+     * @return Orders
+     */
+    public function setUpSellDiscount($upSellDiscount)
+    {
+        $this->upSellDiscount = $upSellDiscount;
+
+        return $this;
+    }
+
+    /**
+     * Get upSellDiscount
+     *
+     * @return string
+     */
+    public function getUpSellDiscount()
+    {
+        return $this->upSellDiscount;
     }
 }

@@ -69,6 +69,16 @@ class ShareSizesGroup
      */
     private $exceptModelSpecificSizes;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $discounts;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $discountCompanions;
+
 
     /**
      * Constructor
@@ -491,5 +501,73 @@ class ShareSizesGroup
     public function getExceptModelSpecificSizes()
     {
         return $this->exceptModelSpecificSizes;
+    }
+
+    /**
+     * Add discount
+     *
+     * @param \AppBundle\Entity\ShareSizesGroupDiscount $discount
+     *
+     * @return ShareSizesGroup
+     */
+    public function addDiscount(\AppBundle\Entity\ShareSizesGroupDiscount $discount)
+    {
+        $this->discounts[] = $discount;
+
+        return $this;
+    }
+
+    /**
+     * Remove discount
+     *
+     * @param \AppBundle\Entity\ShareSizesGroupDiscount $discount
+     */
+    public function removeDiscount(\AppBundle\Entity\ShareSizesGroupDiscount $discount)
+    {
+        $this->discounts->removeElement($discount);
+    }
+
+    /**
+     * Get discounts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDiscounts()
+    {
+        return $this->discounts;
+    }
+
+    /**
+     * Add discountCompanion
+     *
+     * @param \AppBundle\Entity\ShareSizesGroupDiscount $discountCompanion
+     *
+     * @return ShareSizesGroup
+     */
+    public function addDiscountCompanion(\AppBundle\Entity\ShareSizesGroupDiscount $discountCompanion)
+    {
+        $this->discountCompanions[] = $discountCompanion;
+
+        return $this;
+    }
+
+    /**
+     * Remove discountCompanion
+     *
+     * @param \AppBundle\Entity\ShareSizesGroupDiscount $discountCompanion
+     */
+    public function removeDiscountCompanion(\AppBundle\Entity\ShareSizesGroupDiscount $discountCompanion)
+    {
+        $this->discountCompanions->removeElement($discountCompanion);
+    }
+
+    /**
+     * Get discountCompanions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDiscountCompanions()
+    {
+        return $this->discountCompanions;
     }
 }

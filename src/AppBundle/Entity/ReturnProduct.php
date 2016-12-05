@@ -201,5 +201,38 @@ class ReturnProduct
 
         return $this;
     }
-}
 
+    /**
+     * Add returnedSize
+     *
+     * @param \AppBundle\Entity\ReturnedSizes $returnedSize
+     *
+     * @return ReturnProduct
+     */
+    public function addReturnedSize(\AppBundle\Entity\ReturnedSizes $returnedSize)
+    {
+        $this->returnedSizes[] = $returnedSize;
+
+        return $this;
+    }
+
+    /**
+     * Remove returnedSize
+     *
+     * @param \AppBundle\Entity\ReturnedSizes $returnedSize
+     */
+    public function removeReturnedSize(\AppBundle\Entity\ReturnedSizes $returnedSize)
+    {
+        $this->returnedSizes->removeElement($returnedSize);
+    }
+
+    /**
+     * Remove history
+     *
+     * @param \AppBundle\Entity\ReturnProductHistory $history
+     */
+    public function removeHistory(\AppBundle\Entity\ReturnProductHistory $history)
+    {
+        $this->history->removeElement($history);
+    }
+}

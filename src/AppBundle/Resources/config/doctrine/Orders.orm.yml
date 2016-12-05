@@ -106,6 +106,13 @@ AppBundle\Entity\Orders:
             options:
                 default: 0.00
             column: loyality_discount
+        upSellDiscount:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 2
+            options:
+                default: 0.00
         bonuses:
             type: integer
             nullable: false
