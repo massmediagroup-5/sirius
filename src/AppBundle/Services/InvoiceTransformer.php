@@ -241,7 +241,7 @@ class InvoiceTransformer
      */
     private function getProviderName()
     {
-        return $this->container->get('options')->getParamValue('provider_name');
+        return $this->container->get('options')->getParamValue('providerName');
     }
 
     /**
@@ -371,7 +371,7 @@ class InvoiceTransformer
     private function getLoyalityDiscount($orderObject)
     {
         if ($orderObject->getDiscountedTotalPrice()){
-            return ($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100;
+            return (int)($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100;
         }
         return false;
     }

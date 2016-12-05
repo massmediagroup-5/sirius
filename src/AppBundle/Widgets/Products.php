@@ -170,8 +170,9 @@ class Products
     {
         $oldPrice = 0;
         if ($object instanceof ProductModels) {
-            $price = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizePrice($object);
-            $oldPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeOldPrice($object);
+            $size = $this->container->get('prices_calculator')->getProductModelLowestSpecificSize($object);
+            $price = $size->getPrice();
+            $oldPrice = $size->getOldPrice();
             $discountedPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeDiscountedPrice($object);
         } elseif ($object instanceof CartSize) {
             // CartSize instance contain right calculated prices
