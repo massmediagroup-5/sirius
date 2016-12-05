@@ -85,6 +85,7 @@ class ShareSizesGroup
      */
     public function __construct()
     {
+        $this->discounts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->models = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modelSpecificSizes = new \Doctrine\Common\Collections\ArrayCollection();

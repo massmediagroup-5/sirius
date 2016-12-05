@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Repository;
 
 use AppBundle\Entity\ProductModels;
+use AppBundle\Entity\ShareSizesGroup;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Illuminate\Support\Arr;
@@ -215,11 +216,24 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 $query->addOrderBy("$productAlias.name", 'DESC');
                 break;
             case 'cheap':
-                // TODO: replace with sql COALESCE
-                $query->addOrderBy("COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", 'ASC');
-                break;
             case 'expensive':
-                $query->addOrderBy("COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", 'DESC');
+                $shareGroupQuery = $this->_em->getRepository('AppBundle:ShareSizesGroup')
+                    ->createQueryBuilder('oGroup')
+                    ->select('COUNT(oGroup.id)')
+                    ->join('oGroup.share', 'oShare')
+                    ->where('oShare.id = share.id')
+                    ->addCriteria($this->_em->getRepository('AppBundle:Share')->getActiveCriteria('oShare'));
+
+                $query->addOrderBy("IFELSE(" .
+                    "({$shareGroupQuery->getDQL()}) = 1, " .
+                    "COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price) * (100 - shareGroup.discount) * 0.01, " .
+                    "COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price))",
+                    $sort == 'cheap' ? 'ASC' : 'DESC'
+                );
+
+                foreach ($shareGroupQuery->getParameters() as $parameter) {
+                    $query->setParameter($parameter->getName(), $parameter->getValue());
+                }
                 break;
             case 'novelty':
                 //$query->orderBy('prodSkuVnd.priority', 'ASC');

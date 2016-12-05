@@ -164,14 +164,15 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param string $alias
      * @return Criteria
      */
-    public function getActiveCriteria()
+    public function getActiveCriteria($alias = 'share')
     {
         return Criteria::create()
-            ->andWhere(Criteria::expr()->eq('share.status', 1))
-            ->andWhere(Criteria::expr()->lt('share.startTime', new \DateTime()))
-            ->andWhere(Criteria::expr()->gt('share.endTime', new \DateTime()));
+            ->andWhere(Criteria::expr()->eq("$alias.status", 1))
+            ->andWhere(Criteria::expr()->lt("$alias.startTime", new \DateTime()))
+            ->andWhere(Criteria::expr()->gt("$alias.endTime", new \DateTime()));
     }
 
 }
