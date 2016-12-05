@@ -30,6 +30,14 @@ AppBundle\Entity\ShareSizesGroup:
             targetEntity: ProductModelSpecificSize
             mappedBy: shareGroup
             fetch: LAZY
+        discounts:
+            targetEntity: ShareSizesGroupDiscount
+            mappedBy: shareGroup
+            fetch: LAZY
+        discountCompanions:
+            targetEntity: ShareSizesGroupDiscount
+            mappedBy: companion
+            fetch: LAZY
     manyToMany:
         sizes:
             targetEntity: ProductModelSizes

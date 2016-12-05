@@ -36,4 +36,3 @@ class ReturnProductHistory extends History
         return $this->returnProduct;
     }
 }
-

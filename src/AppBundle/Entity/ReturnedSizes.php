@@ -124,5 +124,14 @@ class ReturnedSizes
     {
         return $this->history;
     }
-}
 
+    /**
+     * Remove history
+     *
+     * @param \AppBundle\Entity\ReturnedSizesHistory $history
+     */
+    public function removeHistory(\AppBundle\Entity\ReturnedSizesHistory $history)
+    {
+        $this->history->removeElement($history);
+    }
+}

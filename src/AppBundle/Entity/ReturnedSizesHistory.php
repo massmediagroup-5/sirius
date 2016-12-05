@@ -45,4 +45,3 @@ class ReturnedSizesHistory extends History
         return $this->returnedSizes;
     }
 }
-

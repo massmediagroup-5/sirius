@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Repository;
 
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -136,6 +137,22 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param $sizesIds
+     * @return array
+     */
+    public function getUpSellSharesForSizes($sizesIds)
+    {
+        return $this->createQueryBuilder('share')
+            ->join('share.sizesGroups', 'groups')
+            ->join('groups.modelSpecificSizes', 'sizes')
+            ->where('sizes.id IN (:ids)')
+            ->addCriteria($this->getActiveCriteria())
+            ->setParameter('ids', $sizesIds)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param QueryBuilder $builder
      * @param $group
      */
@@ -144,6 +161,18 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
         $builder->andWhere('specificSizes.shareGroup <> :group')
             ->andWhere('specificSizes.shareGroup IS NOT NULL')
             ->setParameter('group', $group);
+    }
+
+    /**
+     * @param string $alias
+     * @return Criteria
+     */
+    public function getActiveCriteria($alias = 'share')
+    {
+        return Criteria::create()
+            ->andWhere(Criteria::expr()->eq("$alias.status", 1))
+            ->andWhere(Criteria::expr()->lt("$alias.startTime", new \DateTime()))
+            ->andWhere(Criteria::expr()->gt("$alias.endTime", new \DateTime()));
     }
 
 }

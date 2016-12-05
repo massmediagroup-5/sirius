@@ -140,8 +140,8 @@ class CartSize
      */
     public function getPreOrderDiscountedPrice()
     {
-        return $this->pricesCalculator->getProductModelSpecificSizeInCartDiscountedPrice($this,
-            $this->getPreOrderQuantity());
+        return $this->pricesCalculator->getProductModelSpecificSizeDiscountedPrice($this->size)
+        * $this->getPreOrderQuantity();
     }
 
     /**
@@ -149,8 +149,8 @@ class CartSize
      */
     public function getStandardDiscountedPrice()
     {
-        return $this->pricesCalculator->getProductModelSpecificSizeInCartDiscountedPrice($this,
-            $this->getStandardQuantity());
+        return $this->pricesCalculator->getProductModelSpecificSizeDiscountedPrice($this->size)
+        * $this->getStandardQuantity();
     }
 
     /**
@@ -158,7 +158,7 @@ class CartSize
      */
     public function getDiscountedPrice()
     {
-        return $this->pricesCalculator->getProductModelSpecificSizeInCartDiscountedPrice($this);
+        return $this->pricesCalculator->getProductModelSpecificSizeDiscountedPrice($this->size) * $this->quantity;
     }
 
     /**

@@ -11,6 +11,9 @@
                             <th>ID</th>
                             <th>Имя</th>
                             <th>Скидка</th>
+                            {% for sizesGroup in admin.subject.sizesGroups %}
+                                <th>{{ sizesGroup.name }}</th>
+                            {% endfor %}
                             <th></th>
                         </tr>
                     </thead>
@@ -26,7 +29,15 @@
                                     <input type="text" value="{{ sizesGroup.discount|format_price }}"
                                            name="discount" class="table-input js_group_update"/>
                                 </td>
-                                <td class="control-group">
+                                {% for sizesGroupCompanion in admin.subject.sizesGroups %}
+                                    <td class="control-group">
+                                        <input type="text" name="discounts[{{ sizesGroupCompanion.id }}]"
+                                               data-companion-id="{{ sizesGroupCompanion.id }}"
+                                               class="table-input js_group_update js_group_discount_update"
+                                               value="{{ admin.discountForShareGroupCompanion(sizesGroup, sizesGroupCompanion) }}"/>
+                                    </td>
+                                {% endfor %}
+                                <td class="control-group js_actions">
                                     <button class="btn btn-success btn-xs js_group_add_size">
                                         Добавить размеры
                                     </button>

@@ -45,4 +45,3 @@ class ProductModelSpecificSizeHistory extends History
         return $this->productModelSpecificSize;
     }
 }
-

@@ -3,7 +3,6 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\LoyaltyProgram;
-use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
@@ -298,74 +297,116 @@ class PricesCalculator
     }
 
     /**
-     * @param CartSize $object
-     * @param bool $quantity
+     * @param Cart $cart
      * @return float
      */
-    public function getProductModelSpecificSizeInCartDiscountedPrice(CartSize $object, $quantity = false)
+    public function getUpSellShareDiscount(Cart $cart)
     {
-        /** @var $cart Cart */
-        $cart = $this->container->get('cart');
+        $cartSizesIds = array_map(function ($size) {
+            return $size->getId();
+        }, $cart->getSizesEntities());
 
-        $shareGroup = $object->getSize()->getShareGroup();
-        $share = $shareGroup ? $shareGroup->getShare() : null;
-        $quantity = $quantity === false ? $object->getQuantity() : $quantity;
-        if ($this->container->get('share')->isActualUpSellShare($share)) {
-            $otherSizesInShare = [];
-            foreach ($share->getSizesGroups() as $group) {
-                $sizesIds = array_map(function ($size) {
-                    return $size->getId();
-                }, $cart->getSizesEntities());
+        $shares = $this->em->getRepository('AppBundle:Share')->getUpSellSharesForSizes($cartSizesIds);
 
-                // TODO create event when cart updated and clear query cache
-                $sizesInGroup = $this->em
-                    ->getRepository('AppBundle:ProductModelSpecificSize')
-                    ->createQueryBuilder('specificSize')
-                    ->andWhere('specificSize.shareGroup = :group')
-                    ->andWhere('specificSize.id IN (:specificSizesIds)')
-                    ->setParameter('group', $group)
-                    ->setParameter('specificSizesIds', $sizesIds)
-                    ->getQuery()
-                    ->useQueryCache(true)
-                    ->useResultCache(true)
-                    ->getResult();
+        $discount = 0;
+        foreach ($shares as $share) {
+            if ($this->container->get('share')->isActualUpSellShare($share)) {
+                // Store information about ordered sizes
+                $cartSizesInGroup = [];
 
-                // Select max count of product sizes in action
-                $sizeInGroupIds = array_map(function ($sizeInGroup) {
-                    return $sizeInGroup->getId();
-                }, $sizesInGroup);
+                // When products from each share group is in cart
+                foreach ($share->getSizesGroups() as $group) {
+                    $groupSizesIds = $group->getModelSpecificSizes()->map(function ($size) {
+                        return $size->getId();
+                    })->toArray();
 
-                $cartSizesInGroup = array_filter($cart->getSizes(),
-                    function (CartSize $cartSize) use ($sizeInGroupIds) {
-                        return in_array($cartSize->getSize()->getId(), $sizeInGroupIds);
-                    });
+                    $cartSizes = array_map(function ($size) {
+                        return clone $size;
+                    }, $cart->getSizes());
 
-                $sizeWithMaxQuantity = array_first($cartSizesInGroup);
-                foreach ($cartSizesInGroup as $cartSize) {
-                    if ($cartSize->getQuantity() > $sizeWithMaxQuantity->getQuantity()) {
-                        $sizeWithMaxQuantity = $cartSize;
+                    $cartSizes = array_filter(
+                        $cartSizes,
+                        function (CartSize $cartSize) use ($groupSizesIds) {
+                            return in_array($cartSize->getSize()->getId(), $groupSizesIds);
+                        }
+                    );
+                    $cartSizesInGroup[$group->getId()] = [
+                        'sizes' => $this->orderCartSizesByPrice($cartSizes),
+                        // Sum all sizes quantity
+                        'quantity' => array_sum(array_map(function (CartSize $cartSize) {
+                            return $cartSize->getQuantity();
+                        }, $cartSizes))
+                    ];
+                }
+
+                // Select min sizes quantity among all groups ordered sizes
+                $minQuantity = min(array_map(function ($cartSizes) {
+                    return $cartSizes['quantity'];
+                }, $cartSizesInGroup));
+
+                if ($minQuantity) {
+                    // Add discount for "all groups combination"
+                    if ($share->getDiscount()) {
+                        // Discount for all sizes
+                        $priceToDiscount = 0;
+                        foreach ($share->getSizesGroups() as $group) {
+                            $firstSizes = $this->getFirstSizes($cartSizesInGroup[$group->getId()]['sizes'],
+                                $minQuantity);
+                            foreach ($firstSizes as $cartSizeArr) {
+                                $priceToDiscount += $cartSizeArr->obj->getPricePerItem() * $cartSizeArr->quantity;
+                                $cartSizeArr->obj->decrementQuantity($cartSizeArr->quantity);
+                            }
+                        }
+                        $discount += $priceToDiscount * $share->getDiscount() / 100;
+                    } else {
+                        // Discount for each sizes groups
+                        foreach ($share->getSizesGroups() as $group) {
+                            $discount += $this->decrementSizesAndCalculateDiscount($cartSizesInGroup[$group->getId()]['sizes'],
+                                $minQuantity, $group->getDiscount());
+                        }
                     }
                 }
 
-                $otherSizesInShare[$group->getId()] = $sizeWithMaxQuantity;
-            }
+                // When only one combination from share group is in cart
+                foreach ($share->getSizesGroups() as $index => $group) {
+                    foreach ($share->getSizesGroups()->slice($index + 1) as $groupCompanion) {
 
-            if (count(array_filter($otherSizesInShare)) == $share->getSizesGroups()->count()) {
+                        $cartSizeArr = &$cartSizesInGroup[$group->getId()];
+                        $companionCartSizeArr = &$cartSizesInGroup[$groupCompanion->getId()];
 
-                $minSizesCount = min(array_map(function (CartSize $cartSize) {
-                    return $cartSize->getQuantity();
-                }, $otherSizesInShare));
+                        $minCompanionQuantity = min($cartSizeArr['quantity'],
+                            $companionCartSizeArr['quantity']) - $minQuantity;
 
-                $pricePerItem = $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true);
+                        foreach ([$cartSizeArr, $companionCartSizeArr] as &$inLoopCartSize) {
+                            $companionDiscount = $this->container->get('share')->discountForShareGroupCompanion($group,
+                                $groupCompanion);
+                            if ($companionDiscount) {
+                                $discount += $this->decrementSizesAndCalculateDiscount($inLoopCartSize['sizes'],
+                                    $minCompanionQuantity, $companionDiscount->getDiscount());
+                            }
+                        }
+                    }
+                }
 
-                $price = ($pricePerItem - ceil($shareGroup->getDiscount() * $pricePerItem) * 0.01) * $minSizesCount
-                    + $pricePerItem * ($quantity - $minSizesCount);
+                // Discount for second size
+                foreach ($share->getSizesGroups() as $group) {
+                    $cartSizeArr = &$cartSizesInGroup[$group->getId()];
+                    $companionDiscount = $this->container->get('share')->discountForShareGroupCompanion($group,
+                        $group);
 
-                return $price;
+                    foreach ($cartSizeArr['sizes'] as $cartSize) {
+                        if ($cartSize->getQuantity() > 1) {
+                            if ($companionDiscount) {
+                                $discount += floor($cartSize->getQuantity() / 2) * $cartSize->getPricePerItem()
+                                    * $companionDiscount->getDiscount() / 100;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        return $this->getProductModelSpecificSizeDiscountedPrice($object->getSize(), true) * $quantity;
+        return round($discount, 2);
     }
 
     /**
@@ -378,9 +419,30 @@ class PricesCalculator
         $shareGroup = $object->getShareGroup();
         $share = $shareGroup ? $shareGroup->getShare() : null;
         $price = $this->getProductModelSpecificSizeDiscountedPrice($object);
-        
+
         if ($this->container->get('share')->isActualUpSellShare($share)) {
             $price -= $price * $shareGroup->getDiscount() * 0.01;
+        }
+
+        return $price;
+    }
+
+    /**
+     * @param ProductModelSpecificSize $size
+     * @param ProductModelSpecificSize $companion
+     * @return float
+     */
+    public function getProductModelSpecificSizeUpSellWithCompanionDiscountedPrice(
+        ProductModelSpecificSize $size,
+        ProductModelSpecificSize $companion
+    ) {
+        $discount = $this->container->get('share')->discountForShareGroupCompanion($size->getShareGroup(),
+            $companion->getShareGroup());
+
+        $price = $this->getDiscountedPrice($size);
+
+        if ($discount) {
+            $price -= $price * $discount->getDiscount() / 100;
         }
 
         return $price;
@@ -451,4 +513,57 @@ class PricesCalculator
         return 0;
     }
 
+    /**
+     * @param $cartSizes
+     * @return array
+     */
+    private function orderCartSizesByPrice($cartSizes)
+    {
+        usort($cartSizes, function ($a, $b) {
+            if ($a->getPricePerItem() == $b->getPricePerItem()) {
+                return 0;
+            }
+            return ($a->getPricePerItem() < $b->getPricePerItem()) ? -1 : 1;
+        });
+
+        return $cartSizes;
+    }
+
+    /**
+     * @param $cartSizes
+     * @param $quantity
+     * @param $discountPrc
+     * @return float
+     */
+    private function decrementSizesAndCalculateDiscount($cartSizes, $quantity, $discountPrc)
+    {
+        $discountedMoney = 0;
+
+        foreach ($this->getFirstSizes($cartSizes, $quantity) as $cartSizeArr) {
+            $priceToDiscount = $cartSizeArr->obj->getPricePerItem() * $cartSizeArr->quantity;
+            $discountedMoney += $priceToDiscount * $discountPrc / 100;
+            $cartSizeArr->obj->decrementQuantity($cartSizeArr->quantity);
+        }
+
+        return $discountedMoney;
+    }
+
+    /**
+     * Return object with cart size and quantity which satisfy $quantity param
+     *
+     * @param $cartSizes
+     * @param $quantity
+     * @return \Generator
+     */
+    private function getFirstSizes($cartSizes, $quantity)
+    {
+        foreach ($cartSizes as $cartSize) {
+            $toDecrementQuantity = min($quantity, $cartSize->getQuantity());
+            $quantity -= $toDecrementQuantity;
+            yield (object)['quantity' => $toDecrementQuantity, 'obj' => $cartSize];
+            if ($quantity == 0) {
+                break;
+            }
+        }
+    }
 }

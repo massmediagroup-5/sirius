@@ -13,7 +13,14 @@
                 <div class="info__i">
                     <p><strong>{{ size.model.products.name }}</strong></p>
 
-                    <p>{{ prices.getProductModelSpecificSizeUpSellDiscountedPrice(size) }} грн.</p>
+                    <p>
+                        {% if companionFlag %}
+                            {{ price }}
+                        {% else %}
+                            {{ prices.getProductModelSpecificSizeUpSellDiscountedPrice(size) }}
+                        {% endif %}
+                        грн.
+                    </p>
                 </div>
             </div>
         </div>

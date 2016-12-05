@@ -1,12 +1,10 @@
 <div class="last-viewed__i complect">
 
     {{ include('AppBundle:shop/product/upsell_item.html.twig', {size: currentSize, flagClass: 'flag_your',
-        flagContent: 'Ваш товар' ~ (currentDiscount ? ' ' ~ currentDiscount ~ '%')}) }}
+        flagContent: 'Ваш товар' ~ (currentDiscount ? ' ' ~ currentDiscount ~ '%'), price: sizePrice}) }}
 
-    {% for item in upSell %}
-        {{ include('AppBundle:shop/product/upsell_item.html.twig', {size: item.obj, flagClass: 'flag_percent',
-            flagContent: item.discount ? item.discount ~ '%' : false}) }}
-    {% endfor %}
+    {{ include('AppBundle:shop/product/upsell_item.html.twig', {size: companion, flagClass: 'flag_percent',
+        flagContent: companionDiscount ? companionDiscount ~ '%' : false, price: companionPrice}) }}
 
     <div class="item item-complect buy-row">
         <p>{{ totalSum }} грн.</p>

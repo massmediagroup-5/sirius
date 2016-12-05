@@ -72,6 +72,13 @@ class Share
      */
     private $image;
 
+    /**
+     * Discount when products from all groups are in cart
+     *
+     * @var string
+     */
+    private $discount;
+
 
     /**
      * Constructor
@@ -419,5 +426,29 @@ class Share
     public function __toString()
     {
         return $this->getName();
+    }
+
+    /**
+     * Set discount
+     *
+     * @param string $discount
+     *
+     * @return Share
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+
+        return $this;
+    }
+
+    /**
+     * Get discount
+     *
+     * @return string
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
     }
 }

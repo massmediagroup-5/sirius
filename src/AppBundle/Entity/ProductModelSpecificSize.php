@@ -363,6 +363,14 @@ class ProductModelSpecificSize
         return $this->shareGroup && $this->shareGroup->getId() == $shareGroup->getId();
     }
 
+    /**
+     * @return Share|bool
+     */
+    public function getShare()
+    {
+        return $this->shareGroup ? $this->shareGroup->getShare() : false;
+    }
+
     public function addHistory($history)
     {
         $this->history[] = $history;
@@ -378,4 +386,14 @@ class ProductModelSpecificSize
         return $this->history;
     }
 
+
+    /**
+     * Remove history
+     *
+     * @param \AppBundle\Entity\ProductModelSpecificSizeHistory $history
+     */
+    public function removeHistory(\AppBundle\Entity\ProductModelSpecificSizeHistory $history)
+    {
+        $this->history->removeElement($history);
+    }
 }

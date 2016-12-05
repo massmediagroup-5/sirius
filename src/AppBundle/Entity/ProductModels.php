@@ -854,4 +854,13 @@ class ProductModels
         return $quantity;
     }
 
+    /**
+     * Remove history
+     *
+     * @param \AppBundle\Entity\ProductModelsHistory $history
+     */
+    public function removeHistory(\AppBundle\Entity\ProductModelsHistory $history)
+    {
+        $this->history->removeElement($history);
+    }
 }
