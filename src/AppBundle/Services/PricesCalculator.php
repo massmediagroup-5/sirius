@@ -248,12 +248,27 @@ class PricesCalculator
      * @param ProductModels $object
      * @return float
      */
-    public function getProductModelLowestSpecificSizeOldPrice(ProductModels $object)
+    public function getProductModelLowestSpecificSize(ProductModels $object)
     {
         $sizes = $object->getSizes()->toArray();
-        return count($sizes) ? min(array_map(function ($item) {
-            return $item->getOldPrice();
-        }, $object->getSizes()->toArray())) : 0;
+        usort($sizes, function ($a, $b) {
+            $aPrice = $this->getProductModelSpecificSizePrice($a);
+            $bPrice = $this->getProductModelSpecificSizePrice($b);
+            if ($aPrice == $bPrice) {
+                return 0;
+            }
+            return $aPrice > $bPrice ? 1 : -1;
+        });
+        return array_shift($sizes);
+    }
+
+    /**
+     * @param ProductModelSpecificSize $object
+     * @return float
+     */
+    public function getProductModelSpecificSizeOldPrice(ProductModelSpecificSize $object)
+    {
+        return $object->getOldPrice();
     }
 
     /**

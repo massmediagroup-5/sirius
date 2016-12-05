@@ -241,7 +241,7 @@ class InvoiceTransformer
      */
     private function getProviderName()
     {
-        return $this->container->get('options')->getParamValue('provider_name');
+        return $this->container->get('options')->getParamValue('providerName');
     }
 
     /**
