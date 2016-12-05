@@ -310,8 +310,6 @@ var SizesGroupControl = (function () {
         this.$content.find('.js_group_remove').on('click', this.removeGroup.bind(this));
         this.$content.find('.js_group_add_size').on('click', this.selectSizes.bind(this));
         this.$content.find('.js_group_update').on('change', this.updateGroup.bind(this));
-        this.$content.find('.js_group_discount_update').on('change keyup', this.updateDiscounts.bind(this));
-        $(document).on('groups.discount_changed', this.discountChangedHandler.bind(this));
     };
 
     SizesGroupControl.prototype.removeGroup = function (e) {
@@ -330,17 +328,6 @@ var SizesGroupControl = (function () {
     SizesGroupControl.prototype.selectSizes = function (e) {
         e.preventDefault();
         selectSizeDialog.openAddSizeDialog(this.$content.data('group-id'));
-    };
-
-    SizesGroupControl.prototype.updateDiscounts = function (e) {
-        var $this = $(e.target);
-        $(document).trigger('groups.discount_changed', [$this.data('companion-id'), this.$content.data('group-id'), $this.val()]);
-    };
-
-    SizesGroupControl.prototype.discountChangedHandler = function (e, companionId, id, value) {
-        if (companionId == this.$content.data('group-id')) {
-            this.$content.find('.js_group_discount_update[data-companion-id="' + id + '"]').val(value);
-        }
     };
 
     SizesGroupControl.prototype.successSubmit = function (response) {

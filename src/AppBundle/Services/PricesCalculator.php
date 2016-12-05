@@ -428,6 +428,27 @@ class PricesCalculator
     }
 
     /**
+     * @param ProductModelSpecificSize $size
+     * @param ProductModelSpecificSize $companion
+     * @return float
+     */
+    public function getProductModelSpecificSizeUpSellWithCompanionDiscountedPrice(
+        ProductModelSpecificSize $size,
+        ProductModelSpecificSize $companion
+    ) {
+        $discount = $this->container->get('share')->discountForShareGroupCompanion($size->getShareGroup(),
+            $companion->getShareGroup());
+
+        $price = $this->getDiscountedPrice($size);
+
+        if ($discount) {
+            $price -= $price * $discount->getDiscount() / 100;
+        }
+
+        return $price;
+    }
+
+    /**
      * Subtract loyalty discount from sum when customer is not a wholesaler
      *
      * @param $sum

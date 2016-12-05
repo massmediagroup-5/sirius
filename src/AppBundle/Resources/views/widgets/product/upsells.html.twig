@@ -1,0 +1,10 @@
+<div class="last-viewed">
+    <h2>Вместе дешевле</h2>
+    {% for upSell in upSells %}
+        {% if upSell.companionFlag %}
+            {{ include('AppBundle:widgets/product/companion_upsell.html.twig', upSell) }}
+        {% else %}
+            {{ include('AppBundle:widgets/product/upsell.html.twig', upSell) }}
+        {% endif %}
+    {% endfor %}
+</div>

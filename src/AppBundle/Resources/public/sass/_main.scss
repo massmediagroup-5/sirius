@@ -9548,10 +9548,10 @@ body {
                 margin-bottom: 22px;
             }
         }
-        .owl-item:nth-child(4n+1) .item:before {
+        .owl-item:first-child .item:before {
             content: none;
         }
-        .owl-item:nth-child(4n+4) .item:before {
+        .owl-item:last-child .item:before {
             content: '=';
             margin-left: -40px;
             font-size: 50px;

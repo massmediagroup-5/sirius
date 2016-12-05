@@ -126,35 +126,84 @@ class Products
     {
         if ($this->container->get('share')->isActualUpSellShare($model->getShare())) {
             $priceCalculator = $this->container->get('prices_calculator');
-            $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($model->getSizes()->first());
             $currentShareGroup = $model->getSizes()->first()->getShareGroup();
             $currentSize = $model->getSizes()->first();
 
+            // Main group upSell
+            $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($model->getSizes()->first());
             $sizesGroups = $model->getShare()->getSizesGroups()->getValues();
             $upSellGroups = array_filter($sizesGroups, function ($group) use ($currentShareGroup) {
                 return $group->getId() != $currentShareGroup->getId();
             });
 
             // Select one product from each group
-            $upSell = array_map(function (ShareSizesGroup $sizesGroup) {
+            $allUpSellSizes = array_map(function (ShareSizesGroup $sizesGroup) use($priceCalculator) {
                 $sizes = $sizesGroup->getModelSpecificSizes()->getValues();
                 return $sizes[array_rand($sizes)];
             }, $upSellGroups);
 
-            $totalSum += round(array_sum(array_map(function (ProductModelSpecificSize $size) use($priceCalculator) {
+            $upSell = array_map(function (ProductModelSpecificSize $size) use($priceCalculator) {
+                return ['obj' => $size, 'discount' => $size->getShareGroup()->getDiscount()];
+            }, $allUpSellSizes);
+
+            $totalSum += round(array_sum(array_map(function ($size) use($priceCalculator) {
                 return $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($size);
-            }, $upSell)));
+            }, $allUpSellSizes)));
 
             // Create form
-            $allUpSellSizes = $upSell;
-            $allUpSellSizes[] = $model->getSizes()->first();
+            $allUpSellSizes[] = $currentSize;
             $form = $this->container->get('form.factory')->create(AddUpSellInCartType::class, null, [
                 'action' => $this->container->get('router')->generate('cart_add_many'),
                 'sizes' => $allUpSellSizes
             ])->createView();
 
-            return $this->templating->render('AppBundle:widgets/product/upsell.html.twig',
-                compact('model', 'upSell', 'totalSum', 'form', 'currentSize'));
+            $currentDiscount = $currentShareGroup->getDiscount();
+            $companionFlag = false;
+
+            $upSells[] = compact('upSell', 'totalSum', 'form', 'currentDiscount', 'companionFlag');
+
+
+            // Combinations upSell
+            foreach ($model->getShare()->getSizesGroups() as $group) {
+                $discount = $this->container->get('share')->discountValueForShareGroupCompanion($currentShareGroup,
+                    $group);
+                $companionDiscount = $this->container->get('share')->discountValueForShareGroupCompanion($group,
+                    $currentShareGroup);
+                if ($discount || $companionDiscount) {
+                    // When discount 1 + 1 for same group - select same size
+                    if ($group->getId() == $currentShareGroup->getId()) {
+                        $companion = $currentSize;
+                    } else {
+                        $sizes = $group->getModelSpecificSizes()->getValues();
+                        $companion = $sizes[array_rand($sizes)];
+                    }
+                    $sizePrice = $priceCalculator->getProductModelSpecificSizeUpSellWithCompanionDiscountedPrice($currentSize,
+                        $companion);
+                    $companionPrice = $priceCalculator->getProductModelSpecificSizeUpSellWithCompanionDiscountedPrice($companion,
+                        $currentSize);
+
+                    $form = $this->container->get('form.factory')->create(AddUpSellInCartType::class, null, [
+                        'action' => $this->container->get('router')->generate('cart_add_many'),
+                        'sizes' => [$currentSize, $companion]
+                    ])->createView();
+
+                    $upSells[] = [
+                        'companion' => $companion,
+                        'companionDiscount' => $companionDiscount,
+                        'totalSum' => $sizePrice + $companionPrice,
+                        'form' => $form,
+                        'sizePrice' => $sizePrice,
+                        'companionPrice' => $companionPrice,
+                        'currentDiscount' => $discount,
+                        'companionFlag' => true
+                    ];
+                }
+            }
+
+            return $this->templating->render(
+                'AppBundle:widgets/product/upsells.html.twig',
+                compact('upSells', 'model', 'currentSize')
+            );
         }
         
         return null;

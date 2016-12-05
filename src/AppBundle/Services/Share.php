@@ -222,16 +222,19 @@ class Share
             })
             ->first();
 
-        if (!$discount) {
-            $discount = $shareGroupCompanion
-                ->getDiscounts()
-                ->filter(function (ShareSizesGroupDiscount $discount) use ($shareGroup) {
-                    return $discount->getCompanion()->getId() == $shareGroup->getId();
-                })
-                ->first();
-        }
-
         return $discount;
+    }
+
+    /**
+     * @param ShareSizesGroup $shareGroup
+     * @param ShareSizesGroup $shareGroupCompanion
+     * @return float
+     */
+    public function discountValueForShareGroupCompanion(ShareSizesGroup $shareGroup, ShareSizesGroup $shareGroupCompanion)
+    {
+        $discount = $this->discountForShareGroupCompanion($shareGroup, $shareGroupCompanion);
+
+        return $discount ? $discount->getDiscount() : 0;
     }
 
     /**
