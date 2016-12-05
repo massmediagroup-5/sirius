@@ -346,9 +346,24 @@ class PricesCalculator
 
                 if ($minQuantity) {
                     // Add discount for "all groups combination"
-                    foreach ($share->getSizesGroups() as $group) {
-                        $discount += $this->decrementSizesAndCalculateDiscount($cartSizesInGroup[$group->getId()]['sizes'],
-                            $minQuantity, $group->getDiscount());
+                    if ($share->getDiscount()) {
+                        // Discount for all sizes
+                        $priceToDiscount = 0;
+                        foreach ($share->getSizesGroups() as $group) {
+                            $firstSizes = $this->getFirstSizes($cartSizesInGroup[$group->getId()]['sizes'],
+                                $minQuantity);
+                            foreach ($firstSizes as $cartSizeArr) {
+                                $priceToDiscount += $cartSizeArr->obj->getPricePerItem() * $cartSizeArr->quantity;
+                                $cartSizeArr->obj->decrementQuantity($cartSizeArr->quantity);
+                            }
+                        }
+                        $discount += $priceToDiscount * $share->getDiscount() / 100;
+                    } else {
+                        // Discount for each sizes groups
+                        foreach ($share->getSizesGroups() as $group) {
+                            $discount += $this->decrementSizesAndCalculateDiscount($cartSizesInGroup[$group->getId()]['sizes'],
+                                $minQuantity, $group->getDiscount());
+                        }
                     }
                 }
 
@@ -503,17 +518,31 @@ class PricesCalculator
     {
         $discountedMoney = 0;
 
+        foreach ($this->getFirstSizes($cartSizes, $quantity) as $cartSizeArr) {
+            $priceToDiscount = $cartSizeArr->obj->getPricePerItem() * $cartSizeArr->quantity;
+            $discountedMoney += $priceToDiscount * $discountPrc / 100;
+            $cartSizeArr->obj->decrementQuantity($cartSizeArr->quantity);
+        }
+
+        return $discountedMoney;
+    }
+
+    /**
+     * Return object with cart size and quantity which satisfy $quantity param
+     *
+     * @param $cartSizes
+     * @param $quantity
+     * @return \Generator
+     */
+    private function getFirstSizes($cartSizes, $quantity)
+    {
         foreach ($cartSizes as $cartSize) {
             $toDecrementQuantity = min($quantity, $cartSize->getQuantity());
-            $priceToDiscount = $cartSize->getPricePerItem() * $toDecrementQuantity;
-            $discountedMoney += $priceToDiscount * $discountPrc / 100;
-            $cartSize->decrementQuantity($toDecrementQuantity);
             $quantity -= $toDecrementQuantity;
+            yield (object)['quantity' => $toDecrementQuantity, 'obj' => $cartSize];
             if ($quantity == 0) {
                 break;
             }
         }
-
-        return $discountedMoney;
     }
 }

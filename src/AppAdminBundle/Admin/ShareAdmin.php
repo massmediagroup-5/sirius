@@ -130,6 +130,7 @@ class ShareAdmin extends Admin
                     'format' => 'dd-MM-yyyy H:m',
                 ]
             )
+            ->add('discount', null, ['label' => 'Скидка'])
             ->add('image', 'comur_image', array(
                 'label' => 'Картинка',
                 'uploadConfig' => array(
