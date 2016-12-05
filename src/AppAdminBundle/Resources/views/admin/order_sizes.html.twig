@@ -73,13 +73,13 @@
                 {% if admin.subject.status.id == 1 or admin.subject.preOrderFlag %}
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-success btn-sm btn-outline sonata-ba-action js_order_add_size pull-right"><i class="fa fa-plus-circle"></i> Добавить размер</a>
+                        <a class="btn btn-success btn-sm btn-outline btn-layout-1 sonata-ba-action js_order_add_size pull-right"><i class="fa fa-plus-circle"></i> Добавить размер</a>
                     </div>
                 </div>
                 {% endif %}
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-success btn-sm btn-outline sonata-ba-action pull-right" href="{{ path(admin.baseRouteName ~ '_get_invoice', {id: admin.subject.id}) }}"><i class="fa fa-plus-circle"></i>{{ 'btn_invoice'|trans({}, 'SonataAdminBundle') }}</a>
+                        <a class="btn btn-success btn-sm btn-outline btn-layout-2 sonata-ba-action pull-right" href="{{ path(admin.baseRouteName ~ '_get_invoice', {id: admin.subject.id}) }}"><i class="fa fa-plus-circle"></i>{{ 'btn_invoice'|trans({}, 'SonataAdminBundle') }}</a>
                     </div>
                 </div>
             </div>
