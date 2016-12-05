@@ -238,14 +238,13 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     public function getAdminSearchQuery($filters = [])
     {
         $builder = $this->createQueryBuilder('model')
-            ->innerJoin('model.sizes', 'specificSizes')->addselect('specificSizes')
-            ->innerJoin('specificSizes.size', 'size')->addselect('size')
-            ->innerJoin('model.products', 'product')->addselect('product')
-            ->innerJoin('model.productColors', 'color')->addselect('color')
+            ->leftJoin('model.sizes', 'specificSizes')->addselect('specificSizes')
+            ->leftJoin('specificSizes.size', 'size')->addselect('size')
+            ->leftJoin('model.productColors', 'color')->addselect('color')
             ->innerJoin('model.products', 'products')->addselect('products')
-            ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics')
-            ->innerJoin('product.baseCategory', 'category')
+            ->leftJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
+            ->leftJoin('characteristicValues.characteristics', 'characteristics')
+            ->leftJoin('products.baseCategory', 'category')
             ->addselect('model');
 
         if ($categoryId = Arr::get($filters, 'category_id')) {
