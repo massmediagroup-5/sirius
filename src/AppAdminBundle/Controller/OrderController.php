@@ -427,8 +427,6 @@ class OrderController extends BaseController
 
         $models = $this->admin->paginateModels($filters);
 
-//        dump($models);
-
         $categories = $this->getDoctrine()->getRepository('AppBundle:Categories')->findAll();
 
         return $this->renderJson([

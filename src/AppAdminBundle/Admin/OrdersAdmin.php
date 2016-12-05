@@ -527,7 +527,6 @@ class OrdersAdmin extends Admin
                                ->getRepository("AppBundle:ProductModels")
                                ->getAdminSearchQuery($filters);
 
-        dump($models);
         $models = $container->get('knp_paginator')->paginate(
             $models,
             Arr::get($filters, 'page', 1),
