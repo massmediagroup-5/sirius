@@ -83,7 +83,6 @@ class EntityEventsSubscriber implements EventSubscriber
             if ($entity instanceof ReturnedSizes) {
                 $this->container->get('returned_sizes')->processProductModelsChanges($entity);
             }
-            $this->clearCache($entity);
         }
 
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
@@ -95,7 +94,13 @@ class EntityEventsSubscriber implements EventSubscriber
         }
 
         $uow->computeChangeSets();
+
+        foreach ($uow->getScheduledEntityUpdates() as $entity) {
+            $this->clearCache($entity);
+        }
+
     }
+
 
     private function clearCache($entity)
     {
