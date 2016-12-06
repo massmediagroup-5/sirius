@@ -359,6 +359,19 @@ class Cart
     }
 
     /**
+     * @return int
+     */
+    public function hasShareDiscount()
+    {
+        foreach ($this->getSizesEntities() as $size) {
+            if ($this->pricesCalculator->getProductModelSpecificSizeShareDiscount($size)) {
+                return true;
+            }
+        }
+        return $this->pricesCalculator->getUpSellShareDiscount($this) > 0;
+    }
+
+    /**
      * Return discounted price without loyalty discount
      *
      * @return int

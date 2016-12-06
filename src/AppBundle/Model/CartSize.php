@@ -177,4 +177,12 @@ class CartSize
         return $this->pricesCalculator->getDiscountedPrice($this->size);
     }
 
+    /**
+     * @return float
+     */
+    public function hasShareDiscount()
+    {
+        return $this->pricesCalculator->hasProductModelSpecificSizeUpSellDiscount($this->size);
+    }
+
 }

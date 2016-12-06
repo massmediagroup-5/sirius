@@ -84,6 +84,8 @@
                                     <div class="mid order-bonuses">
                                         {% if is_granted('ROLE_GRAY_LIST') %}
                                             <h2>Вам запрещено использовать бонусы</h2>
+                                        {% elseif cart.hasShareDiscount() %}
+                                            <h2>Нельзя использовать бонусы вместе с акциями</h2>
                                         {% else %}
                                             <h2>
                                                 Бонусный счет

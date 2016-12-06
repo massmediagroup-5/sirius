@@ -223,12 +223,30 @@ class PricesCalculator
             return $price;
         }
 
-        $price = $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
+        return $this->getProductModelSpecificSizeShareDiscounted($object);
+    }
+
+    /**
+     * @param ProductModelSpecificSize $object
+     * @return mixed
+     */
+    public function getProductModelSpecificSizeShareDiscounted(ProductModelSpecificSize $object)
+    {
+        $price = $this->getPrice($object);
 
         // Subtract share discount
-        $discount = $this->container->get('share')->getSingleDiscount($object);
+        $discount = $this->getProductModelSpecificSizeShareDiscount($object);
 
         return $discount ? $price - ceil($price * $discount) / 100 : $price;
+    }
+
+    /**
+     * @param ProductModelSpecificSize $object
+     * @return mixed
+     */
+    public function getProductModelSpecificSizeShareDiscount(ProductModelSpecificSize $object)
+    {
+        return $this->container->get('share')->getSingleDiscount($object);
     }
 
     /**
