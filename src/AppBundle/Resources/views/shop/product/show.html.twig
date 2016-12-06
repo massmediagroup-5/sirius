@@ -92,9 +92,11 @@
                                             </div>
                                         {% endif %}
                                         {% for size in current_model.sizes %}
-                                            <div class="price price_old js_product_price product-info-size-price" data-size-id="{{ size.id }}">
-                                                Старая цена: <s>{{ size.oldPrice |format_price }} грн.</s>
-                                            </div>
+                                            {% if size.oldPrice %}
+                                                <div class="price price_old js_product_price product-info-size-price" data-size-id="{{ size.id }}">
+                                                    Старая цена: <s>{{ size.oldPrice |format_price }} грн.</s>
+                                                </div>
+                                            {% endif %}
                                         {% endfor %}
                                         <div class="color-select">
                                             <div class="color-select__i">

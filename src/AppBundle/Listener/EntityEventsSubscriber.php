@@ -105,22 +105,18 @@ class EntityEventsSubscriber implements EventSubscriber
     private function clearCache($entity)
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
-        switch (get_class($entity)) {
-            case ProductModelImage::class:
-            case ProductModelSpecificSize::class:
-                $em->getRepository('AppBundle:Products')->clearGetProductInfoByAliasCache($entity->getModel());
-                break;
-            case ProductModels::class:
-                $em->getRepository('AppBundle:Products')->clearGetProductInfoByAliasCache($entity);
-                break;
-            case Products::class:
-            case ProductColors::class:
-            case Categories::class:
-                $em->getConfiguration()->getResultCacheImpl()->deleteAll();
-                break;
-            case SiteParams::class:
-                $this->container->get('cache')->delete('options');
-                break;
+        if ($entity instanceof ProductModelImage or $entity instanceof ProductModelSpecificSize){
+            $em->getRepository('AppBundle:Products')->clearGetProductInfoByAliasCache($entity->getModel());
+        }
+        if ($entity instanceof ProductModels){
+            $em->getRepository('AppBundle:Products')->clearGetProductInfoByAliasCache($entity);
+        }
+        if ($entity instanceof Products or $entity instanceof ProductColors or
+            $entity instanceof Categories){
+            $em->getConfiguration()->getResultCacheImpl()->deleteAll();
+        }
+        if ($entity instanceof SiteParams){
+            $this->container->get('cache')->delete('options');
         }
     }
 }

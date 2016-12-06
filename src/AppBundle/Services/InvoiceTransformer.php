@@ -371,7 +371,7 @@ class InvoiceTransformer
     private function getLoyalityDiscount($orderObject)
     {
         if ($orderObject->getDiscountedTotalPrice()){
-            return (int)($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100;
+            return (int)(($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100);
         }
         return false;
     }
