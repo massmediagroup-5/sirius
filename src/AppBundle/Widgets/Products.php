@@ -128,10 +128,11 @@ class Products
             $priceCalculator = $this->container->get('prices_calculator');
             $currentShareGroup = $model->getSizes()->first()->getShareGroup();
             $currentSize = $model->getSizes()->first();
+            $sizesGroups = $model->getShare()->getSizesGroups();
 
             // Main group upSell
             $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($model->getSizes()->first());
-            $sizesGroups = $model->getShare()->getSizesGroups()->getValues();
+            $sizesGroups = $sizesGroups->getValues();
             $upSellGroups = array_filter($sizesGroups, function ($group) use ($currentShareGroup) {
                 return $group->getId() != $currentShareGroup->getId();
             });
@@ -164,7 +165,11 @@ class Products
 
 
             // Combinations upSell
-            foreach ($model->getShare()->getSizesGroups() as $group) {
+            foreach ($sizesGroups as $group) {
+                // Protect combination duplicates
+                if (count($sizesGroups) == 2 && $group->getId() != $currentShareGroup->getId()) {
+                    continue;
+                }
                 $discount = $this->container->get('share')->discountValueForShareGroupCompanion($currentShareGroup,
                     $group);
                 $companionDiscount = $this->container->get('share')->discountValueForShareGroupCompanion($group,

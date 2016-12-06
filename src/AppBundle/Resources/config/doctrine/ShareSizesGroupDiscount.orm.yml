@@ -15,8 +15,12 @@ AppBundle\Entity\ShareSizesGroupDiscount:
             targetEntity: ShareSizesGroup
             fetch: EAGER
             inversedBy: discounts
+            joinColumn:
+                onDelete: CASCADE
         companion:
             targetEntity: ShareSizesGroup
             fetch: EAGER
             inversedBy: discountCompanions
+            joinColumn:
+                onDelete: CASCADE
     lifecycleCallbacks: {  }

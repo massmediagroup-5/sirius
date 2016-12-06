@@ -352,8 +352,15 @@ class Cart
      */
     public function getDiscountedTotalPrice()
     {
-        $price = $this->pricesCalculator->getLoyaltyDiscounted($this->getDiscountedIntermediatePrice());
-        $price = $price - $this->pricesCalculator->getUpSellShareDiscount($this);
+        $upSellDiscount = $this->pricesCalculator->getUpSellShareDiscount($this);
+        $price = $this->getDiscountedIntermediatePrice();
+
+        // Use upSell discount or loyalty discount
+        if ($upSellDiscount) {
+            $price -= $upSellDiscount;
+        } else {
+            $price = $this->pricesCalculator->getLoyaltyDiscounted($price);
+        }
 
         return $price;
     }
