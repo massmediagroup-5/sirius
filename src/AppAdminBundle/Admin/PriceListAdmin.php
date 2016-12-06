@@ -1,14 +1,17 @@
 <?php
 
-
 namespace AppAdminBundle\Admin;
 
+
+use AppBundle\Helper\Arr;
+use Exporter\Source\IteratorSourceIterator;
 use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Exporter\Source\DoctrineORMQuerySourceIterator;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PriceListAdmin extends Admin
 {
@@ -87,11 +90,40 @@ class PriceListAdmin extends Admin
         $exportFields['Активность'] = 'model.products.active';
         $exportFields['Продукт опубликован'] = 'model.published';
 
+        $exportFields['alias'] = 'model.alias';
+        $exportFields['categoryAlias'] = 'model.products.baseCategory.alias';
+
         return $exportFields;
     }
 
     public function getExportFormats()
     {
         return ['xls'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataSourceIterator()
+    {
+        $dataIterator = parent::getDataSourceIterator();
+
+        return new IteratorSourceIterator($this->getFormattedDataSourceGenerator($dataIterator));
+    }
+
+    private function getFormattedDataSourceGenerator($dataIterator)
+    {
+        foreach ($dataIterator as $item) {
+            $href = $this->getConfigurationPool()
+                ->getContainer()
+                ->get('router')
+                ->generate('product', [
+                    'category' => Arr::pull($item, 'categoryAlias'),
+                    'product' => Arr::pull($item, 'alias')
+                ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $item['Модель'] = "<a href=\"$href\">{$item['Модель']}</a>";
+            yield $item;
+        }
     }
 }
