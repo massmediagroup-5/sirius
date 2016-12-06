@@ -147,9 +147,12 @@ class PricesCalculator
      */
     public function getProductModelMinDiscountedPrice(ProductModels $object)
     {
-        return min(array_map(function ($size) {
-            return $this->getPrice($size);
-        }, $object->getSizes()->toArray()));
+        if (($object->getSizes()->count())){
+            return min(array_map(function ($size) {
+                return $this->getPrice($size);
+            }, $object->getSizes()->toArray()));
+        }
+        return false;
     }
 
     /**
@@ -158,9 +161,12 @@ class PricesCalculator
      */
     public function getProductModelMaxDiscountedPrice(ProductModels $object)
     {
-        return max(array_map(function ($size) {
-            return $this->getPrice($size);
-        }, $object->getSizes()->toArray()));
+        if (($object->getSizes()->count())) {
+            return max(array_map(function ($size) {
+                return $this->getPrice($size);
+            }, $object->getSizes()->toArray()));
+        }
+        return false;
     }
 
     /**
