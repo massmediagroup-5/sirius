@@ -749,6 +749,14 @@ class Orders
     }
 
     /**
+     * @return float
+     */
+    public function getLoyaltyAndUpSellDiscounted()
+    {
+        return $this->getDiscountedTotalPrice() - $this->loyalityDiscount - $this->upSellDiscount;
+    }
+
+    /**
      * Get individual discounted total price
      *
      * @return int
