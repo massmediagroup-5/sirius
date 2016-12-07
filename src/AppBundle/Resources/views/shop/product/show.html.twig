@@ -123,7 +123,11 @@
                                                             {{ form_widget(form.size, {'attr': {'data-placeholder': 'Выберите размер', 'class': 'select js_cart_size'}}) }}
                                                         </li>
                                                         <li>
-                                                            {{ form_widget(form.quantity, {'attr': {'data-placeholder': 'К-во', 'class': 'select'}}) }}
+                                                            <div class="amount-control single-buyer-amount-control">
+                                                                <a href="#" class="minus"></a>
+                                                                {{ form_widget(form.quantity, {'attr': {'data-placeholder': 'К-во', 'data-min': 1}}) }}
+                                                                <a href="#" class="plus"></a>
+                                                            </div>
                                                         </li>
                                                         <li>
                                                             <a href="#size-table2" class="popup_js">Как снять размер?</a>

@@ -495,6 +495,10 @@ $(document).ready(function () {
         $(this).closest('.inp_error').removeClass('inp_error').find('.error-msg').remove();
     });
 
+    $('body').on('click', 'input.error', function () {
+        $(this).removeClass('error');
+    });
+
     //FORM VALIDATION END//
 
 
@@ -622,21 +626,28 @@ $(window).load(function () {
     });
 
     $(".amount-control .plus").click(function (e) {
-        var text = $(this).prev("input");
+        var text = $(this).prev("input"),
+            value = parseInt(text.val(), 10);
         e.preventDefault();
-        text.val(parseInt(text.val(), 10) + 1).trigger('change');
+
+        value = isNaN(value) ? 0 : value;
+        text.val(value + 1).trigger('change');
 
         return false;
     });
 
     $(".amount-control .minus").click(function (e) {
-        var text = $(this).next("input");
+        var text = $(this).next("input"),
+            value = parseInt(text.val(), 10);
         e.preventDefault();
+
+        value = isNaN(value) ? 0 : value;
+
         if ((text.val() == text.data('min'))||(text.val() <= 0)) {
             return false
         }
         else {
-            text.val(parseInt(text.val(), 10) - 1).trigger('change');
+            text.val(value - 1).trigger('change');
         }
 
         return false;

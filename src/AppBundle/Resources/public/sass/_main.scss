@@ -8350,6 +8350,15 @@ input[type="checkbox"] {
             margin: auto;
         }
     }
+    &.single-buyer-amount-control {
+        input {
+            border-color: #cdcdcd;
+            height: 32px;
+            &.error {
+                border-color: #f24841;
+            }
+        }
+    }
 }
 
 .collect {
@@ -9298,7 +9307,7 @@ input[type="checkbox"] {
     }
     input {
         border: 1px solid #cdcdcd;
-        padding: 8px 25px 8px 10px;
+        padding: 8px 8px 8px 10px;
         box-sizing: border-box;
         width: 100%;
 
