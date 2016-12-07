@@ -68,14 +68,14 @@ class InvoiceTransformer
             ->setCellValue('L' . ($sizesCount + 16), $orderObject->getDiscountedTotalPrice())
             ->setCellValue('I' . ($sizesCount + 17), 'Скидка')
             ->setCellValue('K' . ($sizesCount + 17),
-                $this->getLoyalityDiscount($orderObject) ? $this->getLoyalityDiscount($orderObject) . ' %' : '')
-            ->setCellValue('L' . ($sizesCount + 17), $orderObject->getLoyalityDiscount($orderObject))
+                $orderObject->getAllDiscountsPrc() ? $orderObject->getAllDiscountsPrc() . ' %' : '')
+            ->setCellValue('L' . ($sizesCount + 17), $orderObject->getAllDiscounts())
             ->setCellValue('I' . ($sizesCount + 18), 'Оплачено бонусами')
             ->setCellValue('L' . ($sizesCount + 18), $orderObject->getBonuses())
             ->setCellValue('I' . ($sizesCount + 19), 'Сумма к оплате')
-            ->setCellValue('L' . ($sizesCount + 19), $this->getFinallyPrice($orderObject))
+            ->setCellValue('L' . ($sizesCount + 19), $orderObject->getIndividualDiscountedTotalPrice())
             ->setCellValue('B' . ($sizesCount + 21), 'Всего к оплате:')
-            ->setCellValue('D' . ($sizesCount + 21), $this->getFinallyPrice($orderObject))
+            ->setCellValue('D' . ($sizesCount + 21), $orderObject->getIndividualDiscountedTotalPrice())
             ->setCellValue('C' . ($sizesCount + 24), 'Отгрузил')
             ->setCellValue('E' . ($sizesCount + 24), 'Подпись');
 
@@ -362,23 +362,5 @@ class InvoiceTransformer
             return $res;
         }
         return false;
-    }
-
-    /**
-     * @param $orderObject
-     * @return float|int
-     */
-    private function getLoyalityDiscount($orderObject)
-    {
-        if ($orderObject->getDiscountedTotalPrice()){
-            return (int)(($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100);
-        }
-        return false;
-    }
-
-    private function getFinallyPrice($orderObject)
-    {
-
-        return $orderObject->getDiscountedTotalPrice() - $orderObject->getLoyalityDiscount() - $orderObject->getBonuses();
     }
 }
