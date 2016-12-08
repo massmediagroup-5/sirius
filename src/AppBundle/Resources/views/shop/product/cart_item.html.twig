@@ -4,7 +4,7 @@
         <tr>
             <td>
                 <div class="prod-img">
-                    <a href="#">
+                    <a href="{{ url_to(size.size.model.products.baseCategory, size.size.model) }}">
                         {{ widget('products.flags', size.size.model)|raw }}
                         {% if size.size.model.images.0 is defined %}
                             <img src="{{ size.size.model.images.0.link | imagine_filter('in_cart') }}" />
@@ -16,7 +16,8 @@
             </td>
             <td>
                 <p class="name">
-                    <a href="#">{{ size.size.model.products.name }}</a>
+                    <a href="{{ url_to(size.size.model.products.baseCategory, size.size.model) }}">
+                        {{ size.size.model.products.name }}</a>
                 </p>
 
                 <p class="description">

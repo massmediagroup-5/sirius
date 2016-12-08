@@ -966,9 +966,8 @@ $(window).load(function () {
 
     var inputBonuses = $('input.only-numbers-for-bonuses');
     inputBonuses.bind("change keyup input click", function() {
-        if (this.value.match(/^[0]/)) {
-            this.value = this.value.replace(/[^1-9]/g, '');
-        }
+
+        this.value = this.value.replace(/^[0]/g, '');
     });
 
     //PRICE SLIDER END//
