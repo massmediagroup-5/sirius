@@ -191,7 +191,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param $query
-     * @param $sort
+     * @param $filters
      * @param string $productAlias
      * @param string $modelAlias
      * @param string $sizeAlias
@@ -199,11 +199,13 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function addSort(
         $query,
-        $sort,
+        $filters,
         $productAlias = 'products',
         $modelAlias = 'productModels',
         $sizeAlias = 'sizes'
     ) {
+        $sort = Arr::get($filters, 'sort');
+        $wholesalerFlag = Arr::get($filters, 'wholesaler');
         switch ($sort) {
             case false:
             case 'new':
@@ -218,25 +220,44 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             case 'cheap':
             case 'expensive':
                 $aggregationFunction = $sort == 'cheap' ? 'MIN' : 'MAX';
-                $sizesQuery = $this->_em->getRepository('AppBundle:Products')
-                    ->createQueryBuilder('oProduct')
-                    ->select("$aggregationFunction(IFELSE(" .
-                        "oShare.groupsCount = 1, " .
-                        "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price) " .
+                $direction = $sort == 'cheap' ? 'ASC' : 'DESC';
+                if ($wholesalerFlag) {
+                    $sizesQuery = $this->_em->getRepository('AppBundle:Products')
+                        ->createQueryBuilder('oProduct')
+                        ->select("$aggregationFunction(" .
+                            "COALESCE(NULLIF(oSizes.wholesalePrice, 0), NULLIF(oModel.wholesalePrice, 0), oProduct.wholesalePrice) " .
+                            ")")
+                        ->join('oProduct.productModels', 'oModel')
+                        ->join('oModel.sizes', 'oSizes')
+                        ->where("oModel.id = $modelAlias.id")
+                        ->andWhere('oProduct.active = 1 AND oModel.published = 1');
+
+                    $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $direction);
+
+                    foreach ($sizesQuery->getParameters() as $parameter) {
+                        $query->setParameter($parameter->getName(), $parameter->getValue());
+                    }
+                } else {
+                    $sizesQuery = $this->_em->getRepository('AppBundle:Products')
+                        ->createQueryBuilder('oProduct')
+                        ->select("$aggregationFunction(IFELSE(" .
+                            "oShare.groupsCount = 1, " .
+                            "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price) " .
                             "* (100 - oShareGroup.discount) * 0.01, " .
-                        "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price)))")
-                    ->join('oProduct.productModels', 'oModel')
-                    ->join('oModel.sizes', 'oSizes')
-                    ->leftJoin('oSizes.shareGroup', 'oShareGroup')
-                    ->leftJoin('oShareGroup.share', 'oShare')
-                    ->where("oProduct.id = $productAlias.id")
-                    ->addCriteria($this->_em->getRepository('AppBundle:ProductModelSpecificSize')->getActiveCriteria('oSizes'))
-                    ->andWhere('oProduct.active = 1 AND oModel.published = 1');
+                            "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price)))")
+                        ->join('oProduct.productModels', 'oModel')
+                        ->join('oModel.sizes', 'oSizes')
+                        ->leftJoin('oSizes.shareGroup', 'oShareGroup')
+                        ->leftJoin('oShareGroup.share', 'oShare')
+                        ->where("oProduct.id = $productAlias.id")
+                        ->addCriteria($this->_em->getRepository('AppBundle:ProductModelSpecificSize')->getActiveCriteria('oSizes'))
+                        ->andWhere('oProduct.active = 1 AND oModel.published = 1');
 
-                $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $sort == 'cheap' ? 'ASC' : 'DESC');
+                    $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $direction);
 
-                foreach ($sizesQuery->getParameters() as $parameter) {
-                    $query->setParameter($parameter->getName(), $parameter->getValue());
+                    foreach ($sizesQuery->getParameters() as $parameter) {
+                        $query->setParameter($parameter->getName(), $parameter->getValue());
+                    }
                 }
                 break;
             case 'novelty':
@@ -490,7 +511,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters);
 
-        $builder = $this->addSort($builder, Arr::get($filters, 'sort'));
+        $builder = $this->addSort($builder, $filters);
 
         return $builder->getQuery();
     }
