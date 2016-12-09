@@ -217,21 +217,25 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 break;
             case 'cheap':
             case 'expensive':
-                $shareGroupQuery = $this->_em->getRepository('AppBundle:ShareSizesGroup')
-                    ->createQueryBuilder('oGroup')
-                    ->select('COUNT(oGroup.id)')
-                    ->join('oGroup.share', 'oShare')
-                    ->where('oShare.id = share.id')
-                    ->addCriteria($this->_em->getRepository('AppBundle:Share')->getActiveCriteria('oShare'));
+                $aggregationFunction = $sort == 'cheap' ? 'MIN' : 'MAX';
+                $sizesQuery = $this->_em->getRepository('AppBundle:Products')
+                    ->createQueryBuilder('oProduct')
+                    ->select("$aggregationFunction(IFELSE(" .
+                        "oShare.groupsCount = 1, " .
+                        "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price) " .
+                            "* (100 - oShareGroup.discount) * 0.01, " .
+                        "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price)))")
+                    ->join('oProduct.productModels', 'oModel')
+                    ->join('oModel.sizes', 'oSizes')
+                    ->leftJoin('oSizes.shareGroup', 'oShareGroup')
+                    ->leftJoin('oShareGroup.share', 'oShare')
+                    ->where("oProduct.id = $productAlias.id")
+                    ->addCriteria($this->_em->getRepository('AppBundle:ProductModelSpecificSize')->getActiveCriteria('oSizes'))
+                    ->andWhere('oProduct.active = 1 AND oModel.published = 1');
 
-                $query->addOrderBy("IFELSE(" .
-                    "({$shareGroupQuery->getDQL()}) = 1, " .
-                    "COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price) * (100 - shareGroup.discount) * 0.01, " .
-                    "COALESCE(NULLIF($sizeAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price))",
-                    $sort == 'cheap' ? 'ASC' : 'DESC'
-                );
+                $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $sort == 'cheap' ? 'ASC' : 'DESC');
 
-                foreach ($shareGroupQuery->getParameters() as $parameter) {
+                foreach ($sizesQuery->getParameters() as $parameter) {
                     $query->setParameter($parameter->getName(), $parameter->getValue());
                 }
                 break;

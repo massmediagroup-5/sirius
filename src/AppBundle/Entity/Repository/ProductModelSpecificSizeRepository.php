@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Repository;
 
 use AppBundle\Entity\ShareSizesGroup;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * CategoriesRepository
@@ -47,6 +48,21 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         ));
 
         return $builder;
+    }
+
+    /**
+     * @param string $sizeAlias
+     * @return Criteria
+     */
+    public function getActiveCriteria($sizeAlias = 'sizes')
+    {
+        return Criteria::create()
+            ->andWhere(
+                Criteria::expr()->orX(
+                    Criteria::expr()->gt("$sizeAlias.quantity", 0),
+                    Criteria::expr()->eq("$sizeAlias.preOrderFlag", true)
+                )
+            );
     }
 
     /**
