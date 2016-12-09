@@ -352,16 +352,35 @@ class Cart
      */
     public function getDiscountedTotalPrice()
     {
-        $price = $this->getDiscountedIntermediatePrice();
+        return $this->getDiscountedIntermediatePrice() - $this->getLoyaltyDiscount() - $this->getUpSellShareDiscount();
+    }
+
+    /**
+     * @return int
+     */
+    public function getLoyaltyDiscount()
+    {
+        $price = $discountedPrice = $this->getDiscountedIntermediatePrice();
 
         // Use upSell discount or loyalty discount
-        if ($this->hasShareDiscount()) {
-            $price -= $this->pricesCalculator->getUpSellShareDiscount($this);
-        } else {
-            $price = $this->pricesCalculator->getLoyaltyDiscounted($price);
+        if (!$this->hasShareDiscount()) {
+            $discountedPrice = $this->pricesCalculator->getLoyaltyDiscounted($price);
         }
 
-        return $price;
+        return floor($price - $discountedPrice);
+    }
+
+    /**
+     * @return int
+     */
+    public function getUpSellShareDiscount()
+    {
+        // Use upSell discount or loyalty discount
+        if ($this->hasShareDiscount()) {
+            return $this->pricesCalculator->getUpSellShareDiscount($this);
+        }
+
+        return 0;
     }
 
     /**
