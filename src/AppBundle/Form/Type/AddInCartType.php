@@ -31,7 +31,8 @@ class AddInCartType extends AbstractType
             ])
             ->add('quantity', TextType::class, [
                 'required' => true,
-                'constraints' => [new NotBlank]
+                'constraints' => [new NotBlank],
+                'data' => 1
             ])
             ->add('submit', SubmitType::class);
 

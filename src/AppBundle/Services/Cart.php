@@ -367,7 +367,7 @@ class Cart
             $discountedPrice = $this->pricesCalculator->getLoyaltyDiscounted($price);
         }
 
-        return floor($price - $discountedPrice);
+        return round($price - $discountedPrice, 2);
     }
 
     /**
@@ -379,7 +379,7 @@ class Cart
     {
         // Use upSell discount or loyalty discount
         if ($this->hasShareDiscount()) {
-            return $this->pricesCalculator->getUpSellShareDiscount($this);
+            return round($this->pricesCalculator->getUpSellShareDiscount($this), 2);
         }
 
         return 0;

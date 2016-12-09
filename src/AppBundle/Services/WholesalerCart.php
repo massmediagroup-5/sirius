@@ -78,4 +78,12 @@ class WholesalerCart extends Cart
         $items = Arr::mapProperty($this->items, 'preOrderSingleItems');
         return $items ? call_user_func_array('array_merge', $items) : [];
     }
+
+    /**
+     * @return int
+     */
+    public function getDiscountedTotalPrice()
+    {
+        return $this->getDiscountedIntermediatePrice();
+    }
 }

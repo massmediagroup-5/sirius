@@ -8318,7 +8318,7 @@ input[type="checkbox"] {
         width: 22px;
         height: 100%;
         position: absolute;
-        left: 0px;
+        right: 0px;
         top: 0;
         &:before {
             content: '';
@@ -8337,7 +8337,7 @@ input[type="checkbox"] {
         width: 22px;
         height: 100%;
         position: absolute;
-        right: 0;
+        left: 0;
         top: 0;
         &:before {
             content: '';
