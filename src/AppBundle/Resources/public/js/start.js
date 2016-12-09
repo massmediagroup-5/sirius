@@ -954,6 +954,19 @@ $(window).load(function () {
         }
     });
 
+
+    $('input.only-integers').on('keyup change', function () {
+        var $this = $(this),
+            val;
+        if (!$this.val().match(/^[1-9][0-9]*$/)) {
+            val = $this.val().replace(/[^\d]/g, '');
+            if (val.charAt(0) == '0') {
+                val = val.substr(1);
+            }
+            $this.val(val);
+        }
+    });
+
     var inputNum = $('input.only-numbers');
     inputNum.on('keydown', function (e) {
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 || (e.keyCode == 65 && e.ctrlKey === true) || (e.keyCode == 67 && e.ctrlKey === true) || (e.keyCode == 88 && e.ctrlKey === true) || (e.keyCode >= 35 && e.keyCode <= 39)) {
