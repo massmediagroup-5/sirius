@@ -371,6 +371,8 @@ class Cart
     }
 
     /**
+     * Calculate globally to all sizes
+     *
      * @return int
      */
     public function getUpSellShareDiscount()
@@ -381,6 +383,26 @@ class Cart
         }
 
         return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllSharesDiscount()
+    {
+        return $this->getUpSellShareDiscount() + $this->getSimpleSharesDiscount();
+    }
+
+    /**
+     * Stored separated in sizes
+     *
+     * @return int
+     */
+    public function getSimpleSharesDiscount()
+    {
+        return array_sum(array_map(function (CartSize $size) {
+            return $size->getDiscount();
+        }, $this->getSizes()));
     }
 
     /**

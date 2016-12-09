@@ -111,8 +111,16 @@
                                             <td>{{ cart.totalPrice }} грн.</td>
                                         </tr>
                                         <tr class="discount">
-                                            <td>Скидка</td>
-                                            <td><span class="js_total_discount">{{ cart.discount }}</span> грн.</td></td>
+                                            {% if cart.hasShareDiscount() %}
+                                                <td>Акционная скидка</td>
+                                                <td>
+                                                    <span class="js_total_discount">{{ cart.allSharesDiscount }}</span>
+                                                    грн.
+                                                </td>
+                                            {% else %}
+                                                <td>Скидка</td>
+                                                <td><span class="js_total_discount">{{ cart.loyaltyDiscount }}</span> грн.</td>
+                                            {% endif %}
                                         </tr>
                                         <tr class="pay-row">
                                             <td>Сумма к оплате</td>
