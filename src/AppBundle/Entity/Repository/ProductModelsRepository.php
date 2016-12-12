@@ -256,7 +256,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if ($article = Arr::get($filters, 'article')) {
-            $builder->andWhere('product.article LIKE :article')->setParameter('article', "%$article%");
+            $builder->andWhere('products.article LIKE :article')->setParameter('article', "%$article%");
         }
 
         if ($color = Arr::get($filters, 'color')) {
@@ -264,7 +264,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if ($model = Arr::get($filters, 'model')) {
-            $builder->andWhere('product.name LIKE :model')->setParameter('model', "%$model%");
+            $builder->andWhere('products.name LIKE :model')->setParameter('model', "%$model%");
         }
 
         if ($model = Arr::get($filters, 'conflicts')) {
