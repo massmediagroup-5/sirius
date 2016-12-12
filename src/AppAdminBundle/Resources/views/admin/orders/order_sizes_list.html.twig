@@ -31,9 +31,11 @@
         <td class="control-group">{{ size.totalPrice }}</td>
         <td class="control-group">{{ size.discountedTotalPrice }}</td>
         <td class="control-group">
-            <button class="btn btn-danger btn-xs js_size_remove">
-                <span class="glyphicon glyphicon-remove"></span>
-            </button>
+            {% if admin.subject.status.id == 1 or admin.subject.preOrderFlag %}
+                <button class="btn btn-danger btn-xs js_size_remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            {% endif %}
         </td>
     </tr>
 {% endfor %}
