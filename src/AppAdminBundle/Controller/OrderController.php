@@ -88,7 +88,7 @@ class OrderController extends BaseController
         $object = $this->admin->getSubject();
 
         $sizes = [];
-        foreach ($request->get('sizes') as $sizeArray) {
+        foreach ($request->get('sizes', []) as $sizeArray) {
             $sizes[] = [
                 $this->getDoctrine()
                      ->getManager()

@@ -45,10 +45,11 @@ class OrderHistoryRelationAddedItem extends AbstractHistoryItem
         if ($this->history->getChanged() == 'sizes') {
             $size = $this->em->getReference('AppBundle\Entity\ProductModelSpecificSize',
                 $this->history->getAdditional('entityId'));
+            $quantity = $this->history->getAdditional('quantity');
             $orderSize = $this->em->getRepository('AppBundle:OrderProductSize')->findOneBySizeAndOrder($size,
                 $this->history->getOrder());
             if ($orderSize) {
-                $this->container->get('order')->removeSize($this->history->getOrder(), $orderSize);
+                $this->container->get('order')->removeSize($this->history->getOrder(), $orderSize, $quantity);
             }
         }
     }

@@ -130,3 +130,6 @@ services:
     invoice_transformer:
         class: AppBundle\Services\InvoiceTransformer
         arguments: [@service_container]
+
+    num_to_string:
+        class: AppBundle\Services\NumToString
