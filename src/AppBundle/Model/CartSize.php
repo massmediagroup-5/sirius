@@ -112,7 +112,7 @@ class CartSize
     }
 
     /**
-     * @return ProductModelSpecificSize
+     * @return float
      */
     public function getPrice()
     {
@@ -159,6 +159,14 @@ class CartSize
     public function getDiscountedPrice()
     {
         return $this->pricesCalculator->getProductModelSpecificSizeDiscountedPrice($this->size) * $this->quantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->getPrice() - $this->getDiscountedPrice();
     }
 
     /**

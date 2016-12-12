@@ -1170,4 +1170,24 @@ class Orders
     {
         return $this->upSellDiscount;
     }
+
+    /**
+     * @return float
+     */
+    public function getAllDiscounts()
+    {
+        return $this->loyalityDiscount + $this->upSellDiscount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAllDiscountsPrc()
+    {
+        if ($this->getDiscountedTotalPrice()){
+            return (int)(($this->getAllDiscounts() / $this->getDiscountedTotalPrice()) * 100);
+        }
+
+        return 0;
+    }
 }

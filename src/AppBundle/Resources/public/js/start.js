@@ -495,6 +495,10 @@ $(document).ready(function () {
         $(this).closest('.inp_error').removeClass('inp_error').find('.error-msg').remove();
     });
 
+    $('body').on('click', 'input.error', function () {
+        $(this).removeClass('error');
+    });
+
     //FORM VALIDATION END//
 
 
@@ -622,21 +626,28 @@ $(window).load(function () {
     });
 
     $(".amount-control .plus").click(function (e) {
-        var text = $(this).prev("input");
+        var text = $(this).prev("input"),
+            value = parseInt(text.val(), 10);
         e.preventDefault();
-        text.val(parseInt(text.val(), 10) + 1).trigger('change');
+
+        value = isNaN(value) ? 0 : value;
+        text.val(value + 1).trigger('change');
 
         return false;
     });
 
     $(".amount-control .minus").click(function (e) {
-        var text = $(this).next("input");
+        var text = $(this).next("input"),
+            value = parseInt(text.val(), 10);
         e.preventDefault();
+
+        value = isNaN(value) ? 0 : value;
+
         if ((text.val() == text.data('min'))||(text.val() <= 0)) {
             return false
         }
         else {
-            text.val(parseInt(text.val(), 10) - 1).trigger('change');
+            text.val(value - 1).trigger('change');
         }
 
         return false;
@@ -940,6 +951,19 @@ $(window).load(function () {
         }
         if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
             e.preventDefault();
+        }
+    });
+
+
+    $('input.only-integers').on('keyup change', function () {
+        var $this = $(this),
+            val;
+        if (!$this.val().match(/^[1-9][0-9]*$/)) {
+            val = $this.val().replace(/[^\d]/g, '');
+            if (val.charAt(0) == '0') {
+                val = val.substr(1);
+            }
+            $this.val(val);
         }
     });
 

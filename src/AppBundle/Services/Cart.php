@@ -352,17 +352,57 @@ class Cart
      */
     public function getDiscountedTotalPrice()
     {
-        $upSellDiscount = $this->pricesCalculator->getUpSellShareDiscount($this);
-        $price = $this->getDiscountedIntermediatePrice();
+        return $this->getDiscountedIntermediatePrice() - $this->getLoyaltyDiscount() - $this->getUpSellShareDiscount();
+    }
+
+    /**
+     * @return int
+     */
+    public function getLoyaltyDiscount()
+    {
+        $price = $discountedPrice = $this->getDiscountedIntermediatePrice();
 
         // Use upSell discount or loyalty discount
-        if ($upSellDiscount) {
-            $price -= $upSellDiscount;
-        } else {
-            $price = $this->pricesCalculator->getLoyaltyDiscounted($price);
+        if (!$this->hasShareDiscount()) {
+            $discountedPrice = $this->pricesCalculator->getLoyaltyDiscounted($price);
         }
 
-        return $price;
+        return round($price - $discountedPrice, 2);
+    }
+
+    /**
+     * Calculate globally to all sizes
+     *
+     * @return int
+     */
+    public function getUpSellShareDiscount()
+    {
+        // Use upSell discount or loyalty discount
+        if ($this->hasShareDiscount()) {
+            return round($this->pricesCalculator->getUpSellShareDiscount($this), 2);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllSharesDiscount()
+    {
+        return $this->getUpSellShareDiscount() + $this->getSimpleSharesDiscount();
+    }
+
+    /**
+     * Stored separated in sizes
+     *
+     * @return int
+     */
+    public function getSimpleSharesDiscount()
+    {
+        return array_sum(array_map(function (CartSize $size) {
+            return $size->getDiscount();
+        }, $this->getSizes()));
     }
 
     /**

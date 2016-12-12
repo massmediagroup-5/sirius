@@ -10,6 +10,9 @@ use Doctrine\ORM\Query\AST\Functions\FunctionNode,
  */
 class SubQuery extends FunctionNode
 {
+    /**
+     * @var \Doctrine\ORM\Query\AST\Subselect
+     */
     public $expr1 = null;
 
     public function parse(\Doctrine\ORM\Query\Parser $parser)

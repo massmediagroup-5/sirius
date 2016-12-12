@@ -75,6 +75,7 @@ class WishList
      */
     public function paginate($page = 1, $perPage = 8, $filters = [])
     {
+        $filters['wholesaler'] = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER');
         if (count($this->getIds())) {
             $models = $this->em->getRepository('AppBundle:ProductModels')->getWishListQuery($this->getIds(), $filters);
         } else {

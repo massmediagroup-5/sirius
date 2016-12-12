@@ -53,6 +53,11 @@ class Share
     private $status = false;
 
     /**
+     * @var boolean
+     */
+    private $groupsCount = false;
+
+    /**
      * @var \DateTime
      */
     private $startTime;
@@ -450,5 +455,29 @@ class Share
     public function getDiscount()
     {
         return $this->discount;
+    }
+
+    /**
+     * Set groupsCount
+     *
+     * @param boolean $groupsCount
+     *
+     * @return Share
+     */
+    public function setGroupsCount($groupsCount)
+    {
+        $this->groupsCount = $groupsCount;
+
+        return $this;
+    }
+
+    /**
+     * Get groupsCount
+     *
+     * @return boolean
+     */
+    public function getGroupsCount()
+    {
+        return $this->groupsCount;
     }
 }

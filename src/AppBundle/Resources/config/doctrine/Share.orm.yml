@@ -28,6 +28,8 @@ AppBundle\Entity\Share:
             type: integer
         status:
             type: boolean
+        groupsCount:
+            type: boolean
         startTime:
             type: datetime
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

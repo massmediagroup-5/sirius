@@ -60,7 +60,7 @@ class Entities
 
     /**
      * @param $categoryAlias
-     * @param null $filters
+     * @param array $filters
      * @param int $perPage
      * @param int $currentPage
      * @param string $entity
@@ -69,12 +69,13 @@ class Entities
      */
     public function getCollectionsByCategoriesAlias(
         $categoryAlias,
-        $filters = null,
+        $filters = [],
         $perPage = 9,
         $currentPage = 1,
         $entity = 'Products',
         $ids = []
     ) {
+        $filters['wholesaler'] = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER');
 
         $category = $this->em
             ->getRepository('AppBundle:Categories')

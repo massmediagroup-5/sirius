@@ -495,8 +495,7 @@ class OrderController extends BaseController
     }
 
     /**
-     *
-     *
+     * @return mixed
      */
     public function getInvoiceAction(){
 

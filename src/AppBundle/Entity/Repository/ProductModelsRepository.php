@@ -180,7 +180,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
+        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters);
 
         return $builder->getQuery();
     }
@@ -224,7 +224,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->where('productModels.id IN (:ids)')
             ->setParameter('ids', $modelIds);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, Arr::get($filters, 'sort'));
+        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters);
 
         $builder->addOrderBy('FIELD(productModels.id, ' . implode(', ', $modelIds) . ')', 'DESC');
 
