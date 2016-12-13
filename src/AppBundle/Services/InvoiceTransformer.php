@@ -75,7 +75,7 @@ class InvoiceTransformer
             ->setCellValue('I' . ($sizesCount + 20), 'Сумма к оплате')
             ->setCellValue('L' . ($sizesCount + 20), $orderObject->getIndividualDiscountedTotalPrice())
             ->setCellValue('B' . ($sizesCount + 22), 'Всего к оплате:')
-            ->setCellValue('D' . ($sizesCount + 22), $this->container->get('num_to_string')->getString($this->getFinallyPrice($orderObject)))
+            ->setCellValue('D' . ($sizesCount + 22), $this->container->get('num_to_string')->getString($orderObject->getIndividualDiscountedTotalPrice()))
             ->setCellValue('C' . ($sizesCount + 25), 'Отгрузил')
             ->setCellValue('E' . ($sizesCount + 25), 'Подпись');
 
@@ -378,23 +378,5 @@ class InvoiceTransformer
             return $res;
         }
         return false;
-    }
-
-    /**
-     * @param $orderObject
-     * @return float|int
-     */
-    private function getLoyalityDiscount($orderObject)
-    {
-        if ($orderObject->getDiscountedTotalPrice()){
-            return (int)(($orderObject->getLoyalityDiscount() / $orderObject->getDiscountedTotalPrice()) * 100);
-        }
-        return false;
-    }
-
-    private function getFinallyPrice($orderObject)
-    {
-
-        return $orderObject->getDiscountedTotalPrice() - $orderObject->getLoyalityDiscount() - $orderObject->getBonuses();
     }
 }

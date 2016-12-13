@@ -339,7 +339,8 @@ class Order
             $this->em->persist($size);
         }
 
-        (new OrderHistoryRelationRemovedItem($this->container))->createHistoryItem($order, 'sizes', $size, $quantity,
+        $removedQuantity = $quantity === null ? $size->getQuantity() : $quantity;
+        (new OrderHistoryRelationRemovedItem($this->container))->createHistoryItem($order, 'sizes', $size, $removedQuantity,
             $this->getUser());
 
         $this->em->persist($order);
