@@ -1182,10 +1182,10 @@ class Orders
     /**
      * @return float
      */
-    public function getAllDiscountsPrc()
+    public function getDiscountsPtc()
     {
         if ($this->getDiscountedTotalPrice()){
-            return (int)(($this->getAllDiscounts() / $this->getDiscountedTotalPrice()) * 100);
+            return (int)(($this->getLoyalityDiscount() / $this->getDiscountedTotalPrice()) * 100);
         }
 
         return 0;
