@@ -472,6 +472,14 @@ input[type="checkbox"] {
 }
 
 //footer socials end
+
+.content {
+    padding-top: 85px;
+}
+.slider + .content {
+    padding-top: 0;
+}
+
 .out {
     min-width: 1140px;
     transition: opacity, 750ms, ease;
