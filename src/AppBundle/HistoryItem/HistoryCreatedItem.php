@@ -5,6 +5,7 @@ namespace AppBundle\HistoryItem;
 
 use AppBundle\Entity\History;
 use AppBundle\Entity\ProductModelsHistory;
+use AppBundle\Entity\ReturnProduct;
 use AppBundle\Entity\ReturnProductHistory;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\OrderHistory;
@@ -55,8 +56,10 @@ class HistoryCreatedItem extends AbstractHistoryItem
      */
     public function label()
     {
+        dump($this->history);
+        $name = (!($this->history->getHistoriable() instanceof ReturnProduct)) ?: '';
         return $this->translator->trans('history.' . $this->getPrefixForLabel() . '_created', [
-            ':name' => $this->history->getHistoriable()
+            ':name' => $name
         ], 'AppAdminBundle').' '.$this->history->getUser();
 
     }
