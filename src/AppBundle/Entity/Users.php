@@ -96,7 +96,7 @@ class Users extends BaseUser
     /**
      * @var \DateTime
      */
-    protected $addBonusesAt = 0;
+    protected $addBonusesAt;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
