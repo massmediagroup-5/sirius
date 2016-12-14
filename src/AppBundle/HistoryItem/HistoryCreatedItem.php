@@ -56,7 +56,6 @@ class HistoryCreatedItem extends AbstractHistoryItem
      */
     public function label()
     {
-        dump($this->history);
         $name = (!($this->history->getHistoriable() instanceof ReturnProduct)) ?: '';
         return $this->translator->trans('history.' . $this->getPrefixForLabel() . '_created', [
             ':name' => $name
