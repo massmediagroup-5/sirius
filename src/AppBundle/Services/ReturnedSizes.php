@@ -3,7 +3,6 @@
 namespace AppBundle\Services;
 
 use AppBundle\HistoryItem\HistoryChangedItem;
-use AppBundle\HistoryItem\HistoryCreatedItem;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

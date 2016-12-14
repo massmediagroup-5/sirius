@@ -2,6 +2,7 @@
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,6 +21,9 @@ class QuickOrderType extends AbstractType
         $builder
             ->add('phone', TextType::class, [
                 'required' => true,
+            ])
+            ->add('quantity', HiddenType::class, [
+                'data' => 1
             ])
             ->add('submit', SubmitType::class);
 

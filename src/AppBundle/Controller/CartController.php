@@ -333,7 +333,7 @@ class CartController extends BaseController
         if ($quickOrderForm->isValid()) {
             $this->get('cart')->backupCart();
             $this->get('cart')->clear();
-            $this->get('cart')->addItemToCard($size, 1);
+            $this->get('cart')->addItemToCard($size, $quickOrderForm->getData()['quantity']);
             $this->get('order')->orderFromCart($quickOrderForm->getData(), $this->getUser(), true);
             $this->get('cart')->restoreCartFromBackup();
 
