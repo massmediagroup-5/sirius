@@ -31,11 +31,15 @@
                             </div>
                         {% endif %}
 
-                        <div class="item-list">
-                            {% for share in shares %}
-                                {{ include('AppBundle:share/partials/_item.html.twig', { share: share }) }}
-                            {% endfor %}
-                        </div>
+                        {% if shares.items is empty %}
+                            <h3>На данный момент акций нет</h3>
+                        {% else %}
+                            <div class="item-list">
+                                {% for share in shares %}
+                                    {{ include('AppBundle:share/partials/_item.html.twig', { share: share }) }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
 
                         {% if shares.pageCount > 1 %}
                             <div class="pager">

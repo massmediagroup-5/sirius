@@ -64,7 +64,7 @@ class OrdersRepository extends EntityRepository
             ->orderBy('orders.updateTime', 'DESC')
             ->getQuery()
             ->setMaxResults(1)
-            ->getSingleResult();
+            ->getOneOrNullResult();
     }
 
     /**
