@@ -725,6 +725,16 @@ class Orders
     }
 
     /**
+     * Get discount
+     *
+     * @return string
+     */
+    public function getFullDiscount()
+    {
+        return $this->getTotalPrice() - $this->getIndividualDiscountedTotalPrice();
+    }
+
+    /**
      * Set individualDiscount
      *
      * @param string $individualDiscount

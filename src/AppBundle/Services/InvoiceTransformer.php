@@ -323,8 +323,6 @@ class InvoiceTransformer
                 $i++;
             }
             foreach ($cart->getSingleSizes($model) as $size) {
-                $discount = $size['entity']->getTotalPricePerItem() - $size['entity']->getDiscountedTotalPricePerItem();
-                $discountPrc = $discount / $size['entity']->getTotalPricePerItem() * 100;
                 $phpExcelObject->getActiveSheet()
                     ->setCellValue("B$i", $i)
                     ->setCellValue("C$i", $model->getProducts()->getArticle())
@@ -334,7 +332,7 @@ class InvoiceTransformer
                     ->setCellValue("G$i", 'шт.')
                     ->setCellValue("H$i", $size['quantity'])
                     ->setCellValue("I$i", $size['entity']->getTotalPricePerItem())
-                    ->setCellValue("J$i", $discountPrc ? $discountPrc . ' %' : '')
+                    ->setCellValue("J$i", '')
                     ->setCellValue("K$i", $size['entity']->getDiscountedTotalPricePerItem())
                     ->setCellValue("L$i", $size['entity']->getDiscountedTotalPricePerItem() * $size['quantity']);
                 $i++;

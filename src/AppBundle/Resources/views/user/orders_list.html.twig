@@ -84,7 +84,7 @@
                                             </tr>
                                             <tr class="discount-row">
                                                 <td>Скидка</td>
-                                                <td>{{ order.discount|format_price }} грн.</td>
+                                                <td>{{ order.fullDiscount|format_price }} грн.</td>
                                             </tr>
                                             {% if order.individualDiscount %}
                                                 <tr class="discount-row">
