@@ -306,7 +306,6 @@ class InvoiceTransformer
                 }, $cart->getModelSizes($model));
 
                 $sizesNames = implode(', ', $sizes);
-                $discount = $cart->getModelPackageDiscount($model);
 
                 $phpExcelObject->getActiveSheet()
                     ->setCellValue("B$i", $i)
@@ -317,7 +316,7 @@ class InvoiceTransformer
                     ->setCellValue("G$i", 'пач.')
                     ->setCellValue("H$i", $packagesCount)
                     ->setCellValue("I$i", $cart->getModelPackagePricePerItem($model))
-                    ->setCellValue("J$i", $discount ? $discount . ' %' : '')
+                    ->setCellValue("J$i", '')
                     ->setCellValue("K$i", $cart->getModelDiscountedPackagePricePerItem($model))
                     ->setCellValue("L$i", $cart->getModelDiscountedPackagesPrice($model));
                 $i++;

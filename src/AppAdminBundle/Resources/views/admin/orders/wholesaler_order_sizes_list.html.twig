@@ -70,13 +70,14 @@
                 {% endif %}
             </td>
             <td class="control-group">{{ size.entity.size.quantity }}</td>
-            <th class="editable-cell vertical-middle-cell">
+            <td class="editable-cell vertical-middle-cell">
                 {% if size.entity.size.preOrderFlag %}
                     <input type="number" name="move_size" min="1" max="{{ size.quantity }}"
                            value="{{ size.quantity }}"/>
                     <i class="fa fa-check-square js_submit_move_size"></i>
                 {% endif %}
-            </th>
+            </td>
+            <td class="control-group">{{ size['entity'].discountedTotalPricePerItem|round }}</td>
             <td class="control-group">{{ size.entity.totalPrice }}</td>
             <td class="control-group">{{ size.entity.discountedTotalPrice}}</td>
             <td class="control-group">
