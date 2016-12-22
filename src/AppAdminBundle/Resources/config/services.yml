@@ -1,3 +1,7 @@
 services:
     admin.wholesaler_cart:
         class: AppAdminBundle\Services\WholesalerCart
+
+    admin.route.generator:
+        class: AppAdminBundle\Services\RouteGenerator
+        arguments: [@router, @sonata.admin.route.cache, @service_container]

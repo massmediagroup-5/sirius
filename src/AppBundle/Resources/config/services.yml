@@ -43,6 +43,11 @@ services:
         arguments: [@service_container]
         tags:
             - { name: kernel.event_subscriber }
+    subscriber.change_user_total_spent:
+        class: AppBundle\Listener\ChangeUserTotalSpentSubscriber
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_subscriber }
     filters:
         class: AppBundle\Services\Filters
         arguments: ["@service_container"]

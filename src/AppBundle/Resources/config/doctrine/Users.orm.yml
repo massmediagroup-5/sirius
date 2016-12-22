@@ -74,6 +74,15 @@ AppBundle\Entity\Users:
             options:
                 unsigned: true
                 default: 0
+        totalSpent:
+            type: decimal
+            precision: 10
+            scale: 2
+            options:
+                default: 0.00
+            options:
+                unsigned: true
+                default: 0
         discount:
             type: integer
             options:

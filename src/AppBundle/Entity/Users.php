@@ -60,6 +60,11 @@ class Users extends BaseUser
     protected $bonuses = 0;
 
     /**
+     * @var integer
+     */
+    protected $totalSpent = 0;
+
+    /**
      * @var \DateTime
      */
     private $createTime;
@@ -562,5 +567,53 @@ class Users extends BaseUser
     public function getDiscount()
     {
         return $this->discount;
+    }
+
+    /**
+     * Set totalSpent
+     *
+     * @param string $totalSpent
+     *
+     * @return Users
+     */
+    public function setTotalSpent($totalSpent)
+    {
+        $this->totalSpent = $totalSpent;
+
+        return $this;
+    }
+
+    /**
+     * Get totalSpent
+     *
+     * @return string
+     */
+    public function getTotalSpent()
+    {
+        return $this->totalSpent;
+    }
+
+    /**
+     * @param $totalSpent
+     *
+     * @return $this
+     */
+    public function incrementTotalSpent($totalSpent)
+    {
+        $this->totalSpent += $totalSpent;
+
+        return $this;
+    }
+
+    /**
+     * @param $totalSpent
+     *
+     * @return $this
+     */
+    public function decrementTotalSpent($totalSpent)
+    {
+        $this->totalSpent -= $totalSpent;
+
+        return $this;
     }
 }

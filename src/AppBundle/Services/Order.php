@@ -612,10 +612,9 @@ class Order
                 if ($fieldName == 'status' && $orderChange[1]) {
                     $doneDate = $orderChange[1]->getCode() == Orders::STATUS_DONE ? new \DateTime() : null;
                     $order->setDoneTime($doneDate);
-                }
-                if ($fieldName == 'status' && $orderChange[1]) {
-                    if ($orderChange[1]->getCode() == 'accepted') {
-                        $this->container->get('event_dispatcher')->dispatch('app.order_accepted',
+
+                    if (in_array($orderChange[1]->getCode(), ['accepted', 'done'])) {
+                        $this->container->get('event_dispatcher')->dispatch("app.order_{$orderChange[1]->getCode()}",
                             new OrderEvent($order, false));
                     } elseif ($orderChange[1]->getCode() == 'canceled') {
                         $this->container->get('event_dispatcher')->dispatch('app.order_canceled',

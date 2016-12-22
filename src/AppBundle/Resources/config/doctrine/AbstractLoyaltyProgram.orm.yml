@@ -1,0 +1,26 @@
+AppBundle\Entity\AbstractLoyaltyProgram:
+    type: entity
+    table: loyalty_program
+    inheritanceType: SINGLE_TABLE
+    discriminatorColumn:
+        name: discr
+        type: string
+    discriminatorMap:
+        simple: LoyaltyProgram
+        wholesaler: WholesalerLoyaltyProgram
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        sumFrom:
+            type: decimal
+            column: sum_from
+        sumTo:
+            type: decimal
+            column: sum_to
+        discount:
+            type: decimal
+    lifecycleCallbacks: {  }

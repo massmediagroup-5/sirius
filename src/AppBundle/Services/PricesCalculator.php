@@ -195,38 +195,12 @@ class PricesCalculator
     public function getProductModelSpecificSizeDiscountedPrice(ProductModelSpecificSize $object, $fromCart = false)
     {
         if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
-            $user = $this->container->get('security.context')->getToken()->getUser();
-            $optionsService = $this->container->get('options');
-
-            $price = $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
-
             // Not subtract discount when user in gray list
             if ($this->authorizationChecker->isGranted('ROLE_GRAY_LIST')) {
-                return $price;
+                return $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
             }
 
-            $wholesalePrice = $object->getWholesalePrice() ?: $this->getProductModelDiscountedPrice($object->getModel());
-
-            $cart = $this->container->get('cart');
-            $totalPriceWithNewSize = $cart->getTotalPrice();
-            // When size from cart not add it to total sum
-            if (!$fromCart) {
-                $totalPriceWithNewSize += $price;
-            }
-            if ($user->getOrders()->count() >= 1) {
-                if ($totalPriceWithNewSize > $optionsService->getParamValue('startWholesalerPriceAfterOrder', 500)) {
-                    $price = $wholesalePrice;
-                }
-            } else {
-                if ($totalPriceWithNewSize > $optionsService->getParamValue('startWholesalerPrice', 2500)) {
-                    $price = $wholesalePrice;
-                } elseif ($price > $optionsService->getParamValue('startPreWholesalerPrice', 500)) {
-                    $discountPct = $optionsService->getParamValue('startDiscountPct', 10) * 0.01;
-                    $price = $price - ceil($price * $discountPct);
-                }
-            }
-            $price -= $price * $user->getDiscount() * 0.01;
-            return $price;
+            return $object->getWholesalePrice() ?: $this->getProductModelDiscountedPrice($object->getModel());
         }
 
         return $this->getProductModelSpecificSizeShareDiscounted($object);
@@ -478,28 +452,39 @@ class PricesCalculator
      * @param $sum
      * @return number
      */
-    public function getLoyaltyDiscounted($sum)
+    public function getLoyaltyDiscount($sum)
     {
-        $isWholesaler = $this->authorizationChecker->isGranted('ROLE_WHOLESALER');
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            if (!$this->authorizationChecker->isGranted('ROLE_GRAY_LIST')) {
+                $user = $this->container->get('security.context')->getToken()->getUser();
+                $optionsService = $this->container->get('options');
 
-        if (!$isWholesaler && $loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
-            return $sum - ceil($loyaltyProgram->getDiscount() / 100 * $sum);
+                $cart = $this->container->get('cart');
+
+                if ($cart->getTotalPrice() > $optionsService->getParamValue('startWholesalerDiscount', 500)) {
+                    // Use user discount
+                    if ($user->getDiscount()) {
+                        return $sum * $user->getDiscount() * 0.01;
+                    } else {
+                        // Use loyalty discount
+                        return $this->getLoyaltyProgramDiscountBySum($sum);
+                    }
+                }
+            }
+            return 0;
         }
-        return $sum;
+
+        return $this->getLoyaltyProgramDiscountBySum($sum);
     }
 
     /**
-     * Subtract loyalty discount from sum when customer is not a wholesaler
-     *
      * @param $sum
-     * @return number
+     * @return float|int
      */
-    public function getLoyaltyDiscount($sum)
+    public function getLoyaltyProgramDiscountBySum($sum)
     {
-        $isWholesaler = $this->authorizationChecker->isGranted('ROLE_WHOLESALER');
-
-        if (!$isWholesaler && $loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
-            return ceil($loyaltyProgram->getDiscount() / 100 * $sum);
+        if ($loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
+            return ceil($loyaltyProgram->getDiscount() * $sum * 0.01);
         }
         return 0;
     }
@@ -510,7 +495,13 @@ class PricesCalculator
      */
     public function getLoyaltyProgramBySum($sum)
     {
-        return $this->em->getRepository('AppBundle:LoyaltyProgram')->firstBySum($sum);
+        if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
+            $repo = 'AppBundle:WholesalerLoyaltyProgram';
+        } else {
+            $repo = 'AppBundle:LoyaltyProgram';
+        }
+
+        return $this->em->getRepository($repo)->firstBySum($sum);
     }
 
     /**

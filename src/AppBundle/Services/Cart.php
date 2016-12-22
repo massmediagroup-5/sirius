@@ -360,14 +360,12 @@ class Cart
      */
     public function getLoyaltyDiscount()
     {
-        $price = $discountedPrice = $this->getDiscountedIntermediatePrice();
-
         // Use upSell discount or loyalty discount
         if (!$this->hasShareDiscount()) {
-            $discountedPrice = $this->pricesCalculator->getLoyaltyDiscounted($price);
+            return $this->pricesCalculator->getLoyaltyDiscount($this->getDiscountedIntermediatePrice());
         }
 
-        return round($price - $discountedPrice, 2);
+        return 0;
     }
 
     /**

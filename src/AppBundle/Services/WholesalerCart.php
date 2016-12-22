@@ -84,6 +84,8 @@ class WholesalerCart extends Cart
      */
     public function getDiscountedTotalPrice()
     {
-        return $this->getDiscountedIntermediatePrice();
+        $discount = $this->pricesCalculator->getLoyaltyDiscount($this->getDiscountedIntermediatePrice());
+
+        return $this->getDiscountedIntermediatePrice() - $discount;
     }
 }

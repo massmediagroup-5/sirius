@@ -4,42 +4,56 @@ services:
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Новые заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.accepted_orders:
         class: AppAdminBundle\Admin\AcceptedOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Принятые заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.wait_orders:
         class: AppAdminBundle\Admin\WaitOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Ожидающие заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.formed_orders:
         class: AppAdminBundle\Admin\FormedOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Сформированные заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.waiting_for_departure_orders:
         class: AppAdminBundle\Admin\WaitingForDepartureOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Заказы ожидающие отправки"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.sent_orders:
         class: AppAdminBundle\Admin\SentOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отправленые заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.refused_orders:
         class: AppAdminBundle\Admin\RefusedOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
 
     app.admin.done_orders:
@@ -47,24 +61,32 @@ services:
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Исполненые заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.canceled_orders:
         class: AppAdminBundle\Admin\CanceledOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Отмененые заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.return_orders:
         class: AppAdminBundle\Admin\ReturnOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Возвращенные заказы"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.order_product_size:
         class: AppAdminBundle\Admin\OrderProductSizeAdmin
         arguments: [~, AppBundle\Entity\OrderProductSize, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Список всех заказанных товаров"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
 
     app.admin.share:
         class: AppAdminBundle\Admin\ShareAdmin
@@ -170,6 +192,14 @@ services:
                 - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Программа лояльности"}
             calls:
                 - [ setTranslationDomain, [AppAdminBundle]]
+
+    app.admin.wholesaler_loyalty_program:
+        class: AppAdminBundle\Admin\WholesalerLoyaltyProgram
+        arguments: [~, AppBundle\Entity\WholesalerLoyaltyProgram, AppAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Программа лояльности для оптовиков"}
+        calls:
+            - [ setTranslationDomain, [AppAdminBundle]]
 
     app_admin.admin.main_slider:
         class: AppAdminBundle\Admin\MainSliderAdmin
