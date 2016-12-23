@@ -467,7 +467,10 @@ class PricesCalculator
                         return $sum * $user->getDiscount() * 0.01;
                     } else {
                         // Use loyalty discount
-                        return $this->getLoyaltyProgramDiscountBySum($sum);
+                        if ($loyaltyProgram = $this->getLoyaltyProgramBySum($user->getTotalSpent())) {
+                            return ceil($loyaltyProgram->getDiscount() * $sum * 0.01);
+                        }
+                        return 0;
                     }
                 }
             }
