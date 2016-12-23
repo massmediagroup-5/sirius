@@ -146,7 +146,7 @@ class OrderController extends BaseController
         $object = $this->admin->getSubject();
 
         $historyItem = $this->get('history_manager')->createFromId($request->get('history_id'));
-        
+
         if ($historyItem->rollback()) {
             $this->addFlash('sonata_flash_success', 'flash_order_history_item_canceled');
         } else {
@@ -193,12 +193,13 @@ class OrderController extends BaseController
     public function ajaxCreateWaybillAction(Request $request)
     {
         // Получаем ключ апи с базы и конфигуруем прослойку для работы с апи
-        $api = $this->getDoctrine()->getRepository('AppBundle:Novaposhta')->findOneBy(['active' => 1]);
-        Config::setApiKey($api->getApiKey());
-        Config::setFormat(Config::FORMAT_JSONRPC2);
-        Config::setLanguage(Config::LANGUAGE_RU);
+        $api = $this->get('novaposhta')->initConfig();
 
         $orderObject = $this->admin->getSubject();
+        if (!$orderObject->getUsers()) {
+            return $this->renderJson(['message' => 'Заказ должен иметь пользователя для генерации ТТН'], 422);
+        }
+
         $form_data   = $request->request->all();
 
         // Габариты груза
@@ -221,10 +222,9 @@ class OrderController extends BaseController
         // данные отправителя
         $data                       = new MethodParameters();
         $data->CounterpartyProperty = 'Sender';
-        $data->FindByString         = 'Мудрицька';
         $result                     = Counterparty::getCounterparties($data);
         $senderInfo                 = $result->data[0]; // Полная информация о отправителе
-        $citySender                 = $senderInfo->City; // Город отправителя
+        $citySender = "db5c88ac-391c-11dd-90d9-001a92567626"; // Город отправителя Хмельницький
         $counterpartySender         = $senderInfo->Ref;
 
         // создаем контрагента получателя если до этого он небыл создан
@@ -311,20 +311,24 @@ class OrderController extends BaseController
 
         // И НАКОНЕЦ-ТО формирование ТТН
         $internetDocument = new \NovaPoshta\ApiModels\InternetDocument();
-        $internetDocument->setSender($sender)
-                         ->setRecipient($recipient)
-                         ->setServiceType($serviceType)
-                         ->setPayerType($payerType)
-                         ->setPaymentMethod($paymentMethod)
-                         ->setCargoType($cargoType)
-                         ->setWeight($form_data['np_weight'])
-                         ->setSeatsAmount($form_data['np_seats_amount'])
-                         ->setCost($form_data['np_cost'])
-                         ->setDescription('Sirius')
-                         ->setDateTime($form_data['np_date'])
-                         ->addOptionsSeat($optionsSeat)
-                         ->addBackwardDeliveryData($backwardDeliveryData);
+        $internetDocument
+            ->setSender($sender)
+            ->setRecipient($recipient)
+            ->setServiceType($serviceType)
+            ->setPayerType($payerType)
+            ->setPaymentMethod($paymentMethod)
+            ->setCargoType($cargoType)
+            ->setWeight($form_data['np_weight'])
+            ->setSeatsAmount($form_data['np_seats_amount'])
+            ->setCost($form_data['np_cost'])
+            ->setDescription('Sirius')
+            ->setDateTime($form_data['np_date'])
+            ->addOptionsSeat($optionsSeat)
+            ->addBackwardDeliveryData($backwardDeliveryData);
+
         $result = $internetDocument->save();
+
+        dump($result);
 
         $refInternetDocument = $result->data[0]->Ref;
         $orderObject->setTtn($refInternetDocument);
@@ -342,9 +346,9 @@ class OrderController extends BaseController
      */
     public function ajaxUpdateWaybillAction(Request $request)
     {
-        $data = new \NovaPoshta\MethodParameters\InternetDocument_getDocumentList();
-        $data->setIntDocNumber($request->get('np_ttn'));
-        $document = InternetDocument::getDocumentList($data);
+        $this->get('novaposhta')->initConfig();
+
+        $document = $this->get('novaposhta')->getInternetDocumentByIntDocNumber($request->get('np_ttn'));
 
         if ($document->data) {
             $ttn = $document->data[0];
@@ -355,7 +359,7 @@ class OrderController extends BaseController
             $this->getDoctrine()->getManager()->flush();
             return $this->renderJson([]);
         }
-        
+
         return $this->renderJson(['message' => 'Неверный ТТН'], 422);
     }
 

@@ -96,6 +96,9 @@ class CreateOrderType extends AbstractType
             ->add('np_delivery_city', 'entity', [
                 'class' => 'AppBundle:Cities',
                 'required' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')->where('c.active = 1');
+                },
                 'constraints' => $delivery == Carriers::NP_ID ? [new NotBlank] : [],
                 'placeholder' => ''
             ])
@@ -104,7 +107,9 @@ class CreateOrderType extends AbstractType
                 'required' => true,
                 'constraints' => $delivery == Carriers::NP_ID ? [new NotBlank] : [],
                 'query_builder' => function (EntityRepository $er) use ($city) {
-                    return $er->createQueryBuilder('s')->orderBy('s.name', 'ASC')->where('s.cities = :city')
+                    return $er->createQueryBuilder('s')
+                        ->orderBy('s.name', 'ASC')
+                        ->where('s.cities = :city AND s.active = 1')
                         ->setParameter('city', $city);
                 },
                 'placeholder' => ''
