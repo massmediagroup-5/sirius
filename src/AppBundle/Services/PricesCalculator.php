@@ -508,6 +508,17 @@ class PricesCalculator
     }
 
     /**
+     * @return mixed
+     */
+    public function getCurrentUserLoyaltyDiscount()
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $loyaltyProgram = $this->getLoyaltyProgramBySum($user->getTotalSpent());
+
+        return $loyaltyProgram ? $loyaltyProgram->getDiscount() : 0;
+    }
+
+    /**
      * @param $sum
      * @return int
      */

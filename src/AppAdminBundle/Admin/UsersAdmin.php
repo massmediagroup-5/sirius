@@ -97,12 +97,28 @@ class UsersAdmin extends BaseUserAdmin
         $formMapper
             ->end()
             ->tab('Заказы', ['tab_template' => 'AppAdminBundle:admin:users/orders_tab.html.twig'])
-            ->end()
+            ->end();
+
+        $formMapper
             ->tab('Скидки')
             ->with('Скидки')
             ->add('discount', null, ['required' => false])
-            ->add('bonuses', null, ['required' => false])
-            ->end();
+            ->add('bonuses', null, ['required' => false]);
+
+        if ($this->getSubject()->hasRole('ROLE_WHOLESALER')) {
+            $loyaltyProgram = $this->getConfigurationPool()
+                ->getContainer()
+                ->get('doctrine.orm.entity_manager')
+                ->getRepository('AppBundle:WholesalerLoyaltyProgram')
+                ->firstBySum($this->getSubject()->getTotalSpent());
+
+            $formMapper->add('loyaltyDiscount', 'text', [
+                'mapped' => false,
+                'data' => $loyaltyProgram ? $loyaltyProgram->getDiscount() : 0
+            ]);
+        }
+
+        $formMapper->end();
     }
 
     /**

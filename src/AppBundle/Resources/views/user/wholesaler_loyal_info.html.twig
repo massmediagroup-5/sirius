@@ -13,8 +13,13 @@
                 <table>
                     <tbody>
                     <tr>
-                        <td>Персональная скидка</td>
-                        <td>-{{ app.user.discount }}%</td>
+                        {% if app.user.discount %}
+                            <td>Персональная скидка</td>
+                            <td>-{{ app.user.discount }}%</td>
+                        {% else %}
+                            <td>Скидка по программе лояльности</td>
+                            <td>-{{ prices.currentUserLoyaltyDiscount }}%</td>
+                        {% endif %}
                     </tr>
                     </tbody>
                 </table>
