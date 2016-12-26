@@ -22,12 +22,20 @@ var OrderSize = (function () {
     OrderSize.prototype.init = function () {
         this.$size.find('.js_submit_move_size').on('click', this.moveSize.bind(this));
         this.$size.find('.js_size_remove').on('click', this.removeSize.bind(this));
+        this.$size.find('.js_change_size_quantity').on('click', this.changeSizeQuantity.bind(this));
     };
 
     OrderSize.prototype.moveSize = function () {
         var quantity = parseInt(this.$size.find('[name="move_size"]').val());
         if (quantity) {
             this.request('move_size', {size: this.$size.data('size-id'), quantity: quantity});
+        }
+    };
+
+    OrderSize.prototype.changeSizeQuantity = function () {
+        var quantity = parseInt(this.$size.find('[name="size_quantity"]').val());
+        if (quantity) {
+            this.request('change_size_quantity', {size: this.$size.data('model-size-id'), quantity: quantity});
         }
     };
 

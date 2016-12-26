@@ -48,7 +48,7 @@ class OrderHistoryRelationChangedItem extends AbstractHistoryItem
                 $this->history->getAdditional('entityId'));
             if ($size) {
                 $quantity = $this->history->getFrom() - $this->history->getTo();
-                $this->container->get('order')->changeSizeCount($this->history->getOrder(), $size, $quantity, true);
+                $this->container->get('order')->incrementSizeCount($this->history->getOrder(), $size, $quantity, true);
             }
         }
     }

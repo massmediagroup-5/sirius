@@ -1,5 +1,5 @@
 {% for size in admin.subject.sizes %}
-    <tr data-size-id="{{ size.id }}">
+    <tr data-size-id="{{ size.id }}" data-model-size-id="{{ size.size.id }}">
         <td class="control-group">{{ size.size.model.products.article }}</td>
         <td class="control-group">
             {% if size.size.model.images.0 is defined %}
@@ -13,8 +13,15 @@
         <td class="control-group">{{ size.size.model.products.name }}</td>
         <td class="control-group">{{ size.size.model.productColors.name }}</td>
         <td class="control-group">{{ size.size }}</td>
-        <td class="control-group">{{ size.quantity }}
-            {% if admin.subject.status.code == 'new' or admin.subject.status.code == 'canceled' %}
+        <td class="control-group">
+            {% if admin.baseRouteName == 'new_orders' %}
+                <input type="number" value="{{ size.quantity }}" name="size_quantity"/>
+                <i class="fa fa-check-square js_change_size_quantity pointer"></i>
+            {% else %}
+                {{ size.quantity }}
+            {% endif %}
+
+            {% if admin.baseRouteName == 'new_orders' or admin.baseRouteName == 'canceled_orders' %}
                 (не перечислено)
             {% else %}
                 (перечислено)

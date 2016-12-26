@@ -255,7 +255,7 @@ class Order
 
         foreach ($sizes as $size) {
             list($size, $quantity) = $size;
-            $this->changeSizeCount($order, $size, $quantity);
+            $this->incrementSizeCount($order, $size, $quantity);
         }
 
         $this->em->persist($order);
@@ -272,8 +272,37 @@ class Order
      * @param bool $flushFlag
      * @throws ImpossibleToAddSizeToOrder
      */
-    public function changeSizeCount(Orders $order, ProductModelSpecificSize $size, $quantity, $flushFlag = false)
+    public function incrementSizeCount(Orders $order, ProductModelSpecificSize $size, $quantity, $flushFlag = false)
     {
+        $this->changeSizeCount($order, $size, $quantity, true, $flushFlag);
+    }
+
+    /**
+     * @param Orders $order
+     * @param ProductModelSpecificSize $size
+     * @param $quantity
+     * @param bool $flushFlag
+     * @throws ImpossibleToAddSizeToOrder
+     */
+    public function setSizeCount(Orders $order, ProductModelSpecificSize $size, $quantity, $flushFlag = false)
+    {
+        $this->changeSizeCount($order, $size, $quantity, false, $flushFlag);
+    }
+
+    /**
+     * @param Orders $order
+     * @param ProductModelSpecificSize $size
+     * @param $quantity
+     * @param bool $increment
+     * @param bool $flushFlag
+     */
+    public function changeSizeCount(
+        Orders $order,
+        ProductModelSpecificSize $size,
+        $quantity,
+        $increment = false,
+        $flushFlag = false
+    ) {
         $availableSizes = $order->getSizes();
         $foundedFlag = false;
 
@@ -281,7 +310,12 @@ class Order
             if ($availableSize->getSize()->getId() == $size->getId()) {
                 $beforeQuantity = $availableSize->getQuantity();
 
-                $availableSize->incrementQuantity($quantity);
+                if ($increment) {
+                    $availableSize->incrementQuantity($quantity);
+                } else {
+                    $availableSize->setQuantity($quantity);
+                }
+
                 $availableSizes->set($key, $availableSize);
 
                 $afterQuantity = $availableSize->getQuantity();

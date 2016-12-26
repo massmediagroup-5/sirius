@@ -19,14 +19,8 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 use NovaPoshta\Config;
 use NovaPoshta\ApiModels\Counterparty;
-use NovaPoshta\ApiModels\Address;
 use NovaPoshta\ApiModels\InternetDocument;
-use NovaPoshta\MethodParameters\Address_getStreet;
 use NovaPoshta\MethodParameters\MethodParameters;
-use NovaPoshta\MethodParameters\InternetDocument_getDocumentList;
-use NovaPoshta\Models\CounterpartyContact;
-use NovaPoshta\Models\OptionsSeat;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * END NOVAPOSHTA
@@ -39,8 +33,6 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class OrderController extends BaseController
 {
-
-
     /**
      * @param Request $request
      *
@@ -56,6 +48,25 @@ class OrderController extends BaseController
             ->find($request->get('size'));
 
         $this->get('order')->moveSize($object, $size, $request->get('quantity'));
+
+        return $this->renderJson($this->renderPartials());
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function changeSizeQuantityAction(Request $request)
+    {
+        $object = $this->admin->getSubject();
+
+        $size = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:ProductModelSpecificSize')
+            ->find($request->get('size'));
+
+        $this->get('order')->setSizeCount($object, $size, $request->get('quantity'), true);
 
         return $this->renderJson($this->renderPartials());
     }

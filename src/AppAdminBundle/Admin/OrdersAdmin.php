@@ -73,6 +73,9 @@ class OrdersAdmin extends Admin
             ->add('move_size', $this->getRouterIdParameter() . '/move_sizes', [], [], [
                 'expose' => true
             ])
+            ->add('change_size_quantity', $this->getRouterIdParameter() . '/change_size_quantity', [], [], [
+                'expose' => true
+            ])
             ->add('ajax_update', $this->getRouterIdParameter() . '/ajax_update', [], [], [
                 'expose' => true
             ])

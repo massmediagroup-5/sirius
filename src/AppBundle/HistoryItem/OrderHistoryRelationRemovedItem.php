@@ -44,7 +44,7 @@ class OrderHistoryRelationRemovedItem extends AbstractHistoryItem
     {
         if ($this->history->getChanged() == 'sizes') {
             $size = $this->em->getRepository('AppBundle:ProductModelSpecificSize')->find($this->history->getAdditional('entityId'));
-            $this->container->get('order')->changeSizeCount($this->history->getOrder(), $size,
+            $this->container->get('order')->incrementSizeCount($this->history->getOrder(), $size,
                 $this->history->getAdditional('quantity'), true);
         }
     }
