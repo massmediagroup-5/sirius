@@ -4,6 +4,7 @@ namespace AppBundle\Entity\Repository;
 
 use AppBundle\Entity\ShareSizesGroup;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Illuminate\Support\Arr;
@@ -136,9 +137,16 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             MIN(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price))"
         );
 
-        $prices = $builder->getQuery()->getResult();
+        $prices = $builder->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
 
-        return ['max_price' => Arr::get($prices, '0.1', 0), 'min_price' => Arr::get($prices, '0.2', 0)];
+        return [
+            'max_price' => max(array_map(function ($item) {
+                return $item[1];
+            }, $prices)),
+            'min_price' => min(array_map(function ($item) {
+                return $item[2];
+            }, $prices))
+        ];
     }
 
     /**

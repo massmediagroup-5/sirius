@@ -27,7 +27,7 @@
                 <td>{{ item.productColors.name }}</td>
                 <td>{{ item.products.getCharacteristicValueByType('material') }}</td>
                 <td>
-                    {% for size in item.sizes %}
+                    {% for size in item.activeSizes %}
                         <p>{{ size.size }}/1</p>
                     {% endfor %}
                 </td>
