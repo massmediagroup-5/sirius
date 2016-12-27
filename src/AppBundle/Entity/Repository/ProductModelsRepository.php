@@ -132,20 +132,22 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
 
-        $builder->addSelect(
-            "MAX(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price)),
-            MIN(COALESCE(NULLIF(sizes.price, 0), NULLIF(productModels.price, 0), products.price))"
-        );
+        $builder->select('sizes.id');
+
+        $builder = $this->createQueryBuilder('pModels')
+            ->join('pModels.products', 'pProducts')
+            ->join('pModels.sizes', 'pSizes')
+            ->addSelect(
+                "MAX(COALESCE(NULLIF(pSizes.price, 0), NULLIF(pModels.price, 0), pProducts.price)),
+                MIN(COALESCE(NULLIF(pSizes.price, 0), NULLIF(pModels.price, 0), pProducts.price))"
+            )
+            ->where($builder->expr()->in('pSizes.id', $builder->getDQL()));
 
         $prices = $builder->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
 
         return [
-            'max_price' => max(array_map(function ($item) {
-                return $item[1];
-            }, $prices)),
-            'min_price' => min(array_map(function ($item) {
-                return $item[2];
-            }, $prices))
+            'max_price' => Arr::get($prices, '0.1', 0),
+            'min_price' => Arr::get($prices, '0.2', 0)
         ];
     }
 
@@ -166,31 +168,47 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      * @param $ids
      * @return array
      */
-    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters, $ids = array())
+    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters, $ids = [])
     {
-        $builder = $this->createQueryBuilderWithJoins();
+        $builder = $this->createQueryBuilder('productModels')
+            ->select('productModels')
+            ->innerJoin('productModels.products', 'products')->addselect('products')
+            ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
+            ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
+            ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
+            ->leftJoin('productModels.images', 'images')->addselect('images')
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes');
 
         if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")
                 ->setParameter('productsIds', array_values($ids));
         }
 
-        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder, 'sizes');
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder,
-            $characteristicValues, 'productModels');
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
-
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->addPriceToQuery($builder, $filters);
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters);
+        $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters);
 
         return $builder->getQuery();
+    }
+
+    /**
+     * @param $category
+     * @param $characteristicValues
+     * @param $filters
+     * @param array $params
+     * @return \Doctrine\ORM\Query
+     */
+    public function createFilteredProductsToCategoryBuilder($category, $characteristicValues, $filters, $params = [])
+    {
+        $builder = $this->createQueryBuilder('productModels');
+
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, 'productModels', $params);
+
+        return $builder;
     }
 
     /**
@@ -198,7 +216,6 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function createQueryBuilderWithJoins()
     {
-
         return $this->createQueryBuilder('productModels')
             ->select('productModels')
             ->innerJoin('productModels.products', 'products')->addselect('products')

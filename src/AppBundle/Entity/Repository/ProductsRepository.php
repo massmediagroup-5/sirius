@@ -194,7 +194,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param $filters
      * @param string $productAlias
      * @param string $modelAlias
-     * @param string $sizeAlias
+     * @param $params
      * @return mixed
      */
     public function addSort(
@@ -202,7 +202,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $filters,
         $productAlias = 'products',
         $modelAlias = 'productModels',
-        $sizeAlias = 'sizes'
+        $params = []
     ) {
         $sort = Arr::get($filters, 'sort');
         $wholesalerFlag = Arr::get($filters, 'wholesaler');
@@ -221,16 +221,23 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             case 'expensive':
                 $aggregationFunction = $sort == 'cheap' ? 'MIN' : 'MAX';
                 $direction = $sort == 'cheap' ? 'ASC' : 'DESC';
+                $prefix = Arr::get($params, 'prefix');
+                $oProductAlias = "{$prefix}oProduct";
+                $oModelAlias = "{$prefix}oModel";
+                $oSizesAlias = "{$prefix}oSizes";
+                $oShareAlias = "{$prefix}oShare";
+                $oShareGroupAlias = "{$prefix}oShareGroup";
                 if ($wholesalerFlag) {
                     $sizesQuery = $this->_em->getRepository('AppBundle:Products')
-                        ->createQueryBuilder('oProduct')
+                        ->createQueryBuilder($oProductAlias)
                         ->select("$aggregationFunction(" .
-                            "COALESCE(NULLIF(oSizes.wholesalePrice, 0), NULLIF(oModel.wholesalePrice, 0), oProduct.wholesalePrice) " .
-                            ")")
-                        ->join('oProduct.productModels', 'oModel')
-                        ->join('oModel.sizes', 'oSizes')
-                        ->where("oModel.id = $modelAlias.id")
-                        ->andWhere('oProduct.active = 1 AND oModel.published = 1');
+                            "COALESCE(NULLIF($oSizesAlias.wholesalePrice, 0), " .
+                            "NULLIF($oModelAlias.wholesalePrice, 0), $oProductAlias.wholesalePrice) )"
+                        )
+                        ->join("$oProductAlias.productModels", $oModelAlias)
+                        ->join("$oModelAlias.sizes", $oSizesAlias)
+                        ->where("$oModelAlias.id = $modelAlias.id")
+                        ->andWhere("$oProductAlias.active = 1 AND $oModelAlias.published = 1");
 
                     $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $direction);
 
@@ -239,19 +246,22 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                     }
                 } else {
                     $sizesQuery = $this->_em->getRepository('AppBundle:Products')
-                        ->createQueryBuilder('oProduct')
+                        ->createQueryBuilder($oProductAlias)
                         ->select("$aggregationFunction(IFELSE(" .
-                            "oShare.groupsCount = 1, " .
-                            "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price) " .
-                            "* (100 - oShareGroup.discount) * 0.01, " .
-                            "COALESCE(NULLIF(oSizes.price, 0), NULLIF(oModel.price, 0), oProduct.price)))")
-                        ->join('oProduct.productModels', 'oModel')
-                        ->join('oModel.sizes', 'oSizes')
-                        ->leftJoin('oSizes.shareGroup', 'oShareGroup')
-                        ->leftJoin('oShareGroup.share', 'oShare')
-                        ->where("oProduct.id = $productAlias.id")
-                        ->addCriteria($this->_em->getRepository('AppBundle:ProductModelSpecificSize')->getActiveCriteria('oSizes'))
-                        ->andWhere('oProduct.active = 1 AND oModel.published = 1');
+                            "$oShareAlias.groupsCount = 1, " .
+                            "COALESCE(NULLIF($oSizesAlias.price, 0), NULLIF($oModelAlias.price, 0), $oProductAlias.price) " .
+                            "* (100 - $oShareGroupAlias.discount) * 0.01, " .
+                            "COALESCE(NULLIF($oSizesAlias.price, 0), NULLIF($oModelAlias.price, 0), $oProductAlias.price)))")
+                        ->join("$oProductAlias.productModels", $oModelAlias)
+                        ->join("$oModelAlias.sizes", $oSizesAlias)
+                        ->leftJoin("$oSizesAlias.shareGroup", $oShareGroupAlias)
+                        ->leftJoin("$oShareGroupAlias.share", $oShareAlias)
+                        ->where("$oProductAlias.id = $productAlias.id")
+                        ->addCriteria(
+                            $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+                                ->getActiveCriteria($oSizesAlias)
+                        )
+                        ->andWhere("$oProductAlias.active = 1 AND $oModelAlias.published = 1");
 
                     $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $direction);
 
@@ -476,42 +486,27 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param $ids
      * @return array
      */
-    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters, $ids = array())
+    public function getFilteredProductsToCategoryQuery($category, $characteristicValues, $filters, $ids = [])
     {
         $builder = $this->createQueryBuilder('products')
-            ->select('products');
-        // Add a starting Joins.
-        $builder
-            ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
-            ->leftJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('products.productModels', 'productModels')->addselect('productModels')
+            ->innerJoin('products.baseCategory', 'baseCategory')->addselect('baseCategory')
+            ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
-            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
-            ->leftJoin('sizes.shareGroup', 'shareGroup')->addselect('shareGroup')
-            ->leftJoin('shareGroup.share', 'share')->addselect('share')
-            ->innerJoin('sizes.size', 'modelSize')->addselect('modelSize')
-            ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
-            ->leftJoin('characteristicValues.characteristics', 'characteristics');
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes');
 
         if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")
                 ->setParameter('productsIds', array_values($ids));
         }
 
-        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder, 'sizes');
 
-        $builder = $this->addCharacteristicsCondition($builder, $characteristicValues);
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters);
 
-        $builder = $this->addFiltersToQuery($builder, $filters);
-
-        $builder = $this->addActiveConditionsToQuery($builder);
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
-
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->addPriceToQuery($builder, $filters);
-
-        $builder = $this->addSort($builder, $filters);
+        $this->addSort($builder, $filters);
 
         return $builder->getQuery();
     }
@@ -535,6 +530,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param string $productsAlias
      * @param string $characteristicValuesAlias
      * @param string $characteristicsAlias
+     * @param string|bool $topLevelValueAlias
      * @return mixed
      */
     public function addCharacteristicsCondition(
@@ -542,18 +538,31 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $characteristicValues,
         $productsAlias = 'productModels',
         $characteristicValuesAlias = 'characteristicValues',
-        $characteristicsAlias = 'characteristics'
+        $characteristicsAlias = 'characteristics',
+        $topLevelValueAlias = false
     ) {
-        if ($characteristicValues) {
-            $builder->andWhere($builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues))
+        if ($characteristicValues || $topLevelValueAlias) {
+            if (!$characteristicValues) {
+                $characteristicValues = [0];
+            }
+            if ($topLevelValueAlias) {
+                $whereSql = " OR inccharval.id = $topLevelValueAlias.id";
+                $builder->andWhere($builder->expr()->orX(
+                    $builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues),
+                    $builder->expr()->eq("$characteristicValuesAlias.id", "$topLevelValueAlias.id")
+                ));
+            } else {
+                $whereSql = '';
+                $builder->andWhere($builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues));
+            }
+            $builder
                 ->groupBy("$productsAlias.id")
                 ->having('COUNT(DISTINCT ' . $characteristicsAlias . '.id) >=
                 (
                     SELECT COUNT( DISTINCT incchar.id )
                     FROM \AppBundle\Entity\Characteristics as incchar
                     JOIN incchar.characteristicValues as inccharval
-                    WHERE inccharval.id IN (' . implode(',', $characteristicValues) . ')
-                    OR inccharval.id = characteristicValues.id
+                    WHERE inccharval.id IN (' . implode(',', $characteristicValues) . ')' . $whereSql . '
                 )
             ');
         }
@@ -561,20 +570,30 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * @param \Doctrine\ORM\QueryBuilder $builder
+     * @param $builder
      * @param $filters
      * @param string $alias
      * @param string $productAlias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param string $characteristicValueAlias
+     * @param string $sharesAlias
+     * @param string $sizesAlias
+     * @return mixed
      */
-    public function addFiltersToQuery($builder, $filters, $alias = 'productModels', $productAlias = 'products', $characteristicValueAlias = 'characteristicValues')
-    {
+    public function addFiltersToQuery(
+        $builder,
+        $filters,
+        $alias = 'productModels',
+        $productAlias = 'products',
+        $characteristicValueAlias = 'characteristicValues',
+        $sharesAlias = 'share',
+        $sizesAlias = 'sizes'
+    ) {
         if ($colors = Arr::get($filters, 'colors')) {
             $colors = explode(',', $colors);
             $builder->andWhere($builder->expr()->in("$alias.productColors", $colors));
         }
-        if ($share = Arr::get($filters, 'share')) {
-            $builder->andWhere('share.id = :shareId')->setParameter('shareId', $share);
+        if ($share = Arr::get($filters, $sharesAlias)) {
+            $builder->andWhere("$sharesAlias.id = :shareId")->setParameter('shareId', $share);
         }
         if ($slug = Arr::get($filters, 'search')) {
             $subSlug = Arr::get($filters, 'sub_search');
@@ -586,8 +605,8 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                     ->setParameter('sub_slug', "%$subSlug%");
         }
         if ($shares = Arr::get($filters, 'shares')) {
-            $builder->andWhere('sizes.shareGroup IS NOT NULL')
-                ->andWhere('share.status = 1 AND share.startTime < :today AND share.endTime > :today')
+            $builder->andWhere("$sizesAlias.shareGroup IS NOT NULL")
+                ->andWhere("$sharesAlias.status = 1 AND $sharesAlias.startTime < :today AND $sharesAlias.endTime > :today")
                 ->setParameter('today', new \DateTime());
         }
 

@@ -567,19 +567,6 @@ class ProductModels
     }
 
     /**
-     * Get sizes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getActiveSizes()
-    {
-        return $this->sizes->matching(new Criteria(Criteria::expr()->orX(
-            Criteria::expr()->gt('quantity', 0),
-            Criteria::expr()->eq('preOrderFlag', true)
-        )));
-    }
-
-    /**
      * Add image
      *
      * @param \AppBundle\Entity\ProductModelImage $image

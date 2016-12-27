@@ -117,20 +117,17 @@ class Entities
             ['wrap-queries' => true]
         );
 
-        $characteristics = $this->em
-            ->getRepository('AppBundle:Characteristics')
-            ->getAllCharacteristicsByCategory($category, $inFilter = true);
+        $characteristics = [];
 
-        $characteristicValues = [];
-        foreach ($characteristics as $characteristic) {
-            if ($characteristicValuesEntities = $characteristic->getCharacteristicValues()) {
-                foreach ($characteristicValuesEntities as $value) {
-                    $supposedFilterValues = $characteristicsValuesIds;
-                    $supposedFilterValues[] = $value->getId();
-                    $characteristicValues[$value->getId()] = count($this->em->getRepository("AppBundle:$entity")->getFilteredProductsToCategoryQuery($category,
-                        $supposedFilterValues, $filters)->getResult());
-                }
+        $characteristicValuesResult = $this->em->getRepository("AppBundle:CharacteristicValues")
+            ->getWithModelsCount($category, $characteristicsValuesIds, $filters);
+
+        foreach ($characteristicValuesResult as $value) {
+            $characteristic = $value[0]->getCharacteristics();
+            if (!isset($characteristics[$characteristic->getId()])) {
+                $characteristics[$characteristic->getId()]['characteristic'] = $characteristic;
             }
+            $characteristics[$characteristic->getId()]['values'][] = $value;
         }
 
         if ($share = Arr::get($filters, 'share')) {

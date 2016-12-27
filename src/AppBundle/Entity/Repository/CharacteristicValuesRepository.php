@@ -1,7 +1,9 @@
 <?php
 
 namespace AppBundle\Entity\Repository;
-use AppBundle\Entity\CharacteristicValues;
+
+
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class: CharacteristicValuesRepository
@@ -94,65 +96,31 @@ class CharacteristicValuesRepository extends BaseRepository
     }
 
     /**
-     * getCharacteristicValuesForCategory
-     *
-     * @param \AppBundle\Entity\Categories|string $category
-     * @param array $characteristicValues
-     * @param array $filters
-     *
+     * @param $category
+     * @param $characteristicsValuesIds
+     * @param $filters
      * @return array
      */
-    public function getAvailableCharacteristicValuesForCategoryProducts($category, $characteristicValues, $filters)
-    {
-        $builder = $this->createQueryBuilder('characteristicValues')
-            ->select('characteristicValues')
-            ->innerJoin('characteristicValues.characteristics', 'characteristics')
-            ->where('characteristics.inFilter = 1')
-        ;
+    public function getWithModelsCount($category, $characteristicsValuesIds, $filters) {
+        /** @var QueryBuilder $modelsBuilder */
+        $modelsBuilder = $this->_em->getRepository('AppBundle:ProductModels')
+            ->createFilteredProductsToCategoryBuilder($category, $characteristicsValuesIds, $filters, [
+                'characteristics' => ['topLevelValueAlias' => 'value'],
+                'skip_order' => true
+            ]);
 
-        // Append products query part.
-        // Filter only values which has products in given filters and category context.
-        // Group values by characteristicId - where (v.id = 1 or v.id = 2) and (v.id = 1 or v.id = 2)
-        $qb = $this->_em->createQueryBuilder();
-        $productsQueryBuilder = $this->_em->createQueryBuilder(); //$qb->expr()->in()
-        $productsQueryBuilder->from('AppBundle:Products', 'products')
-            ->innerJoin('products.characteristicValues', 'productCharacteristicValues')
-            ->innerJoin('products.productModels', 'productModels')
-            ->innerJoin('productModels.sizes', 'sizes')
-            ->innerJoin('products.baseCategory', 'baseCategory')
-            ->andWhere('productModels.published = 1 AND baseCategory.active = 1')
-            ->andWhere($qb->expr()->eq('products.baseCategory', $category->getId()))
+        $modelsBuilder->select('COUNT(productModels)');
 
-            ->innerJoin('productCharacteristicValues.characteristics', 'pCharacteristics')
-            ->andWhere($builder->expr()->in("productCharacteristicValues.id", $characteristicValues))
+        $builder = $this->createQueryBuilder('value')
+            ->addSelect('characteristic')
+            ->join('value.characteristics', 'characteristic')
+            ->addSelect("({$modelsBuilder->getDQL()}) modelsCount");
 
-            ->select('COUNT(DISTINCT products.id)')
-            ->having('COUNT(DISTINCT pCharacteristics.id) >=
-                (
-                    SELECT COUNT( DISTINCT incchar.id )
-                    FROM \AppBundle\Entity\Characteristics as incchar
-                    JOIN incchar.characteristicValues as inccharval
-                    WHERE
-                    ' . ($characteristicValues ? 'inccharval.id IN (' . implode(',', $characteristicValues) . ') OR ' : '') .
-                    'inccharval.id = characteristicValues.id
-                )
-            ')
-        ;
+        foreach ($modelsBuilder->getParameters() as $parameter) {
+            $builder->setParameter($parameter->getName(), $parameter->getValue());
+        }
 
-        // Filter price
-        $productsQueryBuilder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($productsQueryBuilder, $filters);
-
-        $productsQueryBuilder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($productsQueryBuilder);
-        $productsQueryBuilder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($productsQueryBuilder);
-
-        $builder->addSelect("({$productsQueryBuilder->getDQL()}) as products_count")
-//            ->having("products_count > 0")
-            ;
-
-        $result = $builder->getQuery()
-            ->getResult();
-
-        return $result;
+        return $builder->getQuery()->getResult();
     }
 
 }
