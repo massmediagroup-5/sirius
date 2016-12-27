@@ -461,7 +461,7 @@ class PricesCalculator
 
                 $cart = $this->container->get('cart');
 
-                if ($cart->getTotalPrice() > $optionsService->getParamValue('startWholesalerDiscount', 500)) {
+                if ($cart->getDiscountedIntermediatePrice() > $optionsService->getParamValue('startWholesalerDiscount', 500)) {
                     // Use user discount
                     if ($user->getDiscount()) {
                         return $sum * $user->getDiscount() * 0.01;

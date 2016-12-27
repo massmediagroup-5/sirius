@@ -1,5 +1,9 @@
-<p class="hello">Здравствуйте, {{ app.user.name }}, пожалуйста проверьте Ваши данные для оформления заказа</p>
+{% if is_granted('ROLE_WHOLESALER') and options.getParamValue('startWholesalerDiscount', 500) > cart.discountedIntermediatePrice %}
+    <p class="hello">Минимальная сумма заказа {{ options.getParamValue('startWholesalerDiscount', 500) }} грн.</p>
+{% else %}
+    <p class="hello">Здравствуйте, {{ app.user.name }}, пожалуйста проверьте Ваши данные для оформления заказа</p>
 
-<div class="new-buyer">
-    {{ include('AppBundle:shop/cart/partials/order_form.html.twig', { 'form': form }) }}
-</div>
+    <div class="new-buyer">
+        {{ include('AppBundle:shop/cart/partials/order_form.html.twig', { 'form': form }) }}
+    </div>
+{% endif %}
