@@ -116,32 +116,20 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      * @param $category
      * @param $characteristicValues
      * @param $filters
-     * @param bool|false $wholesale
      * @return mixed
      */
-    public function getPricesIntervalForFilters($category, $characteristicValues, $filters, $wholesale = false)
+    public function getPricesIntervalForFilters($category, $characteristicValues, $filters)
     {
-        $builder = $this->createQueryBuilderWithJoins();
-
-        $builder = $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category);
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addCharacteristicsCondition($builder,
-            $characteristicValues, 'productModels');
-
-        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters);
-        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder);
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder);
-
-        $builder->select('sizes.id');
-
         $builder = $this->createQueryBuilder('pModels')
             ->join('pModels.products', 'pProducts')
             ->join('pModels.sizes', 'pSizes')
             ->addSelect(
                 "MAX(COALESCE(NULLIF(pSizes.price, 0), NULLIF(pModels.price, 0), pProducts.price)),
                 MIN(COALESCE(NULLIF(pSizes.price, 0), NULLIF(pModels.price, 0), pProducts.price))"
-            )
-            ->where($builder->expr()->in('pSizes.id', $builder->getDQL()));
+            );
+
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, 'pModels');
 
         $prices = $builder->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
 
@@ -199,14 +187,15 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      * @param $characteristicValues
      * @param $filters
      * @param array $params
-     * @return \Doctrine\ORM\Query
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function createFilteredProductsToCategoryBuilder($category, $characteristicValues, $filters, $params = [])
     {
-        $builder = $this->createQueryBuilder('productModels');
+        $modelsAlias = Arr::get($params, 'modelsAlias', 'productModels');
+        $builder = $this->createQueryBuilder($modelsAlias);
 
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, 'productModels', $params);
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, $modelsAlias, $params);
 
         return $builder;
     }
