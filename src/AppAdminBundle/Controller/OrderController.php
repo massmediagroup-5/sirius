@@ -68,7 +68,7 @@ class OrderController extends BaseController
             ->getRepository('AppBundle:ProductModelSpecificSize')
             ->find($request->get('size'));
 
-        $this->get('order')->setSizeCount($object, $size, $request->get('quantity'), true);
+        $this->get('order')->changeSizeCount($object, $size, $request->get('quantity'), true, true);
 
         return $this->renderJson($this->renderPartials());
     }

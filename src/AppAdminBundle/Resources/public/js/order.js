@@ -23,6 +23,7 @@ var OrderSize = (function () {
         this.$size.find('.js_submit_move_size').on('click', this.moveSize.bind(this));
         this.$size.find('.js_size_remove').on('click', this.removeSize.bind(this));
         this.$size.find('.js_change_size_quantity').on('click', this.changeSizeQuantity.bind(this));
+        this.$quantity = this.$size.find('[name="size_quantity"]');
     };
 
     OrderSize.prototype.moveSize = function () {
@@ -33,10 +34,13 @@ var OrderSize = (function () {
     };
 
     OrderSize.prototype.changeSizeQuantity = function () {
-        var quantity = parseInt(this.$size.find('[name="size_quantity"]').val());
-        if (quantity) {
-            console.log(this.$size.data());
-            this.request('change_size_quantity', {size: this.$size.data('model-size-id'), quantity: quantity});
+        var quantity = parseInt(this.$quantity.val()),
+            oldQuantity = parseInt(this.$quantity.data('old-quantity')),
+            diff = quantity - oldQuantity;
+
+        if (!isNaN(quantity)) {
+            this.request('change_size_quantity', {size: this.$size.data('model-size-id'), quantity: diff});
+            this.$quantity.data('old-quantity', quantity)
         }
     };
 

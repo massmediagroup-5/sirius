@@ -15,7 +15,8 @@
         <td class="control-group">{{ size.size }}</td>
         <td class="control-group">
             {% if admin.baseRouteName == 'new_orders' %}
-                <input type="number" value="{{ size.quantity }}" name="size_quantity"/>
+                <input type="number" value="{{ size.quantity }}" name="size_quantity"
+                       data-old-quantity="{{ size.quantity }}"/>
                 <i class="fa fa-check-square js_change_size_quantity pointer"></i>
             {% else %}
                 {{ size.quantity }}

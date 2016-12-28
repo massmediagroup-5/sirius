@@ -1,0 +1,62 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Артикул</th>
+        <th>Картинка</th>
+        <th>Модель</th>
+        <th>Цвет</th>
+        <th>Размер</th>
+        <th>Количество</th>
+        <th>Доступно</th>
+        <th>
+            {% if admin.subject.preOrderFlag %}
+                В заказ
+            {% else %}
+                В предзаказ
+            {% endif %}
+        </th>
+        <th>Цена(за ед)</th>
+        <th>Цена(всего)</th>
+        <th>Цена со скидкой</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody class="sonata-ba-tbody">
+        {% include 'AppAdminBundle:admin/orders/order_sizes_list.html.twig'%}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="10" class="text-right">Всего</td>
+        <th colspan="2" id="totalPrice">{{ admin.subject.totalPrice }}</th>
+    </tr>
+    <tr>
+        <td colspan="10" class="text-right">Цена со скидкой</td>
+        <th colspan="2" id="discountedTotalPrice">{{ admin.subject.loyaltyAndUpSellDiscounted }}</th>
+    </tr>
+    <tr>
+        <td colspan="10" class="text-right">Оплачено бонусами</td>
+        <th colspan="2" id="bonuses">{{ admin.subject.bonuses }}</th>
+    </tr>
+    <tr>
+        <td colspan="10" class="text-right">Погасить</td>
+        <th colspan="2">
+            <input type="text" value="{{ admin.subject.individualDiscount }}"
+                   name="individualDiscount" class="table-input js_order_update"/>
+        </th>
+    </tr>
+    <tr>
+        <td colspan="10" class="text-right">
+            <input type="text" value="{{ admin.subject.additionalSolarDescription }}"
+                   name="additionalSolarDescription" class="table-input text-right js_order_update"/>
+        </td>
+        <th colspan="10">
+            <input type="text" value="{{ admin.subject.additionalSolar }}" name="additionalSolar"
+                   class="table-input js_order_update"/>
+        </th>
+    </tr>
+    <tr>
+        <td colspan="10" class="text-right">К оплате</td>
+        <th colspan="2" id="individualDiscountedTotalPrice">{{ admin.subject.individualDiscountedTotalPrice }}</th>
+    </tr>
+    </tfoot>
+</table>

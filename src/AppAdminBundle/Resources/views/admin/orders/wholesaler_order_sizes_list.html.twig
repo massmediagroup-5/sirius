@@ -26,7 +26,8 @@
     </tr>
     {% if itemPackagesCount %}
         {% for key, size in modelSizes %}
-            <tr data-size-id="{{ size.id }}" data-quantity="{{ itemPackagesCount }}">
+            <tr data-size-id="{{ size.id }}" data-quantity="{{ itemPackagesCount }}"
+                data-model-size-id="{{ size.size.id }}">
                 {#miss first 4 colls - it will be rowspaned#}
                 <td class="control-group">{{ size.size }}</td>
                 {% if key == 0 %}
@@ -39,6 +40,21 @@
                         {% endif %}
                     </td>
                 {% endif %}
+                <td class="control-group">
+                    {% if admin.baseRouteName == 'new_orders' %}
+                        <input type="number" value="{{ itemPackagesCount }}" name="size_quantity"
+                            data-old-quantity="{{ itemPackagesCount }}"/>
+                        <i class="fa fa-check-square js_change_size_quantity pointer"></i>
+                    {% else %}
+                        {{ itemPackagesCount }}
+                    {% endif %}
+
+                    {% if admin.subject.status.code == 'new' or admin.subject.status.code == 'canceled' %}
+                        (не перечислено)
+                    {% else %}
+                        (перечислено)
+                    {% endif %}
+                </td>
                 <td class="control-group">{{ size.size.quantity }}</td>
                 <th class="editable-cell">
                     {% if size.size.preOrderFlag %}
@@ -62,9 +78,11 @@
         <tr data-size-id="{{ size.entity.id }}" data-quantity="{{ size.quantity }}" data-model-size-id="{{ size.entity.size.id }}">
             {#miss first 4 colls - it will be rowspaned#}
             <td class="control-group">{{ size.entity.size }}</td>
+            <td class="control-group"></td>
             <td class="control-group" valign="middle">
                 {% if admin.baseRouteName == 'new_orders' %}
-                    <input type="number" value="{{ size.quantity }}" name="size_quantity"/>
+                    <input type="number" value="{{ size.quantity }}" name="size_quantity"
+                           data-old-quantity="{{ size.quantity }}"/>
                     <i class="fa fa-check-square js_change_size_quantity pointer"></i>
                 {% else %}
                     {{ size.quantity }}
@@ -88,9 +106,11 @@
             <td class="control-group">{{ size.entity.totalPrice }}</td>
             <td class="control-group">{{ size.entity.discountedTotalPrice}}</td>
             <td class="control-group">
-                <button class="btn btn-danger btn-xs js_size_remove">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
+                {% if admin.baseRouteName == 'new_orders' %}
+                    <button class="btn btn-danger btn-xs js_size_remove">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}
