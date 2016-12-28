@@ -1,0 +1,168 @@
+<div class="filter">
+    <div class="filter__i">
+        {% if filters.isShowFiltered(data) %}
+            <div class="filtered">
+                <div class="filtered__i">
+                    <h2>ВЫ ИЩЕТЕ <a
+                                href="{{ url('category', {'category': data.category.alias}) }}"
+                                class="clear">Очистить все</a></h2>
+                    <div class="filtered-list">
+                        <div class="filtered-list__i">
+                            <ul>
+                                {% if not is_granted('ROLE_WHOLESALER') and filters.has('shares') %}
+                                    <li>
+                                        <a href="{{ filters.replaceQueryParameter('shares') }}"
+                                           class="remove"></a><strong>Акции</strong>
+                                    </li>
+                                {% endif %}
+
+                                {% for filter_item in data.characteristics %}
+                                    {% if app.request.get(filter_item.characteristic.id) %}
+                                        {% for param in filter_item.values %}
+                                            {% set checked_array = app.request.get(filter_item.characteristic.id)|split(',') %}
+                                            {% if param.0.id in checked_array %}
+                                                <li>
+                                                    <a href="{{ filters.removeQueryParameter(filter_item.characteristic.id, param.0.id) }}"
+                                                       class="remove"></a>
+                                                    <strong>{{ filter_item.characteristic.name }}
+                                                        :</strong> {{ param.0.name }}
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if data.filters.price_from != data.price_filter.min_price %}
+                                    <li>
+                                        <a href="{{ filters.replaceQueryParameter('price_from', data.price_filter.min_price|round) }}"
+                                           class="remove"></a>
+                                        <strong>Цена от:</strong>
+                                        {{ app.request.get('price_from') ? app.request.get('price_from') : data.price_filter.min_price }}
+                                    </li>
+                                {% endif %}
+                                {% if data.filters.price_to != data.price_filter.max_price %}
+                                    <li>
+                                        <a href="{{ filters.replaceQueryParameter('price_to', data.price_filter.max_price|round) }}"
+                                           class="remove"></a>
+                                        <strong>Цена до:</strong>
+                                        {{ app.request.get('price_to') ? app.request.get('price_to') : data.price_filter.max_price }}
+                                    </li>
+                                {% endif %}
+
+                                {% for color in filters.selectedColors(data) %}
+                                    <li>
+                                        <a href="{{ filters.removeQueryParameter('colors', color.id) }}"
+                                           class="remove"></a><strong>Цвет:</strong> {{ color.name }}
+                                        <span class="color"
+                                              style="background: {{ color.hex }}"></span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <form class="filters" id="filters">
+            <div class="filters__i">
+                {% if not is_granted('ROLE_WHOLESALER') and not filters.has('shares') %}
+                    {% if filters.get('share') %}
+                        <input type="hidden" name="share" value="{{ filters.get('share') }}"/>
+                    {% endif %}
+                    <div class="sale">
+                        <ul class="check-fltr">
+                            <li>
+                                <label class="filter-check">
+                                    <input type="checkbox" class="checkbox" name="shares"
+                                           value="any" />
+                                    <span class="f-check"></span> Акции <i></i></label></li>
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="price-slider">
+                    <p>Цена (грн)</p>
+                    <div class="price-slider__i">
+                        <div class="values clearfix">
+                            <span class="from">От</span>
+                            <input type="text" id="min"
+                                   data-value="{{ data.filters.price_from|round }}"
+                                   data-min="{{ data.price_filter.min_price|round }}"/>
+                            <span class="to">до</span>
+                            <input type="text" id="max"
+                                   data-value="{{ data.filters.price_to|round }}"
+                                   data-max="{{ data.price_filter.max_price|round }}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="list">
+
+                    {% for filter_item in data.characteristics %}
+                        <div class="item{% if app.request.get(filter_item.characteristic.id) %} active{% endif %}">
+                            <div class="item-name">
+                                <a href="#">{{ filter_item.characteristic.name }} <span></span></a>
+                            </div>
+                            <div class="item-drop"{% if app.request.get(filter_item.characteristic.id) %} style="display: block;"{% endif %}>
+                                <div class="item-drop__i">
+                                    <ul class="check-fltr">
+                                        {% for param in filter_item.values %}
+                                            <li>
+                                                <label class="filter-check">
+                                                    {# check if filter parameter checked #}
+                                                    {% set check = "" %}
+                                                    {% if app.request.get(filter_item.characteristic.id) %}
+                                                        {% set checked_array = app.request.get(filter_item.characteristic.id)|split(',') %}
+                                                        {% if param.0.id in checked_array %}
+                                                            {% set check = 'checked="checked"' %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if param.modelsCount == 0 %}
+                                                        {% set disabled = "disabled" %}
+                                                    {% else %}
+                                                        {% set disabled = "" %}
+                                                    {% endif %}
+                                                    <input type="checkbox" class="checkbox" {{ check }} {{ disabled }} name="{{ filter_item.characteristic.id }}" value="{{ param.0.id }}"/>
+                                                    <span class="f-check"></span>
+                                                    {{ param.0.name }}
+                                                    <span>({{ param.modelsCount }})</span>
+                                                </label>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="item">
+                        <div class="item-name">
+                            <a href="#" {% if filters.selectedColors(data)|length %} data-active="1" {% endif %}>ЦВЕТ<span></span></a>
+                        </div>
+                        <div class="item-drop">
+                            <div class="item-drop__i">
+                                <div class="color-filter">
+                                    <ul>
+                                        {% for color in data.colors %}
+                                            <li>
+                                                <label class="color-check">
+                                                    <input type="checkbox" name="colors" value="{{ color.id }}" class="checkbox" {% if filters.isSelectedColor(color) %} checked {% endif %}/>
+                                                    <span style="background-color: {{ color.hex }};border: 1px solid #656565;"></span>
+                                                </label>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {#<div class="single-item">#}
+                    {#<label><input type="checkbox"/>РАСПРОДАЖА</label>#}
+                    {#</div>#}
+                </div>
+                <button class="submit-btn btn btn_blue filters-submit">Найти</button>
+            </div>
+        </form>
+
+    </div>
+</div>

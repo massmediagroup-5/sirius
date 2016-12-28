@@ -2,8 +2,11 @@
 
 namespace AppBundle\Entity\Repository;
 
+use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ShareSizesGroup;
+use AppBundle\Helper\Arr;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * CategoriesRepository
@@ -159,4 +162,88 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * @param QueryBuilder $builder
+     * @param $category
+     * @param $characteristicValues
+     * @param $filters
+     * @param string $alias
+     * @param $params
+     */
+    public function applyAvailableSizesCondition(
+        QueryBuilder $builder,
+        $category,
+        $characteristicValues,
+        $filters,
+        $alias = 'productModels',
+        $params = []
+    ) {
+        $params['prefix'] = 'available';
+
+        $activeSizesBuilder = $this->createAvailableSizesBuilder($category, $characteristicValues, $filters, $params);
+        
+        $activeSizesBuilder->select('1');
+        $activeSizesBuilder->andWhere("availableproductModels.id = $alias.id");
+
+        $builder->andWhere($activeSizesBuilder->expr()->exists($activeSizesBuilder->getDQL()));
+
+        foreach ($activeSizesBuilder->getParameters() as $parameter) {
+            $builder->setParameter($parameter->getName(), $parameter->getValue());
+        }
+    }
+
+    /**
+     * @param $category
+     * @param $characteristicValues
+     * @param $filters
+     * @param $params
+     * @return QueryBuilder
+     */
+    public function createAvailableSizesBuilder($category, $characteristicValues, $filters, $params = [])
+    {
+        $prefix = Arr::get($params, 'prefix');
+        $modelsAlias = "{$prefix}productModels";
+        $baseCategoryAlias = "{$prefix}baseCategory";
+        $productsAlias = "{$prefix}products";
+        $characteristicValuesAlias = "{$prefix}characteristicValues";
+        $characteristicsAlias = "{$prefix}characteristics";
+        $sharesAlias = "{$prefix}share";
+        $sizesAlias = "{$prefix}sizes";
+        $shareGroupAlias = "{$prefix}shareGroup";
+
+        $builder = $this->createQueryBuilder($sizesAlias)
+            ->innerJoin("{$sizesAlias}.model", $modelsAlias)
+            ->innerJoin("{$sizesAlias}.shareGroup", $shareGroupAlias)
+            ->innerJoin("{$modelsAlias}.products", $productsAlias)
+            ->innerJoin("{$productsAlias}.baseCategory", $baseCategoryAlias)
+            ->innerJoin("{$productsAlias}.characteristicValues", $characteristicValuesAlias)
+            ->leftJoin("$shareGroupAlias.share", $sharesAlias)
+            ->innerJoin("{$characteristicValuesAlias}.characteristics", $characteristicsAlias);
+
+        $this->_em->getRepository('AppBundle:Categories')->addCategoryFilterCondition($builder, $category,
+            $baseCategoryAlias);
+
+        $this->_em->getRepository('AppBundle:Products')
+            ->addCharacteristicsCondition($builder, $characteristicValues, $modelsAlias, $characteristicValuesAlias,
+                $characteristicsAlias, Arr::get($params, 'characteristics.topLevelValueAlias'));
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters, $modelsAlias,
+            $productsAlias, $characteristicValuesAlias, $sharesAlias, $sizesAlias);
+
+        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder, $modelsAlias,
+            $productsAlias);
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder,
+            $sizesAlias);
+
+        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->addPriceToQuery($builder, $filters, $sizesAlias, $modelsAlias, $productsAlias);
+
+        if (!Arr::get($params, 'skip_order')) {
+            $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters, $productsAlias, $modelsAlias, [
+                'prefix' => $prefix
+            ]);
+        }
+
+        return $builder;
+    }
 }
