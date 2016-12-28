@@ -16,7 +16,9 @@
                 <div class="">
                     <p>{{ 'labels.user_bonuses'|transchoice(app.user.bonuses|round) }}</p>
                     <p>{{ 'labels.user_bonuses_processed'|transchoice(bonusesInProcess, {'%count%': bonusesInProcess}) }}</p>
-                    <button class="btn btn-primary toggle">Подробнее</button>
+                    {% if not (app.user.bonuses == 0 and bonusesInProcess == 0) %}
+                        <button class="btn btn-primary toggle">Подробнее</button>
+                    {% endif %}
                 </div>
             </div>
             <div class="bonuses-table">
