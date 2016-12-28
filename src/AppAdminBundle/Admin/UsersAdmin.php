@@ -114,7 +114,8 @@ class UsersAdmin extends BaseUserAdmin
 
             $formMapper->add('loyaltyDiscount', 'text', [
                 'mapped' => false,
-                'data' => $loyaltyProgram ? $loyaltyProgram->getDiscount() : 0
+                'data' => $loyaltyProgram ? $loyaltyProgram->getDiscount() : 0,
+                'disabled' => true
             ]);
         }
 
