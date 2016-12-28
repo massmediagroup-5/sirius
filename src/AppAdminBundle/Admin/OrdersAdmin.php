@@ -399,23 +399,37 @@ class OrdersAdmin extends Admin
             ])
             ->end();
         if (in_array($this->statusName, ['waiting_for_departure', 'sent', 'done', 'canceled'])) {
-            $ttn = $date = '';
-            if ($this->subject->getTtn()) {
-                $this->get('novaposhta')->initConfig();
-                $ttnDocument = $this->get('novaposhta')->getInternetDocumentByRef($this->subject->getTtn());
-                if ($ttnDocument->data) {
-                    $dateDocument = $this->get('novaposhta')->getDocumentDeliveryDateByTtnDocument($ttnDocument);
-                    $ttn = $ttnDocument->data[0];
-                    $date = $dateDocument->data[0]->DeliveryDate;
+            if (($city = $this->subject->getCities()) && $this->get('novaposhta')->isNovaPoshtaCarrier($city->getCarriers())) {
+                $ttn = $date = '';
+                if ($this->subject->getTtn()) {
+                    $this->get('novaposhta')->initConfig();
+                    $ttnDocument = $this->get('novaposhta')->getInternetDocumentByRef($this->subject->getTtn());
+                    if ($ttnDocument->data) {
+                        $dateDocument = $this->get('novaposhta')->getDocumentDeliveryDateByTtnDocument($ttnDocument);
+                        $ttn = $ttnDocument->data[0];
+                        $date = count($dateDocument->data) ? $dateDocument->data[0]->DeliveryDate : '';
+                    }
                 }
-            }
 
-            $formMapper->tab('ТТН', [
-                'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
-                'object' => $this->getSubject(),
-                'ttn' => $ttn,
-                'date' => $date
-            ])->end();
+                $formMapper->tab('ТТН', [
+                    'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
+                    'object' => $this->getSubject(),
+                    'ttn' => $ttn,
+                    'date' => $date
+                ])->end();
+
+            } else {
+                $formMapper
+                    ->tab('ТТН', [
+                        'tab_template' => 'AppAdminBundle:admin:order_waybill.html.twig'
+                    ])
+                    ->with('ТТН', ['class' => 'col-md-12'])
+                    ->add('ttn', null, [
+                        'label' => 'ТТН'
+                    ])
+                    ->end()
+                    ->end();
+            }
         }
         if ($otherOrders) {
             $formMapper->tab('Другие заказы покупателя', [
