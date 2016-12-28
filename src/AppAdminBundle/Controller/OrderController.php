@@ -349,8 +349,6 @@ class OrderController extends BaseController
 
         $result = $internetDocument->save();
 
-        dump($result);
-
         $refInternetDocument = $result->data[0]->Ref;
         $orderObject->setTtn($refInternetDocument);
 

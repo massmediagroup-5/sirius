@@ -74,10 +74,15 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
      */
     public function findWithModels($ids)
     {
-        return $this->createQueryBuilder('modelSizes')
-            ->innerJoin('modelSizes.model', 'model')->addselect('model')
-            ->andWhere('modelSizes.id IN (:ids)')
-            ->setParameter('ids', $ids)
+        $builder = $this->createQueryBuilder('sizes')
+            ->innerJoin('sizes.model', 'model')->addselect('model')
+            ->innerJoin('model.sizes', 'modelSizes')->addselect('modelSizes')
+            ->andWhere('sizes.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        $this->addActiveConditionsToQuery($builder, 'modelSizes');
+
+        return $builder
             ->getQuery()
             ->getResult();
     }
