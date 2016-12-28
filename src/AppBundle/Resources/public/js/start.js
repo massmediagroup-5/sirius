@@ -51,6 +51,13 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+function parseISO8601(dateStr) {
+    var a = dateStr.split(" ");
+    var d = a[0].split("-");
+    var t = a[1].split(":");
+    return new Date(d[0], (d[1] - 1), d[2], t[0], t[1], t[2]);
+}
+
 /**
  * Execute last command on body click
  */
@@ -128,7 +135,7 @@ $(function () {
 (function (e) {
     e.fn.countdown = function (t, n) {
         function i() {
-            eventDate = Date.parse(r.date) / 1e3;
+            eventDate = parseISO8601(r.date) / 1e3;
             currentDate = Math.floor(e.now() / 1e3);
             if (eventDate <= currentDate) {
                 n.call(this);
