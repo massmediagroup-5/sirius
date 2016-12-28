@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Controller;
 
+use AppAdminBundle\DTO\OrderWaybillForm;
 use AppBundle\Exception\ImpossibleMoveToPreOrder;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use Illuminate\Support\Arr;
@@ -21,6 +22,7 @@ use NovaPoshta\Config;
 use NovaPoshta\ApiModels\Counterparty;
 use NovaPoshta\ApiModels\InternetDocument;
 use NovaPoshta\MethodParameters\MethodParameters;
+use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 /**
  * END NOVAPOSHTA
@@ -203,13 +205,26 @@ class OrderController extends BaseController
      */
     public function ajaxCreateWaybillAction(Request $request)
     {
+        $orderObject = $this->admin->getSubject();
+
+        /** @var $validator RecursiveValidator */
+        $validator = $this->get('validator');
+
+        $waybillForm = new OrderWaybillForm();
+        $waybillForm->np_surname = $request->get('np_surname');
+        $waybillForm->np_name = $request->get('np_name');
+        $waybillForm->np_middlename = $request->get('np_middlename');
+        $waybillForm->np_phone = $request->get('np_phone');
+
+        $errors = $validator->validate($waybillForm);
+
+        if (count($errors)) {
+            $serializer = $this->get('jms_serializer');
+            return new Response($serializer->serialize(['errors' => $errors], 'json'), 422);
+        }
+
         // Получаем ключ апи с базы и конфигуруем прослойку для работы с апи
         $api = $this->get('novaposhta')->initConfig();
-
-        $orderObject = $this->admin->getSubject();
-        if (!$orderObject->getUsers()) {
-            return $this->renderJson(['message' => 'Заказ должен иметь пользователя для генерации ТТН'], 422);
-        }
 
         $form_data   = $request->request->all();
 
@@ -239,23 +254,18 @@ class OrderController extends BaseController
         $counterpartySender         = $senderInfo->Ref;
 
         // создаем контрагента получателя если до этого он небыл создан
-        if ( ! $orderObject->getUsers()->getCounterpartyRef()) {
-            $counterparty = new \NovaPoshta\ApiModels\Counterparty();
-            $counterparty->setCounterpartyProperty(\NovaPoshta\ApiModels\Counterparty::RECIPIENT);
-            $counterparty->setCityRef($cityRecipient);
-            $counterparty->setCounterpartyType($counterpartyType);
-            $counterparty->setFirstName($orderObject->getUsers()->getName());
-            $counterparty->setLastName($orderObject->getUsers()->getSurname());
-            $counterparty->setMiddleName($orderObject->getUsers()->getMiddlename());
-            $counterparty->setPhone(preg_replace("/[^0-9]/", '', strip_tags($orderObject->getUsers()->getPhone())));
-            $counterparty->setEmail($orderObject->getUsers()->getEmail());
-            $result = $counterparty->save();
+        $counterparty = new \NovaPoshta\ApiModels\Counterparty();
+        $counterparty->setCounterpartyProperty(\NovaPoshta\ApiModels\Counterparty::RECIPIENT);
+        $counterparty->setCityRef($cityRecipient);
+        $counterparty->setCounterpartyType($counterpartyType);
+        $counterparty->setFirstName($waybillForm->np_name);
+        $counterparty->setLastName($waybillForm->np_surname);
+        $counterparty->setMiddleName($waybillForm->np_middlename);
+        $counterparty->setPhone(preg_replace("/[^0-9]/", '', strip_tags($waybillForm->np_phone)));
+//      $counterparty->setEmail($orderObject->getUsers()->getEmail());
+        $result = $counterparty->save();
 
-            $counterpartyRecipient = $result->data[0]->Ref;
-            $orderObject->getUsers()->setCounterpartyRef($counterpartyRecipient);
-        } else {
-            $counterpartyRecipient = $orderObject->getUsers()->getCounterpartyRef();
-        }
+        $counterpartyRecipient = $result->data[0]->Ref;
 
         // Получим контактных персон для контрагентов:
         $data = new \NovaPoshta\MethodParameters\Counterparty_getCounterpartyContactPersons();
@@ -338,8 +348,6 @@ class OrderController extends BaseController
             ->addBackwardDeliveryData($backwardDeliveryData);
 
         $result = $internetDocument->save();
-
-        dump($result);
 
         $refInternetDocument = $result->data[0]->Ref;
         $orderObject->setTtn($refInternetDocument);

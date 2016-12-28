@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row js-waybill-fields">
     <div class="col-md-12">
         <div class="box box-success">
             <div class="box-header">
@@ -10,28 +10,54 @@
                     {% if form_tab.ttn == '' %}
                         <tr>
                             <td>Количество мест:</td>
-                            <td><input type="text" name="np_seats_amount" id="np_seats_amount"/></td>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_seats_amount" id="np_seats_amount"
+                                           class="form-control"/>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Фактический вес(кг):</td>
-                            <td><input type="text" name="np_weight" id="np_weight"/></td>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_weight" id="np_weight" class="form-control"/>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Д/Ш/В, см:</td>
-                            <td>
-                                <input type="text" name="np_volumetric_width" id="np_volumetric_width"/>
-                                <input type="text" name="np_volumetric_height" id="np_volumetric_height"/>
-                                <input type="text" name="np_volumetric_length" id="np_volumetric_length"/>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_volumetric_width" id="np_volumetric_width"
+                                           class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="np_volumetric_height" id="np_volumetric_height"
+                                           class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="np_volumetric_length" id="np_volumetric_length"
+                                           class="form-control"/>
+                                </div>
                             </td>
                         </tr>
                         <tr>
                             <td>Обратная доставка:</td>
-                            <td><input type="text" name="np_backward_delivery_cost" id="np_backward_delivery_cost"/> грн
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_backward_delivery_cost" id="np_backward_delivery_cost"
+                                           class="form-control"/> грн
+                                </div>
                             </td>
                         </tr>
                         <tr>
                             <td>Дата отправления:</td>
-                            <td><input type="text" name="np_date" id="np_date"/> <span class="notice">пример - 09.05.1945</span>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_date" id="np_date" class="form-control"/>
+                                    <span class="notice">пример - 09.05.1945</span>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -57,7 +83,37 @@
                         </tr>
                         <tr>
                             <td>Оглашенна ценность:</td>
-                            <td><input type="text" name="np_cost" id="np_cost"/></td>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_cost" id="np_cost" class="form-control"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Фио получателя:</td>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_surname" id="np_surname" class="form-control"
+                                           value="{{ object.users ? object.users.surname : ''}}"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="np_name" id="np_name" class="form-control"
+                                           value="{{ object.users ? object.users.name : ''}}"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="np_middlename" id="np_middlename" class="form-control"
+                                           value="{{ object.users ? object.users.middlename : ''}}"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Телефон получателя:</td>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="np_phone" id="np_phone" class="form-control"
+                                           value="{{ object.users ? object.users.phone : ''}}"/>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2"><input type="button" id="submit_ttn" name="submit" class="btn btn-success"
@@ -79,7 +135,7 @@
                         <tr>
                             <td>Приблизительная дата доставки:</td>
                             <td>
-                                {{ form_tab.date.date|date("d.m.Y") }}
+                                {{ form_tab.date ? form_tab.date.date|date("d.m.Y") : '' }}
                             </td>
                         </tr>
                         <tr>
@@ -136,9 +192,15 @@
                     return false;
                 }
             },
-            error: function (message) {
-                console.log(message.status + ' ' + message.statusText);
-                return false;
+            error: function (response) {
+                if (response.status == 422) {
+                    var message = '';
+                    response.responseJSON.errors.forEach(function (error) {
+                        $('[name="' + error.property_path + '"]').closest('.form-group').addClass('has-error');
+                        message += error.property_path + ' - ' + error.message + '\n';
+                    });
+                    alert(message);
+                }
             },
         });
         return false;
@@ -210,5 +272,7 @@
         });
         return false;
     });
-
+    $('.js-waybill-fields input').on('click focus', function () {
+        $(this).closest('.form-group').removeClass('has-error');
+    });
 </script>

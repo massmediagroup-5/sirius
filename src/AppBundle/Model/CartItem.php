@@ -199,11 +199,12 @@ class CartItem
     }
 
     /**
-     * @return int
+     * @param bool $preOrderFlag
+     * @return float
      */
-    public function getPackagesDiscountedPrice()
+    public function getPackagesDiscountedPrice($preOrderFlag = false)
     {
-        return $this->getPackagesQuantity() * $this->getPackageDiscountedPrice();
+        return $this->getPackagesQuantity($preOrderFlag) * $this->getPackageDiscountedPrice();
     }
 
     /**
@@ -408,7 +409,9 @@ class CartItem
         } else {
             foreach ($this->sizes as $sizeId => $size) {
                 if ($size->$quantityGetter()) {
-                    $singleSizes[$sizeId] = $size;
+                    $newSize = clone $size;
+                    $newSize->setQuantity($size->$quantityGetter());
+                    $singleSizes[$sizeId] = $newSize;
                 }
             }
         }

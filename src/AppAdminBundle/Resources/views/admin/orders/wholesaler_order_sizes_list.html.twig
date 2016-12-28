@@ -59,10 +59,17 @@
         {% endfor %}
     {% endif %}
     {% for size in singleSizes %}
-        <tr data-size-id="{{ size.entity.id }}" data-quantity="{{ size.quantity }}">
+        <tr data-size-id="{{ size.entity.id }}" data-quantity="{{ size.quantity }}" data-model-size-id="{{ size.entity.size.id }}">
             {#miss first 4 colls - it will be rowspaned#}
             <td class="control-group">{{ size.entity.size }}</td>
-            <td class="control-group" valign="middle">{{ size.quantity }}
+            <td class="control-group" valign="middle">
+                {% if admin.baseRouteName == 'new_orders' %}
+                    <input type="number" value="{{ size.quantity }}" name="size_quantity"/>
+                    <i class="fa fa-check-square js_change_size_quantity pointer"></i>
+                {% else %}
+                    {{ size.quantity }}
+                {% endif %}
+
                 {% if admin.subject.status.code == 'new' or admin.subject.status.code == 'canceled' %}
                     (не перечислено)
                 {% else %}

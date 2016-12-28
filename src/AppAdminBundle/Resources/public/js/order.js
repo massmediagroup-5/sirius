@@ -35,6 +35,7 @@ var OrderSize = (function () {
     OrderSize.prototype.changeSizeQuantity = function () {
         var quantity = parseInt(this.$size.find('[name="size_quantity"]').val());
         if (quantity) {
+            console.log(this.$size.data());
             this.request('change_size_quantity', {size: this.$size.data('model-size-id'), quantity: quantity});
         }
     };

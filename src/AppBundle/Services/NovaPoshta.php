@@ -9,6 +9,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\AppBundle;
+use AppBundle\Entity\Carriers;
 use AppBundle\Entity\Cities;
 use AppBundle\Entity\Stores;
 use Doctrine\ORM\EntityManager;
@@ -217,5 +218,15 @@ class NovaPoshta
         Config::setLanguage(Config::LANGUAGE_RU);
 
         return $api;
+    }
+
+    /**
+     * @param Carriers $carrier
+     *
+     * @return bool
+     */
+    public function isNovaPoshtaCarrier(Carriers $carrier)
+    {
+        return $carrier->getId() == 1;
     }
 }
