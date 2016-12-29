@@ -32,12 +32,7 @@ FOS\UserBundle\Model\User:
 
     properties:
         email:
-            - NotBlank:
-                message: fos_user.email.blank
-                groups: [ "UserRegistration", "UserProfile" ]
             - Length:
-                min: 2
-                minMessage: fos_user.email.short
                 max: 255
                 maxMessage: fos_user.email.long
                 groups: [ "UserRegistration", "ResetPassword" ]
@@ -55,46 +50,6 @@ FOS\UserBundle\Model\User:
                 groups: [ "UserRegistration", "UserProfile", "ResetPassword", "ChangePassword"]
 
 FOS\UserBundle\Model\Group:
-    properties:
-        name:
-            - NotBlank:
-                message: fos_user.group.blank
-                groups: [ "UserRegistration" ]
-            - Length:
-                min: 2
-                minMessage: fos_user.group.short
-                max: 255
-                maxMessage: fos_user.group.long
-                groups: [ "UserRegistration" ]
-
-FOS\UserBundle\Propel\User:
-    properties:
-        email:
-            - NotBlank:
-                message: fos_user.email.blank
-                groups: [ "UserRegistration", "UserProfile" ]
-            - Length:
-                min: 2
-                minMessage: fos_user.email.short
-                max: 255
-                maxMessage: fos_user.email.long
-                groups: [ "UserRegistration", "ResetPassword" ]
-            - Email:
-                message: fos_user.email.invalid
-                groups: [ "UserRegistration", "UserProfile" ]
-
-        plainPassword:
-            - NotBlank:
-                message: fos_user.password.blank
-                groups: [ "UserRegistration", "ResetPassword", "ChangePassword" ]
-            - Length:
-                min: 2
-                max: 4096
-                minMessage: fos_user.password.short
-                groups: [ "UserRegistration", "UserProfile", "ResetPassword", "ChangePassword"]
-
-
-FOS\UserBundle\Propel\Group:
     properties:
         name:
             - NotBlank:

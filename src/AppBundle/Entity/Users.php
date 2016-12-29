@@ -10,7 +10,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Users
  * @ORM\Entity
- * @UniqueEntity("email")
  */
 class Users extends BaseUser
 {
@@ -517,17 +516,6 @@ class Users extends BaseUser
     public function getOrders()
     {
         return $this->orders;
-    }
-
-    /**
-     * @param string $email
-     * @return $this
-     */
-    public function setEmail($email)
-    {
-        $this->email = $this->username = $email;
-
-        return $this;
     }
 
     /**
