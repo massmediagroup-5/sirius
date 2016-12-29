@@ -110,6 +110,9 @@ class OrdersAdmin extends Admin
                 ])
                 ->add('ajax_delete_waybill', $this->getRouterIdParameter() . '/ajax_delete_waybill', [], [], [
                     'expose' => true
+                ])
+                ->add('ajax_unbind_waybill', $this->getRouterIdParameter() . '/ajax_unbind_waybill', [], [], [
+                    'expose' => true
                 ]);
         }
     }
@@ -399,8 +402,8 @@ class OrdersAdmin extends Admin
             ])
             ->end();
         if (in_array($this->statusName, ['waiting_for_departure', 'sent', 'done', 'canceled'])) {
+            $ttn = $date = '';
             if (($city = $this->subject->getCities()) && $this->get('novaposhta')->isNovaPoshtaCarrier($city->getCarriers())) {
-                $ttn = $date = '';
                 if ($this->subject->getTtn()) {
                     $this->get('novaposhta')->initConfig();
                     $ttnDocument = $this->get('novaposhta')->getInternetDocumentByRef($this->subject->getTtn());
@@ -410,26 +413,18 @@ class OrdersAdmin extends Admin
                         $date = count($dateDocument->data) ? $dateDocument->data[0]->DeliveryDate : '';
                     }
                 }
+            }
 
-                $formMapper->tab('ТТН', [
+            $formMapper
+                ->tab('ТТН', [
                     'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
                     'object' => $this->getSubject(),
                     'ttn' => $ttn,
                     'date' => $date
-                ])->end();
-
-            } else {
-                $formMapper
-                    ->tab('ТТН', [
-                        'tab_template' => 'AppAdminBundle:admin:order_waybill.html.twig'
-                    ])
-                    ->with('ТТН', ['class' => 'col-md-12'])
-                    ->add('ttn', null, [
-                        'label' => 'ТТН'
-                    ])
-                    ->end()
-                    ->end();
-            }
+                ])
+                ->add('customTtn', null, ['label' => 'ТТН'])
+                ->end()
+                ->end();
         }
         if ($otherOrders) {
             $formMapper->tab('Другие заказы покупателя', [

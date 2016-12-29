@@ -68,6 +68,11 @@ class Orders
     /**
      * @var string
      */
+    private $customTtn;
+
+    /**
+     * @var string
+     */
     private $phone;
 
     /**
@@ -1199,5 +1204,25 @@ class Orders
         }
 
         return 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomTtn()
+    {
+        return $this->customTtn;
+    }
+
+    /**
+     * @param $customTtn
+     *
+     * @return $this
+     */
+    public function setCustomTtn($customTtn)
+    {
+        $this->customTtn = $customTtn;
+
+        return $this;
     }
 }

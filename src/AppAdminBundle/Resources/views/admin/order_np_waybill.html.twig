@@ -145,6 +145,8 @@
                                 <input type="button" id="print_ttn" name="submit" class="btn btn-info" value="Печать"/>
                                 <input type="button" id="delete_ttn" name="submit" class="btn btn-danger"
                                        value="Удалить ТТН"/>
+                                <input type="button" id="unbind_ttn" name="submit" class="btn btn-danger"
+                                       value="Отвязать ТТН"/>
                             </td>
                         </tr>
                     {% endif %}
@@ -171,6 +173,19 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <div class="box-header">
+                <h4 class="box-title">ТТН для другой службы</h4>
+            </div>
+            <div class="box-body">
+                <div class="sonata-ba-collapsed-fields clearfix">
+                    <div class="col-md-6">
+                        {{ form_row(form.customTtn) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -264,7 +279,6 @@
             type: "POST",
             success: function (data) {
                 if(data.status =='OK'){
-//                    console.log(data);
                     location.reload();
                 }else{
                     console.log(data);
@@ -273,11 +287,27 @@
             },
             error: function (message) {
                 console.log(message.status + ' ' + message.statusText);
-                return false;
             },
         });
         return false;
     });
+
+    $(document).on('click', '#unbind_ttn', function(e) {
+        e.stopPropagation();
+        $.ajax({
+            url: Routing.generate('waiting_for_departure_orders_ajax_unbind_waybill', {'id': '{{ form_tab.object.id }}' }),
+            dataType: "json",
+            type: "POST",
+            success: function (data) {
+                location.reload();
+            },
+            error: function (message) {
+                console.log(message.status + ' ' + message.statusText);
+            },
+        });
+        return false;
+    });
+
     $('.js-waybill-fields input').on('click focus', function () {
         $(this).closest('.form-group').removeClass('has-error');
     });

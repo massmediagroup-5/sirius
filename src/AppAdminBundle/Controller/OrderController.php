@@ -445,6 +445,23 @@ class OrderController extends BaseController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
+    public function ajaxUnbindWaybillAction(Request $request)
+    {
+        $orderObject = $this->admin->getSubject();
+
+        $orderObject->setTtn(null);
+
+        $this->getDoctrine()->getManager()->persist($orderObject);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->renderJson([]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function getSizesAction(Request $request)
     {
         $admin = $this->admin;

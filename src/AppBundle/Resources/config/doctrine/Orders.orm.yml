@@ -66,6 +66,9 @@ AppBundle\Entity\Orders:
             length: 255
             options:
                 fixed: false
+        customTtn:
+            type: text
+            nullable: true
         phone:
             type: string
             nullable: true

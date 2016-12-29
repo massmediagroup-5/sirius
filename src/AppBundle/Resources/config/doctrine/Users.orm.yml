@@ -4,15 +4,17 @@ AppBundle\Entity\Users:
     repositoryClass: AppBundle\Entity\Repository\UserRepository
     attributeOverride:
       email:
-        type: string
-        length: 255
-        nullable: true
-        unique: false
+          name: email
+          type: string
+          length: 255
+          nullable: true
+          unique: false
       emailCanonical:
-        type: string
-        length: 255
-        nullable: true
-        unique: false
+          name: email_canonical
+          type: string
+          length: 255
+          nullable: true
+          unique: false
     uniqueConstraints:
         id_UNIQUE:
             columns:
