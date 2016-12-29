@@ -457,14 +457,8 @@ class PricesCalculator
         if ($this->authorizationChecker->isGranted('ROLE_WHOLESALER')) {
             if (!$this->authorizationChecker->isGranted('ROLE_GRAY_LIST')) {
                 $user = $this->container->get('security.context')->getToken()->getUser();
-                $optionsService = $this->container->get('options');
 
-                $cart = $this->container->get('cart');
-
-                if ($user->getOrders()->count()
-                    || $cart->getDiscountedIntermediatePrice() > $optionsService->getParamValue('startWholesalerDiscount',
-                        500)
-                ) {
+                if ($this->isWholesalerMakeOrder()) {
                     // Use user discount
                     if ($user->getDiscount()) {
                         return $sum * $user->getDiscount() * 0.01;
@@ -481,6 +475,21 @@ class PricesCalculator
         }
 
         return $this->getLoyaltyProgramDiscountBySum($sum);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWholesalerMakeOrder()
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $optionsService = $this->container->get('options');
+
+        $cart = $this->container->get('cart');
+
+        return $user->getOrders()->count()
+        || $cart->getDiscountedIntermediatePrice() > $optionsService->getParamValue('startWholesalerDiscount', 500);
     }
 
     /**

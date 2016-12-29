@@ -1,4 +1,4 @@
-{% if is_granted('ROLE_WHOLESALER') and options.getParamValue('startWholesalerDiscount', 500) > cart.discountedIntermediatePrice %}
+{% if is_granted('ROLE_WHOLESALER') and not prices.wholesalerMakeOrder %}
     <p class="hello">Минимальная сумма заказа {{ options.getParamValue('startWholesalerDiscount', 500) }} грн.</p>
 {% else %}
     <p class="hello">Здравствуйте, {{ app.user.name }}, пожалуйста проверьте Ваши данные для оформления заказа</p>
