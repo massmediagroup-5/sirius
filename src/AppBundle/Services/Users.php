@@ -54,14 +54,13 @@ class Users extends BaseFOSUBProvider
             $user = new UserEntity();
             $name = $response->getFirstName();
             $surname = $response->getLastName();
-            $email = $response->getEmail() ? : $response->getUsername() . '@' . $response->getResourceOwner()->getName() . 'com';
             if(!$name) {
                 list($name, $surname) = explode(' ', $response->getRealName());
             }
             $user->setUsername($response->getUsername());
             $user->setName($name);
             $user->setSurname($surname);
-            $user->setEmail($email);
+            $user->setEmail($response->getEmail());
             $user->setPassword($response->getUsername()); // Set wrong not hashed password, user can change it
             $user->setEnabled(true);
         }
