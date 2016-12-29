@@ -1,6 +1,7 @@
 <div class="row js-waybill-fields">
     <div class="col-md-12">
-        <div class="box box-success">
+        {% if admin.currentCarrierNovaPoshta %}
+            <div class="box box-success">
             <div class="box-header">
                 <h4 class="box-title">{{ form_tab.name }}</h4>
             </div>
@@ -153,7 +154,8 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+            </div>
+        {% endif %}
 
         <div class="box box-success">
             <div class="box-header">

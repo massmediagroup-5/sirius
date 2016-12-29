@@ -403,7 +403,7 @@ class OrdersAdmin extends Admin
             ->end();
         if (in_array($this->statusName, ['waiting_for_departure', 'sent', 'done', 'canceled'])) {
             $ttn = $date = '';
-            if (($city = $this->subject->getCities()) && $this->get('novaposhta')->isNovaPoshtaCarrier($city->getCarriers())) {
+            if ($this->isCurrentCarrierNovaPoshta()) {
                 if ($this->subject->getTtn()) {
                     $this->get('novaposhta')->initConfig();
                     $ttnDocument = $this->get('novaposhta')->getInternetDocumentByRef($this->subject->getTtn());
@@ -510,6 +510,14 @@ class OrdersAdmin extends Admin
     public function getFormTheme()
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_stores_list_edit.html.twig']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCurrentCarrierNovaPoshta()
+    {
+        return ($city = $this->subject->getCities()) && $this->get('novaposhta')->isNovaPoshtaCarrier($city->getCarriers());
     }
 
     /**
