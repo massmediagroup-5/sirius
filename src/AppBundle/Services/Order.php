@@ -115,6 +115,10 @@ class Order
         if ($user) {
             $user->decrementBonuses(Arr::get($data, 'bonuses', 0));
 
+            if (!$user->getPhone()) {
+                $user->setPhone($order->getPhone());
+            }
+
             $this->em->persist($user);
         }
 
@@ -469,7 +473,7 @@ class Order
                             }
                         }
                     }
-                    if (($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers())) {
+                    if (($orderStatus->getSendClientEmail()) && (!empty($orderStatus->getSendClientEmailText())) && ($order->getUsers()) && $order->getUsers()->getEmail()) {
                         $body = sprintf(
                             $orderStatus->getSendClientEmailText(),
                             $order->getId() ? $order->getId() : date('G:i:s d-m-Y', time()) // %s
