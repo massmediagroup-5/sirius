@@ -104,9 +104,9 @@ class OrderController extends BaseController
         foreach ($request->get('sizes', []) as $sizeArray) {
             $sizes[] = [
                 $this->getDoctrine()
-                     ->getManager()
-                     ->getRepository('AppBundle:ProductModelSpecificSize')
-                     ->find($sizeArray['id']),
+                    ->getManager()
+                    ->getRepository('AppBundle:ProductModelSpecificSize')
+                    ->find($sizeArray['id']),
                 $sizeArray['count']
             ];
         }
@@ -176,7 +176,7 @@ class OrderController extends BaseController
      */
     public function ajaxUpdateAction(Request $request)
     {
-        $data   = Arr::only($request->request->all(), [
+        $data = Arr::only($request->request->all(), [
             'individualDiscount',
             'additionalSolarDescription',
             'additionalSolar',
@@ -226,32 +226,32 @@ class OrderController extends BaseController
         // Получаем ключ апи с базы и конфигуруем прослойку для работы с апи
         $api = $this->get('novaposhta')->initConfig();
 
-        $form_data   = $request->request->all();
+        $form_data = $request->request->all();
 
         // Габариты груза
         $optionsSeat = new \NovaPoshta\Models\OptionsSeat();
         $optionsSeat->setVolumetricHeight($form_data['np_volumetric_height'])
-                    ->setVolumetricLength($form_data['np_volumetric_length'])
-                    ->setVolumetricWidth($form_data['np_volumetric_width'])
-                    ->setWeight($form_data['np_weight']);
+            ->setVolumetricLength($form_data['np_volumetric_length'])
+            ->setVolumetricWidth($form_data['np_volumetric_width'])
+            ->setWeight($form_data['np_weight']);
 
         // Город получателя
         $data = new \NovaPoshta\MethodParameters\Address_getCities();
         $data->setFindByString($orderObject->getCities()->getName());
-        $result        = \NovaPoshta\ApiModels\Address::getCities($data);
+        $result = \NovaPoshta\ApiModels\Address::getCities($data);
         $cityRecipient = $result->data[0]->Ref;
 
         // Выбираем тип контрагента:
-        $result           = \NovaPoshta\ApiModels\Common::getTypesOfCounterparties();
+        $result = \NovaPoshta\ApiModels\Common::getTypesOfCounterparties();
         $counterpartyType = $result->data[1]->Ref; // тип PrivatePerson
 
         // данные отправителя
-        $data                       = new MethodParameters();
+        $data = new MethodParameters();
         $data->CounterpartyProperty = 'Sender';
-        $result                     = Counterparty::getCounterparties($data);
-        $senderInfo                 = $result->data[0]; // Полная информация о отправителе
+        $result = Counterparty::getCounterparties($data);
+        $senderInfo = $result->data[0]; // Полная информация о отправителе
         $citySender = "db5c88ac-391c-11dd-90d9-001a92567626"; // Город отправителя Хмельницький
-        $counterpartySender         = $senderInfo->Ref;
+        $counterpartySender = $senderInfo->Ref;
 
         // создаем контрагента получателя если до этого он небыл создан
         $counterparty = new \NovaPoshta\ApiModels\Counterparty();
@@ -265,6 +265,9 @@ class OrderController extends BaseController
 //      $counterparty->setEmail($orderObject->getUsers()->getEmail());
         $result = $counterparty->save();
 
+        if ($result->errors) {
+            return $this->npErrorResponse($result);
+        }
         $counterpartyRecipient = $result->data[0]->Ref;
 
         // Получим контактных персон для контрагентов:
@@ -287,36 +290,36 @@ class OrderController extends BaseController
         $addressRecipient = $orderObject->getStores()->getRef();
 
         // Теперь получим тип услуги:
-        $result      = \NovaPoshta\ApiModels\Common::getServiceTypes();
+        $result = \NovaPoshta\ApiModels\Common::getServiceTypes();
         $serviceType = $result->data[2]->Ref; // Выбрали: WarehouseWarehouse
 
         // Выбираем плательщика:
         $payerType = $form_data['np_delivery_payer'];
 
         // Форму оплаты:
-        $result        = \NovaPoshta\ApiModels\Common::getPaymentForms();
+        $result = \NovaPoshta\ApiModels\Common::getPaymentForms();
         $paymentMethod = $result->data[1]->Ref; // Выбрали: Cash
 
         // Тип груза:
-        $result    = \NovaPoshta\ApiModels\Common::getCargoTypes();
+        $result = \NovaPoshta\ApiModels\Common::getCargoTypes();
         $cargoType = $result->data[0]->Ref; // Выбрали: Cargo
 
         // Мы выбрали все данные которые нам нужны для создания ЭН. Создаем ЭН:
         // Контрагент отправитель
         $sender = new \NovaPoshta\Models\CounterpartyContact();
         $sender->setCity($citySender)
-               ->setRef($counterpartySender)
-               ->setAddress($addressSender)
-               ->setContact($contactPersonSender)
-               ->setPhone(preg_replace("/[^0-9]/", '', strip_tags($api->getPhone())));
+            ->setRef($counterpartySender)
+            ->setAddress($addressSender)
+            ->setContact($contactPersonSender)
+            ->setPhone(preg_replace("/[^0-9]/", '', strip_tags($api->getPhone())));
 
         // Контрагент получатель
         $recipient = new \NovaPoshta\Models\CounterpartyContact();
         $recipient->setCity($cityRecipient)
-                  ->setRef($counterpartyRecipient)
-                  ->setAddress($addressRecipient)
-                  ->setContact($contactPersonRecipient)
-                  ->setPhone(preg_replace("/[^0-9]/", '', strip_tags($orderObject->getPhone())));
+            ->setRef($counterpartyRecipient)
+            ->setAddress($addressRecipient)
+            ->setContact($contactPersonRecipient)
+            ->setPhone(preg_replace("/[^0-9]/", '', strip_tags($waybillForm->np_phone)));
 
         // Получаем тип платильщика обратной доставки с формы
         $redeliveryPayer = $form_data['np_backward_delivery_payer'];
@@ -404,7 +407,7 @@ class OrderController extends BaseController
 
         return $this->renderJson([
             'status' => 'OK',
-            'link'   => $link
+            'link' => $link
         ]);
     }
 
@@ -503,7 +506,7 @@ class OrderController extends BaseController
     protected function renderPartials()
     {
         $parameters = [
-            'admin'    => isset( $parameters['admin'] ) ? $parameters['admin'] : $this->admin,
+            'admin' => isset($parameters['admin']) ? $parameters['admin'] : $this->admin,
             'form_tab' => [
                 'name' => 'Список заказанных товаров'
             ]
@@ -520,9 +523,20 @@ class OrderController extends BaseController
     /**
      * @return mixed
      */
-    public function getInvoiceAction(){
+    public function getInvoiceAction()
+    {
 
         $orderObject = $this->admin->getSubject();
         return $this->get('invoice_transformer')->createInvoice($orderObject);
+    }
+
+    /**
+     * @param $response
+     *
+     * @return Response
+     */
+    protected function npErrorResponse($response)
+    {
+        return $this->renderJson(['errors' => $response['errors']], 422);
     }
 }

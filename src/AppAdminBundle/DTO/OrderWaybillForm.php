@@ -26,7 +26,6 @@ class OrderWaybillForm
 
     /**
      * @var string
-     * @Assert\NotBlank
      */
     public $np_middlename;
 

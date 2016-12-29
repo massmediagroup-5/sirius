@@ -46,7 +46,8 @@
                             <td>Обратная доставка:</td>
                             <td class="form-inline">
                                 <div class="form-group">
-                                    <input type="text" name="np_backward_delivery_cost" id="np_backward_delivery_cost"
+                                    <input type="text" value="{{ object.individualDiscountedTotalPrice }}"
+                                           name="np_backward_delivery_cost" id="np_backward_delivery_cost"
                                            class="form-control"/> грн
                                 </div>
                             </td>
@@ -85,7 +86,8 @@
                             <td>Оглашенна ценность:</td>
                             <td class="form-inline">
                                 <div class="form-group">
-                                    <input type="text" name="np_cost" id="np_cost" class="form-control"/>
+                                    <input type="text" value="{{ object.individualDiscountedTotalPrice }}"
+                                           name="np_cost" id="np_cost" class="form-control"/>
                                 </div>
                             </td>
                         </tr>
@@ -111,7 +113,7 @@
                             <td class="form-inline">
                                 <div class="form-group">
                                     <input type="text" name="np_phone" id="np_phone" class="form-control"
-                                           value="{{ object.users ? object.users.phone : ''}}"/>
+                                           value="{{ object.users ? object.users.phone : object.phone}}"/>
                                 </div>
                             </td>
                         </tr>
@@ -196,8 +198,12 @@
                 if (response.status == 422) {
                     var message = '';
                     response.responseJSON.errors.forEach(function (error) {
-                        $('[name="' + error.property_path + '"]').closest('.form-group').addClass('has-error');
-                        message += error.property_path + ' - ' + error.message + '\n';
+                        if (typeof error == 'string') {
+                            message += error;
+                        } else {
+                            $('[name="' + error.property_path + '"]').closest('.form-group').addClass('has-error');
+                            message += error.property_path + ' - ' + error.message + '\n';
+                        }
                     });
                     alert(message);
                 }
