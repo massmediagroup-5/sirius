@@ -43,13 +43,13 @@ class OrdersRepository extends EntityRepository
         $rsm->addScalarResult('sclr_0', 'bonusesInProcess');
 
         return $this->_em->createNativeQuery('SELECT 
-                SUM(((SELECT 
-                                FLOOR(SUM(sizes.discounted_total_price * sizes.quantity))
+                SUM(FLOOR(((SELECT 
+                                SUM(sizes.discounted_total_price * sizes.quantity)
                             FROM
                                 order_product_size sizes
                             WHERE
                                 sizes.order_id = orders.id) - orders.individual_discount + orders.additional_solar
-                                 - orders.bonuses - orders.loyality_discount - orders.up_sell_discount) / 100) sclr_0
+                                 - orders.bonuses - orders.loyality_discount - orders.up_sell_discount) / 100)) sclr_0
             FROM orders
             JOIN order_status ON orders.status_id = order_status.id
             WHERE orders.users_id = ? AND orders.bonuses_enrolled = 0 AND order_status.code = ?;', $rsm)
