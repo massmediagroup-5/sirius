@@ -98,40 +98,42 @@
                 <div class="list">
 
                     {% for filter_item in data.characteristics %}
-                        <div class="item{% if app.request.get(filter_item.characteristic.id) %} active{% endif %}">
-                            <div class="item-name">
-                                <a href="#">{{ filter_item.characteristic.name }} <span></span></a>
-                            </div>
-                            <div class="item-drop"{% if app.request.get(filter_item.characteristic.id) %} style="display: block;"{% endif %}>
-                                <div class="item-drop__i">
-                                    <ul class="check-fltr">
-                                        {% for param in filter_item.values %}
-                                            <li>
-                                                <label class="filter-check">
-                                                    {# check if filter parameter checked #}
-                                                    {% set check = "" %}
-                                                    {% if app.request.get(filter_item.characteristic.id) %}
-                                                        {% set checked_array = app.request.get(filter_item.characteristic.id)|split(',') %}
-                                                        {% if param.0.id in checked_array %}
-                                                            {% set check = 'checked="checked"' %}
+                        {% if filter_item.characteristic.inFilter %}
+                            <div class="item{% if app.request.get(filter_item.characteristic.id) %} active{% endif %}">
+                                <div class="item-name">
+                                    <a href="#">{{ filter_item.characteristic.name }} <span></span></a>
+                                </div>
+                                <div class="item-drop"{% if app.request.get(filter_item.characteristic.id) %} style="display: block;"{% endif %}>
+                                    <div class="item-drop__i">
+                                        <ul class="check-fltr">
+                                            {% for param in filter_item.values %}
+                                                <li>
+                                                    <label class="filter-check">
+                                                        {# check if filter parameter checked #}
+                                                        {% set check = "" %}
+                                                        {% if app.request.get(filter_item.characteristic.id) %}
+                                                            {% set checked_array = app.request.get(filter_item.characteristic.id)|split(',') %}
+                                                            {% if param.0.id in checked_array %}
+                                                                {% set check = 'checked="checked"' %}
+                                                            {% endif %}
                                                         {% endif %}
-                                                    {% endif %}
-                                                    {% if param.modelsCount == 0 %}
-                                                        {% set disabled = "disabled" %}
-                                                    {% else %}
-                                                        {% set disabled = "" %}
-                                                    {% endif %}
-                                                    <input type="checkbox" class="checkbox" {{ check }} {{ disabled }} name="{{ filter_item.characteristic.id }}" value="{{ param.0.id }}"/>
-                                                    <span class="f-check"></span>
-                                                    {{ param.0.name }}
-                                                    <span>({{ param.modelsCount }})</span>
-                                                </label>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
+                                                        {% if param.modelsCount == 0 %}
+                                                            {% set disabled = "disabled" %}
+                                                        {% else %}
+                                                            {% set disabled = "" %}
+                                                        {% endif %}
+                                                        <input type="checkbox" class="checkbox" {{ check }} {{ disabled }} name="{{ filter_item.characteristic.id }}" value="{{ param.0.id }}"/>
+                                                        <span class="f-check"></span>
+                                                        {{ param.0.name }}
+                                                        <span>({{ param.modelsCount }})</span>
+                                                    </label>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
 
                     <div class="item">

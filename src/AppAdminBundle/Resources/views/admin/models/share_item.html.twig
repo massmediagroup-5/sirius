@@ -8,6 +8,11 @@
         до {{ prices.getProductModelMaxDiscountedPrice(model)|format_price }}
     </td>
     <td>
+        {% if model.allSizesQuantity %}<span class="label label-success">Да</span>
+        {% else %}<span class="label label-danger">Нет</span>
+        {% endif %}
+    </td>
+    <td>
         <label>
             <input type="checkbox" class="js_check_model" {% if model.inShareGroup(group) %} checked {% endif %} />
         </label>
