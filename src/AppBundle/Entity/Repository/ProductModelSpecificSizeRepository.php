@@ -218,7 +218,7 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
 
         $builder = $this->createQueryBuilder($sizesAlias)
             ->innerJoin("{$sizesAlias}.model", $modelsAlias)
-            ->innerJoin("{$sizesAlias}.shareGroup", $shareGroupAlias)
+            ->leftJoin("{$sizesAlias}.shareGroup", $shareGroupAlias)
             ->innerJoin("{$modelsAlias}.products", $productsAlias)
             ->innerJoin("{$productsAlias}.baseCategory", $baseCategoryAlias)
             ->innerJoin("{$productsAlias}.characteristicValues", $characteristicValuesAlias)
