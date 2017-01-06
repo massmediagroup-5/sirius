@@ -108,7 +108,7 @@ AppBundle\Entity\Users:
             column: create_time
         addBonusesAt:
             type: datetime
-            nullable: false
+            nullable: true
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             column: add_bonuses_at
         updateTime:
@@ -122,4 +122,5 @@ AppBundle\Entity\Users:
             cascade: {  }
             fetch: LAZY
             mappedBy: users
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+            prePersist: [ setCreateTime ]

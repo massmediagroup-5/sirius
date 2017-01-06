@@ -179,13 +179,11 @@ class Users extends BaseUser
     /**
      * Set createTime
      *
-     * @param \DateTime $createTime
-     *
      * @return Users
      */
-    public function setCreateTime($createTime)
+    public function setCreateTime()
     {
-        $this->createTime = $createTime;
+        $this->createTime = new \DateTime();
 
         return $this;
     }
