@@ -64,8 +64,8 @@
                     {% endif %}
                 </th>
                 <td class="control-group">{{ size.discountedTotalPricePerItem|round }}</td>
-                <td class="control-group">{{ size.totalPrice }}</td>
-                <td class="control-group">{{ size.discountedTotalPrice}}</td>
+                <td class="control-group">{{ admin.wholesalerCart.getItemInPackagePrice(size) }}</td>
+                <td class="control-group">{{ admin.wholesalerCart.getItemInPackageDiscountedPrice(size)}}</td>
                 <td class="control-group">
                     <button class="btn btn-danger btn-xs js_size_remove">
                         <span class="glyphicon glyphicon-remove"></span>
@@ -103,8 +103,8 @@
                 {% endif %}
             </td>
             <td class="control-group">{{ size['entity'].discountedTotalPricePerItem|round }}</td>
-            <td class="control-group">{{ size.entity.totalPrice }}</td>
-            <td class="control-group">{{ size.entity.discountedTotalPrice}}</td>
+            <td class="control-group">{{ size.totalPrice }}</td>
+            <td class="control-group">{{ size.discountedTotalPrice}}</td>
             <td class="control-group">
                 {% if admin.baseRouteName == 'new_orders' %}
                     <button class="btn btn-danger btn-xs js_size_remove">

@@ -5,6 +5,7 @@ namespace AppAdminBundle\Services;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
+use AppBundle\Model\CartSize;
 
 /**
  * Class WholesalerOrder
@@ -41,7 +42,7 @@ class WholesalerCart
 
     /**
      * @param ProductModels $model
-     * @return array
+     * @return int
      */
     public function getPackagesCount($model)
     {
@@ -62,6 +63,24 @@ class WholesalerCart
             return $packagesCount;
         }
         return 0;
+    }
+
+    /**
+     * @param OrderProductSize $size
+     * @return float
+     */
+    public function getItemInPackagePrice(OrderProductSize $size)
+    {
+        return round($this->getPackagesCount($size->getSize()->getModel()) * $size->getTotalPricePerItem());
+    }
+
+    /**
+     * @param OrderProductSize $size
+     * @return float
+     */
+    public function getItemInPackageDiscountedPrice(OrderProductSize $size)
+    {
+        return round($this->getPackagesCount($size->getSize()->getModel()) * $size->getDiscountedTotalPricePerItem());
     }
 
     /**
@@ -140,6 +159,8 @@ class WholesalerCart
                 $sizes[] = [
                     'quantity' => $diff,
                     'entity' => $size,
+                    'totalPrice' => $size->getTotalPricePerItem() * $diff,
+                    'discountedTotalPrice' => $size->getDiscountedTotalPricePerItem() * $diff,
                 ];
             }
         }
