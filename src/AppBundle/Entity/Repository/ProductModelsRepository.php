@@ -179,6 +179,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
 
         $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters);
 
+        $builder->addOrderBy('images.priority', 'ASC');
+
         return $builder->getQuery();
     }
 
