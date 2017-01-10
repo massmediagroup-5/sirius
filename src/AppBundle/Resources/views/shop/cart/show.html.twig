@@ -6,10 +6,12 @@
     <section class="content">
         <div class="wrap">
             <div class="content__i">
-                {% if is_granted('ROLE_WHOLESALER') %}
-                    {{ include('AppBundle:shop/cart/wholesale_products_list.html.twig') }}
-                {% else %}
+                <div id="cartContent">
                     {{ include('AppBundle:shop/cart/products_list.html.twig') }}
+                </div>
+
+                {% if not is_granted('ROLE_WHOLESALER') %}
+                    {{ widget('products.recentlyReviewed')|raw }}
                 {% endif %}
             </div>
         </div>

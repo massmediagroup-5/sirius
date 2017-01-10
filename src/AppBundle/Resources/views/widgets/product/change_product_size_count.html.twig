@@ -1,8 +1,11 @@
 {{ form_start(form, {'attr': {'novalidate': true, 'class': 'js_auto_ajax_form', 'data-id': size.id}}) }}
     <div class="inp amount-control single-buyer-amount-control">
         <a href="#" class="minus"></a>
-        {{ form_widget(form.quantity, {'attr': {'data-placeholder': 'К-во', 'data-min': 1, 'class': 'only-integers'}}) }}
+        <input type="text" class="only-integers js-quantity" value="{{ form.vars.options.selected }}" data-placeholder="К-во"
+               data-min="1">
+        {# quantity to increment #}
         <a href="#" class="plus"></a>
     </div>
+    {{ form_widget(form.quantity) }}
     {{ form_widget(form.size, {'attr': {'class': 'js_item_size_id'}}) }}
 {{ form_end(form) }}

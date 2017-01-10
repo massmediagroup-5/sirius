@@ -145,12 +145,11 @@ class CartController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $this->get('cart')->changeItemSizeCount(
-                $size,
-                $form->get('quantity')->getNormData()
-            );
+            $this->get('cart')->incrementItemSizeQuantity($size, $form->get('quantity')->getNormData());
+
             $cartInfo = $this->getGeneralCartInfo();
             $cartInfo['currentPrice'] = $this->get('cart')->getSizeDiscountedPrice($size);
+            $cartInfo['cartContentPartial'] = $this->getCartContentPartial();
             return new JsonResponse($cartInfo);
         }
 
@@ -395,6 +394,16 @@ class CartController extends BaseController
         }
 
         return $errors;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCartContentPartial()
+    {
+        return $this->renderView('AppBundle:shop/cart/products_list.html.twig', [
+            'continueShopUrl' => $this->get('last_urls')->getLastCatalogUrl()
+        ]);
     }
 
 }

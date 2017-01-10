@@ -1,4 +1,7 @@
 {{ form_start(form, {'attr': {'novalidate': true, 'class': 'remove js_auto_ajax_remove_form'}}) }}
     {{ form_widget(form.size, {'attr': {'class': 'js_item_size_id'}}) }}
-    {{ form_widget(form.delete, {'attr': {'class': 'remove-info-btn'}}) }}
+
+    {{ form_widget(form.quantity) }}
+
+    <button type="submit" class="remove-info-btn"></button>
 {{ form_end(form) }}

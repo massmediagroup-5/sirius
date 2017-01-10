@@ -70,6 +70,21 @@ class CartItem
     }
 
     /**
+     * @param $size
+     * @param $quantity
+     * @return $this
+     */
+    public function incrementSizeQuantity(ProductModelSpecificSize $size, $quantity)
+    {
+        if(isset($this->sizes[$size->getId()])) {
+            $this->sizes[$size->getId()]->incrementQuantity($quantity);
+        } else {
+            $this->addSize($size, $quantity);
+        }
+        return $this;
+    }
+
+    /**
      * @param $sizes
      * @return mixed
      */
@@ -417,6 +432,26 @@ class CartItem
         }
 
         return $singleSizes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPreOrderQuantity()
+    {
+        return array_sum(array_map(function (CartSize $size) {
+            return $size->getPreOrderQuantity();
+        }, $this->sizes));
+    }
+
+    /**
+     * @return int
+     */
+    public function getStandardQuantity()
+    {
+        return array_sum(array_map(function (CartSize $size) {
+            return $size->getStandardQuantity();
+        }, $this->sizes));
     }
 
 }

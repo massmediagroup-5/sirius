@@ -1,14 +1,11 @@
-var updatePrices = function(data) {
-    $('.js_cart_pre_order_total_price').text(data.preOrderItemsPrice);
-    $('.js_cart_standard_total_price').text(data.standardItemsPrice);
+$(document).on('order.cart_size.changed', function (e, data) {
     $('.js_cart_total_count').text(data.totalCount);
-    $('.js_cart_total_price').text(data.totalPrice);
     $('.js_cart_total_discounted_price').text(data.discountedTotalPrice);
-    $('.js_total_discount').text(data.totalDiscount);
 
-    var modelId = this.$form.data('id');
-    $('.js_item_price[data-id="' + modelId + '"]').text(data.currentPrice);
-};
+    $('#cartContent').html(data.cartContentPartial);
+
+    $(document).trigger('order.cart_content_inserted');
+});
 
 /**
  * Form to change cart item count
@@ -18,13 +15,25 @@ var OrderItemCountAutoForm = (function (superClass) {
 
     function OrderItemCountAutoForm($form) {
         OrderItemCountAutoForm.__super__.constructor.call(this, $form);
+
+        this.oldValue = this.currentQuantity();
     }
 
     OrderItemCountAutoForm.prototype.successSubmit = function (data) {
-        this.updatePrices(data);
+        $(document).trigger('order.cart_size.changed', [data]);
     };
 
-    OrderItemCountAutoForm.prototype.updatePrices = updatePrices;
+    OrderItemCountAutoForm.prototype.submitForm = function () {
+        // Set quantity to increment
+        this.$form.find('input[id$=_quantity]').val(this.currentQuantity() - this.oldValue);
+        this.oldValue = this.currentQuantity();
+
+        OrderItemCountAutoForm.__super__.submitForm.call(this);
+    };
+
+    OrderItemCountAutoForm.prototype.currentQuantity = function () {
+        return this.$form.find('.js-quantity').val();
+    };
 
     return OrderItemCountAutoForm;
 })(AjaxAutoForm);
@@ -62,7 +71,7 @@ var OrderItemSizeAutoForm = (function (superClass) {
 
         // If model size type changed
         if(this.$size.find('option:selected').data('preorderflag') == $lastOption.data('preorderflag')) {
-            this.updatePrices(data);
+            $(document).trigger('order.cart_size.changed', [data]);
             this.$size.data('current', this.$size.val());
         } else {
             window.location.reload();
@@ -74,8 +83,6 @@ var OrderItemSizeAutoForm = (function (superClass) {
         this.$form.data('id', currentItemSizeId);
         this.$form.attr('action', Routing.generate('cart_change_size', {id: currentItemSizeId}));
     };
-
-    OrderItemSizeAutoForm.prototype.updatePrices = updatePrices;
 
     return OrderItemSizeAutoForm;
 })(AjaxAutoForm);
@@ -91,23 +98,13 @@ var OrderItemRemoveAutoForm = (function (superClass) {
     }
 
     OrderItemRemoveAutoForm.prototype.successSubmit = function (data) {
-        if(data.totalCount == 0) {
-            window.location.reload();
-            return;
-        }
-        this.updatePrices(data);
-
-        this.$form.closest('.js_cart_item').remove();
-
-        $(document).trigger('order.cart_item_removed', []);
+        $(document).trigger('order.cart_size.changed', [data]);
     };
-
-    OrderItemRemoveAutoForm.prototype.updatePrices = updatePrices;
 
     return OrderItemRemoveAutoForm;
 })(AjaxAutoForm);
 
-$(window).ready(function () {
+$(document).on('ready order.cart_content_inserted', function () {
     $('.js_auto_ajax_form[name="change_product_size_quantity"]').each(function () {
         new OrderItemCountAutoForm($(this));
     });
@@ -129,4 +126,10 @@ $(window).ready(function () {
         });
     });
 
+});
+
+$(document).on('order.cart_content_inserted', function () {
+    var $content = $('#cartContent');
+    initSelects($content);
+    initAmountSelects($content);
 });

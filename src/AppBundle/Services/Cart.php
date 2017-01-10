@@ -142,6 +142,19 @@ class Cart
     }
 
     /**
+     * @param $size
+     * @param $quantity
+     * @return $this
+     */
+    public function incrementItemSizeQuantity(ProductModelSpecificSize $size, $quantity)
+    {
+        $cartItem = $this->items[$size->getModel()->getId()];
+        $cartItem->incrementSizeQuantity($size, $quantity);
+        $this->saveInStore();
+        return $this;
+    }
+
+    /**
      * @param ProductModels $model
      * @return bool
      */
@@ -181,6 +194,17 @@ class Cart
         }, $this->items);
 
         return $sizes ? call_user_func_array('array_merge', $sizes) : [];
+    }
+
+    /**
+     * @param ProductModelSpecificSize $size
+     * @return CartSize|null
+     */
+    public function getCartSize(ProductModelSpecificSize $size)
+    {
+        return Arr::first($this->getSizes(), function ($key, CartSize $cartSize) use ($size) {
+            return $cartSize->getSize()->getId() == $size->getId();
+        });
     }
 
     /**
@@ -450,6 +474,12 @@ class Cart
      */
     public function saveInStore()
     {
+        // Delete empty records
+        foreach ($this->items as $key => $item) {
+            if (!$item->getQuantity()) {
+                unset($this->items[$key]);
+            }
+        }
         $this->store->setSizes($this->toSizesArray());
     }
 
@@ -566,6 +596,28 @@ class Cart
             $this->items[$size->getModel()->getId()] = new CartItem($size->getModel(), $this->pricesCalculator);
             $this->items[$size->getModel()->getId()]->addSize($size, $quantity);
         }
+    }
+
+    /**
+     * @param ProductModelSpecificSize $size
+     * @return int
+     */
+    public function getSizePreOrderQuantity(ProductModelSpecificSize $size)
+    {
+        $cartSize = $this->getCartSize($size);
+
+        return $cartSize ? $cartSize->getPreOrderQuantity() : 0;
+    }
+
+    /**
+     * @param ProductModelSpecificSize $size
+     * @return int
+     */
+    public function getSizeStandardQuantity(ProductModelSpecificSize $size)
+    {
+        $cartSize = $this->getCartSize($size);
+
+        return $cartSize ? $cartSize->getStandardQuantity() : 0;
     }
 
 }

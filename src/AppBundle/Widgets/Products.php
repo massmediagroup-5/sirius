@@ -340,14 +340,17 @@ class Products
     }
 
     /**
-     * @param $size
+     * @param CartSize $size
+     * @param $preOrderMode
      * @return mixed
      */
-    public function removeProductFromCart(CartSize $size)
+    public function removeProductFromCart(CartSize $size, $preOrderMode)
     {
-        $form = $this->container->get('form.factory')->create(RemoveProductSizeType::class, null, [
-            'action' => $this->container->get('router')->generate('cart_remove', ['id' => $size->getSize()->getId()]),
-            'size' => $size->getSize()
+        $form = $this->container->get('form.factory')->create(ChangeProductSizeQuantityType::class, null, [
+            'action' => $this->container->get('router')->generate('cart_change_size_count',
+                ['id' => $size->getSize()->getId()]),
+            'size' => $size->getSize(),
+            'toChangeQuantity' => - ($preOrderMode ? $size->getPreOrderQuantity() : $size->getStandardQuantity()),
         ])->createView();
 
         return $this->templating->render('AppBundle:widgets/product/remove_product_size.html.twig', [

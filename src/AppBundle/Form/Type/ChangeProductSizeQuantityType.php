@@ -7,6 +7,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -18,9 +20,9 @@ class ChangeProductSizeQuantityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('quantity', TextType::class, [
+            ->add('quantity', HiddenType::class, [
                 'required' => true,
-                'data' => isset($options['selected']) ? $options['selected'] : 1,
+                'data' => isset($options['toChangeQuantity']) ? $options['toChangeQuantity'] : 1,
                 'constraints' => [new NotBlank]
             ])->add('size', HiddenType::class, [
                 'data' => $options['size'],
@@ -30,13 +32,22 @@ class ChangeProductSizeQuantityType extends AbstractType
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['options'] = $options;
+    }
+
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'size',
-        ));
-        $resolver->setOptional(array(
+        ]);
+        $resolver->setOptional([
             'selected',
-        ));
+            'toChangeQuantity'
+        ]);
     }
 }

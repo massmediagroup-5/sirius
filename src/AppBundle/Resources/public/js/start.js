@@ -58,6 +58,69 @@ function parseISO8601(dateStr) {
     return new Date(d[0], (d[1] - 1), d[2], t[0], t[1], t[2]);
 }
 
+function initSelects ($content) {
+    $content = $content ? $content : $('body');
+    $content.find('.select').select2({
+        minimumResultsForSearch: 2
+    }).on('change select2-opening', function () {
+        $(this).removeClass('error');
+    });
+
+    var sort_select = $content.find('select.sorting_dropdown').data('sort');
+    $content.find("select.sorting_dropdown").val(sort_select);
+    $content.find('select.sorting_dropdown').select2({
+        minimumResultsForSearch: -1,
+        dropdownCssClass: 'sorting_dropdown'
+    });
+}
+
+function initAmountSelects ($content) {
+    $content = $content ? $content : $('body');
+
+    $content.find('.amount-select .inp').on('click', ':not(.amount-select-drop)', function (e) {
+        $content.find(this).toggleClass('dropActive');
+    });
+    if($content.find('.amount-select-drop').length > 0) {
+        $content.find('.amount-select-drop').mCustomScrollbar();
+    }
+    $content.find('.amount-select-drop a').on('click', function(e){
+        e.preventDefault();
+        var value = $(this).text(),
+            inp = $(this).closest('.inp').find('input');
+        inp.val(value).trigger('change');
+        $(this).closest('.inp').removeClass('dropActive');
+        return false;
+    });
+
+    $content.find(".amount-control .plus").click(function (e) {
+        var text = $(this).prev("input"),
+            value = parseInt(text.val(), 10);
+        e.preventDefault();
+
+        value = isNaN(value) ? 0 : value;
+        text.val(value + 1).trigger('change');
+
+        return false;
+    });
+
+    $content.find(".amount-control .minus").click(function (e) {
+        var text = $(this).next("input"),
+            value = parseInt(text.val(), 10);
+        e.preventDefault();
+
+        value = isNaN(value) ? 0 : value;
+
+        if ((text.val() == text.data('min'))||(text.val() <= 0)) {
+            return false
+        }
+        else {
+            text.val(value - 1).trigger('change');
+        }
+
+        return false;
+    });
+}
+
 /**
  * Execute last command on body click
  */
@@ -632,34 +695,6 @@ $(window).load(function () {
         $(this).closest('.amount-control').find('.collect').removeClass('active')
     });
 
-    $(".amount-control .plus").click(function (e) {
-        var text = $(this).prev("input"),
-            value = parseInt(text.val(), 10);
-        e.preventDefault();
-
-        value = isNaN(value) ? 0 : value;
-        text.val(value + 1).trigger('change');
-
-        return false;
-    });
-
-    $(".amount-control .minus").click(function (e) {
-        var text = $(this).next("input"),
-            value = parseInt(text.val(), 10);
-        e.preventDefault();
-
-        value = isNaN(value) ? 0 : value;
-
-        if ((text.val() == text.data('min'))||(text.val() <= 0)) {
-            return false
-        }
-        else {
-            text.val(value - 1).trigger('change');
-        }
-
-        return false;
-    });
-
     $('.catalog .item').on('mouseenter', function () {
         if ($(this).closest('.item').find('.color-slider__i a').length > 3) {
             var $slider = $(this).closest('.item').find('.color-slider__i');
@@ -1046,19 +1081,7 @@ $(window).load(function () {
     $('.filters .item-name a[data-active="1"]').click();
 
     //FILTER DROPS END
-
-    $('.select').select2({
-        minimumResultsForSearch: 2
-    }).on('change select2-opening', function () {
-        $(this).removeClass('error');
-    });
-
-    var sort_select = $('select.sorting_dropdown').data('sort');
-    $("select.sorting_dropdown").val(sort_select);
-    $('select.sorting_dropdown').select2({
-        minimumResultsForSearch: -1,
-        dropdownCssClass: 'sorting_dropdown'
-    });
+    initSelects();
 
     //ORDER FORM PASSWORD RECOVERY START//
 
@@ -1329,20 +1352,7 @@ $(window).load(function () {
     //$('.amount-select input').focus(function () {
     //	$(this).closest('.inp').toggleClass('dropActive');
     //});
-    $('.amount-select .inp').on('click', ':not(.amount-select-drop)', function (e) {
-        $(this).toggleClass('dropActive');
-    });
-    if($('.amount-select-drop').length > 0) {
-        $('.amount-select-drop').mCustomScrollbar();
-    }
-    $('.amount-select-drop a').on('click', function(e){
-        e.preventDefault();
-        var value = $(this).text(),
-            inp = $(this).closest('.inp').find('input');
-        inp.val(value).trigger('change');
-        $(this).closest('.inp').removeClass('dropActive');
-        return false;
-    });
+    initAmountSelects();
 });
 
 $(window).on('resize load', function () {
