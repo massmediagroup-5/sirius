@@ -327,12 +327,6 @@ class OrderController extends BaseController
         // Тип обратной доставки
         $redeliveryCargoType = 'Money';
 
-        // Обратная доставка ценные бумаги
-        $backwardDeliveryData = new \NovaPoshta\Models\BackwardDeliveryData();
-        $backwardDeliveryData->setPayerType($redeliveryPayer);
-        $backwardDeliveryData->setCargoType($redeliveryCargoType);
-        $backwardDeliveryData->setRedeliveryString($form_data['np_backward_delivery_cost']);
-
         // И НАКОНЕЦ-ТО формирование ТТН
         $internetDocument = new \NovaPoshta\ApiModels\InternetDocument();
         $internetDocument
@@ -347,8 +341,17 @@ class OrderController extends BaseController
             ->setCost($form_data['np_cost'])
             ->setDescription('Sirius')
             ->setDateTime($form_data['np_date'])
-            ->addOptionsSeat($optionsSeat)
-            ->addBackwardDeliveryData($backwardDeliveryData);
+            ->addOptionsSeat($optionsSeat);
+
+        if ($form_data['np_backward_delivery_cost']) {
+            // Обратная доставка ценные бумаги
+            $backwardDeliveryData = new \NovaPoshta\Models\BackwardDeliveryData();
+            $backwardDeliveryData->setPayerType($redeliveryPayer);
+            $backwardDeliveryData->setCargoType($redeliveryCargoType);
+            $backwardDeliveryData->setRedeliveryString($form_data['np_backward_delivery_cost']);
+
+            $internetDocument->addBackwardDeliveryData($backwardDeliveryData);
+        }
 
         $result = $internetDocument->save();
 
