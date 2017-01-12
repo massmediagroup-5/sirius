@@ -266,6 +266,16 @@ class OrderProductSize
     }
 
     /**
+     * Get discountedTotalPricePerItem
+     *
+     * @return string
+     */
+    public function getDiscountPercentages()
+    {
+        return ($this->totalPricePerItem - $this->discountedTotalPricePerItem) / $this->totalPricePerItem * 100;
+    }
+
+    /**
      * Set totalPricePerItem
      *
      * @param string $totalPricePerItem

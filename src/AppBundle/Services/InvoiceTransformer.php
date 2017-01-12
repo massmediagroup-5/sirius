@@ -316,7 +316,7 @@ class InvoiceTransformer
                     ->setCellValue("G$i", 'пач.')
                     ->setCellValue("H$i", $packagesCount)
                     ->setCellValue("I$i", $cart->getModelPackagePricePerItem($model))
-                    ->setCellValue("J$i", '')
+                    ->setCellValue("J$i", $cart->getModelPackageDiscount($model))
                     ->setCellValue("K$i", $cart->getModelDiscountedPackagePricePerItem($model))
                     ->setCellValue("L$i", $cart->getModelDiscountedPackagesPrice($model));
                 $i++;
@@ -331,7 +331,7 @@ class InvoiceTransformer
                     ->setCellValue("G$i", 'шт.')
                     ->setCellValue("H$i", $size['quantity'])
                     ->setCellValue("I$i", $size['entity']->getTotalPricePerItem())
-                    ->setCellValue("J$i", '')
+                    ->setCellValue("J$i", round($size['entity']->getDiscountPercentages()))
                     ->setCellValue("K$i", $size['entity']->getDiscountedTotalPricePerItem())
                     ->setCellValue("L$i", $size['entity']->getDiscountedTotalPricePerItem() * $size['quantity']);
                 $i++;
