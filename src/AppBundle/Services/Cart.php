@@ -142,19 +142,6 @@ class Cart
     }
 
     /**
-     * @param $size
-     * @param $quantity
-     * @return $this
-     */
-    public function incrementItemSizeQuantity(ProductModelSpecificSize $size, $quantity)
-    {
-        $cartItem = $this->items[$size->getModel()->getId()];
-        $cartItem->incrementSizeQuantity($size, $quantity);
-        $this->saveInStore();
-        return $this;
-    }
-
-    /**
      * @param ProductModels $model
      * @return bool
      */

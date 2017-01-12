@@ -83,7 +83,7 @@ class CartController extends BaseController
     }
 
     /**
-     * @Route("/cart/add_wholesale", name="cart_add_wholesale", options={"expose"=true})
+     * @Route("/cart/batch_increment", name="cart_batch_increment", options={"expose"=true})
      * @Method("POST")
      * @param Request $request
      * @return JsonResponse|RedirectResponse
@@ -101,7 +101,9 @@ class CartController extends BaseController
             }
         }
 
-        return new JsonResponse($this->getGeneralCartInfoWholesale());
+        return new JsonResponse(array_merge($this->getGeneralCartInfoWholesale(), [
+            'cartContentPartial' => $this->getCartContentPartial()
+        ]));
     }
 
     /**
@@ -145,7 +147,7 @@ class CartController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $this->get('cart')->incrementItemSizeQuantity($size, $form->get('quantity')->getNormData());
+            $this->get('cart')->addItemToCard($size, $form->get('quantity')->getNormData());
 
             $cartInfo = $this->getGeneralCartInfo();
             $cartInfo['currentPrice'] = $this->get('cart')->getSizeDiscountedPrice($size);

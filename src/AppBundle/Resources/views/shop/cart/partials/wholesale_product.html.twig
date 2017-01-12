@@ -41,14 +41,14 @@
                         <div class="amount-control">
                             <a href="#" class="minus"></a>
                             <input type="text" class="js_amounts_changer" data-min=1
-                                   value="{{ currentSize is defined ? (preOrderMode ? currentSize.preOrderQuantity : currentSize.standardQuantity) : packagesQuantity }}"/>
+                                   value="{{ currentSize is defined ? currentSize.quantity : packagesQuantity }}"/>
                             <a href="#" class="plus"></a>
                         </div>
                     </td>
                     <td>
                         {% if currentSize is defined %}
                             <span class="js_item_price" data-price="{{ prices.getDiscountedPrice(currentSize.size) }}">
-                                {{ (preOrderMode ? currentSize.preOrderDiscountedPrice : currentSize.standardDiscountedPrice)|format_price }}
+                                {{ currentSize.discountedPrice|format_price }}
                             </span>
                         {% else %}
                             <span class="js_item_price" data-price="{{ prices.getProductModelPackageDiscountedPrice(item.productModel) }}">

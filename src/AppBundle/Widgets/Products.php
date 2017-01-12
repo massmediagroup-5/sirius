@@ -245,22 +245,6 @@ class Products
         );
     }
 
-//    /**
-//     * Render old and new prices
-//     *
-//     * @param $object
-//     * @return mixed
-//     */
-//    public function oldPrices($object)
-//    {
-//        $oldPrice = $this->container->get('prices_calculator')->getProductModelLowestSpecificSizeOldPrice($object);
-//
-//        return $this->templating->render('AppBundle:widgets/product/old_prices.html.twig', [
-//                'oldPrice' => $oldPrice,
-//            ]
-//        );
-//    }
-
     /**
      * @param $model
      * @return mixed
