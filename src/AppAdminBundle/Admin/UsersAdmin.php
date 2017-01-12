@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use AppBundle\Entity\Users;
+use Symfony\Component\Form\CallbackTransformer;
 
 class UsersAdmin extends BaseUserAdmin
 {
@@ -120,6 +121,17 @@ class UsersAdmin extends BaseUserAdmin
         }
 
         $formMapper->end();
+
+        $formMapper->getFormBuilder()
+            ->addModelTransformer(new CallbackTransformer(
+                function ($user) {
+                    return $user;
+                },
+                function ($user) {
+                    $user->setUsername($user->getEmail());
+                    return $user;
+                }
+            ));;
     }
 
     /**

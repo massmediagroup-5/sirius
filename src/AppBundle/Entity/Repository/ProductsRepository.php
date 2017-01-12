@@ -508,6 +508,8 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
 
         $this->addSort($builder, $filters);
 
+        $builder->addOrderBy('images.priority', 'ASC');
+
         return $builder->getQuery();
     }
 

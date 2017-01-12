@@ -78,7 +78,6 @@ class ShopController extends Controller
             }
             $this->get('widgets.breadcrumbs')->push(['name' => $data['category']->getName()]);
             $this->get('last_urls')->setLastCatalogUrl($request->getRequestUri());
-//            dump($data);exit; 
             return $this->render('AppBundle:shop:category.html.twig', array(
                 'data' => $data,
                 'breadcrumb' => $this->breadcrumb,
