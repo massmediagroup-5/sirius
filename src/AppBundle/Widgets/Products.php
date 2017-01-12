@@ -128,41 +128,46 @@ class Products
             $priceCalculator = $this->container->get('prices_calculator');
             $currentShareGroup = $model->getSizes()->first()->getShareGroup();
             $currentSize = $model->getSizes()->first();
-            $sizesGroups = $model->getShare()->getSizesGroups();
+            $upSells = [];
 
-            // Main group upSell
-            $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($model->getSizes()->first());
-            $sizesGroups = $sizesGroups->getValues();
-            $upSellGroups = array_filter($sizesGroups, function ($group) use ($currentShareGroup) {
-                return $group->getId() != $currentShareGroup->getId();
-            });
+            $sizesGroups = $this->em->getRepository('AppBundle:ShareSizesGroup')
+                ->findActiveForShare($model->getShare());
 
-            // Select one product from each group
-            $allUpSellSizes = array_map(function (ShareSizesGroup $sizesGroup) use($priceCalculator) {
-                $sizes = $sizesGroup->getModelSpecificSizes()->getValues();
-                return $sizes[array_rand($sizes)];
-            }, $upSellGroups);
+            // Combination of all groups
+            // Skip combination when some groups are not available
+            if ($model->getShare()->getSizesGroups()->count() == count($sizesGroups)) {
+                $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($model->getSizes()->first());
 
-            $upSell = array_map(function (ProductModelSpecificSize $size) use($priceCalculator) {
-                return ['obj' => $size, 'discount' => $size->getShareGroup()->getDiscount()];
-            }, $allUpSellSizes);
+                $upSellGroups = array_filter($sizesGroups, function ($group) use ($currentShareGroup) {
+                    return $group->getId() != $currentShareGroup->getId();
+                });
 
-            $totalSum += round(array_sum(array_map(function ($size) use($priceCalculator) {
-                return $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($size);
-            }, $allUpSellSizes)));
+                // Select one product from each group
+                $allUpSellSizes = array_map(function (ShareSizesGroup $sizesGroup) use ($priceCalculator) {
+                    $sizes = $sizesGroup->getModelSpecificSizes()->getValues();
+                    return $sizes[array_rand($sizes)];
+                }, $upSellGroups);
 
-            // Create form
-            $allUpSellSizes[] = $currentSize;
-            $form = $this->container->get('form.factory')->create(AddUpSellInCartType::class, null, [
-                'action' => $this->container->get('router')->generate('cart_add_many'),
-                'sizes' => $allUpSellSizes
-            ])->createView();
+                $upSell = array_map(function (ProductModelSpecificSize $size) use ($priceCalculator) {
+                    return ['obj' => $size, 'discount' => $size->getShareGroup()->getDiscount()];
+                }, $allUpSellSizes);
 
-            $currentDiscount = $currentShareGroup->getDiscount();
-            $companionFlag = false;
+                $totalSum += round(array_sum(array_map(function ($size) use ($priceCalculator) {
+                    return $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($size);
+                }, $allUpSellSizes)));
 
-            $upSells[] = compact('upSell', 'totalSum', 'form', 'currentDiscount', 'companionFlag');
+                // Create form
+                $allUpSellSizes[] = $currentSize;
+                $form = $this->container->get('form.factory')->create(AddUpSellInCartType::class, null, [
+                    'action' => $this->container->get('router')->generate('cart_add_many'),
+                    'sizes' => $allUpSellSizes
+                ])->createView();
 
+                $currentDiscount = $currentShareGroup->getDiscount();
+                $companionFlag = false;
+
+                $upSells[] = compact('upSell', 'totalSum', 'form', 'currentDiscount', 'companionFlag');
+            }
 
             // Combinations upSell
             foreach ($sizesGroups as $group) {
@@ -205,10 +210,12 @@ class Products
                 }
             }
 
-            return $this->templating->render(
-                'AppBundle:widgets/product/upsells.html.twig',
-                compact('upSells', 'model', 'currentSize')
-            );
+            if ($upSells) {
+                return $this->templating->render(
+                    'AppBundle:widgets/product/upsells.html.twig',
+                    compact('upSells', 'model', 'currentSize')
+                );
+            }
         }
         
         return null;

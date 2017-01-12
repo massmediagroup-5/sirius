@@ -69,8 +69,7 @@ class ShareController extends BaseController
             $group->setDiscount($request->get('discount'));
         }
 
-        foreach ($request->get('discounts', []) as $discountId => $discount)
-        if ($request->get('discounts')) {
+        foreach ($request->get('discounts', []) as $discountId => $discount) {
             $companionGroup = $em->getReference('AppBundle:ShareSizesGroup', $discountId);
             $this->get('share')->saveDiscountForCompanion($group, $companionGroup, $discount);
         }
