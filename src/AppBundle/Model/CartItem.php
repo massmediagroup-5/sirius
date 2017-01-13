@@ -306,8 +306,6 @@ class CartItem
      */
     public function getPreOrderSizesQuantity()
     {
-        dump($this->sizes);
-        dump($this->getPreOrderSingleItems());
         return Arr::sumProperty($this->sizes, 'preOrderQuantity');
     }
 

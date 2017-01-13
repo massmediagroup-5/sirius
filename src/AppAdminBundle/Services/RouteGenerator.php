@@ -141,7 +141,6 @@ class RouteGenerator implements RouteGeneratorInterface
 
         // someone provide the fullname
         if (array_key_exists($name, $this->caches)) {
-            dump($name);
             return $name;
         }
 
