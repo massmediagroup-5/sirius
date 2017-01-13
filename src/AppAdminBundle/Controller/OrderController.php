@@ -215,6 +215,8 @@ class OrderController extends BaseController
         $waybillForm->np_name = $request->get('np_name');
         $waybillForm->np_middlename = $request->get('np_middlename');
         $waybillForm->np_phone = $request->get('np_phone');
+        $waybillForm->np_backward_delivery_cost = $request->get('np_backward_delivery_cost');
+        $waybillForm->np_backward_delivery_payer = $request->get('np_backward_delivery_payer');
 
         $errors = $validator->validate($waybillForm);
 
@@ -321,12 +323,6 @@ class OrderController extends BaseController
             ->setContact($contactPersonRecipient)
             ->setPhone(preg_replace("/[^0-9]/", '', strip_tags($waybillForm->np_phone)));
 
-        // Получаем тип платильщика обратной доставки с формы
-        $redeliveryPayer = $form_data['np_backward_delivery_payer'];
-
-        // Тип обратной доставки
-        $redeliveryCargoType = 'Money';
-
         // И НАКОНЕЦ-ТО формирование ТТН
         $internetDocument = new \NovaPoshta\ApiModels\InternetDocument();
         $internetDocument
@@ -343,12 +339,18 @@ class OrderController extends BaseController
             ->setDateTime($form_data['np_date'])
             ->addOptionsSeat($optionsSeat);
 
-        if ($form_data['np_backward_delivery_cost']) {
+        if ($waybillForm->np_backward_delivery_cost) {
+            // Получаем тип платильщика обратной доставки с формы
+            $redeliveryPayer = $form_data->np_backward_delivery_payer;
+
+            // Тип обратной доставки
+            $redeliveryCargoType = 'Money';
+
             // Обратная доставка ценные бумаги
             $backwardDeliveryData = new \NovaPoshta\Models\BackwardDeliveryData();
             $backwardDeliveryData->setPayerType($redeliveryPayer);
             $backwardDeliveryData->setCargoType($redeliveryCargoType);
-            $backwardDeliveryData->setRedeliveryString($form_data['np_backward_delivery_cost']);
+            $backwardDeliveryData->setRedeliveryString($waybillForm->np_backward_delivery_cost);
 
             $internetDocument->addBackwardDeliveryData($backwardDeliveryData);
         }

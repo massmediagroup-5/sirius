@@ -72,8 +72,15 @@
                         <tr>
                             <td>Платильщик обратной доставки:</td>
                             <td>
-                                <input type="radio" name="np_backward_delivery_payer" value="Recipient"> получатеть<br>
-                                <input type="radio" name="np_backward_delivery_payer" value="Sender"> отправитель
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="radio" name="np_backward_delivery_payer" value="Recipient" class="form-control"> получатеть<br>
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="np_backward_delivery_payer" value="Sender" class="form-control"> отправитель
+                                        </label>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -310,7 +317,7 @@
         return false;
     });
 
-    $('.js-waybill-fields input').on('click focus', function () {
+    $('.js-waybill-fields input').on('click focus ifChanged', function () {
         $(this).closest('.form-group').removeClass('has-error');
     });
 </script>
