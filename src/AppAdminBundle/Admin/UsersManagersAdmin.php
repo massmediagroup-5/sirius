@@ -19,5 +19,5 @@ class UsersManagersAdmin extends UsersAdmin
 
     protected $baseRoutePattern = '/app/users-managers';
 
-    protected $userRole = 'ROLE_ADMIN';
+    protected $userRole = 'ROLE_SONATA_ADMIN';
 }
