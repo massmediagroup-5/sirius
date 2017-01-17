@@ -271,6 +271,7 @@ class OrderController extends BaseController
             return $this->npErrorResponse($result);
         }
         $counterpartyRecipient = $result->data[0]->Ref;
+        $contactPersonRecipient = $result->data[0]->ContactPerson->data[0]->Ref;
 
         // Получим контактных персон для контрагентов:
         $data = new \NovaPoshta\MethodParameters\Counterparty_getCounterpartyContactPersons();
@@ -278,12 +279,6 @@ class OrderController extends BaseController
         $result = \NovaPoshta\ApiModels\Counterparty::getCounterpartyContactPersons($data);
 
         $contactPersonSender = $result->data[0]->Ref;
-
-        $data = new \NovaPoshta\MethodParameters\Counterparty_getCounterpartyContactPersons();
-        $data->setRef($counterpartyRecipient);
-        $result = \NovaPoshta\ApiModels\Counterparty::getCounterpartyContactPersons($data);
-
-        $contactPersonRecipient = $result->data[0]->Ref;
 
         // Для контрагента отправителя получим склад отправки:
         $addressSender = $api->getWarehouseRef();
@@ -341,7 +336,7 @@ class OrderController extends BaseController
 
         if ($waybillForm->np_backward_delivery_cost) {
             // Получаем тип платильщика обратной доставки с формы
-            $redeliveryPayer = $form_data->np_backward_delivery_payer;
+            $redeliveryPayer = $waybillForm->np_backward_delivery_payer;
 
             // Тип обратной доставки
             $redeliveryCargoType = 'Money';
