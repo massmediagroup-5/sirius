@@ -832,15 +832,22 @@ class Order
      */
     public function getUserOrders(UsersEntity $user)
     {
-        return $this->em->getRepository('AppBundle:Orders')
+        $query = $this->em->getRepository('AppBundle:Orders')
             ->createQueryBuilder('orders')
             ->select('orders')
             ->leftJoin('orders.sizes', 'orderSizes')->addSelect('orderSizes')
             ->where('orders.users = :user')
             ->orderBy('orders.id', 'DESC')
             ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+
+
+        $paginator  = $this->container->get('knp_paginator');
+        return $paginator->paginate(
+            $query, /* query NOT result */
+            $this->container->get('request_stack')->getCurrentRequest()->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
     }
 
     /**
