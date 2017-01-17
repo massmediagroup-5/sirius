@@ -165,9 +165,9 @@
             </div>
             <script type="text/javascript">
                 $(function () {
-                    if (!$('input[value="ROLE_ADMIN"]').prop('checked'))
+                    if (!$('input[value="ROLE_SONATA_ADMIN"]').prop('checked'))
                         $('.js-block-admin').hide();
-                        $('input[value="ROLE_ADMIN"]').on('ifChanged', function () {
+                        $('input[value="ROLE_SONATA_ADMIN"]').on('ifChanged', function () {
                             $('.js-block-admin').toggle();
                         })
                     });
