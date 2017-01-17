@@ -952,12 +952,8 @@ $(window).load(function () {
     var minPriceInp = $('#min');
     var maxPriceInp = $('#max');
     var slider = $(".price-slider__i");
-    if (minPriceInp.data('value') != minPriceInp.data('min')) {
-        minPriceInp.val(minPriceInp.data('value'));
-    }
-    if (maxPriceInp.data('value') != maxPriceInp.data('max')) {
-        maxPriceInp.val(maxPriceInp.data('value'));
-    }
+    minPriceInp.val(minPriceInp.data('value'));
+    maxPriceInp.val(maxPriceInp.data('value'));
 
     slider.slider({
         range: true,
@@ -974,6 +970,7 @@ $(window).load(function () {
         var low = minPriceInp.val() || minPriceInp.data('min'),
             high = maxPriceInp.val() || maxPriceInp.data('max');
         low = Math.min(low, high);
+        low = Math.max(low, minPriceInp.data('min'));
         minPriceInp.val(low);
         slider.slider('values', 0, low);
     });
@@ -982,6 +979,7 @@ $(window).load(function () {
         var low = minPriceInp.val() || minPriceInp.data('min'),
             high = maxPriceInp.val() || maxPriceInp.data('max');
         high = Math.max(low, high);
+        high = Math.min(high, maxPriceInp.data('max'));
         maxPriceInp.val(high);
         slider.slider('values', 1, high);
     });

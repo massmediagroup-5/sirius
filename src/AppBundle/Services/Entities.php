@@ -95,7 +95,7 @@ class Entities
         }
 
         $price_filter = $this->em->getRepository('AppBundle:ProductModels')
-            ->getPricesIntervalForFilters($category, $characteristicsValuesIds, $filters);
+            ->getPricesIntervalForFilters($category, $characteristicsValuesIds);
 
         if (empty($filters['price_from']) || $filters['price_from'] < $price_filter['min_price']) {
             $filters['price_from'] = $price_filter['min_price'];

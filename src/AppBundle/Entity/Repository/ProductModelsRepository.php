@@ -115,10 +115,10 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     /**
      * @param $category
      * @param $characteristicValues
-     * @param $filters
+     * @param array $filters
      * @return mixed
      */
-    public function getPricesIntervalForFilters($category, $characteristicValues, $filters)
+    public function getPricesIntervalForFilters($category, $characteristicValues, $filters = [])
     {
         $builder = $this->createQueryBuilder('pModels')
             ->join('pModels.products', 'pProducts')
