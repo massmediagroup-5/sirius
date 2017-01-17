@@ -1,0 +1,27 @@
+sirius_application:
+    image: phusion/baseimage
+    volumes:
+        - ../:/var/www
+    tty: true
+sirius_db:
+    build: ./mysql
+    ports:
+        - 3307:3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: sirius
+sirius_php:
+    build: ./php-fpm
+    volumes_from:
+        - sirius_application
+    links:
+        - sirius_db
+    working_dir: /var/www
+sirius_nginx:
+    build: ./nginx
+    ports:
+        - 8000:80
+    links:
+        - sirius_php
+    volumes_from:
+        - sirius_application
