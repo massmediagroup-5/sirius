@@ -183,12 +183,13 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         $alias = 'productModels',
         $params = []
     ) {
-        $params['prefix'] = 'available';
+        $prefix = isset($params['prefix']) ? $params['prefix'] : 'available';
+        $params['prefix'] = $prefix;
 
         $activeSizesBuilder = $this->createAvailableSizesBuilder($category, $characteristicValues, $filters, $params);
         
         $activeSizesBuilder->select('1');
-        $activeSizesBuilder->andWhere("availableproductModels.id = $alias.id");
+        $activeSizesBuilder->andWhere("{$prefix}productModels.id = $alias.id");
 
         $builder->andWhere($activeSizesBuilder->expr()->exists($activeSizesBuilder->getDQL()));
 
@@ -230,7 +231,7 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
 
         $this->_em->getRepository('AppBundle:Products')
             ->addCharacteristicsCondition($builder, $characteristicValues, $modelsAlias, $characteristicValuesAlias,
-                $characteristicsAlias, Arr::get($params, 'characteristics.topLevelValueAlias'));
+                $characteristicsAlias, Arr::get($params, 'characteristics.topLevelValueAlias'), $prefix);
 
         $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters, $modelsAlias,
             $productsAlias, $characteristicValuesAlias, $sharesAlias, $sizesAlias);

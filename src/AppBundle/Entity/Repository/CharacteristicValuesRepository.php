@@ -102,25 +102,51 @@ class CharacteristicValuesRepository extends BaseRepository
      * @return array
      */
     public function getWithModelsCount($category, $characteristicsValuesIds, $filters) {
-        /** @var QueryBuilder $modelsBuilder */
-        $modelsBuilder = $this->_em->getRepository('AppBundle:ProductModels')
+        $filteredModelsBuilder = $this->_em->getRepository('AppBundle:ProductModels')
             ->createFilteredProductsToCategoryBuilder($category, $characteristicsValuesIds, $filters, [
                 'characteristics' => ['topLevelValueAlias' => 'value'],
                 'skip_order' => true
-            ]);
+            ])
+            ->select('COUNT(productModels)');
 
-        $modelsBuilder->select('COUNT(productModels)');
+        $modelsBuilder = $this->_em->getRepository('AppBundle:ProductModels')
+            ->createFilteredProductsToCategoryBuilder($category, [], [], [
+                'characteristics' => ['topLevelValueAlias' => 'sqValue'],
+                'modelsAlias' => 'allProductModels',
+                'prefix' => 'allAvailable',
+                'skip_order' => true
+            ])
+            ->select('1');
 
-        $builder = $this->createQueryBuilder('value')
-            ->addSelect('characteristic')
-            ->join('value.characteristics', 'characteristic')
-            ->addSelect("({$modelsBuilder->getDQL()}) modelsCount");
+        $categoriesRepository = $this->_em->getRepository('AppBundle:Categories');
 
-        foreach ($modelsBuilder->getParameters() as $parameter) {
-            $builder->setParameter($parameter->getName(), $parameter->getValue());
+        $subQueryBuilder = $this->createQueryBuilder('sqValue')
+            ->select('sqValue.id')
+            ->join('sqValue.characteristics', 'sqCharacteristic')
+            ->join('sqCharacteristic.characteristicValues', 'cValue')
+            ->join('cValue.categories', 'vCategories')
+            ->join('sqCharacteristic.categories', 'cCategories');
+
+        // Filter values by selected to category characteristics
+        $categoriesRepository->addCategoryFilterCondition($subQueryBuilder, $category, 'cCategories');
+
+        // Filter values by selected to category values
+        $categoriesRepository->addCategoryFilterCondition($subQueryBuilder, $category, 'vCategories');
+
+        // Select only values which have models (not consider filters)
+        $subQueryBuilder->andWhere($subQueryBuilder->expr()->exists($modelsBuilder->getDQL()));
+
+        foreach ($filteredModelsBuilder->getParameters() as $parameter) {
+            $subQueryBuilder->setParameter($parameter->getName(), $parameter->getValue());
         }
 
-        return $builder->getQuery()->getResult();
+        return $this->createQueryBuilder('value')
+            ->addSelect('characteristic')
+            ->addSelect("({$filteredModelsBuilder->getDQL()}) modelsCount")
+            ->join('value.characteristics', 'characteristic')
+            ->andWhere($subQueryBuilder->expr()->in('value.id', $subQueryBuilder->getDQL()))
+            ->getQuery()
+            ->getResult();
     }
 
 }

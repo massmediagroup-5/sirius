@@ -533,6 +533,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
      * @param string $characteristicValuesAlias
      * @param string $characteristicsAlias
      * @param string|bool $topLevelValueAlias
+     * @param string $prefix
      * @return mixed
      */
     public function addCharacteristicsCondition(
@@ -541,14 +542,17 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $productsAlias = 'productModels',
         $characteristicValuesAlias = 'characteristicValues',
         $characteristicsAlias = 'characteristics',
-        $topLevelValueAlias = false
+        $topLevelValueAlias = false,
+        $prefix = ''
     ) {
         if ($characteristicValues || $topLevelValueAlias) {
+            $inccharvalAlias = $prefix . 'inccharval';
+            $inccharAlias = $prefix . 'incchar';
             if (!$characteristicValues) {
                 $characteristicValues = [0];
             }
             if ($topLevelValueAlias) {
-                $whereSql = " OR inccharval.id = $topLevelValueAlias.id";
+                $whereSql = " OR $inccharvalAlias.id = $topLevelValueAlias.id";
                 $builder->andWhere($builder->expr()->orX(
                     $builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues),
                     $builder->expr()->eq("$characteristicValuesAlias.id", "$topLevelValueAlias.id")
@@ -557,16 +561,17 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
                 $whereSql = '';
                 $builder->andWhere($builder->expr()->in("$characteristicValuesAlias.id", $characteristicValues));
             }
+            $implodedCharacteristicValues = implode(',', $characteristicValues);
             $builder
                 ->groupBy("$productsAlias.id")
-                ->having('COUNT(DISTINCT ' . $characteristicsAlias . '.id) >=
+                ->having("COUNT(DISTINCT $characteristicsAlias.id) >=
                 (
-                    SELECT COUNT( DISTINCT incchar.id )
-                    FROM \AppBundle\Entity\Characteristics as incchar
-                    JOIN incchar.characteristicValues as inccharval
-                    WHERE inccharval.id IN (' . implode(',', $characteristicValues) . ')' . $whereSql . '
+                    SELECT COUNT( DISTINCT $inccharAlias.id )
+                    FROM \\AppBundle\\Entity\\Characteristics as $inccharAlias
+                    JOIN $inccharAlias.characteristicValues as $inccharvalAlias
+                    WHERE $inccharvalAlias.id IN ($implodedCharacteristicValues) $whereSql
                 )
-            ');
+            ");
         }
         return $builder;
     }
