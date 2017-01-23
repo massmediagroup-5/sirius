@@ -123,8 +123,13 @@
 
                                     <div class="item">
                                         <p>Адрес склада:	</p>
-                                        <p><strong>{{ order.cities ? order.cities.name : 'город не выбран' }},
-                                                {{ order.stores ? order.stores.name : 'склад не выбран' }}</strong></p>
+                                        <p>{% if order.carriers.id == constant('AppBundle\\Entity\\Carriers::CUSTOM_DELIVERY_ID') %}
+                                                <strong>{{ order.customDelivery }}</strong>
+                                            {% else %}
+                                                <strong>{{ order.cities ? order.cities.name : 'город не выбран' }},
+                                                    {{ order.stores ? order.stores.name : 'склад не выбран' }}</strong>
+                                            {% endif %}
+                                        </p>
                                     </div>
 
                                     <div class="item">
