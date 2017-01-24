@@ -556,4 +556,19 @@ class OrderController extends BaseController
     {
         return $this->renderJson(['errors' => $response['errors']], 422);
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function deliveryDataAction(Request $request){
+
+        $carrier = $request->get('carrier');
+
+        $cities = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Cities')->findBy(['carriers' => $carrier]);
+
+        return new Response($this->get('jms_serializer')->serialize(['data' => $cities], 'json'));
+    }
 }

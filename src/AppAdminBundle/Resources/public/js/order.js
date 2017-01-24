@@ -194,6 +194,24 @@ var CarriersChanger = (function () {
             $('.js-custom-delivery').closest('.form-group').hide();
             $('.js-cities').closest('.form-group').show();
             $('.js-stores').closest('.form-group').show();
+
+            var $cities = $('select.js-cities');
+
+            $.ajax({
+                type: 'GET',
+                url: Routing.generate(baseRouteName + '_delivery_data', baseRouteParams),
+                dataType: 'json',
+                data: {carrier: $('select.js-custom-carriers').val()},
+                success: function(response){
+
+                    response.data.forEach(function (city) {
+                        var $option = $('<option></option>')
+                            .val(city.id)
+                            .text(city.name);
+                        $cities.append($option);
+                    });
+                }
+            });
         }
     };
 

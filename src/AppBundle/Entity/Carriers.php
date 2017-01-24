@@ -8,7 +8,8 @@ namespace AppBundle\Entity;
 class Carriers
 {
     const NP_ID = 1;
-    
+    const CUSTOM_DELIVERY_ID = 3;
+
     /**
      * @var integer
      */
