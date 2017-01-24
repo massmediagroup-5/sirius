@@ -136,17 +136,17 @@ class CharacteristicValuesRepository extends BaseRepository
         // Select only values which have models (not consider filters)
         $subQueryBuilder->andWhere($subQueryBuilder->expr()->exists($modelsBuilder->getDQL()));
 
-        foreach ($filteredModelsBuilder->getParameters() as $parameter) {
-            $subQueryBuilder->setParameter($parameter->getName(), $parameter->getValue());
-        }
-
-        return $this->createQueryBuilder('value')
+        $builder = $this->createQueryBuilder('value')
             ->addSelect('characteristic')
             ->addSelect("({$filteredModelsBuilder->getDQL()}) modelsCount")
             ->join('value.characteristics', 'characteristic')
-            ->andWhere($subQueryBuilder->expr()->in('value.id', $subQueryBuilder->getDQL()))
-            ->getQuery()
-            ->getResult();
+            ->andWhere($subQueryBuilder->expr()->in('value.id', $subQueryBuilder->getDQL()));
+
+        foreach ($filteredModelsBuilder->getParameters() as $parameter) {
+            $builder->setParameter($parameter->getName(), $parameter->getValue());
+        }
+
+        return $builder->getQuery()->getResult();
     }
 
 }

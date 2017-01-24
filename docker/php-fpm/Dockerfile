@@ -12,7 +12,7 @@ RUN tar -C /usr/local --strip-components 1 -xJf node-v6.9.4-linux-x64.tar.xz
 
 RUN npm install -g gulp
 
-RUN apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev && \
+RUN apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libssl-dev libreadline-dev libgdbm-dev && \
 docker-php-ext-install exif mbstring && \
 docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/  &&  \
 docker-php-ext-install gd
@@ -24,8 +24,7 @@ cd ruby-2.3.3 && \
 ./configure --prefix=/usr/local && \
 make && \
 make install
-RUN gem source -r https://rubygems.org/ && echo ':sources: ["http://rubygems.org"]' > ~/.gemrc
-RUN gem update --system && gem install compass
+RUN gem update --system && gem install bundle capistrano compass --no-ri --no-rdoc
 
 ADD php.ini /usr/local/etc/php/conf.d/
 

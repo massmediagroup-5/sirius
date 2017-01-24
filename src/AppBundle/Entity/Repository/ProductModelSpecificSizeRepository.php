@@ -233,15 +233,15 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
             ->addCharacteristicsCondition($builder, $characteristicValues, $modelsAlias, $characteristicValuesAlias,
                 $characteristicsAlias, Arr::get($params, 'characteristics.topLevelValueAlias'), $prefix);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters, $modelsAlias,
+        $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters, $modelsAlias,
             $productsAlias, $characteristicValuesAlias, $sharesAlias, $sizesAlias);
 
-        $builder = $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder, $modelsAlias,
+        $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder, $modelsAlias,
             $productsAlias);
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder,
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder,
             $sizesAlias);
 
-        $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters, $sizesAlias, $modelsAlias, $productsAlias);
 
         if (!Arr::get($params, 'skip_order')) {

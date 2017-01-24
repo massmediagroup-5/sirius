@@ -599,7 +599,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             $colors = explode(',', $colors);
             $builder->andWhere($builder->expr()->in("$alias.productColors", $colors));
         }
-        if ($share = Arr::get($filters, $sharesAlias)) {
+        if ($share = Arr::get($filters, 'share')) {
             $builder->andWhere("$sharesAlias.id = :shareId")->setParameter('shareId', $share);
         }
         if ($slug = Arr::get($filters, 'search')) {
