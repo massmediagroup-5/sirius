@@ -28,11 +28,13 @@ RUN gem update --system && gem install bundle capistrano compass --no-ri --no-rd
 
 ADD php.ini /usr/local/etc/php/conf.d/
 
-ENV user honey
+ENV user sirius
 ARG PUID=1000
 ARG PGID=1000
 RUN groupadd -g $PGID $user && \
     useradd -u $PUID -g $user -m $user
+
+RUN chown -R $user:$user /usr/local/
 
 USER $user
 

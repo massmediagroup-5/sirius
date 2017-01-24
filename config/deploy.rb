@@ -1,4 +1,4 @@
-lock '3.6.1'
+lock '3.7.1'
 
 set :application, 'Sirius'
 set :repo_url, 'git@bitbucket.org:massmediagroup/sirius.git'
