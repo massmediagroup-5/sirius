@@ -42,7 +42,7 @@
                         <td>Количество</td>
                     </tr>
                     <tr>
-                        <td>{{ dateActivationLastBonus | format_datetime }}</td>
+                        <td>{{ bonusesInProcess ? dateActivationLastBonus | format_datetime : '' }}</td>
                         <td>{{ bonusesInProcess }}</td>
                     </tr>
                 </table>

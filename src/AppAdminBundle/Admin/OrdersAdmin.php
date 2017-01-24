@@ -79,6 +79,9 @@ class OrdersAdmin extends Admin
             ->add('ajax_update', $this->getRouterIdParameter() . '/ajax_update', [], [], [
                 'expose' => true
             ])
+            ->add('delivery_data', $this->getRouterIdParameter() . '/delivery_data', [], [], [
+                'expose' => true
+            ])
             ->add('get_sizes', $this->getRouterIdParameter() . '/get_sizes', [], [], [
                 'expose' => true
             ])
