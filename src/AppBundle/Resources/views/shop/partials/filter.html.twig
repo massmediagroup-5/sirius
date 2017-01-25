@@ -65,15 +65,17 @@
 
         <form class="filters" id="filters">
             <div class="filters__i">
-                {% if not is_granted('ROLE_WHOLESALER') and not filters.has('shares') %}
-                    {% if filters.get('share') %}
-                        <input type="hidden" name="share" value="{{ filters.get('share') }}"/>
-                    {% endif %}
+                {% if filters.get('share') %}
+                    <input type="hidden" name="share" value="{{ filters.get('share') }}"/>
+                {% endif %}
+
+                {% if not is_granted('ROLE_WHOLESALER') %}
                     <div class="sale">
                         <ul class="check-fltr">
                             <li>
                                 <label class="filter-check">
                                     <input type="checkbox" class="checkbox" name="shares"
+                                           {{ filters.get('shares') == 'any' ? 'checked' : '' }}
                                            value="any" />
                                     <span class="f-check"></span> Акции <i></i></label></li>
                         </ul>

@@ -14,7 +14,7 @@ use Illuminate\Support\Arr;
 class ProductColorsRepository extends BaseRepository
 {
 
-    public function getColorsForFilteredProducts($category, $characteristicsValuesIds, $filters)
+    public function getColorsForFilteredProducts($category, $characteristicsValuesIds = [], $filters = [])
     {
         // Not filter by selected colors
         unset($filters['colors']);

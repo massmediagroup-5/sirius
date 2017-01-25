@@ -77,6 +77,8 @@ class Entities
     ) {
         $filters['wholesaler'] = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER');
 
+        $filtersForFiltersQueries = Arr::only($filters, ['share', 'wholesaler']);
+
         $category = $this->em
             ->getRepository('AppBundle:Categories')
             ->getCategoryInfo($categoryAlias);
@@ -94,7 +96,7 @@ class Entities
             }
         }
         $price_filter = $this->em->getRepository('AppBundle:ProductModels')
-            ->getPricesIntervalForFilters($category, []);
+            ->getPricesIntervalForFilters($category, [], $filtersForFiltersQueries);
 
         if (empty($filters['price_from']) || $filters['price_from'] < $price_filter['min_price']) {
             $filters['price_from'] = $price_filter['min_price'];
@@ -107,7 +109,7 @@ class Entities
             ->getFilteredProductsToCategoryQuery($category, $characteristicsValuesIds, $filters, $ids);
 
         $colors = $this->em->getRepository('AppBundle:ProductColors')
-            ->getColorsForFilteredProducts($category, $characteristicsValuesIds, $filters);
+            ->getColorsForFilteredProducts($category, [], $filtersForFiltersQueries);
 
         $products = $this->container->get('knp_paginator')->paginate(
             $products,
