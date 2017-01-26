@@ -120,13 +120,22 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getPricesIntervalForFilters($category, $characteristicValues, $filters = [])
     {
+        $priceField = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+            ->getPricePart([
+                'shareAlias' => 'pShares',
+                'sizesAlias' => 'pSizes',
+                'modelAlias' => 'pModels',
+                'productAlias' => 'pProducts',
+                'shareGroupAlias' => 'pShareGroups',
+                'wholesaler' => Arr::get($filters, 'wholesaler'),
+            ]);
+
         $builder = $this->createQueryBuilder('pModels')
             ->join('pModels.products', 'pProducts')
             ->join('pModels.sizes', 'pSizes')
-            ->addSelect(
-                "MAX(COALESCE(NULLIF(pSizes.price, 0), NULLIF(pModels.price, 0), pProducts.price)),
-                MIN(COALESCE(NULLIF(pSizes.price, 0), NULLIF(pModels.price, 0), pProducts.price))"
-            );
+            ->join('pSizes.shareGroup', 'pShareGroups')
+            ->join('pShareGroups.share', 'pShares')
+            ->addSelect("MAX($priceField), MIN($priceField)");
 
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, 'pSizes');
