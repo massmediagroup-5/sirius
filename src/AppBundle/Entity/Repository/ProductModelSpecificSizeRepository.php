@@ -14,25 +14,40 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
 {
-
     /**
-     * @param \Doctrine\ORM\QueryBuilder $builder
+     * @param $builder
      * @param $filters
      * @param string $alias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param string $modelAlias
+     * @param string $productAlias
+     * @param string $shareAlias
+     * @param string $shareGroupAlias
+     * @return mixed
      */
-    public function addPriceToQuery($builder, $filters, $alias = 'sizes', $modelAlias = 'productModels', $productAlias = 'products')
-    {
+    public function addPriceToQuery(
+        $builder,
+        $filters,
+        $alias = 'sizes',
+        $modelAlias = 'productModels',
+        $productAlias = 'products',
+        $shareAlias = 'shares',
+        $shareGroupAlias = 'shareGroups'
+    ) {
+        $priceField = $this->getPricePart([
+            'shareAlias' => $shareAlias,
+            'sizesAlias' => $alias,
+            'modelAlias' => $modelAlias,
+            'productAlias' => $productAlias,
+            'shareGroupAlias' => $shareGroupAlias,
+            'wholesaler' => Arr::get($filters, 'wholesaler')
+        ]);
+
         if (!empty($filters['price_from'])) {
-            $builder->andWhere(
-                $builder->expr()->gte("COALESCE(NULLIF($alias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", $filters['price_from'])
-            );
+            $builder->andWhere($builder->expr()->gte($priceField, $filters['price_from']));
         }
 
         if (!empty($filters['price_to'])) {
-            $builder->andWhere(
-                $builder->expr()->lte("COALESCE(NULLIF($alias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price)", $filters['price_to'])
-            );
+            $builder->andWhere($builder->expr()->lte($priceField, $filters['price_to']));
         }
 
         return $builder;
@@ -180,7 +195,7 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         $category,
         $characteristicValues,
         $filters,
-        $alias = 'productModels',
+        $alias = 'sizes',
         $params = []
     ) {
         $prefix = isset($params['prefix']) ? $params['prefix'] : 'available';
@@ -189,7 +204,7 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         $activeSizesBuilder = $this->createAvailableSizesBuilder($category, $characteristicValues, $filters, $params);
         
         $activeSizesBuilder->select('1');
-        $activeSizesBuilder->andWhere("{$prefix}productModels.id = $alias.id");
+        $activeSizesBuilder->andWhere("{$prefix}sizes.id = $alias.id");
 
         $builder->andWhere($activeSizesBuilder->expr()->exists($activeSizesBuilder->getDQL()));
 
@@ -242,7 +257,8 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
             $sizesAlias);
 
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->addPriceToQuery($builder, $filters, $sizesAlias, $modelsAlias, $productsAlias);
+            ->addPriceToQuery($builder, $filters, $sizesAlias, $modelsAlias, $productsAlias, $sharesAlias,
+                $shareGroupAlias);
 
         if (!Arr::get($params, 'skip_order')) {
             $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters, $productsAlias, $modelsAlias, [
@@ -251,5 +267,28 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $builder;
+    }
+
+    /**
+     * @param array $params
+     * @return string
+     */
+    public function getPricePart($params = [])
+    {
+        $shareAlias = Arr::get($params, 'shareAlias', 'share');
+        $sizesAlias = Arr::get($params, 'sizesAlias', 'sizes');
+        $modelAlias = Arr::get($params, 'modelAlias', 'models');
+        $productAlias = Arr::get($params, 'productAlias', 'products');
+        $shareGroupAlias = Arr::get($params, 'shareGroupAlias', 'shareGroups');
+
+        if (Arr::get($params, 'wholesaler')) {
+            return "COALESCE(NULLIF($sizesAlias.wholesalePrice, 0), " .
+                "NULLIF($modelAlias.wholesalePrice, 0), $productAlias.wholesalePrice)";
+        }
+
+        return "IFELSE($shareAlias.groupsCount = 1, " .
+            "COALESCE(NULLIF($sizesAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price) " .
+            "* (100 - $shareGroupAlias.discount) * 0.01, " .
+            "COALESCE(NULLIF($sizesAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price))";
     }
 }

@@ -113,6 +113,7 @@ class CharacteristicValuesRepository extends BaseRepository
             ->createFilteredProductsToCategoryBuilder($category, [], [], [
                 'characteristics' => ['topLevelValueAlias' => 'sqValue'],
                 'modelsAlias' => 'allProductModels',
+                'sizesAlias' => 'allSizes',
                 'prefix' => 'allAvailable',
                 'skip_order' => true
             ])

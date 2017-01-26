@@ -129,7 +129,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             );
 
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, 'pModels');
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, 'pSizes');
 
         $prices = $builder->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
 
@@ -194,10 +194,12 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
     public function createFilteredProductsToCategoryBuilder($category, $characteristicValues, $filters, $params = [])
     {
         $modelsAlias = Arr::get($params, 'modelsAlias', 'productModels');
-        $builder = $this->createQueryBuilder($modelsAlias);
+        $sizesAlias = Arr::get($params, 'sizesAlias', 'sizes');
+        $builder = $this->createQueryBuilder($modelsAlias)
+            ->join("$modelsAlias.sizes", $sizesAlias);
 
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, $modelsAlias, $params);
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, $sizesAlias, $params);
 
         return $builder;
     }
