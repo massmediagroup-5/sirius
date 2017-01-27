@@ -146,6 +146,57 @@ var BodyCommands = (function () {
     return BodyCommands;
 })();
 
+/**
+ * Model images gallery
+ */
+var OwlGallery = (function () {
+    function OwlGallery($holder) {
+        this.$holder = $holder;
+        this.init();
+    }
+
+    OwlGallery.prototype.init = function () {
+        var self = this;
+        this.$holder.on('initialized.owl.carousel', function (event) {
+            var items = event.item.count;
+            var item = event.item.index;
+            self.$holder.find('.owl-item').each(function () {
+                var $this = $(this);
+                $this.attr('rel', $this.index());
+            });
+
+            $(this).closest('.gallery-box__main').find('.overall').text(items);
+            $(this).closest('.gallery-box__main').find('.current').text(item + 1);
+        });
+
+        this.$holder.on('translate.owl.carousel', function (event) {
+            var item = event.item.index;
+            $(this).closest('.gallery-box__main').find('.current').text(item + 1);
+        });
+
+        this.$holder.owlCarousel({
+            items: 1,
+            nav: true,
+            loop: this.$holder.children().length > 1,
+            navText: [
+                "",
+                "<i class='icon icon-popup-arr-next'></i><i class='icon icon-popup-arr-next-hover hover'></i>"
+            ],
+            thumbs: true,
+            thumbImage: true,
+            responsive: false,
+            thumbContainerClass: 'gallery-box__thumb',
+            thumbItemClass: 'owl-thumb-item'
+        });
+    };
+
+    OwlGallery.prototype.to = function (index) {
+        this.$holder.trigger('to', index);
+    };
+
+    return OwlGallery;
+})();
+
 var bodyCommands = new BodyCommands;
 
 jQuery.extend(verge);
@@ -1138,57 +1189,6 @@ $(window).load(function () {
             }
         });
 
-    /**
-     * Model images gallery
-     */
-    var OwlGallery = (function () {
-        function OwlGallery($holder) {
-            this.$holder = $holder;
-            this.init();
-        }
-
-        OwlGallery.prototype.init = function () {
-            var self = this;
-            this.$holder.on('initialized.owl.carousel', function (event) {
-                var items = event.item.count;
-                var item = event.item.index;
-                self.$holder.find('.owl-item').each(function () {
-                    var $this = $(this);
-                    $this.attr('rel', $this.index());
-                });
-
-                $(this).closest('.gallery-box__main').find('.overall').text(items);
-                $(this).closest('.gallery-box__main').find('.current').text(item + 1);
-            });
-
-            this.$holder.on('translate.owl.carousel', function (event) {
-                var item = event.item.index;
-                $(this).closest('.gallery-box__main').find('.current').text(item + 1);
-            });
-
-            this.$holder.owlCarousel({
-                items: 1,
-                nav: true,
-                loop: this.$holder.children().length > 1,
-                navText: [
-                    "",
-                    "<i class='icon icon-popup-arr-next'></i><i class='icon icon-popup-arr-next-hover hover'></i>"
-                ],
-                thumbs: true,
-                thumbImage: true,
-                responsive: false,
-                thumbContainerClass: 'gallery-box__thumb',
-                thumbItemClass: 'owl-thumb-item'
-            });
-        };
-
-        OwlGallery.prototype.to = function (index) {
-            this.$holder.trigger('to', index);
-        };
-
-        return OwlGallery;
-    })();
-
     $(".popup_gallery").each(function () {
         let $this = $(this);
         if($($this.attr('href')).length) {
@@ -1653,8 +1653,7 @@ var QuickOrder = (function () {
 
     QuickOrder.prototype.tryToSubmitForm = function (e) {
         var $form = $(e.target);
-        console.log($form.data('preorder'), userIsAuthenticated);
-        console.log($form.data('preorder') && !userIsAuthenticated);
+
         if($form.data('preorder') && !userIsAuthenticated) {
             $.fancybox.open({href: '#preorder-login', type: 'inline'});
         } else {
