@@ -1138,49 +1138,62 @@ $(window).load(function () {
             }
         });
 
-    var owlGlry = $(".product-popup .big-img");
+    /**
+     * Model images gallery
+     */
+    var OwlGallery = (function () {
+        function OwlGallery($holder) {
+            this.$holder = $holder;
+            this.init();
+        }
 
-    function owlGallery(index) {
+        OwlGallery.prototype.init = function () {
+            var self = this;
+            this.$holder.on('initialized.owl.carousel', function (event) {
+                var items = event.item.count;
+                var item = event.item.index;
+                self.$holder.find('.owl-item').each(function () {
+                    var $this = $(this);
+                    $this.attr('rel', $this.index());
+                });
 
-        owlGlry.on('initialized.owl.carousel', function (event) {
-            var items = event.item.count;
-            var item = event.item.index;
-            owlGlry.find('.owl-item').each(function () {
-                var $this = $(this);
-                $this.attr('rel', $this.index());
+                $(this).closest('.gallery-box__main').find('.overall').text(items);
+                $(this).closest('.gallery-box__main').find('.current').text(item + 1);
             });
 
-            $(this).closest('.gallery-box__main').find('.overall').text(items);
-            $(this).closest('.gallery-box__main').find('.current').text(item + 1);
-            if (index > 0) {
-                owlGlry.trigger('to', index);
-            }
-        });
-        owlGlry.on('translate.owl.carousel', function (event) {
-            var item = event.item.index;
-            $(this).closest('.gallery-box__main').find('.current').text(item + 1);
-        });
+            this.$holder.on('translate.owl.carousel', function (event) {
+                var item = event.item.index;
+                $(this).closest('.gallery-box__main').find('.current').text(item + 1);
+            });
 
-        owlGlry.owlCarousel({
-            items: 1,
-            nav: true,
-            loop: owlGlry.children().length > 1,
-            navText: [
-                "",
-                "<i class='icon icon-popup-arr-next'></i><i class='icon icon-popup-arr-next-hover hover'></i>"
+            this.$holder.owlCarousel({
+                items: 1,
+                nav: true,
+                loop: this.$holder.children().length > 1,
+                navText: [
+                    "",
+                    "<i class='icon icon-popup-arr-next'></i><i class='icon icon-popup-arr-next-hover hover'></i>"
+                ],
+                thumbs: true,
+                thumbImage: true,
+                responsive: false,
+                thumbContainerClass: 'gallery-box__thumb',
+                thumbItemClass: 'owl-thumb-item'
+            });
+        };
 
-            ],
-            thumbs: true,
-            thumbImage: true,
-            responsive: false,
-            thumbContainerClass: 'gallery-box__thumb',
-            thumbItemClass: 'owl-thumb-item'
-        });
-    }
+        OwlGallery.prototype.to = function (index) {
+            this.$holder.trigger('to', index);
+        };
+
+        return OwlGallery;
+    })();
 
     $(".popup_gallery").each(function () {
-        var $this = $(this);
+        let $this = $(this);
         if($($this.attr('href')).length) {
+            let owlGlry = new OwlGallery($($this.attr('href')).find('.big-img'));
+
             $this.fancybox({
                 padding: 0,
                 helpers: {
@@ -1193,12 +1206,8 @@ $(window).load(function () {
                 },
                 wrapCSS: 'gallery-wr',
                 beforeShow: function () {
-                    owlGallery(this.element.closest('.owl-item').index());
-                },
-                afterClose: function () {
-                    owlGlry.trigger('destroy').removeClass('owl-carousel owl-loaded');
-                    owlGlry.find('.owl-stage-outer').children().unwrap();
-                    owlGlry.find('.gallery-box__thumb').remove();
+                    let index = this.element.closest('.owl-item').index();
+                    owlGlry.to(index != -1 ? index : 0);
                 }
             });
         } else {
