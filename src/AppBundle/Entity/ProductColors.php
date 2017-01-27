@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * ProductColors
  */
@@ -13,11 +15,13 @@ class ProductColors
     private $id;
 
     /**
+     * @Assert\NotBlank()
      * @var string
      */
     private $name;
 
     /**
+     * @Assert\NotBlank()
      * @var string
      */
     private $hex;
@@ -155,7 +159,7 @@ class ProductColors
      * @return string
      */
     public function __toString() {
-        return $this->getName();
+        return (string)$this->getName();
     }
 
     /**
