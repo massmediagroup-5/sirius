@@ -47,7 +47,7 @@ class ProductController extends Controller
         $quickForm = $this->createForm(QuickOrderType::class, null, [
             'action' => $this->container->get('router')->generate('cart_quick_order_single_product',
                 ['id' => $currentModel->getSizes()->first()->getId()]),
-            'attr' => ['data-preorder' => $currentModel->getSizes()->first()->getPreOrderFlag()]
+            'attr' => ['data-preorder' => $currentModel->getSizes()->first()->getCheckPreOrder()]
         ])->createView();
 
         return $this->render('AppBundle:shop:product/show.html.twig', [

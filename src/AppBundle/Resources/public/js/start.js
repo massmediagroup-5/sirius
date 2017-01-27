@@ -1653,6 +1653,8 @@ var QuickOrder = (function () {
 
     QuickOrder.prototype.tryToSubmitForm = function (e) {
         var $form = $(e.target);
+        console.log($form.data('preorder'), userIsAuthenticated);
+        console.log($form.data('preorder') && !userIsAuthenticated);
         if($form.data('preorder') && !userIsAuthenticated) {
             $.fancybox.open({href: '#preorder-login', type: 'inline'});
         } else {
