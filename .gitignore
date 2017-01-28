@@ -15,6 +15,7 @@
 /web/css/*
 /web/js/*
 /web/images/*
+/web/uploads/*
 /web/media/*
 /web/bundles/*
 /web/bower_components/*

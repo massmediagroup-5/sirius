@@ -133,8 +133,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->createQueryBuilder('pModels')
             ->join('pModels.products', 'pProducts')
             ->join('pModels.sizes', 'pSizes')
-            ->join('pSizes.shareGroup', 'pShareGroups')
-            ->join('pShareGroups.share', 'pShares')
+            ->leftJoin('pSizes.shareGroup', 'pShareGroups')
+            ->leftJoin('pShareGroups.share', 'pShares')
             ->addSelect("MAX($priceField), MIN($priceField)");
 
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
