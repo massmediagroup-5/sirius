@@ -18,6 +18,9 @@ use Sonata\AdminBundle\Validator\ErrorElement;
 
 use NovaPoshta\Config;
 use NovaPoshta\ApiModels\InternetDocument;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Class OrdersAdmin
@@ -329,44 +332,6 @@ class OrdersAdmin extends Admin
                     'class' => 'js-custom-delivery'
                 ]
             ])
-            ->add('cities', 'entity', [
-                'class' => 'AppBundle:Cities',
-                'label' => 'Город',
-                'required' => false,
-                'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
-                'query_builder' => function (EntityRepository $er) {
-                    $carrier = $this->getSubject()->getCarriers();
-
-                    return $er->createQueryBuilder('s')
-                        ->where('s.carriers = :id')
-                        ->setParameter('id', $carrier ? $carrier->getId() : null);
-                },
-                'empty_value' => 'Выберите город',
-                'attr' => [
-                    'class' => 'js-cities'
-                ]
-            ])
-            ->add('stores', 'sonata_stores_list', [
-                'class' => 'AppBundle:Stores',
-                'label' => 'Склад',
-                'required' => false,
-                'read_only' => $this->disableEdit,
-                'disabled' => $this->disableEdit,
-                'attr' => [
-                    'class' => 'js-stores'
-                ],
-                'query_builder' => function (EntityRepository $er) {
-                    if (!$cityId = Arr::get($this->request->request->get($this->getUniqid()), 'cities')) {
-                        $city = $this->getSubject()->getCities();
-                        $cityId = $city ? $city->getId() : null;
-                    }
-
-                    return $er->createQueryBuilder('s')
-                        ->where('s.cities = :id')
-                        ->setParameter('id', $cityId);
-                }
-            ])
 //            ->add('clientSmsId', null, [
 //                'label'     => 'Идентификатор смс клиента',
 //                'read_only' => true,
@@ -437,6 +402,27 @@ class OrdersAdmin extends Admin
             ])
                 ->end();
         }
+
+        $formMapper->getFormBuilder()->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+        $formMapper->getFormBuilder()->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onPreSubmit']);
+    }
+
+    /**
+     * @param FormEvent $e
+     */
+    public function onPreSetData(FormEvent $e)
+    {
+        $this->addCitiesField($e->getForm(), $e->getData() ? $e->getData()->getCarriers() : null);
+        $this->addStoresField($e->getForm(), $e->getData() ? $e->getData()->getCities() : null);
+    }
+
+    /**
+     * @param FormEvent $e
+     */
+    public function onPreSubmit(FormEvent $e)
+    {
+        $this->addCitiesField($e->getForm(), Arr::get($e->getData(), 'carriers'));
+        $this->addStoresField($e->getForm(), Arr::get($e->getData(), 'cities'));
     }
 
     public function getTemplate($name)
@@ -712,5 +698,52 @@ class OrdersAdmin extends Admin
     protected function get($id)
     {
         return $this->getConfigurationPool()->getContainer()->get($id);
+    }
+
+    /**
+     * @param $form
+     * @param $carrier
+     */
+    protected function addCitiesField($form, $carrier)
+    {
+        $form->add('cities', 'entity', [
+            'class' => 'AppBundle:Cities',
+            'label' => 'Город',
+            'required' => false,
+            'read_only' => $this->disableEdit,
+            'disabled' => $this->disableEdit,
+            'query_builder' => function (EntityRepository $er) use ($carrier) {
+                return $er->createQueryBuilder('s')
+                    ->where('s.carriers = :id')
+                    ->setParameter('id', $carrier);
+            },
+            'empty_value' => 'Выберите город',
+            'attr' => [
+                'class' => 'js-cities'
+            ]
+        ]);
+    }
+
+    /**
+     * @param $form
+     * @param $city
+     */
+    protected function addStoresField($form, $city)
+    {
+        $form->add('stores', 'sonata_stores_list', [
+            'class' => 'AppBundle:Stores',
+            'label' => 'Склад',
+            'required' => false,
+            'read_only' => $this->disableEdit,
+            'disabled' => $this->disableEdit,
+            'attr' => [
+                'class' => 'js-stores'
+            ],
+            'query_builder' => function (EntityRepository $er) use ($city) {
+                return $er->createQueryBuilder('s')
+                    ->where('s.cities = :id')
+                    ->setParameter('id', $city);
+            }
+        ]);
     }
 }

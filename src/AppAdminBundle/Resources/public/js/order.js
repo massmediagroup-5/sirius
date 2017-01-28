@@ -178,6 +178,9 @@ var OrderSizesDialog = (function () {
 var CarriersChanger = (function () {
     function CarriersChanger() {
         this.$select = $('select.js-custom-carriers');
+        this.$cities = $('select.js-cities');
+        this.$stores = $('select.js-stores');
+        this.isDirty = false;
         this.$select.on('change', this.init.bind(this));
         this.init();
     }
@@ -188,31 +191,38 @@ var CarriersChanger = (function () {
     CarriersChanger.prototype.init = function () {
         if (this.$select.val() == '3'){
             $('.js-custom-delivery').closest('.form-group').show();
-            $('.js-cities').closest('.form-group').hide();
-            $('.js-stores').closest('.form-group').hide();
+            this.$cities.closest('.form-group').hide();
+            this.$stores.closest('.form-group').hide();
         } else {
             $('.js-custom-delivery').closest('.form-group').hide();
-            $('.js-cities').closest('.form-group').show();
-            $('.js-stores').closest('.form-group').show();
+            this.$cities.closest('.form-group').show();
+            this.$stores.closest('.form-group').show();
 
-            var $cities = $('select.js-cities');
-
-            $.ajax({
-                type: 'GET',
-                url: Routing.generate(baseRouteName + '_delivery_data', baseRouteParams),
-                dataType: 'json',
-                data: {carrier: $('select.js-custom-carriers').val()},
-                success: function(response){
-
-                    response.data.forEach(function (city) {
-                        var $option = $('<option></option>')
-                            .val(city.id)
-                            .text(city.name);
-                        $cities.append($option);
-                    });
-                }
-            });
+            if (this.isDirty) {
+                this.updateCities();
+            }
         }
+        this.isDirty = true;
+    };
+
+    CarriersChanger.prototype.updateCities = function () {
+        var self = this;
+        $.ajax({
+            type: 'GET',
+            url: Routing.generate(baseRouteName + '_delivery_data', baseRouteParams),
+            dataType: 'json',
+            data: {carrier: $('select.js-custom-carriers').val()},
+            success: function(response){
+                self.$cities.empty();
+                response.data.forEach(function (city) {
+                    var $option = $('<option></option>')
+                        .val(city.id)
+                        .text(city.name);
+                    self.$cities.append($option);
+                });
+                self.$cities.find("option:selected").prop("selected", false).trigger('change');
+            }
+        });
     };
 
     return CarriersChanger;
