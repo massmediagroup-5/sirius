@@ -1,4 +1,4 @@
-FROM php:7.0-fpm
+FROM php:5.6-fpm
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -18,9 +18,9 @@ docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/u
 docker-php-ext-install gd
 
 # Ruby and compass
-RUN wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.3.tar.gz && \
-tar -xzf ruby-2.3.3.tar.gz && \
-cd ruby-2.3.3 && \
+RUN wget https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.6.tar.gz && \
+tar -xzf ruby-2.2.6.tar.gz && \
+cd ruby-2.2.6 && \
 ./configure --prefix=/usr/local && \
 make && \
 make install

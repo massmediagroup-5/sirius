@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @import "base";
 
 /* Webfont: Lato-Black */
@@ -3933,7 +3935,7 @@ input[type="checkbox"] {
     }
 }
 
-.product {    
+.product {
     margin-bottom: 30px;
     .side {
         float: left;
@@ -8137,7 +8139,7 @@ input[type="checkbox"] {
 
     .item-drop__i {
         .inner {
-            margin: 0;    
+            margin: 0;
 			display: -ms-flexbox;
 			display: flex;
 
@@ -9695,7 +9697,7 @@ body {
         padding: 0;
         border: 0;
     }
-    .text {    
+    .text {
         display: block;
         margin-top: -5px;
         p{
@@ -9734,8 +9736,8 @@ body {
     table-layout: fixed;
 }
 .ctable .ctable-col{
-    display: table-cell; 
-    padding: 0 15px;    
+    display: table-cell;
+    padding: 0 15px;
 }.warranty-info__i .text__i em{
     color: red;
     font-style: normal;
