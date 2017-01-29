@@ -1,0 +1,5 @@
+<td>
+    {% block field%}
+        <a href="{{ path(admin.baseRouteName ~ '_edit', {id: object.id}) }}">{{ object.email ?: 'no_email'|trans }}</a>
+    {% endblock %}
+</td>

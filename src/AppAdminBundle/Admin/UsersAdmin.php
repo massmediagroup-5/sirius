@@ -215,7 +215,9 @@ class UsersAdmin extends BaseUserAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('email')
+            ->addIdentifier('email', null, [
+                'template' => 'AppAdminBundle:list:user_email.html.twig'
+            ])
             ->add('name')
             ->add('surname')
             ->add('enabled', null, ['editable' => true])
