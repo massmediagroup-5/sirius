@@ -175,6 +175,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes');
+            // not join shares here because wholesaler not have it
 
         if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")
@@ -248,6 +249,8 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('characteristicValues.categories', 'categories')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
+            ->leftJoin('sizes.shareGroup', 'shareGroups')
+            ->leftJoin('shareGroups.share', 'share')
             ->where('productModels.id IN (:ids)')
             ->setParameter('ids', $modelIds);
 

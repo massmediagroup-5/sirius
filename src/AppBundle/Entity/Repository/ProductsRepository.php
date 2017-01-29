@@ -200,75 +200,33 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
     public function addSort(
         $query,
         $filters,
-        $productAlias = 'products',
-        $modelAlias = 'productModels',
         $params = []
     ) {
         $sort = Arr::get($filters, 'sort');
         $wholesalerFlag = Arr::get($filters, 'wholesaler');
+        $params['productAlias'] = Arr::get($params, 'productAlias', 'products');
+        $params['modelAlias'] = Arr::get($params, 'modelAlias', 'productModels');
+        $params['sizeAlias'] = Arr::get($params, 'sizeAlias', 'sizes');
         switch ($sort) {
             case false:
             case 'new':
-                $query->addOrderBy("$modelAlias.createTime", 'DESC');
+                $query->addOrderBy("{$params['modelAlias']}.createTime", 'DESC');
                 break;
             case 'az':
-                $query->addOrderBy("$productAlias.name", 'ASC');
+                $query->addOrderBy("{$params['productAlias']}.name", 'ASC');
                 break;
             case 'za':
-                $query->addOrderBy("$productAlias.name", 'DESC');
+                $query->addOrderBy("{$params['productAlias']}.name", 'DESC');
                 break;
             case 'cheap':
             case 'expensive':
                 $aggregationFunction = $sort == 'cheap' ? 'MIN' : 'MAX';
                 $direction = $sort == 'cheap' ? 'ASC' : 'DESC';
-                $prefix = Arr::get($params, 'prefix');
-                $oProductAlias = "{$prefix}oProduct";
-                $oModelAlias = "{$prefix}oModel";
-                $oSizesAlias = "{$prefix}oSizes";
-                $oShareAlias = "{$prefix}oShare";
-                $oShareGroupAlias = "{$prefix}oShareGroup";
-                if ($wholesalerFlag) {
-                    $sizesQuery = $this->_em->getRepository('AppBundle:Products')
-                        ->createQueryBuilder($oProductAlias)
-                        ->select("$aggregationFunction(" .
-                            "COALESCE(NULLIF($oSizesAlias.wholesalePrice, 0), " .
-                            "NULLIF($oModelAlias.wholesalePrice, 0), $oProductAlias.wholesalePrice) )"
-                        )
-                        ->join("$oProductAlias.productModels", $oModelAlias)
-                        ->join("$oModelAlias.sizes", $oSizesAlias)
-                        ->where("$oModelAlias.id = $modelAlias.id")
-                        ->andWhere("$oProductAlias.active = 1 AND $oModelAlias.published = 1");
 
-                    $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $direction);
-
-                    foreach ($sizesQuery->getParameters() as $parameter) {
-                        $query->setParameter($parameter->getName(), $parameter->getValue());
-                    }
-                } else {
-                    $sizesQuery = $this->_em->getRepository('AppBundle:Products')
-                        ->createQueryBuilder($oProductAlias)
-                        ->select("$aggregationFunction(IFELSE(" .
-                            "$oShareAlias.groupsCount = 1, " .
-                            "COALESCE(NULLIF($oSizesAlias.price, 0), NULLIF($oModelAlias.price, 0), $oProductAlias.price) " .
-                            "* (100 - $oShareGroupAlias.discount) * 0.01, " .
-                            "COALESCE(NULLIF($oSizesAlias.price, 0), NULLIF($oModelAlias.price, 0), $oProductAlias.price)))")
-                        ->join("$oProductAlias.productModels", $oModelAlias)
-                        ->join("$oModelAlias.sizes", $oSizesAlias)
-                        ->leftJoin("$oSizesAlias.shareGroup", $oShareGroupAlias)
-                        ->leftJoin("$oShareGroupAlias.share", $oShareAlias)
-                        ->where("$oProductAlias.id = $productAlias.id")
-                        ->addCriteria(
-                            $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-                                ->getActiveCriteria($oSizesAlias)
-                        )
-                        ->andWhere("$oProductAlias.active = 1 AND $oModelAlias.published = 1");
-
-                    $query->addOrderBy("SUBQUERY({$sizesQuery->getDQL()})", $direction);
-
-                    foreach ($sizesQuery->getParameters() as $parameter) {
-                        $query->setParameter($parameter->getName(), $parameter->getValue());
-                    }
-                }
+                $params['wholesaler'] = $wholesalerFlag;
+                $pricePart = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
+                    ->getPricePart($params);
+                $query->addOrderBy($pricePart, $direction);
                 break;
             case 'novelty':
                 //$query->orderBy('prodSkuVnd.priority', 'ASC');
@@ -279,10 +237,10 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             default:
                 break;
         }
-        $query->addOrderBy("$modelAlias.inStock", 'DESC');
-        $query->addOrderBy("$modelAlias.priority", 'DESC');
-        $query->addOrderBy("$modelAlias.createTime", 'DESC');
-        $query->addOrderBy("$modelAlias.id", 'DESC');
+        $query->addOrderBy("{$params['modelAlias']}.inStock", 'DESC');
+        $query->addOrderBy("{$params['modelAlias']}.priority", 'DESC');
+        $query->addOrderBy("{$params['modelAlias']}.createTime", 'DESC');
+        $query->addOrderBy("{$params['modelAlias']}.id", 'DESC');
 
         return $query;
     }
@@ -494,7 +452,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
-            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes');
+            ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->leftJoin('sizes.shareGroup', 'shareGroups')
+            ->leftJoin('shareGroups.share', 'share');
 
         if (!empty($ids)) {
             $builder->andWhere("products.id IN(:productsIds)")

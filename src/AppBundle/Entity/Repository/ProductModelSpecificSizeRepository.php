@@ -261,7 +261,12 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
                 $shareGroupAlias);
 
         if (!Arr::get($params, 'skip_order')) {
-            $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters, $productsAlias, $modelsAlias, [
+            $this->_em->getRepository('AppBundle:Products')->addSort($builder, $filters, [
+                'productsAlias' => $productsAlias,
+                'modelAlias' => $modelsAlias,
+                'sizesAlias' => $sizesAlias,
+                'shareGroupAlias' => $shareGroupAlias,
+                'shareAlias' => $sharesAlias,
                 'prefix' => $prefix
             ]);
         }
