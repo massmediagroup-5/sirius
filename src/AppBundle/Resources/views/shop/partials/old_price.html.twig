@@ -1,0 +1,21 @@
+{% set isFirst = isFirst is defined ? isFirst : false %}
+
+{% if prices.getPrice(size) != prices.getDiscountedPrice(size) %}
+    <div class="price price_old js_product_price {{ isFirst ? '' : 'product-info-size-price' }}"
+        {% if isFirst %}
+         data-model-id="{{ current_model.id }}"
+        {% else %}
+         data-size-id="{{ size.id }}"
+        {% endif %}>
+        Старая цена: <s>{{ prices.getPrice(size) |format_price }} грн.</s>
+    </div>
+{% elseif size.oldPrice and prices.getDiscountedPrice(size) != size.oldPrice %}
+    <div class="price price_old js_product_price {{ isFirst ? '' : 'product-info-size-price' }}"
+        {% if isFirst %}
+         data-model-id="{{ current_model.id }}"
+        {% else %}
+         data-size-id="{{ size.id }}"
+        {% endif %}>
+        Старая цена: <s>{{ size.oldPrice |format_price }} грн.</s>
+    </div>
+{% endif %}

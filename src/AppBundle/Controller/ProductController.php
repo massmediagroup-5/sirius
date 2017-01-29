@@ -56,7 +56,7 @@ class ProductController extends Controller
             'models' => $this->get('entities')->getModelsByProduct($product),
             'form' => $form,
             'quickForm' => $quickForm,
-            'size' => $size
+            'cheapestSize' => $size
         ]);
     }
 

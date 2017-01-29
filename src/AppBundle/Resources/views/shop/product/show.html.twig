@@ -78,7 +78,7 @@
                                         <h2 class="name">{{ current_model.products.name }}</h2>
                                         <div class="price price_new">
                                             <p class="js_product_price" data-model-id="{{ current_model.id }}">
-                                                {{ prices.getDiscountedPrice(size) |format_price }} грн.
+                                                {{ prices.getDiscountedPrice(cheapestSize) |format_price }} грн.
                                             </p>
                                             {% for size in current_model.sizes %}
                                                 <p class="js_product_price product-info-size-price" data-size-id="{{ size.id }}">
@@ -86,23 +86,13 @@
                                                 </p>
                                             {% endfor %}
                                         </div>
-                                        {% if prices.getPrice(size) != prices.getDiscountedPrice(size) %}
-                                            <div class="price price_old js_product_price" data-model-id="{{ current_model.id }}">
-                                                Старая цена: <s>{{ prices.getPrice(size) |format_price }} грн.</s>
-                                            </div>
-                                        {% elseif size.oldPrice and prices.getDiscountedPrice(size) != size.oldPrice %}
-                                            <div class="price price_old js_product_price" data-model-id="{{ current_model.id }}">
-                                                Старая цена: <s>{{ size.oldPrice |format_price }} грн.</s>
-                                            </div>
-                                        {% endif %}
+
+                                        {{ include('AppBundle:shop/partials/old_price.html.twig', {size: cheapestSize, isFirst: true}) }}
 
                                         {% for size in current_model.sizes %}
-                                            {% if size.oldPrice %}
-                                                <div class="price price_old js_product_price product-info-size-price" data-size-id="{{ size.id }}">
-                                                    Старая цена: <s>{{ size.oldPrice |format_price }} грн.</s>
-                                                </div>
-                                            {% endif %}
+                                            {{ include('AppBundle:shop/partials/old_price.html.twig') }}
                                         {% endfor %}
+
                                         <div class="color-select">
                                             <div class="color-select__i">
                                                 <p class="color-select-inf">Цвет {{ current_model.productColors.name }} (Артикул: {{ current_model.products.article }})</p>
