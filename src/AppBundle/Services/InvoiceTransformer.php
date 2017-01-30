@@ -308,7 +308,7 @@ class InvoiceTransformer
                 $sizesNames = implode(', ', $sizes);
 
                 $phpExcelObject->getActiveSheet()
-                    ->setCellValue("B$i", $i)
+                    ->setCellValue("B$i", $i - 16)
                     ->setCellValue("C$i", $model->getProducts()->getArticle())
                     ->setCellValue("D$i", $model->getProducts()->getName())
                     ->setCellValue("E$i", $sizesNames)
