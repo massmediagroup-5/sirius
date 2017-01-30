@@ -7,7 +7,7 @@ security:
     role_hierarchy:
         ROLE_SONATA_ADMIN: []
         ROLE_WHOLESALER: []
-        ROLE_SUPER_ADMIN: []
+        ROLE_SUPER_ADMIN: [ROLE_SONATA_ADMIN]
         ROLE_GRAY_LIST: []
         ROLE_BLACK_LIST: []
 
@@ -59,5 +59,5 @@ security:
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/admin/, role: ROLE_SONATA_ADMIN }
+        - { path: ^/admin/, role: [ROLE_SONATA_ADMIN, ROLE_SUPER_ADMIN] }
         - { path: ^/js/, role: IS_AUTHENTICATED_ANONYMOUSLY }

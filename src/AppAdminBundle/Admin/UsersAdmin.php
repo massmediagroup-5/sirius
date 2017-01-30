@@ -83,18 +83,17 @@ class UsersAdmin extends BaseUserAdmin
             ])
             ->end();
 
-        if (!$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
-            $formMapper
-                ->with('Management')
-                ->add('roles', 'sonata_security_roles', [
-                    'expanded' => true,
-                    'multiple' => true,
-                    'required' => false
-                ])
-                ->add('locked', null, ['required' => false])
-                ->add('enabled', null, ['required' => false])
-                ->end();
-        }
+        $formMapper
+            ->with('Management')
+            ->add('roles', 'sonata_security_roles', [
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false
+            ])
+            ->add('locked', null, ['required' => false])
+            ->add('enabled', null, ['required' => false])
+            ->end();
+
         $formMapper
             ->end()
             ->tab('Заказы', ['tab_template' => 'AppAdminBundle:admin:users/orders_tab.html.twig'])

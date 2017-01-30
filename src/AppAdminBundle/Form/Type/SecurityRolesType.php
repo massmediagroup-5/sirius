@@ -185,9 +185,9 @@ class SecurityRolesType extends AbstractType
         }
 
         $formattedOtherRoles = [];
-        foreach ($otherRoles as $role) {
-            $role = trim($role, ' :');
-            $formattedOtherRoles[$role] = $this->cleanTitle($role);
+        foreach ($otherRoles as $roleKey => $role) {
+            $roleKey = trim($roleKey, ' :');
+            $formattedOtherRoles[$roleKey] = $this->cleanTitle($roleKey);
         }
 
         $resolver->setDefaults(array(
