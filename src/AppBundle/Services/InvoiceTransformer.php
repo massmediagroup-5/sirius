@@ -323,7 +323,7 @@ class InvoiceTransformer
             }
             foreach ($cart->getSingleSizes($model) as $size) {
                 $phpExcelObject->getActiveSheet()
-                    ->setCellValue("B$i", $i)
+                    ->setCellValue("B$i", $i - 16)
                     ->setCellValue("C$i", $model->getProducts()->getArticle())
                     ->setCellValue("D$i", $model->getProducts()->getName())
                     ->setCellValue("E$i", $size['entity']->getSize()->getSize())
