@@ -48,12 +48,12 @@ class ClearCommand extends ContainerAwareCommand
             'Characteristics',
             'DistributionSmsInfo',
             'EmailAndSmsDistribution',
-            'Filters',
+//            'Filters',
             'History',
-            'LoyaltyProgram',
-            'MainBanners',
-            'Menu',
-            'MenuItems',
+//            'LoyaltyProgram',
+//            'MainBanners',
+//            'Menu',
+//            'MenuItems',
             'OrderHistory',
             'OrderProductSize',
             'OrderSmsInfo',
@@ -62,13 +62,12 @@ class ClearCommand extends ContainerAwareCommand
             'Orders',
 //            'PageImages',
 //            'Pages',
-            'ProductColors',
+//            'ProductColors',
             'ProductModelImage',
             'ProductModelSizes',
             'ProductModelSpecificSize',
             'ProductModelSpecificSizeHistory',
             'ProductModels',
-            'ProductModelsHistory',
             'ProductModelsHistory',
             'Products',
             'ReturnProduct',
@@ -84,8 +83,8 @@ class ClearCommand extends ContainerAwareCommand
 //            'Stores',
 //            'Unisender',
 //            'Users',
-            'Vendors',
-            'WholesalerLoyaltyProgram',
+//            'Vendors',
+//            'WholesalerLoyaltyProgram',
             'Wishlist'
         ];
 
@@ -115,6 +114,7 @@ class ClearCommand extends ContainerAwareCommand
         $em->createQuery("delete from AppBundle\Entity\Users u where not u.username = 'admin'")
             ->execute();
 
+        $connection->query('SET FOREIGN_KEY_CHECKS=0');
         $em->createQuery("delete from AppBundle\Entity\Categories c where not c.alias = 'all'")
             ->execute();
 

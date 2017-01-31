@@ -63,7 +63,9 @@
                         </div>
                     </div>
                 {% endif %}
-                {{ widget('products.recentlyReviewed')|raw }}
+                {% if not is_granted('ROLE_WHOLESALER') %}
+                    {{ widget('products.recentlyReviewed')|raw }}
+                {% endif %}
             </div>
         </div>
         </section>

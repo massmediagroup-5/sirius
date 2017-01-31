@@ -5300,7 +5300,6 @@ input[type="checkbox"] {
                 @include sized-sprite($icons, remove);
             }
         }
-
     }
 
     .opt-main-control {
@@ -8307,6 +8306,9 @@ input[type="checkbox"] {
         }
     }
 
+    .opt-list-sizes {
+        padding-right: 0;
+    }
 }
 
 .amount-control {
