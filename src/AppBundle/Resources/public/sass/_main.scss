@@ -8178,6 +8178,9 @@ input[type="checkbox"] {
                 background: #f9f9f9;
                 width: 55%;
             }
+            &.opt-list-sizes {
+                padding-right: 0;
+            }
         }
 
         table {
@@ -8306,9 +8309,6 @@ input[type="checkbox"] {
         }
     }
 
-    .opt-list-sizes {
-        padding-right: 0;
-    }
 }
 
 .amount-control {
