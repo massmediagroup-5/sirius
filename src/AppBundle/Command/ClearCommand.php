@@ -3,9 +3,7 @@
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -15,13 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ClearCommand extends ContainerAwareCommand
 {
-
-    /**
-     * logger
-     *
-     * @var mixed
-     */
-    private $logger;
+    const ENTITY_NAMESPACE = 'AppBundle\Entity\\';
 
     /**
      * configure
@@ -31,78 +23,101 @@ class ClearCommand extends ContainerAwareCommand
     {
         $this
             ->setName('clear:db')
-            ->setDescription('Clear ALL Database!!!')
-        ;
+            ->setDescription('Clear ALL Database!!!');
     }
 
     /**
-     * execute
-     *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
+     * @return true
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->logger = $this->getContainer()->get('logger');
-        $this->logger->info('Start to Clear database.');
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $connection = $em->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
+        $connection->query('SET FOREIGN_KEY_CHECKS=0');
 
         $entities = [
-            'Cart',
-            'Orders',
+            'ActionLabels',
             'CallBack',
-            'Wishlist',
-            'ProductModels',
-            'ProductColors',
-            'ProductModelSizes',
-            'Products',
-            'Categories',
-            'Filters',
-            'Characteristics',
-            'CharacteristicValues',
+//            'Categories',
             'CharacteristicGroups',
+            'CharacteristicValues',
+            'Characteristics',
+            'DistributionSmsInfo',
+            'EmailAndSmsDistribution',
+            'Filters',
+            'History',
+            'LoyaltyProgram',
+            'MainBanners',
+            'Menu',
+            'MenuItems',
+            'OrderHistory',
+            'OrderProductSize',
+            'OrderSmsInfo',
+//            'OrderStatus',
+//            'OrderStatusPay',
+            'Orders',
+//            'PageImages',
+//            'Pages',
+            'ProductColors',
+            'ProductModelImage',
+            'ProductModelSizes',
+            'ProductModelSpecificSize',
+            'ProductModelSpecificSizeHistory',
+            'ProductModels',
+            'ProductModelsHistory',
+            'ProductModelsHistory',
+            'Products',
+            'ReturnProduct',
+            'ReturnProductHistory',
+            'ReturnedSizes',
+            'ReturnedSizesHistory',
+            'Sessions',
+            'Share',
+            'ShareSizesGroup',
+            'ShareSizesGroupDiscount',
+//            'SiteParams',
+            'SocialNetworks',
+//            'Stores',
+//            'Unisender',
+//            'Users',
+            'Vendors',
+            'WholesalerLoyaltyProgram',
+            'Wishlist'
         ];
-        $tables = [
-            'products_has_characteristic_values',
-            'products_has_categories',
+
+        $relationTables = [
             'categories_has_characteristics',
             'categories_has_characteristic_values',
+            'email_and_sms_distribution_users',
             'filters_has_characteristics',
-//            'sessions',
-        ];
-        $fields = [
-            'ProductColors'  => [
-                'none',
-            ],
-            'Filters' => [
-                'all',
-            ],
-            'Categories' => [
-                'Базовая',
-            ],
+            'product_models_has_recommended',
+            'products_has_characteristic_values',
+            'share_sizes_group_characteristic_values',
+            'share_sizes_group_product_colors',
+            'share_sizes_group_product_model_sizes',
         ];
 
-        $this->clearDb($entities, $tables, $fields);
+        foreach ($entities as $entity) {
+            $fullName = self::ENTITY_NAMESPACE . $entity;
+            $q = $em->createQuery("delete from {$fullName}");
+            $q->execute();
+        }
 
-        $this->logger->info('Clearing database was finished!');
-        $output->writeln('Clearing database was finished!');
+        foreach ($relationTables as $table) {
+            $q = $dbPlatform->getTruncateTableSql($table);
+            $connection->executeUpdate($q);
+        }
+
+        $em->createQuery("delete from AppBundle\Entity\Users u where not u.username = 'admin'")
+            ->execute();
+
+        $em->createQuery("delete from AppBundle\Entity\Categories c where not c.alias = 'all'")
+            ->execute();
+
+        $connection->query('SET FOREIGN_KEY_CHECKS=1');
     }
-
-    /**
-     * clearDb
-     *
-     * @param array $entities
-     * @param array $tables
-     * @param array $fields
-     *
-     * @return boolean
-     */
-    private function clearDb(array $entities, array $tables = array(), array $fields = array())
-    {
-        return $this->getContainer()->get('clearDb')
-            ->setEntities($entities)
-            ->setTables($tables)
-            ->setNotDeletedFields($fields)
-            ->clear();
-    }
-
 }
