@@ -97,7 +97,9 @@ class CreateOrderType extends AbstractType
                 'class' => 'AppBundle:Cities',
                 'required' => true,
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('c')->where('c.active = 1');
+                    return $er->createQueryBuilder('c')
+                        ->where('c.active = 1')
+                        ->orderBy('c.name', 'ASC');
                 },
                 'constraints' => $delivery == Carriers::NP_ID ? [new NotBlank] : [],
                 'placeholder' => ''

@@ -39,7 +39,16 @@ class InvoiceTransformer
         // ask the service for a Excel5
         $phpExcel = $this->container->get('phpexcel');
         $phpExcelObject = $phpExcel->createPHPExcelObject();
-        $sizesCount = $orderObject->getSizes()->count();
+
+        /** @var WholesalerCart $cart */
+        $cart = $this->container->get('admin.wholesaler_cart');
+        $cart->setOrder($orderObject);
+
+        if ($orderObject->getUsers() && $orderObject->getUsers()->hasRole('ROLE_WHOLESALER')) {
+            $sizesCount = $cart->getAllSingleSizesCount() + $cart->getAllPackagesCount();
+        } else {
+            $sizesCount = $orderObject->getSizes()->count();
+        }
 
         $phpExcelObject->getProperties()->setCreator("mmg")
             ->setTitle("Office 2005 XLSX Test Document");
@@ -293,6 +302,7 @@ class InvoiceTransformer
     private function outputWholesalerSizes($phpExcelObject, $orderObject)
     {
         $i = 17;
+
         /** @var WholesalerCart $cart */
         $cart = $this->container->get('admin.wholesaler_cart');
         $cart->setOrder($orderObject);
