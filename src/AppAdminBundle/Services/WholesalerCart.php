@@ -43,20 +43,20 @@ class WholesalerCart
     /**
      * @return int
      */
-    public function getAllPackagesCount()
+    public function getPackagesPositionsCount()
     {
         return array_sum(array_map(function ($model) {
-            return $this->getPackagesCount($model);
+            return $this->getPackagesCount($model) ? 1 : 0;
         }, $this->getModels()));
     }
 
     /**
      * @return int
      */
-    public function getAllSingleSizesCount()
+    public function getSingleSizePositionsCount()
     {
         return array_sum(array_map(function ($model) {
-            return count($this->getSingleSizes($model));
+            return count($this->getSingleSizes($model)) ? 1 : 0;
         }, $this->getModels()));
     }
 

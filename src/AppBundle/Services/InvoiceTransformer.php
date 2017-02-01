@@ -40,12 +40,12 @@ class InvoiceTransformer
         $phpExcel = $this->container->get('phpexcel');
         $phpExcelObject = $phpExcel->createPHPExcelObject();
 
-        /** @var WholesalerCart $cart */
-        $cart = $this->container->get('admin.wholesaler_cart');
-        $cart->setOrder($orderObject);
-
         if ($orderObject->getUsers() && $orderObject->getUsers()->hasRole('ROLE_WHOLESALER')) {
-            $sizesCount = $cart->getAllSingleSizesCount() + $cart->getAllPackagesCount();
+            /** @var WholesalerCart $cart */
+            $cart = $this->container->get('admin.wholesaler_cart');
+            $cart->setOrder($orderObject);
+
+            $sizesCount = $cart->getSingleSizePositionsCount() + $cart->getPackagesPositionsCount();
         } else {
             $sizesCount = $orderObject->getSizes()->count();
         }

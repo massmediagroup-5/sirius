@@ -6,6 +6,7 @@ use AppAdminBundle\DTO\OrderWaybillForm;
 use AppBundle\Exception\ImpossibleMoveToPreOrder;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use Illuminate\Support\Arr;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
@@ -352,6 +353,9 @@ class OrderController extends BaseController
 
         $result = $internetDocument->save();
 
+        if ($result->errors) {
+            return new JsonResponse(['errors' => $result->errors], 422);
+        }
         $refInternetDocument = $result->data[0]->Ref;
         $orderObject->setTtn($refInternetDocument);
 
