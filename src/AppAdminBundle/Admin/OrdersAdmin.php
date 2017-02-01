@@ -715,7 +715,8 @@ class OrdersAdmin extends Admin
             'query_builder' => function (EntityRepository $er) use ($carrier) {
                 return $er->createQueryBuilder('c')
                     ->where('c.carriers = :id AND c.active = 1')
-                    ->setParameter('id', $carrier);
+                    ->setParameter('id', $carrier)
+                    ->orderBy('c.name', 'ASC');
             },
             'empty_value' => 'Выберите город',
             'attr' => [
@@ -742,7 +743,8 @@ class OrdersAdmin extends Admin
             'query_builder' => function (EntityRepository $er) use ($city) {
                 return $er->createQueryBuilder('s')
                     ->where('s.cities = :id AND s.active = 1')
-                    ->setParameter('id', $city);
+                    ->setParameter('id', $city)
+                    ->orderBy('s.name', 'ASC');
             }
         ]);
     }
