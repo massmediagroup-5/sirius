@@ -220,7 +220,7 @@ class AjaxController extends Controller
         if ($request->get('city_id')) {
             $em = $this->getDoctrine()->getManager()->getRepository('AppBundle:Stores');
             $query = $em->createQueryBuilder('s')
-                ->where('s.cities = :city_id')
+                ->where('s.cities = :city_id AND s.active = 1')
                 ->setParameter('city_id', $request->get('city_id'))
                 ->getQuery();
             $data = $query->getArrayResult();

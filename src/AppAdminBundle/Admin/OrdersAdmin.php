@@ -713,8 +713,8 @@ class OrdersAdmin extends Admin
             'read_only' => $this->disableEdit,
             'disabled' => $this->disableEdit,
             'query_builder' => function (EntityRepository $er) use ($carrier) {
-                return $er->createQueryBuilder('s')
-                    ->where('s.carriers = :id')
+                return $er->createQueryBuilder('c')
+                    ->where('c.carriers = :id AND c.active = 1')
                     ->setParameter('id', $carrier);
             },
             'empty_value' => 'Выберите город',
@@ -741,7 +741,7 @@ class OrdersAdmin extends Admin
             ],
             'query_builder' => function (EntityRepository $er) use ($city) {
                 return $er->createQueryBuilder('s')
-                    ->where('s.cities = :id')
+                    ->where('s.cities = :id AND s.active = 1')
                     ->setParameter('id', $city);
             }
         ]);
