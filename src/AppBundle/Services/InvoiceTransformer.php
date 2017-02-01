@@ -245,7 +245,7 @@ class InvoiceTransformer
         $phpExcelObject->setActiveSheetIndex(0);
 
         // create the writer
-        $writer = $phpExcel->createWriter($phpExcelObject, 'Excel5');
+        $writer = $phpExcel->createWriter($phpExcelObject, 'Excel2007');
         // create the response
         $response = $phpExcel->createStreamedResponse($writer);
         // adding headers
