@@ -65,8 +65,16 @@
                         <tr>
                             <td>Платильщик доставки:</td>
                             <td>
-                                <input type="radio" name="np_delivery_payer" value="Recipient"> получатеть<br>
-                                <input type="radio" name="np_delivery_payer" value="Sender"> отправитель
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="radio" name="np_delivery_payer" value="Recipient" class="form-control"> получатеть<br>
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="np_delivery_payer" value="Sender" class="form-control"> отправитель
+                                        </label>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -78,8 +86,12 @@
                                             <input type="radio" name="np_backward_delivery_payer" value="Recipient" class="form-control"> получатеть<br>
                                         </label>
                                         <label>
-                                            <input type="radio" name="np_backward_delivery_payer" value="Sender" class="form-control"> отправитель
+                                            <input type="radio" name="np_backward_delivery_payer" value="Sender" class="form-control"> отправитель<br>
                                         </label>
+                                        <label>
+                                            <input type="radio" name="np_backward_delivery_payer" value="" class="form-control"> не выбрано
+                                        </label>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

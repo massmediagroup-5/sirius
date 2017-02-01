@@ -216,6 +216,7 @@ class OrderController extends BaseController
         $waybillForm->np_name = $request->get('np_name');
         $waybillForm->np_middlename = $request->get('np_middlename');
         $waybillForm->np_phone = $request->get('np_phone');
+        $waybillForm->np_delivery_payer = $request->get('np_delivery_payer');
         $waybillForm->np_backward_delivery_cost = $request->get('np_backward_delivery_cost');
         $waybillForm->np_backward_delivery_payer = $request->get('np_backward_delivery_payer');
 
@@ -292,7 +293,7 @@ class OrderController extends BaseController
         $serviceType = $result->data[2]->Ref; // Выбрали: WarehouseWarehouse
 
         // Выбираем плательщика:
-        $payerType = $form_data['np_delivery_payer'];
+        $payerType = $waybillForm->np_delivery_payer;
 
         // Форму оплаты:
         $result = \NovaPoshta\ApiModels\Common::getPaymentForms();
