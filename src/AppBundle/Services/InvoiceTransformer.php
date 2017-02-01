@@ -39,7 +39,16 @@ class InvoiceTransformer
         // ask the service for a Excel5
         $phpExcel = $this->container->get('phpexcel');
         $phpExcelObject = $phpExcel->createPHPExcelObject();
-        $sizesCount = $orderObject->getSizes()->count();
+
+        /** @var WholesalerCart $cart */
+        $cart = $this->container->get('admin.wholesaler_cart');
+        $cart->setOrder($orderObject);
+
+        if ($orderObject->getUsers() && $orderObject->getUsers()->hasRole('ROLE_WHOLESALER')) {
+            $sizesCount = $cart->getAllSingleSizesCount() + $cart->getAllPackagesCount();
+        } else {
+            $sizesCount = $orderObject->getSizes()->count();
+        }
 
         $phpExcelObject->getProperties()->setCreator("mmg")
             ->setTitle("Office 2005 XLSX Test Document");
@@ -236,7 +245,7 @@ class InvoiceTransformer
         $phpExcelObject->setActiveSheetIndex(0);
 
         // create the writer
-        $writer = $phpExcel->createWriter($phpExcelObject, 'Excel2007');
+        $writer = $phpExcel->createWriter($phpExcelObject, 'Excel5');
         // create the response
         $response = $phpExcel->createStreamedResponse($writer);
         // adding headers
@@ -293,6 +302,7 @@ class InvoiceTransformer
     private function outputWholesalerSizes($phpExcelObject, $orderObject)
     {
         $i = 17;
+
         /** @var WholesalerCart $cart */
         $cart = $this->container->get('admin.wholesaler_cart');
         $cart->setOrder($orderObject);
@@ -308,7 +318,7 @@ class InvoiceTransformer
                 $sizesNames = implode(', ', $sizes);
 
                 $phpExcelObject->getActiveSheet()
-                    ->setCellValue("B$i", $i)
+                    ->setCellValue("B$i", $i - 16)
                     ->setCellValue("C$i", $model->getProducts()->getArticle())
                     ->setCellValue("D$i", $model->getProducts()->getName())
                     ->setCellValue("E$i", $sizesNames)
@@ -323,7 +333,7 @@ class InvoiceTransformer
             }
             foreach ($cart->getSingleSizes($model) as $size) {
                 $phpExcelObject->getActiveSheet()
-                    ->setCellValue("B$i", $i)
+                    ->setCellValue("B$i", $i - 16)
                     ->setCellValue("C$i", $model->getProducts()->getArticle())
                     ->setCellValue("D$i", $model->getProducts()->getName())
                     ->setCellValue("E$i", $size['entity']->getSize()->getSize())
