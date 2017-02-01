@@ -291,7 +291,7 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
                 "NULLIF($modelAlias.wholesalePrice, 0), $productAlias.wholesalePrice)";
         }
 
-        return "IFELSE($shareAlias.groupsCount = 1, " .
+        return "IFELSE($shareAlias.groupsCount = 1 AND $shareAlias.status = 1 AND $shareAlias.startTime < NOW() AND $shareAlias.endTime > NOW(), " .
             "COALESCE(NULLIF($sizesAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price) " .
             "* (100 - $shareGroupAlias.discount) * 0.01, " .
             "COALESCE(NULLIF($sizesAlias.price, 0), NULLIF($modelAlias.price, 0), $productAlias.price))";
