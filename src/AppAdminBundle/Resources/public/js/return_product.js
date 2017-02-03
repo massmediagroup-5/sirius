@@ -21,11 +21,12 @@ var ReturnSizes = (function () {
      */
     ReturnSizes.prototype.recalculatePrice = function () {
         var $returnedPrice = $('#individualReturnedTotalPrice'),
-            price = 0;
+            price = 0,
+            discountedTotalPrice = $('#discountedTotalPrice').text();
 
-        $('.js-row-size').each(function () {
+            $('.js-row-size').each(function () {
             price += $(this).find('.js-return-count').val() *
-            $(this).find('.js-disc-price').text();
+                (discountedTotalPrice / $(this).find('.js-size-count').text());
         });
         var reteurnedPrice = price - $('#bonuses').text() - $('#individualDiscount').text();
         $returnedPrice.text(reteurnedPrice > 0 ? reteurnedPrice : 0);

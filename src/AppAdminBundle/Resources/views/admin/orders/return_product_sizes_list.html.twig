@@ -19,7 +19,7 @@
         <td class="control-group">
             <input type="text" class="js-return-count" name="return_sizes[{{ size.id }}][count]" value="{{ admin.getReturnSizeBySizeCount(size.id) }}">
         </td>
-        <td class="control-group">{{ size.quantity }}</td>
+        <td class="control-group js-size-count">{{ size.quantity }}</td>
         <td class="control-group js-price">{{ size.totalPrice }}</td>
         <td class="control-group js-disc-price">{{ size.discountedTotalPrice }}</td>
     </tr>

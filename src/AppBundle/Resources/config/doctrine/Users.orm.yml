@@ -85,7 +85,7 @@ AppBundle\Entity\Users:
         bonuses:
             type: integer
             options:
-                unsigned: true
+                unsigned: false
                 default: 0
         totalSpent:
             type: decimal
