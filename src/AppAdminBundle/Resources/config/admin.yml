@@ -75,8 +75,8 @@ services:
     app.admin.return_orders:
         class: AppAdminBundle\Admin\ReturnOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Возвращенные заказы"}
+#        tags:
+#            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Возвращенные заказы"}
         calls:
             - [ setRouteGenerator, ["@admin.route.generator"] ]
 
