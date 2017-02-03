@@ -3,7 +3,7 @@ var OrderSizesDialog = (function () {
         this.$selectSizeDialog = $('#share-sizes-select').dialog({
             autoOpen: false,
             height: 640,
-            width: 1080,
+            width: 1200,
             modal: true,
             dialogClass: 'ui-dialog-material'
         });
@@ -232,12 +232,35 @@ var DialogSelectableModelItem = (function () {
         this.sizesGroupId = sizesGroupId;
         this.modelId = this.$content.data('model-id');
         this.$content.find('.js_check_model').on('ifChanged', this.modelCheckToggle.bind(this));
+
+        $(document).on('shares.model_size_changed_' + this.modelId, this.setInShare.bind(this));
+        this.setInShare();
     }
 
     DialogSelectableModelItem.prototype.modelCheckToggle = function (e) {
         e.stopPropagation();
+        if (this.$content.find('.js_check_model:checked').length) {
+            this.$content.find('.js-in-action')
+                .html("<span class='label label-success'>Да</span>");
+        }
+        else {
+            this.$content.find('.js-in-action')
+                .html('');
+        }
+
         this.request('toggle_group_model', {}, {sizes_group_id: this.sizesGroupId, model_id: this.modelId});
         $(document).trigger('shares.model_toggle_' + this.$content.data('model-id'), [e.currentTarget.checked])
+    };
+
+    DialogSelectableModelItem.prototype.setInShare = function () {
+        if ($('.js_size_row[data-model-id=' + this.modelId + '] .js_check_size:checked').length) {
+            this.$content.find('.js-in-action')
+                .html("<span class='label label-success'>Да</span>");
+        } else {
+            this.$content.find('.js-in-action')
+                .html('');
+            this.$content.find('.icheckbox_minimal').removeClass('checked');
+        }
     };
 
     mix(DialogSelectableModelItem, requestMixin);
@@ -260,6 +283,8 @@ var DialogSelectableSizeItem = (function () {
             this.preventRequest = false;
         } else {
             this.request('toggle_group_size', {}, {sizes_group_id: this.sizesGroupId, size_id: this.sizeId});
+
+            $(document).trigger('shares.model_size_changed_' + this.$content.data('model-id'));
         }
     };
 

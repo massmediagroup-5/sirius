@@ -17,6 +17,7 @@
             <input type="checkbox" class="js_check_model" {% if model.inShareGroup(group) %} checked {% endif %} />
         </label>
     </td>
+    <td class="js-in-action"></td>
 </tr>
 {% for size in model.sizes %}
     <tr class="js_size_row size-row" data-size-id="{{ size.id }}" data-model-id="{{ model.id }}">
