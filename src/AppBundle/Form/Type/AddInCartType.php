@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,7 +19,14 @@ class AddInCartType extends AbstractType
         $builder
             ->add('size', 'entity', [
                 'class' => 'AppBundle:ProductModelSpecificSize',
-                'choices' => $options['model']->getSizes(),
+                'query_builder' => function (EntityRepository $er) use ($options){
+                    return $er->createQueryBuilder('s')
+                        ->join('s.model', 'model')
+                        ->join('s.size', 'size')
+                        ->where('model.id = :modelId')
+                        ->orderBy('size.size', 'ASC')
+                        ->setParameter('modelId', $options['model']->getId());
+                },
                 'required' => true,
                 'placeholder' => '',
                 'constraints' => [new NotBlank],
