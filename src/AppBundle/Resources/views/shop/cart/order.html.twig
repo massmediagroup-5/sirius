@@ -117,7 +117,10 @@
                                                     <span class="js_total_discount">{{ cart.allSharesDiscount }}</span>
                                                     грн.
                                                 </td>
-                                            {% else %}
+                                            {% endif %}
+                                        </tr>
+                                        <tr class="discount">
+                                            {% if cart.loyaltyDiscount %}
                                                 <td>Скидка</td>
                                                 <td><span class="js_total_discount">{{ cart.loyaltyDiscount }}</span> грн.</td>
                                             {% endif %}

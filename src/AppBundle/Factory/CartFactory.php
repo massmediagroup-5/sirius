@@ -29,13 +29,12 @@ class CartFactory
 
     /**
      * @param EntityManager $em
-     * @param Session $session
      * @return Cart
      */
-    public function createCart(EntityManager $em, Session $session)
+    public function createCart(EntityManager $em)
     {
         $security = $this->container->get('security.context');
-        $sessionStore = new SessionCartStore($session);
+        $sessionStore = $this->container->get('session_cart_store');
         if ($security->getToken() && $security->isGranted('ROLE_WHOLESALER')) {
             return new WholesalerCart($em, $this->container, $sessionStore);
         }

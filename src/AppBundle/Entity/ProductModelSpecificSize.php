@@ -364,11 +364,11 @@ class ProductModelSpecificSize
     }
 
     /**
-     * @return Share|bool
+     * @return Share|null
      */
     public function getShare()
     {
-        return $this->shareGroup ? $this->shareGroup->getShare() : false;
+        return $this->shareGroup ? $this->shareGroup->getShare() : null;
     }
 
     public function addHistory($history)

@@ -371,12 +371,39 @@ class Cart
      */
     public function getLoyaltyDiscount()
     {
-        // Use upSell discount or loyalty discount
-        if (!$this->hasShareDiscount()) {
-            return $this->pricesCalculator->getLoyaltyDiscount($this->getDiscountedIntermediatePrice());
-        }
+        $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'discountedPrice');
 
-        return 0;
+        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLoyaltyDiscountForPreOrder()
+    {
+        $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'preOrderDiscountedPrice');
+
+        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLoyaltyDiscountForStandard()
+    {
+        $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'standardDiscountedPrice');
+
+        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSizesWithoutShare()
+    {
+        return array_filter($this->getSizes(), function ($size) {
+            return !$size->hasActualShare();
+        });
     }
 
     /**

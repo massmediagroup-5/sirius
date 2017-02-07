@@ -7,7 +7,6 @@ use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\OrderSmsInfo;
-use AppBundle\Entity\OrderStatusPay;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Unisender;
 use AppBundle\Entity\Users as UsersEntity;
@@ -19,17 +18,15 @@ use AppBundle\Exception\ImpossibleMoveToPreOrder;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use AppBundle\HistoryItem\HistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryChangedItem;
-use AppBundle\HistoryItem\OrderHistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryMergedWithRelatedItem;
 use AppBundle\HistoryItem\OrderHistoryMoveFromSizeItem;
 use AppBundle\HistoryItem\OrderHistoryMoveToSizeItem;
 use AppBundle\HistoryItem\OrderHistoryRelationAddedItem;
 use AppBundle\HistoryItem\OrderHistoryRelationChangedItem;
 use AppBundle\HistoryItem\OrderHistoryRelationRemovedItem;
-use Illuminate\Support\Arr;
+use AppBundle\Helper\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class Order
@@ -101,6 +98,7 @@ class Order
             $preOrder = $this->createOrder($cart->getSizes(), $data, $user, $quickFlag, true);
 
             $preOrder->setPreOrderFlag(true);
+            $preOrder->setLoyalityDiscount($cart->getLoyaltyDiscountForPreOrder());
 
             if ($order) {
                 $order->setRelatedOrder($preOrder);
@@ -122,7 +120,7 @@ class Order
             $this->em->persist($user);
         }
 
-        $order->setLoyalityDiscount($cart->getLoyaltyDiscount());
+        $order->setLoyalityDiscount($cart->getLoyaltyDiscountForStandard());
         $order->setUpSellDiscount($cart->getUpSellShareDiscount());
 
         $this->em->persist($order);
@@ -862,6 +860,34 @@ class Order
 
     /**
      * @param Orders $order
+     */
+    public function recalculateOrderDiscounts(Orders $order)
+    {
+        $priceCalculator = new PricesCalculator($this->container, $this->em, $order->getUsers());
+
+        $discountedSum = Arr::sumProperty($order->getSizes()->toArray(), 'discountedTotalPrice');
+
+        if ($order->getRelatedOrder()) {
+            $discountedSum += Arr::sumProperty($order->getRelatedOrder()->getSizes()->toArray(),
+                'discountedTotalPrice');
+        }
+
+        // Recalculate discount for order
+        $sumToDiscount = $this->getSumToDiscount($order, $priceCalculator);
+        $order->setLoyalityDiscount($priceCalculator->getLoyaltyDiscountBySumForSum($discountedSum, $sumToDiscount));
+
+        if ($order->getRelatedOrder()) {
+            // Recalculate discount for related order
+            $sumToDiscount = $this->getSumToDiscount($order->getRelatedOrder(), $priceCalculator);
+            $order->getRelatedOrder()->setLoyalityDiscount($priceCalculator->getLoyaltyDiscountBySumForSum($discountedSum,
+                $sumToDiscount));
+        }
+
+        $this->recomputeChanges($order);
+    }
+
+    /**
+     * @param Orders $order
      * @param $sizes
      */
     protected function mergeSizesToOrder(Orders $order, $sizes)
@@ -880,6 +906,23 @@ class Order
             $availableSizes->add($size);
         }
         $order->setSizes($availableSizes);
+    }
+
+    /**
+     * @param Orders $order
+     * @param $priceCalculator
+     * @return float|number
+     */
+    protected function getSumToDiscount(Orders $order, $priceCalculator)
+    {
+        if ($order->getUsers()->hasRole('ROLE_WHOLESALER')) {
+            return $order->getDiscountedTotalPrice();
+        }
+
+        $sizes = $order->getSizes()->filter(function ($size) use ($priceCalculator) {
+            return !$priceCalculator->hasActualShare($size->getSize());
+        })->toArray();
+        return Arr::sumProperty($sizes, 'discountedTotalPrice');
     }
 
     /**

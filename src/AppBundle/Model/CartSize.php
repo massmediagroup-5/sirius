@@ -193,4 +193,12 @@ class CartSize
         return $this->pricesCalculator->hasProductModelSpecificSizeUpSellDiscount($this->size);
     }
 
+    /**
+     * @return int
+     */
+    public function hasActualShare()
+    {
+        return $this->pricesCalculator->hasActualShare($this->size);
+    }
+
 }

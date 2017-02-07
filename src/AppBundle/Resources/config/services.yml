@@ -17,7 +17,10 @@ services:
     cart:
         class: AppBundle\Services\Cart
         factory: [@cart_factory, createCart]
-        arguments: ["@doctrine.orm.entity_manager", "@session"]
+        arguments: ["@doctrine.orm.entity_manager"]
+    session_cart_store:
+        class: AppBundle\Cart\Store\SessionCartStore
+        arguments: [@session]
     order:
         class: AppBundle\Services\Order
         arguments: [@doctrine.orm.entity_manager, @service_container]
@@ -72,9 +75,6 @@ services:
     clearDb:
         class: AppBundle\Services\ClearDb
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
-    cron_mailer:
-        class: AppBundle\Services\CronMailer
-        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
     proc:
         class: AppBundle\Services\Proc
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "%kernel.root_dir%"]
@@ -87,9 +87,12 @@ services:
     humanizer:
         class: AppBundle\Services\Humanizer
         arguments: ["@service_container"]
+    prices_calculator_factory:
+        class: AppBundle\Factory\PricesCalculatorFactory
     prices_calculator:
         class: AppBundle\Services\PricesCalculator
-        arguments: [@service_container, @doctrine.orm.entity_manager]
+        factory: [@prices_calculator_factory, createPricesCalculator]
+        arguments: [@service_container, @doctrine.orm.entity_manager, @security.token_storage]
     history_manager:
         class: AppBundle\Services\HistoryManager
         arguments: [@service_container, @doctrine.orm.entity_manager]
