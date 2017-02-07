@@ -260,7 +260,7 @@ class Products
     {
         if($flagText = $model->getTextLabel()) {
             $flag = $model->getTextLabelColor() ? false : 'discount';
-        } else if($discount = $this->container->get('share')->getSingleDiscount($model)) {
+        } else if($discount = $this->container->get('share')->getHighestPrioritySingleDiscount($model)) {
             $flag = 'discount';
             $flagText = $discount . '%';
         } else {

@@ -144,6 +144,49 @@ class Share
     }
 
     /**
+     * Single discount only for share with one group
+     *
+     * @param ProductModels $entity
+     *
+     * @return int|string
+     */
+    public function getHighestPrioritySingleDiscount(ProductModels $entity)
+    {
+        if (!$this->container->get('security.context')->isGranted('ROLE_WHOLESALER')) {
+            $shareGroup = $this->getHighestPrioritySingleShareGroup($entity);
+
+            if ($shareGroup) {
+                return $shareGroup->getDiscount();
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param ProductModels $entity
+     *
+     * @return ShareSizesGroup|null
+     */
+    public function getHighestPrioritySingleShareGroup(ProductModels $entity)
+    {
+        $shareGroups = $entity->getSizes()->map(function (ProductModelSpecificSize $size) {
+            return $size->getShareGroup();
+        })->filter(function ($shareGroup) {
+            return $shareGroup ? $this->isActualSingleShare($shareGroup->getShare()) : false;
+        })->toArray();
+
+        usort($shareGroups, function (ShareSizesGroup $a, ShareSizesGroup $b) {
+            if ($a->getShare()->getPriority() == $b->getShare()->getPriority()) {
+                return 0;
+            }
+            return $a->getShare()->getPriority() < $b->getShare()->getPriority() ? 1 : -1;
+        });
+
+        return array_first($shareGroups);
+    }
+
+    /**
      * @param array $params
      */
     public function paginateShares($params = [])
