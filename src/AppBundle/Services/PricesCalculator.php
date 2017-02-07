@@ -6,7 +6,7 @@ use AppBundle\Entity\LoyaltyProgram;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
-use AppBundle\Entity\Users;
+use AppBundle\Entity\Users as User;
 use AppBundle\Model\CartSize;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -31,7 +31,7 @@ class PricesCalculator
     private $em;
 
     /**
-     * @var Users
+     * @var User
      */
     private $user;
 
@@ -40,7 +40,7 @@ class PricesCalculator
      *
      * @param ContainerInterface $container
      * @param EntityManager $em
-     * @param Users $user
+     * @param User $user
      */
     public function __construct(ContainerInterface $container, EntityManager $em, $user)
     {
