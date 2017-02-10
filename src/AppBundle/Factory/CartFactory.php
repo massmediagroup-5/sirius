@@ -3,12 +3,11 @@
 namespace AppBundle\Factory;
 
 
-use AppBundle\Cart\Store\SessionCartStore;
+use AppBundle\Cart\Store\CartStoreInterface;
+use AppBundle\Entity\Users;
 use AppBundle\Services\Cart;
 use AppBundle\Services\WholesalerCart;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class CartFactory
@@ -28,16 +27,32 @@ class CartFactory
     }
 
     /**
-     * @param EntityManager $em
-     * @return Cart
+     * @param CartStoreInterface $cartStore
+     *
+     * @return Cart|WholesalerCart
      */
-    public function createCart(EntityManager $em)
+    public function createCart(CartStoreInterface $cartStore)
     {
-        $security = $this->container->get('security.context');
-        $sessionStore = $this->container->get('session_cart_store');
-        if ($security->getToken() && $security->isGranted('ROLE_WHOLESALER')) {
-            return new WholesalerCart($em, $this->container, $sessionStore);
+        $token = $this->container->get('security.token_storage')->getToken();
+        $user = $token && is_object($token->getUser()) ? $token->getUser() : null;
+
+        return $this->createCartForUser($cartStore, $user);
+    }
+
+    /**
+     * @param CartStoreInterface $cartStore
+     * @param Users $user
+     *
+     * @return Cart|WholesalerCart
+     */
+    public function createCartForUser(CartStoreInterface $cartStore, Users $user = null)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        if ($user && $user->hasRole('ROLE_WHOLESALER')) {
+            return new WholesalerCart($em, $this->container, $cartStore);
         }
-        return new Cart($em, $this->container, $sessionStore);
+
+        return new Cart($em, $this->container, $cartStore);
     }
 }

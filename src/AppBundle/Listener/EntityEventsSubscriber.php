@@ -72,7 +72,9 @@ class EntityEventsSubscriber implements EventSubscriber
                 $this->container->get('order')->processOrderChanges($entity);
             }
             if ($entity instanceof OrderProductSize) {
-                $this->container->get('order')->recalculateOrderDiscounts($entity->getOrder());
+                if ($entity->getOrder()->getId()) {
+                    $this->container->get('order')->recalculateOrderDiscounts($entity->getOrder());
+                }
             }
             if ($entity instanceof ProductModels) {
                 $this->container->get('product')->processProductModelsChanges($entity);

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Cart\Store\ArrayCartStore;
 use AppBundle\Entity\Carriers;
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\OrderProductSize;
@@ -865,25 +866,49 @@ class Order
     {
         $priceCalculator = new PricesCalculator($this->container, $this->em, $order->getUsers());
 
-        $discountedSum = Arr::sumProperty($order->getSizes()->toArray(), 'discountedTotalPrice');
+        $wholeCart = $this->createArrayCartFromOrder($order);
+        $cart = $this->createArrayCartFromOrder($order, false);
 
         if ($order->getRelatedOrder()) {
-            $discountedSum += Arr::sumProperty($order->getRelatedOrder()->getSizes()->toArray(),
-                'discountedTotalPrice');
+            $relatedCart = $this->createArrayCartFromOrder($order->getRelatedOrder(), false);
+
+            // Recalculate discount for related order
+            $loyaltyDiscount = $priceCalculator->getLoyaltyDiscountForCartForSum($wholeCart,
+                $relatedCart->getTotalPriceForLoyalty());
+            $order->getRelatedOrder()->setLoyalityDiscount($loyaltyDiscount);
+
+            $this->recomputeChanges($order->getRelatedOrder());
         }
 
         // Recalculate discount for order
-        $sumToDiscount = $this->getSumToDiscount($order, $priceCalculator);
-        $order->setLoyalityDiscount($priceCalculator->getLoyaltyDiscountBySumForSum($discountedSum, $sumToDiscount));
-
-        if ($order->getRelatedOrder()) {
-            // Recalculate discount for related order
-            $sumToDiscount = $this->getSumToDiscount($order->getRelatedOrder(), $priceCalculator);
-            $order->getRelatedOrder()->setLoyalityDiscount($priceCalculator->getLoyaltyDiscountBySumForSum($discountedSum,
-                $sumToDiscount));
-        }
+        $loyaltyDiscount = $priceCalculator->getLoyaltyDiscountForCartForSum($wholeCart,
+            $cart->getTotalPriceForLoyalty());
+        $order->setLoyalityDiscount($loyaltyDiscount);
 
         $this->recomputeChanges($order);
+    }
+
+    /**
+     * @param Orders $order
+     * @param bool $loadRelatedFlag
+     *
+     * @return Cart|WholesalerCart
+     */
+    protected function createArrayCartFromOrder(Orders $order, $loadRelatedFlag = true)
+    {
+        $cart = $this->container->get('cart_factory')->createCartForUser(new ArrayCartStore(), $order->getUsers());
+
+        $sizes = $order->getSizes()->toArray();
+
+        if ($loadRelatedFlag && $order->getRelatedOrder()) {
+            $sizes = array_merge($sizes, $order->getRelatedOrder()->getSizes()->toArray());
+        }
+
+        foreach ($sizes as $size) {
+            $cart->addItemToCard($size->getSize(), $size->getQuantity());
+        }
+
+        return $cart;
     }
 
     /**
@@ -906,23 +931,6 @@ class Order
             $availableSizes->add($size);
         }
         $order->setSizes($availableSizes);
-    }
-
-    /**
-     * @param Orders $order
-     * @param $priceCalculator
-     * @return float|number
-     */
-    protected function getSumToDiscount(Orders $order, $priceCalculator)
-    {
-        if ($order->getUsers()->hasRole('ROLE_WHOLESALER')) {
-            return $order->getDiscountedTotalPrice();
-        }
-
-        $sizes = $order->getSizes()->filter(function ($size) use ($priceCalculator) {
-            return !$priceCalculator->hasActualShare($size->getSize());
-        })->toArray();
-        return Arr::sumProperty($sizes, 'discountedTotalPrice');
     }
 
     /**

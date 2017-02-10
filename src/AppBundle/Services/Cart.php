@@ -442,6 +442,16 @@ class Cart
     }
 
     /**
+     * Return total price for operations with loyalty
+     *
+     * @return number
+     */
+    public function getTotalPriceForLoyalty()
+    {
+        return Arr::sumProperty($this->getSizesWithoutShare(), 'discountedPrice');
+    }
+
+    /**
      * @return int
      */
     public function hasShareDiscount()

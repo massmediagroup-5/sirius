@@ -88,4 +88,34 @@ class WholesalerCart extends Cart
 
         return $this->getDiscountedIntermediatePrice() - $discount;
     }
+
+    /**
+     * @return int
+     */
+    public function getLoyaltyDiscountForPreOrder()
+    {
+        $sum = Arr::sumProperty($this->getSizes(), 'preOrderDiscountedPrice');
+
+        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLoyaltyDiscountForStandard()
+    {
+        $sum = Arr::sumProperty($this->getSizes(), 'standardDiscountedPrice');
+
+        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+    }
+
+    /**
+     * Return total price for operations with loyalty
+     *
+     * @return number
+     */
+    public function getTotalPriceForLoyalty()
+    {
+        return $this->getDiscountedIntermediatePrice();
+    }
 }

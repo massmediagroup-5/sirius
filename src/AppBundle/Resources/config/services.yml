@@ -17,7 +17,7 @@ services:
     cart:
         class: AppBundle\Services\Cart
         factory: [@cart_factory, createCart]
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@session_cart_store"]
     session_cart_store:
         class: AppBundle\Cart\Store\SessionCartStore
         arguments: [@session]

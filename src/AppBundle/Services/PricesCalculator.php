@@ -102,7 +102,7 @@ class PricesCalculator
      */
     public function getProductDiscountedPrice(Products $object)
     {
-        if ($this->user->hasRole('ROLE_WHOLESALER')) {
+        if ($this->hasRole('ROLE_WHOLESALER')) {
             return $object->getWholesalePrice() ?: $object->getPrice();
         }
 
@@ -133,7 +133,7 @@ class PricesCalculator
      */
     public function getProductModelDiscountedPrice(ProductModels $object)
     {
-        if ($this->user->hasRole('ROLE_WHOLESALER')) {
+        if ($this->hasRole('ROLE_WHOLESALER')) {
             if ($object->getWholesalePrice()) {
                 return $object->getWholesalePrice();
             }
@@ -196,9 +196,9 @@ class PricesCalculator
      */
     public function getProductModelSpecificSizeDiscountedPrice(ProductModelSpecificSize $object, $fromCart = false)
     {
-        if ($this->user->hasRole('ROLE_WHOLESALER')) {
+        if ($this->hasRole('ROLE_WHOLESALER')) {
             // Not subtract discount when user in gray list
-            if ($this->user->hasRole('ROLE_GRAY_LIST')) {
+            if ($this->hasRole('ROLE_GRAY_LIST')) {
                 return $object->getPrice() ?: $this->getProductModelPrice($object->getModel());
             }
 
@@ -465,8 +465,8 @@ class PricesCalculator
      */
     public function getLoyaltyDiscount($sum)
     {
-        if ($this->user->hasRole('ROLE_WHOLESALER')) {
-            if (!$this->user->hasRole('ROLE_GRAY_LIST')) {
+        if ($this->hasRole('ROLE_WHOLESALER')) {
+            if (!$this->hasRole('ROLE_GRAY_LIST')) {
                 $user = $this->container->get('security.context')->getToken()->getUser();
 
                 if ($this->isWholesalerMakeOrder()) {
@@ -510,7 +510,7 @@ class PricesCalculator
      */
     public function getLoyaltyDiscountForCartForSum(Cart $cart, $sum)
     {
-        return $this->getLoyaltyDiscountBySumForSum($cart->getDiscountedIntermediatePrice(), $sum);
+        return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
     }
 
     /**
@@ -555,7 +555,7 @@ class PricesCalculator
      */
     public function getLoyaltyProgramBySum($sum)
     {
-        if ($this->user->hasRole('ROLE_WHOLESALER')) {
+        if ($this->hasRole('ROLE_WHOLESALER')) {
             $repo = 'AppBundle:WholesalerLoyaltyProgram';
         } else {
             $repo = 'AppBundle:LoyaltyProgram';
@@ -651,5 +651,14 @@ class PricesCalculator
                 break;
             }
         }
+    }
+
+    /**
+     * @param $role
+     * @return mixed
+     */
+    private function hasRole($role)
+    {
+        return $this->user ? $this->user->hasRole($role) : false;
     }
 }
