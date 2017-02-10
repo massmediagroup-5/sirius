@@ -103,10 +103,12 @@
                 </button>
             {% endif %}
 
-            <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_change_pre_order_flag', {id: object.id}) }}">
-                <i class="glyphicon glyphicon-arrow-right"></i>
-                {{ (object.preOrderFlag ? 'link_to_order' : 'link_to_pre_order')|trans({}, 'AppAdminBundle') }}
-            </a>
+            {% if object.status.code == 'new' and (not object.relatedOrder or object.relatedOrder.status.code == 'new') %}
+                <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_change_pre_order_flag', {id: object.id}) }}">
+                    <i class="glyphicon glyphicon-arrow-right"></i>
+                    {{ (object.preOrderFlag ? 'link_to_order' : 'link_to_pre_order')|trans({}, 'AppAdminBundle') }}
+                </a>
+            {% endif %}
 
             {% if object.status.code != 'canceled' %}
                 <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_cancel_order', {id: object.id}) }}">

@@ -148,7 +148,7 @@ class Order
         $order->getSizes();
         $relatedOrder = $order->getRelatedOrder();
         $size->setQuantity($size->getQuantity() - $quantity);
-        if ($size->getQuantity() > $quantity) {
+        if ($size->getQuantity()) {
             $this->em->persist($size);
         } else {
             $order->removeSize($size);
