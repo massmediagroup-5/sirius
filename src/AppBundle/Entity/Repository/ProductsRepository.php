@@ -326,7 +326,9 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('prodMod.sizes', 'specific_sizes')->addselect('specific_sizes')
             ->leftJoin('specific_sizes.size', 'sizes')->addselect('sizes')
             ->where('prod.active = 1 AND prodMod.published = 1 AND prodMod.alias = :alias')
-            ->setParameter('alias', $modelAlias);
+            ->setParameter('alias', $modelAlias)
+            ->orderBy('prodMod.priority')
+            ->addOrderBy('sizes.size');
 
         $builder = $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder,
             'specific_sizes');
