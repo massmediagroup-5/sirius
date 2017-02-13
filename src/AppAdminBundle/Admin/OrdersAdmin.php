@@ -681,6 +681,16 @@ class OrdersAdmin extends Admin
     }
 
     /**
+     * @return bool
+     */
+    public function canChangeSizes()
+    {
+        return $this->subject->getStatus()->getCode() == 'new'
+            && (!$this->subject->getRelatedOrder()
+                || $this->subject->getRelatedOrder()->getStatus()->getCode() == 'new');
+    }
+
+    /**
      * @param $historyItem
      */
     protected function getSizeFromHistory($historyItem)

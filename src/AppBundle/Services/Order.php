@@ -927,6 +927,7 @@ class Order
                     continue 2;
                 }
             }
+            $size = clone $size;
             $size->setOrder($order);
             $availableSizes->add($size);
         }

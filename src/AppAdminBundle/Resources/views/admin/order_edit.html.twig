@@ -103,7 +103,7 @@
                 </button>
             {% endif %}
 
-            {% if object.status.code == 'new' and (not object.relatedOrder or object.relatedOrder.status.code == 'new') %}
+            {% if admin.canChangeSizes %}
                 <a class="btn btn-danger" href="{{ path(admin.baseRouteName ~ '_change_pre_order_flag', {id: object.id}) }}">
                     <i class="glyphicon glyphicon-arrow-right"></i>
                     {{ (object.preOrderFlag ? 'link_to_order' : 'link_to_pre_order')|trans({}, 'AppAdminBundle') }}
