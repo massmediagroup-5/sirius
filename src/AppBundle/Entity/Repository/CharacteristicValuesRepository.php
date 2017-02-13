@@ -141,7 +141,8 @@ class CharacteristicValuesRepository extends BaseRepository
             ->addSelect('characteristic')
             ->addSelect("({$filteredModelsBuilder->getDQL()}) modelsCount")
             ->join('value.characteristics', 'characteristic')
-            ->andWhere($subQueryBuilder->expr()->in('value.id', $subQueryBuilder->getDQL()));
+            ->andWhere($subQueryBuilder->expr()->in('value.id', $subQueryBuilder->getDQL()))
+            ->orderBy('value.name');
 
         foreach ($filteredModelsBuilder->getParameters() as $parameter) {
             $builder->setParameter($parameter->getName(), $parameter->getValue());
