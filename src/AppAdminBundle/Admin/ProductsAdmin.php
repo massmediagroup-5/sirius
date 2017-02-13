@@ -2,6 +2,7 @@
 
 namespace AppAdminBundle\Admin;
 
+use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -162,6 +163,9 @@ class ProductsAdmin extends Admin
                 [
                     'class'    => 'AppBundle:CharacteristicValues',
                     'label' => 'Значения характеристик',
+                    'query_builder' => function (EntityRepository $entityRepository) {
+                        return $entityRepository->createQueryBuilder('value')->orderBy('value.name');
+                    },
                     'expanded' => true,
                     'multiple' => true,
                     'by_reference' => false
