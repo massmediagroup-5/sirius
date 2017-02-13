@@ -215,6 +215,8 @@ class Characteristics
      */
     public function addCharacteristicValue(\AppBundle\Entity\CharacteristicValues $characteristicValue)
     {
+        $characteristicValue->setCharacteristics($this);
+
         $this->characteristicValues[] = $characteristicValue;
 
         return $this;

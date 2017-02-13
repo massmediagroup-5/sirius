@@ -64,17 +64,18 @@ class CharacteristicsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('name', null, array('label' => 'Название'))
-            ->add('inFilter', null, array('label' => 'В фильтре','editable' => true))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ))
+            ->add('name', null, ['label' => 'Название'])
+            ->add('inFilter', null, ['label' => 'В фильтре','editable' => true])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                    'delete' => [],
+                ]
+            ]
+            )
         ;
     }
 
@@ -84,14 +85,16 @@ class CharacteristicsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', null, array('label' => 'Название'))
-            ->add('characteristicValues', 'sonata_type_models_list', [
-                'label' => 'Значения характеристики',
-                'class' => 'AppBundle:CharacteristicValues',
-                'model_manager' => $this->getModelManager()
+            ->add('name', null, ['label' => 'Название'])
+            ->add('characteristicValues', 'sonata_type_collection', [
+                'required' => false,
+                'cascade_validation' => true,
+                'by_reference' => false
+            ], [
+                'edit' => 'inline',
+                'inline' => 'table'
             ])
-//            ->add('renderType', null, array('label' => 'Тип отображения'))
-            ->add('inFilter', null, array('label' => 'В фильтре'))
+            ->add('inFilter', null, ['label' => 'В фильтре'])
         ;
     }
 
@@ -101,10 +104,10 @@ class CharacteristicsAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, array('label' => 'Название'))
-            ->add('inFilter', null, array('label' => 'В фильтре'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'))
+            ->add('name', null, ['label' => 'Название'])
+            ->add('inFilter', null, ['label' => 'В фильтре'])
+            ->add('createTime', null, ['label' => 'Дата создания'])
+            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
         ;
     }
 

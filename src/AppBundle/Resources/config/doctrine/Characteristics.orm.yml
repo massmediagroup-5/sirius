@@ -58,7 +58,7 @@ AppBundle\Entity\Characteristics:
             fetch: LAZY
             mappedBy: characteristics
             inversedBy: null
-            orphanRemoval: false
+            orphanRemoval: true
     manyToOne:
         characteristicGroups:
             targetEntity: CharacteristicGroups

@@ -158,7 +158,7 @@ services:
         class: AppAdminBundle\Admin\CharacteristicValuesAdmin
         arguments: [~, AppBundle\Entity\CharacteristicValues, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Значения характеристик"}
+            - {name: sonata.admin, manager_type: orm, show_in_dashboard: false}
 
     app.admin.product_colors:
         class: AppAdminBundle\Admin\ProductColorsAdmin
