@@ -173,7 +173,7 @@ class CRUDController extends BaseController
 
         $clonedObject = $this->admin->create($clonedObject);
 
-        $this->addFlash('sonata_flash_success', 'Cloned successfully');
+        $this->addFlash('sonata_flash_success', 'cloned_successfully');
 
         return new RedirectResponse($this->admin->generateUrl('edit', ['id' => $clonedObject->getId()]));
     }

@@ -4,3 +4,4 @@ flash_impossible_to_change_pre_order_flag: Невозможно изменить
 flash_order_history_item_canceled: Изменения отменены
 flash_order_history_item_canceled_fail: Нельзя отменить данное изменение
 btn_invoice: Получить чек
+cloned_successfully: Клонирование успешно

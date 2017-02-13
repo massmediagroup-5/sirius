@@ -2,7 +2,6 @@
 
 namespace AppAdminBundle\Controller;
 
-use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @see BaseController
  */
-class ProductModelController extends BaseController
+class ProductModelController extends CRUDController
 {
     /**
      * @param Request $request
