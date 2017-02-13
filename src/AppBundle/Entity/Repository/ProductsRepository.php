@@ -455,6 +455,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin('productModels.productColors', 'productColors')->addselect('productColors')
             ->leftJoin('productModels.images', 'images')->addselect('images')
             ->innerJoin('productModels.sizes', 'sizes')->addselect('sizes')
+            ->innerJoin('sizes.size', 'size')->addselect('size')
             ->leftJoin('sizes.shareGroup', 'shareGroups')
             ->leftJoin('shareGroups.share', 'share');
 
@@ -471,6 +472,7 @@ class ProductsRepository extends \Doctrine\ORM\EntityRepository
         $this->addSort($builder, $filters);
 
         $builder->addOrderBy('images.priority', 'ASC');
+        $builder->addOrderBy('size.size', 'ASC');
 
         return $builder->getQuery();
     }
