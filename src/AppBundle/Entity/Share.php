@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Helper\Arr;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
@@ -51,6 +52,11 @@ class Share
      * @var boolean
      */
     private $status = false;
+
+    /**
+     * @var boolean
+     */
+    private $forbidDeactivation = false;
 
     /**
      * @var boolean
@@ -282,6 +288,34 @@ class Share
     }
 
     /**
+     * @return bool
+     */
+    public function getForbidDeactivation()
+    {
+        return $this->forbidDeactivation;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForbidDeactivation()
+    {
+        return $this->forbidDeactivation;
+    }
+
+    /**
+     * @param $forbidDeactivation
+     *
+     * @return $this
+     */
+    public function setForbidDeactivation($forbidDeactivation)
+    {
+        $this->forbidDeactivation = $forbidDeactivation;
+
+        return $this;
+    }
+
+    /**
      * Set startTime
      *
      * @param \DateTime $startTime
@@ -479,5 +513,44 @@ class Share
     public function getGroupsCount()
     {
         return $this->groupsCount;
+    }
+
+    /**
+     * Get groupsCount
+     *
+     * @return ShareSizesGroupDiscount[]
+     */
+    public function getGroupsDiscounts()
+    {
+        $discounts = [];
+        /** @var ShareSizesGroup $group */
+        foreach ($this->sizesGroups as $group) {
+            $discounts = array_merge($discounts, $group->getDiscounts()->toArray());
+        }
+        return $discounts;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActualGroupsDiscounts()
+    {
+        return Arr::where($this->getGroupsDiscounts(), function ($key, ShareSizesGroupDiscount $discount) {
+            return $discount->getDiscount();
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGlobalGroupDiscount()
+    {
+        foreach ($this->sizesGroups as $sizesGroup) {
+            if ($sizesGroup->getDiscount()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

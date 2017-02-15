@@ -160,11 +160,6 @@ AppBundle\Entity\ProductModels:
                 products_id:
                     referencedColumnName: id
             orphanRemoval: false
-        shareGroup:
-            targetEntity: ShareSizesGroup
-            inversedBy: models
-            joinColumn:
-                onDelete: SET NULL
     manyToMany:
         recommended:
             targetEntity: ProductModels

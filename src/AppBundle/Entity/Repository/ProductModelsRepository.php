@@ -275,6 +275,7 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('products.characteristicValues', 'characteristicValues')->addSelect('characteristicValues')
             ->leftJoin('characteristicValues.characteristics', 'characteristics')
             ->leftJoin('products.baseCategory', 'category')
+            ->leftJoin('specificSizes.shareGroups', 'shareGroups')
             ->addselect('model');
 
         if ($categoryId = Arr::get($filters, 'category_id')) {

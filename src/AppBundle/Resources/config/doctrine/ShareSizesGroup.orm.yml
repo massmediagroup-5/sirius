@@ -23,11 +23,7 @@ AppBundle\Entity\ShareSizesGroup:
             inversedBy: sizesGroups
             orphanRemoval: false
     oneToMany:
-        models:
-            targetEntity: ProductModels
-            fetch: LAZY
-            mappedBy: shareGroup
-        modelSpecificSizes:
+        actualModelSpecificSizes:
             targetEntity: ProductModelSpecificSize
             mappedBy: shareGroup
             fetch: LAZY
@@ -48,5 +44,9 @@ AppBundle\Entity\ShareSizesGroup:
             fetch: LAZY
         colors:
             targetEntity: ProductColors
+            fetch: LAZY
+        modelSpecificSizes:
+            targetEntity: ProductModelSpecificSize
+            mappedBy: shareGroups
             fetch: LAZY
     lifecycleCallbacks: {  }

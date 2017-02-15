@@ -2,6 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Helper\Arr;
+use Doctrine\Common\Collections\Collection;
+
 /**
  * ProductModelSpecificSize
  */
@@ -48,9 +51,14 @@ class ProductModelSpecificSize
     private $size;
 
     /**
-     * @var \AppBundle\Entity\ShareSizesGroup
+     * @var ShareSizesGroup
      */
     private $shareGroup;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $shareGroups;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -331,15 +339,31 @@ class ProductModelSpecificSize
     }
 
     /**
-     * Set shareGroup
+     * Add shareGroup
      *
-     * @param \AppBundle\Entity\ShareSizesGroup $shareGroup
+     * @param ShareSizesGroup $shareGroup
      *
      * @return ProductModelSpecificSize
      */
-    public function setShareGroup(\AppBundle\Entity\ShareSizesGroup $shareGroup = null)
+    public function addShareGroup(ShareSizesGroup $shareGroup)
     {
-        $this->shareGroup = $shareGroup;
+        if (!$this->inShareGroup($shareGroup)) {
+            $this->shareGroups->add($shareGroup);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove shareGroup
+     *
+     * @param ShareSizesGroup $shareGroup
+     *
+     * @return ProductModelSpecificSize
+     */
+    public function removeShareGroup(ShareSizesGroup $shareGroup)
+    {
+        $this->shareGroups->removeElement($shareGroup);
 
         return $this;
     }
@@ -347,11 +371,11 @@ class ProductModelSpecificSize
     /**
      * Get shareGroup
      *
-     * @return \AppBundle\Entity\ShareSizesGroup
+     * @return Collection
      */
-    public function getShareGroup()
+    public function getShareGroups()
     {
-        return $this->shareGroup;
+        return $this->shareGroups;
     }
 
     /**
@@ -360,15 +384,65 @@ class ProductModelSpecificSize
      */
     public function inShareGroup(ShareSizesGroup $shareGroup)
     {
-        return $this->shareGroup && $this->shareGroup->getId() == $shareGroup->getId();
+        return $this->shareGroups->contains($shareGroup);
     }
 
     /**
+     * @param ShareSizesGroup $shareGroup
+     * @return self
+     */
+    public function toggleShareGroup(ShareSizesGroup $shareGroup)
+    {
+        if ($this->inShareGroup($shareGroup)) {
+            $this->removeShareGroup($shareGroup);
+        } else {
+            $this->addShareGroup($shareGroup);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ShareSizesGroup
+     */
+    public function getShareGroup()
+    {
+        return $this->shareGroup;
+    }
+
+    /**
+     * @param $shareGroup
+     *
+     * @return $this
+     */
+    public function setShareGroup($shareGroup)
+    {
+        $this->shareGroup = $shareGroup;
+
+        return $this;
+    }
+
+    /**
+     * Return share with highest priority
+     *
      * @return Share|null
      */
     public function getShare()
     {
         return $this->shareGroup ? $this->shareGroup->getShare() : null;
+    }
+
+    /**
+     * Return share with highest priority
+     *
+     * @return Share[]
+     */
+    public function getShares()
+    {
+        $shares = $this->shareGroups->map(function (ShareSizesGroup $shareGroup) {
+            return $shareGroup->getShare();
+        })->toArray();
+        return array_unique($shares);
     }
 
     public function addHistory($history)

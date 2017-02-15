@@ -7,6 +7,7 @@ use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\ShareSizesGroup;
 use AppBundle\Entity\ShareSizesGroupDiscount;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -37,7 +38,7 @@ class Share
      */
     private $classNames = [
         'item_left_b',
-        'item_center'
+        'item_center',
     ];
 
     /**
@@ -58,10 +59,14 @@ class Share
      */
     public function toggleGroupModel(ShareSizesGroup $group, ProductModels $model)
     {
-        $newShareGroup = $model->inShareGroup($group) ? null : $group;
+        $inShareGroup = $model->inShareGroup($group) ? null : $group;
 
         foreach ($model->getSizes() as $size) {
-            $size->setShareGroup($newShareGroup);
+            if ($inShareGroup) {
+                $size->addShareGroup($group);
+            } else {
+                $size->removeShareGroup($group);
+            }
             $this->em->persist($size);
         }
 
@@ -74,11 +79,7 @@ class Share
      */
     public function toggleGroupSize(ShareSizesGroup $group, ProductModelSpecificSize $size)
     {
-        if ($size->getShareGroup() && $size->getShareGroup()->getId() == $group->getId()) {
-            $size->setShareGroup(null);
-        } else {
-            $size->setShareGroup($group);
-        }
+        $size->toggleShareGroup($group);
 
         $this->em->persist($size);
         $this->em->flush();
@@ -90,28 +91,15 @@ class Share
     public function updateShareGroupSizes(ShareSizesGroup $group)
     {
         // Detach old sizes and models
-        $this->em->createQueryBuilder()
-            ->update('AppBundle:ProductModelSpecificSize', 'size')
-            ->set('size.shareGroup', ':shareGroupValue')
-            ->where('size.shareGroup = :shareGroup')
-            ->setParameter('shareGroup', $group)
-            ->setParameter('shareGroupValue', null)
-            ->getQuery()
-            ->execute();
-
-        $this->em->createQueryBuilder()
-            ->update('AppBundle:ProductModels', 'model')
-            ->set('model.shareGroup', ':shareGroupValue')
-            ->where('model.shareGroup = :shareGroup')
-            ->setParameter('shareGroup', $group)
-            ->setParameter('shareGroupValue', null)
-            ->getQuery()
-            ->execute();
+        $this->em->getConnection()->executeUpdate(
+            'DELETE FROM `product_model_specific_size_share_sizes_group` WHERE `share_sizes_group_id` = :shareGroup',
+            ['shareGroup' => $group->getId()]
+        );
 
         $sizes = $this->em->getRepository('AppBundle:ProductModelSpecificSize')->getShareGroupSizes($group);
 
         foreach ($sizes as $size) {
-            $size->setShareGroup($group);
+            $size->addShareGroup($group);
             $this->em->persist($size);
         }
 
@@ -243,7 +231,7 @@ class Share
         if ($this->checkShareActuality($share)) {
             // Skip empty groups
             $sizesGroups = array_filter($share->getSizesGroups()->getValues(), function (ShareSizesGroup $sizesGroup) {
-                return $sizesGroup->getModelSpecificSizes()->count() > 0;
+                return $sizesGroup->getActualModelSpecificSizes()->count() > 0;
             });
             return count($sizesGroups) > 1;
         }
@@ -303,6 +291,50 @@ class Share
         $discount->setDiscount($discountNumber);
         $this->em->persist($discount);
         $this->em->flush();
+    }
+
+    /**
+     * Bind actual share groups to sizes
+     */
+    public function bindActualShareGroupsToSizes()
+    {
+        $this->em->getConnection()->executeUpdate(
+            'UPDATE product_model_specific_size s
+            SET share_group_id = (
+                SELECT ssg.id FROM share_sizes_group ssg
+                JOIN product_model_specific_size_share_sizes_group s_ssg
+                    ON s_ssg.share_sizes_group_id = ssg.id
+                JOIN share ON ssg.share_id = share.id
+                WHERE share.status = 1 AND share.start_time < NOW() AND share.end_time > NOW()
+                    AND s_ssg.product_model_specific_size_id = s.id
+                ORDER BY share.priority DESC LIMIT 1
+        )');
+    }
+
+    /**
+     * Deactivate share when all discounts is defective (that is mean that main group discount is also not active)
+     *
+     * @param \AppBundle\Entity\Share $share
+     */
+    public function updateSharesActuality(\AppBundle\Entity\Share $share)
+    {
+        $discounts = $share->getActualGroupsDiscounts();
+
+        /** @var ShareSizesGroupDiscount $discount */
+        foreach ($discounts as $discount) {
+            $availability = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
+                ->isHasShareGroupHasAvailableSizes($discount->getShareGroup());
+            if ($availability) {
+                $companionAvailability = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
+                    ->isHasShareGroupHasAvailableSizes($discount->getCompanion());
+                if ($companionAvailability) {
+                    // At least one discount has sizes
+                    return;
+                }
+            }
+        }
+
+        $share->setStatus(false);
     }
 
 }

@@ -243,6 +243,8 @@ class CartController extends BaseController
      */
     public function showOrderAction(Request $request)
     {
+        $this->get('share')->bindActualShareGroupsToSizes();
+
         if($this->get('cart')->isEmpty()) {
             return $this->forward('AppBundle:Cart:showCart');
         }

@@ -126,11 +126,6 @@ class ProductModels
     private $recommended;
 
     /**
-     * @var \AppBundle\Entity\ShareSizesGroup
-     */
-    private $shareGroup;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $history;
@@ -693,30 +688,6 @@ class ProductModels
         }
         $this->sizes = $sizes;
         $this->alias .= '-clone-' . uniqid();
-    }
-
-    /**
-     * Set shareGroup
-     *
-     * @param \AppBundle\Entity\ShareSizesGroup $shareGroup
-     *
-     * @return ProductModels
-     */
-    public function setShareGroup(\AppBundle\Entity\ShareSizesGroup $shareGroup = null)
-    {
-        $this->shareGroup = $shareGroup;
-
-        return $this;
-    }
-
-    /**
-     * Get shareGroup
-     *
-     * @return \AppBundle\Entity\ShareSizesGroup
-     */
-    public function getShareGroup()
-    {
-        return $this->shareGroup;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Helper\Arr;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -37,12 +38,12 @@ class ShareSizesGroup
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $models;
+    private $modelSpecificSizes;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $modelSpecificSizes;
+    private $actualModelSpecificSizes;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -60,21 +61,15 @@ class ShareSizesGroup
     private $colors;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $exceptModels;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $exceptModelSpecificSizes;
-
-    /**
+     * Discounts for sizes in this group
+     *
      * @var \Doctrine\Common\Collections\Collection
      */
     private $discounts;
 
     /**
+     * Discounts for sizes in related groups
+     *
      * @var \Doctrine\Common\Collections\Collection
      */
     private $discountCompanions;
@@ -86,14 +81,13 @@ class ShareSizesGroup
     public function __construct()
     {
         $this->discounts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->discountCompanions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->models = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modelSpecificSizes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->actualModelSpecificSizes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->characteristicValues = new \Doctrine\Common\Collections\ArrayCollection();
         $this->colors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->exceptModels = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->exceptModelSpecificSizes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -213,40 +207,6 @@ class ShareSizesGroup
     }
 
     /**
-     * Add model
-     *
-     * @param \AppBundle\Entity\ProductModels $model
-     *
-     * @return ShareSizesGroup
-     */
-    public function addModel(\AppBundle\Entity\ProductModels $model)
-    {
-        $this->models[] = $model;
-
-        return $this;
-    }
-
-    /**
-     * Remove model
-     *
-     * @param \AppBundle\Entity\ProductModels $model
-     */
-    public function removeModel(\AppBundle\Entity\ProductModels $model)
-    {
-        $this->models->removeElement($model);
-    }
-
-    /**
-     * Get models
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getModels()
-    {
-        return $this->models;
-    }
-
-    /**
      * Add modelSpecificSize
      *
      * @param \AppBundle\Entity\ProductModelSpecificSize $modelSpecificSize
@@ -278,6 +238,40 @@ class ShareSizesGroup
     public function getModelSpecificSizes()
     {
         return $this->modelSpecificSizes;
+    }
+
+    /**
+     * Add modelSpecificSize
+     *
+     * @param \AppBundle\Entity\ProductModelSpecificSize $modelSpecificSize
+     *
+     * @return ShareSizesGroup
+     */
+    public function addActualModelSpecificSizes(\AppBundle\Entity\ProductModelSpecificSize $modelSpecificSize)
+    {
+        $this->actualModelSpecificSizes[] = $modelSpecificSize;
+
+        return $this;
+    }
+
+    /**
+     * Remove modelSpecificSize
+     *
+     * @param \AppBundle\Entity\ProductModelSpecificSize $modelSpecificSize
+     */
+    public function removeActualModelSpecificSizes(\AppBundle\Entity\ProductModelSpecificSize $modelSpecificSize)
+    {
+        $this->actualModelSpecificSizes->removeElement($modelSpecificSize);
+    }
+
+    /**
+     * Get actualModelSpecificSizes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActualModelSpecificSizes()
+    {
+        return $this->actualModelSpecificSizes;
     }
 
     /**
@@ -437,74 +431,6 @@ class ShareSizesGroup
     }
 
     /**
-     * Add exceptModel
-     *
-     * @param \AppBundle\Entity\ProductModels $exceptModel
-     *
-     * @return ShareSizesGroup
-     */
-    public function addExceptModel(\AppBundle\Entity\ProductModels $exceptModel)
-    {
-        $this->exceptModels[] = $exceptModel;
-
-        return $this;
-    }
-
-    /**
-     * Remove exceptModel
-     *
-     * @param \AppBundle\Entity\ProductModels $exceptModel
-     */
-    public function removeExceptModel(\AppBundle\Entity\ProductModels $exceptModel)
-    {
-        $this->exceptModels->removeElement($exceptModel);
-    }
-
-    /**
-     * Get exceptModels
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getExceptModels()
-    {
-        return $this->exceptModels;
-    }
-
-    /**
-     * Add exceptModelSpecificSize
-     *
-     * @param \AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize
-     *
-     * @return ShareSizesGroup
-     */
-    public function addExceptModelSpecificSize(\AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize)
-    {
-        $this->exceptModelSpecificSizes[] = $exceptModelSpecificSize;
-
-        return $this;
-    }
-
-    /**
-     * Remove exceptModelSpecificSize
-     *
-     * @param \AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize
-     */
-    public function removeExceptModelSpecificSize(\AppBundle\Entity\ProductModelSpecificSize $exceptModelSpecificSize)
-    {
-        $this->exceptModelSpecificSizes->removeElement($exceptModelSpecificSize);
-    }
-
-    /**
-     * Get exceptModelSpecificSizes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getExceptModelSpecificSizes()
-    {
-        return $this->exceptModelSpecificSizes;
-    }
-
-    /**
      * Add discount
      *
      * @param \AppBundle\Entity\ShareSizesGroupDiscount $discount
@@ -570,5 +496,27 @@ class ShareSizesGroup
     public function getDiscountCompanions()
     {
         return $this->discountCompanions;
+    }
+
+    /**
+     * Get discountCompanions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAllDiscounts()
+    {
+        $discounts = $this->discounts->toArray();
+
+        /** @var ShareSizesGroupDiscount $companion */
+        foreach ($this->discountCompanions as $companion) {
+            $foundedDiscount = Arr::first($discounts, function (ShareSizesGroupDiscount $discount) use ($companion) {
+                return $discount->getShareGroup()->getId() == $companion->getCompanion()->getId();
+            });
+            if (!$foundedDiscount) {
+                $discounts[] = $companion;
+            }
+        }
+
+        return $discounts;
     }
 }

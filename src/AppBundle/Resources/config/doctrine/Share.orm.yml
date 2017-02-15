@@ -30,6 +30,10 @@ AppBundle\Entity\Share:
             type: boolean
         groupsCount:
             type: boolean
+        forbidDeactivation:
+            type: boolean
+            options:
+                default: false
         startTime:
             type: datetime
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

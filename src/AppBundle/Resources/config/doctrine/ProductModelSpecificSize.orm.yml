@@ -41,7 +41,7 @@ AppBundle\Entity\ProductModelSpecificSize:
             orphanRemoval: false
         shareGroup:
             targetEntity: ShareSizesGroup
-            inversedBy: modelSpecificSizes
+            inversedBy: actualModelSpecificSizes
             joinColumn:
                 onDelete: SET NULL
     oneToMany:
@@ -59,4 +59,8 @@ AppBundle\Entity\ProductModelSpecificSize:
             mappedBy: productModelSpecificSize
             inversedBy: null
             orderBy: {id: DESC}
+    manyToMany:
+        shareGroups:
+            targetEntity: ShareSizesGroup
+            inversedBy: modelSpecificSizes
     lifecycleCallbacks: {  }

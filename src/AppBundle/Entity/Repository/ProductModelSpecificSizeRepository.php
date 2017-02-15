@@ -165,7 +165,6 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         $shareRepo = $this->_em->getRepository('AppBundle:Share');
 
         $shareRepo->addHasGroupCondition($builder, $group);
-        $shareRepo->addNotHasGroupExceptGivenCondition($builder, $group);
 
         return $builder->getQuery()->getResult();
     }
@@ -272,6 +271,27 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $builder;
+    }
+
+    /**
+     * @param $shareGroup
+     *
+     * @return bool
+     */
+    public function isHasShareGroupHasAvailableSizes($shareGroup)
+    {
+        $builder = $this->createQueryBuilder('sizes')
+            ->select('SUM(IFELSE(sizes.preOrderFlag = 1, 1, sizes.quantity))')
+            ->innerJoin('sizes.model', 'model')
+            ->innerJoin('model.products', 'product')
+            ->innerJoin('sizes.shareGroup', 'shareGroup')
+            ->andWhere('shareGroup.id = :shareGroupId')
+            ->setParameter('shareGroupId', $shareGroup);
+
+        $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder, 'model', 'product');
+        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder, 'sizes');
+
+        return (bool)$builder->getQuery()->getSingleScalarResult();
     }
 
     /**

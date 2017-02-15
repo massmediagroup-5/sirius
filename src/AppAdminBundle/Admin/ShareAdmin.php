@@ -158,6 +158,10 @@ class ShareAdmin extends Admin
                 )
             ))
             ->add('status', null, ['label' => 'Статус публікації', 'required' => false])
+            ->add('forbidDeactivation', null, [
+                'label' => 'Запретить отключать акцию когда закончились товары',
+                'required' => false,
+            ])
             ->add('className', 'choice', [
                 'label' => 'Имя класса',
                 'choices' => $classNames,

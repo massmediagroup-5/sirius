@@ -112,20 +112,6 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * @param QueryBuilder $builder
-     * @param $group
-     */
-    public function addNotHasGroupExceptGivenCondition(QueryBuilder $builder, $group)
-    {
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->eq('specificSizes.shareGroup', $builder->expr()->literal($group->getId())),
-                $builder->expr()->isNull('specificSizes.shareGroup')
-            )
-        );
-    }
-
-    /**
      * @return QueryBuilder
      */
     public function getActiveSharesQuery()
@@ -144,7 +130,7 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->createQueryBuilder('share')
             ->join('share.sizesGroups', 'groups')
-            ->join('groups.modelSpecificSizes', 'sizes')
+            ->join('groups.actualModelSpecificSizes', 'sizes')
             ->where('sizes.id IN (:ids)')
             ->addCriteria($this->getActiveCriteria())
             ->setParameter('ids', $sizesIds)
@@ -158,8 +144,8 @@ class ShareRepository extends \Doctrine\ORM\EntityRepository
      */
     public function addHasGroupExceptGivenCondition(QueryBuilder $builder, $group)
     {
-        $builder->andWhere('specificSizes.shareGroup <> :group')
-            ->andWhere('specificSizes.shareGroup IS NOT NULL')
+        $builder->andWhere('shareGroups.id <> :group')
+            ->andWhere('shareGroups.id IS NOT NULL')
             ->setParameter('group', $group);
     }
 

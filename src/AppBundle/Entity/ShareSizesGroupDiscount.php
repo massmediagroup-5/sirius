@@ -17,6 +17,16 @@ class ShareSizesGroupDiscount
      */
     private $discount;
 
+    /**
+     * @var \AppBundle\Entity\ShareSizesGroup
+     */
+    private $shareGroup;
+
+    /**
+     * @var \AppBundle\Entity\ShareSizesGroup
+     */
+    private $companion;
+
 
     /**
      * Get id
@@ -51,16 +61,6 @@ class ShareSizesGroupDiscount
     {
         return $this->discount;
     }
-    /**
-     * @var \AppBundle\Entity\ShareSizesGroup
-     */
-    private $shareGroup;
-
-    /**
-     * @var \AppBundle\Entity\ShareSizesGroup
-     */
-    private $companion;
-
 
     /**
      * Set shareGroup

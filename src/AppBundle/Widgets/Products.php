@@ -135,8 +135,12 @@ class Products
 
             // Combination of all groups
             // Skip combination when some groups are not available
-            if ($model->getShare()->getSizesGroups()->count() == count($sizesGroups)) {
-                $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice($model->getSizes()->first());
+            if ($model->getShare()->hasGlobalGroupDiscount()
+                && $model->getShare()->getSizesGroups()->count() == count($sizesGroups)
+            ) {
+                $totalSum = $priceCalculator->getProductModelSpecificSizeUpSellDiscountedPrice(
+                    $model->getSizes()->first()
+                );
 
                 $upSellGroups = array_filter($sizesGroups, function ($group) use ($currentShareGroup) {
                     return $group->getId() != $currentShareGroup->getId();
@@ -144,7 +148,7 @@ class Products
 
                 // Select one product from each group
                 $allUpSellSizes = array_map(function (ShareSizesGroup $sizesGroup) use ($priceCalculator) {
-                    $sizes = $sizesGroup->getModelSpecificSizes()->getValues();
+                    $sizes = $sizesGroup->getActualModelSpecificSizes()->getValues();
                     return $sizes[array_rand($sizes)];
                 }, $upSellGroups);
 
@@ -172,7 +176,9 @@ class Products
             // Combinations upSell
             foreach ($sizesGroups as $group) {
                 // Protect combination duplicates
-                if (count($sizesGroups) == 2 && $group->getId() != $currentShareGroup->getId()) {
+                if (count($sizesGroups) == 2 && $group->getId() != $currentShareGroup->getId()
+                    && $model->getShare()->hasGlobalGroupDiscount()
+                ) {
                     continue;
                 }
                 $discount = $this->container->get('share')->discountValueForShareGroupCompanion($currentShareGroup,
@@ -184,7 +190,7 @@ class Products
                     if ($group->getId() == $currentShareGroup->getId()) {
                         $companion = $currentSize;
                     } else {
-                        $sizes = $group->getModelSpecificSizes()->getValues();
+                        $sizes = $group->getActualModelSpecificSizes()->getValues();
                         $companion = $sizes[array_rand($sizes)];
                     }
                     $sizePrice = $priceCalculator->getProductModelSpecificSizeUpSellWithCompanionDiscountedPrice($currentSize,

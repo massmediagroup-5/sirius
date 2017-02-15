@@ -20,7 +20,7 @@ class ShareSizesGroupRepository extends \Doctrine\ORM\EntityRepository
         return $this->createQueryBuilder('sizesGroup')
             ->addSelect('sizes')
             ->join('sizesGroup.share', 'share')
-            ->join('sizesGroup.modelSpecificSizes', 'sizes')
+            ->join('sizesGroup.actualModelSpecificSizes', 'sizes')
             ->where('share.id = :share')
             ->addCriteria($this->_em->getRepository('AppBundle:ProductModelSpecificSize')->getActiveCriteria())
             ->setParameter('share', $share)

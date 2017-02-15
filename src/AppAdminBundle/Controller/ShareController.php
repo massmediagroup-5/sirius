@@ -65,7 +65,7 @@ class ShareController extends BaseController
             $group->setName($request->get('name'));
         }
 
-        if ($request->get('discount')) {
+        if ($request->get('discount') !== null) {
             $group->setDiscount($request->get('discount'));
         }
 
