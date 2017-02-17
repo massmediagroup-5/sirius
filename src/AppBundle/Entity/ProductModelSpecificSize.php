@@ -270,6 +270,7 @@ class ProductModelSpecificSize
     {
         $this->orderedSizes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->history = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->shareGroups = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

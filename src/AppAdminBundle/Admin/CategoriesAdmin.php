@@ -139,6 +139,10 @@ class CategoriesAdmin extends Admin
                             'expanded' => true,
                             'multiple' => true,
                             'by_reference' => false,
+                            'query_builder' => function ($er) {
+                                return $er->createQueryBuilder('characteristic')
+                                    ->orderBy('characteristic.name', 'ASC');
+                            },
                         ]
                     )
                 ->end()
@@ -162,7 +166,9 @@ class CategoriesAdmin extends Admin
                                     $qb->select('characteristicValues')
                                         ->innerJoin('characteristicValues.characteristics', 'characteristics')->addSelect('characteristics')
                                         ->innerJoin('characteristics.categories', 'categories')->addSelect('categories')
-                                        ->where('categories.id = :id')->setParameter('id', $id)
+                                        ->where('categories.id = :id')
+                                        ->orderBy('characteristicValues.name', 'ASC')
+                                        ->setParameter('id', $id)
                                     ;
                                     return $qb;
                                 }

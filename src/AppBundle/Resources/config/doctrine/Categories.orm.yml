@@ -136,7 +136,7 @@ AppBundle\Entity\Categories:
                     -
                         name: characteristic_values_id
                         referencedColumnName: id
-            orderBy: null
+            orderBy: {name: ASC}
         characteristics:
             targetEntity: Characteristics
             cascade: {  }
@@ -153,7 +153,7 @@ AppBundle\Entity\Categories:
                     -
                         name: characteristics_id
                         referencedColumnName: id
-            orderBy: null
+            orderBy: {name: ASC}
     lifecycleCallbacks:
         prePersist: [ setAllFilters ]
         preUpdate:  [ setAllFilters ]

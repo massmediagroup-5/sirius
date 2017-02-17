@@ -59,6 +59,7 @@ AppBundle\Entity\Characteristics:
             mappedBy: characteristics
             inversedBy: null
             orphanRemoval: true
+            orderBy: {name: ASC}
     manyToOne:
         characteristicGroups:
             targetEntity: CharacteristicGroups
