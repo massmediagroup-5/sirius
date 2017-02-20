@@ -318,15 +318,28 @@ class Share
      */
     public function updateSharesActuality(\AppBundle\Entity\Share $share)
     {
-        $discounts = $share->getActualGroupsDiscounts();
+        $sizesRepo = $this->em->getRepository('AppBundle:ProductModelSpecificSize');
 
+        // When mail group has products
+        if ($share->hasGlobalGroupDiscount()) {
+            $mainShareHasProductsFlag = true;
+            foreach ($share->getGroupsDiscounts() as $group) {
+                if (!$sizesRepo->isHasShareGroupHasAvailableSizes($group)) {
+                    $mainShareHasProductsFlag = false;
+                }
+            }
+
+            if ($mainShareHasProductsFlag) {
+                return;
+            }
+        }
+
+        $discounts = $share->getActualGroupsDiscounts();
         /** @var ShareSizesGroupDiscount $discount */
         foreach ($discounts as $discount) {
-            $availability = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
-                ->isHasShareGroupHasAvailableSizes($discount->getShareGroup());
+            $availability = $sizesRepo->isHasShareGroupHasAvailableSizes($discount->getShareGroup());
             if ($availability) {
-                $companionAvailability = $this->em->getRepository('AppBundle:ProductModelSpecificSize')
-                    ->isHasShareGroupHasAvailableSizes($discount->getCompanion());
+                $companionAvailability = $sizesRepo->isHasShareGroupHasAvailableSizes($discount->getCompanion());
                 if ($companionAvailability) {
                     // At least one discount has sizes
                     return;
