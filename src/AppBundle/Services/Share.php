@@ -323,7 +323,7 @@ class Share
         // When mail group has products
         if ($share->hasGlobalGroupDiscount()) {
             $mainShareHasProductsFlag = true;
-            foreach ($share->getGroupsDiscounts() as $group) {
+            foreach ($share->getSizesGroups() as $group) {
                 if (!$sizesRepo->isHasShareGroupHasAvailableSizes($group)) {
                     $mainShareHasProductsFlag = false;
                 }
