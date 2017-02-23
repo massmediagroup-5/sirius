@@ -30,7 +30,8 @@
                         </tr>
                         <tr>
                             <td colspan="8" class="text-right">Цена со скидкой</td>
-                            <th colspan="2" id="discountedTotalPrice">{{ admin.subject.order.discountedTotalPrice }}</th>
+                            <th colspan="2" id="discountedTotalPrice">
+                                {{ admin.subject.order.individualDiscountedTotalPrice }}</th>
                         </tr>
                         <tr>
                             <td colspan="8" class="text-right">Оплачено бонусами</td>
@@ -52,7 +53,9 @@
                         </tr>
                         <tr>
                             <td colspan="8" class="text-right">К возврату</td>
-                            <th colspan="2" id="individualReturnedTotalPrice">0</th>
+                            <th colspan="2" id="individualReturnedTotalPrice"
+                                data-additional-discounts="{{ admin.subject.order.additionalDiscounts }}">0
+                            </th>
                         </tr>
                     </tfoot>
                 </table>

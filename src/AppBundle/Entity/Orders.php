@@ -778,8 +778,18 @@ class Orders
      */
     public function getIndividualDiscountedTotalPrice()
     {
-        return $this->getDiscountedTotalPrice() - $this->individualDiscount + $this->additionalSolar
-            - $this->getBonuses() - $this->loyalityDiscount - $this->upSellDiscount;
+        return $this->getDiscountedTotalPrice() - $this->getAdditionalDiscounts();
+    }
+
+    /**
+     * Get additional discounts. E. g. discounts not related to specific size.
+     *
+     * @return int
+     */
+    public function getAdditionalDiscounts()
+    {
+        return $this->individualDiscount - $this->additionalSolar + $this->getBonuses() + $this->loyalityDiscount
+            + $this->upSellDiscount;
     }
 
     public function getStringForFilter()
