@@ -234,6 +234,7 @@ class OrdersAdmin extends Admin
                     '' => 'Не выбрано',
                     (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                     (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
+                    (string)Orders::PAY_TYPE_EMPTY => 'Не оплачено',
                 ]
             ])
 //            ->add('users.roles', null, ['label' => 'Тип пользователя'])
