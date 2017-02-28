@@ -370,7 +370,9 @@ class CartController extends BaseController
         return [
             'totalCount' => $this->get('cart')->getTotalCount(),
             'totalPrice' => $this->get('cart')->getTotalPrice(),
+            'discountedIntermediatePrice' => $this->get('cart')->getDiscountedIntermediatePrice(),
             'totalDiscount' => $this->get('cart')->getDiscount(),
+            'intermediateDiscount' => $this->get('cart')->getIntermediateDiscount(),
             'discountedTotalPrice' => $this->get('cart')->getDiscountedTotalPrice(),
             'singleItemsCount' => $this->get('cart')->getSingleItemsCount(),
             'packagesCount' => $this->get('cart')->getPackagesCount(),

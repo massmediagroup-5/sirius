@@ -456,12 +456,16 @@ class Cart
      */
     public function hasShareDiscount()
     {
-        foreach ($this->getSizesEntities() as $size) {
-            if ($this->pricesCalculator->getProductModelSpecificSizeShareDiscount($size)) {
-                return true;
+        if ($this->pricesCalculator->canHaveShareDiscount()) {
+            foreach ($this->getSizesEntities() as $size) {
+                if ($this->pricesCalculator->getProductModelSpecificSizeShareDiscount($size)) {
+                    return true;
+                }
             }
+
+            return $this->pricesCalculator->getUpSellShareDiscount($this) > 0;
         }
-        return $this->pricesCalculator->getUpSellShareDiscount($this) > 0;
+        return false;
     }
 
     /**
@@ -480,6 +484,14 @@ class Cart
     public function getDiscount()
     {
         return $this->getDiscountedTotalPrice() - $this->getTotalPrice();
+    }
+
+    /**
+     * @return float
+     */
+    public function getIntermediateDiscount()
+    {
+        return $this->getDiscountedTotalPrice() - $this->getDiscountedIntermediatePrice();
     }
 
     /**

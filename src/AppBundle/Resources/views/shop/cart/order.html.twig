@@ -52,7 +52,7 @@
                                         <table>
                                             <tr>
                                                 <td>Итого</td>
-                                                <td>{{ cart.standardPrice }}</td>
+                                                <td>{{ cart.standardDiscountedPrice }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -75,7 +75,7 @@
                                         <table>
                                             <tr>
                                                 <td>Итого</td>
-                                                <td>{{ cart.preOrderPrice }}</td>
+                                                <td>{{ cart.preOrderDiscountedPrice }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -108,7 +108,7 @@
                                     <table>
                                         <tr>
                                             <td>Итого</td>
-                                            <td>{{ cart.totalPrice }} грн.</td>
+                                            <td>{{ cart.discountedIntermediatePrice }} грн.</td>
                                         </tr>
                                         <tr class="discount">
                                             {% if cart.hasShareDiscount() %}

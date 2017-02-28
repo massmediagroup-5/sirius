@@ -232,6 +232,14 @@ class PricesCalculator
     }
 
     /**
+     * @return mixed
+     */
+    public function canHaveShareDiscount()
+    {
+        return !$this->hasRole('ROLE_WHOLESALER');
+    }
+
+    /**
      * @param ProductModels $object
      * @return float
      */
@@ -571,6 +579,7 @@ class PricesCalculator
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $loyaltyProgram = $this->getLoyaltyProgramBySum($user->getTotalSpent());
+        dump($loyaltyProgram);
 
         return $loyaltyProgram ? $loyaltyProgram->getDiscount() : 0;
     }
