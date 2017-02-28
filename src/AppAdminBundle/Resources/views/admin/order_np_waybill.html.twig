@@ -116,11 +116,11 @@
                             <td class="form-inline">
                                 <div class="form-group">
                                     <input type="text" name="np_surname" id="np_surname" class="form-control"
-                                           value="{{ object.users ? object.users.surname : ''}}"/>
+                                           value="{{ object.users ? object.users.surname : object.surname}}"/>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="np_name" id="np_name" class="form-control"
-                                           value="{{ object.users ? object.users.name : ''}}"/>
+                                           value="{{ object.users ? object.users.name : object.name}}"/>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="np_middlename" id="np_middlename" class="form-control"

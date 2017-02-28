@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Helper\Arr;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -347,6 +348,26 @@ class Orders
     public function getFio()
     {
         return $this->fio;
+    }
+
+    /**
+     * Get fio
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return explode(' ', $this->fio)[0];
+    }
+
+    /**
+     * Get fio
+     *
+     * @return string
+     */
+    public function getSurname()
+    {
+        return last(explode(' ', $this->fio));
     }
 
     /**
