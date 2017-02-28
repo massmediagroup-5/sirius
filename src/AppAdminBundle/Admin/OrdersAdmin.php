@@ -692,6 +692,19 @@ class OrdersAdmin extends Admin
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function toString($object)
+    {
+        $type = [
+            Orders::TYPE_NORMAL => 'обычный',
+            Orders::TYPE_QUICK => 'быстрый',
+        ][$object->getType()];
+
+        return "{$object->getId()} ($type)";
+    }
+
+    /**
      * @param $historyItem
      */
     protected function getSizeFromHistory($historyItem)
