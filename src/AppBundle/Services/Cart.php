@@ -373,7 +373,7 @@ class Cart
     {
         $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'discountedPrice');
 
-        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+        return $this->pricesCalculator->getLoyaltyDiscount($sum, $this);
     }
 
     /**
@@ -383,7 +383,7 @@ class Cart
     {
         $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'preOrderDiscountedPrice');
 
-        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+        return $this->pricesCalculator->getLoyaltyDiscount($sum, $this);
     }
 
     /**
@@ -393,7 +393,7 @@ class Cart
     {
         $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'standardDiscountedPrice');
 
-        return $this->pricesCalculator->getLoyaltyDiscountForCartForSum($this, $sum);
+        return $this->pricesCalculator->getLoyaltyDiscount($sum, $this);
     }
 
     /**
@@ -491,7 +491,7 @@ class Cart
      */
     public function getIntermediateDiscount()
     {
-        return $this->getDiscountedTotalPrice() - $this->getDiscountedIntermediatePrice();
+        return $this->getDiscountedIntermediatePrice() - $this->getDiscountedTotalPrice();
     }
 
     /**

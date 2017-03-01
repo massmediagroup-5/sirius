@@ -469,31 +469,39 @@ class PricesCalculator
      * Subtract loyalty discount from sum when customer is not a wholesaler
      *
      * @param $sum
+     * @param Cart $cart
      * @return number
      */
-    public function getLoyaltyDiscount($sum)
+    public function getLoyaltyDiscount($sum, Cart $cart)
     {
         if ($this->hasRole('ROLE_WHOLESALER')) {
             if (!$this->hasRole('ROLE_GRAY_LIST')) {
                 $user = $this->container->get('security.context')->getToken()->getUser();
 
-                if ($this->isWholesalerMakeOrder()) {
+                if ($this->canWholesalerHaveLoyalty()) {
                     // Use user discount
                     if ($user->getDiscount()) {
                         return $sum * $user->getDiscount() * 0.01;
                     } else {
                         // Use loyalty discount
-                        if ($loyaltyProgram = $this->getLoyaltyProgramBySum($user->getTotalSpent())) {
-                            return ceil($loyaltyProgram->getDiscount() * $sum * 0.01);
-                        }
-                        return 0;
+                        return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
                     }
                 }
             }
             return 0;
         }
 
-        return $this->getLoyaltyProgramDiscountBySum($sum);
+        return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
+    }
+
+    /**
+     * @return bool
+     */
+    public function canWholesalerHaveLoyalty()
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        return $user->getOrders()->count();
     }
 
     /**
@@ -501,14 +509,11 @@ class PricesCalculator
      */
     public function isWholesalerMakeOrder()
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
         $optionsService = $this->container->get('options');
 
         $cart = $this->container->get('cart');
 
-        return $user->getOrders()->count()
-        || $cart->getDiscountedIntermediatePrice() > $optionsService->getParamValue('startWholesalerDiscount', 500);
+        return $cart->getDiscountedIntermediatePrice() > $optionsService->getParamValue('startWholesalerDiscount', 500);
     }
 
     /**
@@ -579,7 +584,6 @@ class PricesCalculator
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $loyaltyProgram = $this->getLoyaltyProgramBySum($user->getTotalSpent());
-        dump($loyaltyProgram);
 
         return $loyaltyProgram ? $loyaltyProgram->getDiscount() : 0;
     }

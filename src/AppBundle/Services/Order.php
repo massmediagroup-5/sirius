@@ -862,18 +862,16 @@ class Order
             $relatedCart = $this->createArrayCartFromOrder($order->getRelatedOrder(), false);
 
             // Recalculate discount for related order
-            $loyaltyDiscount = $priceCalculator->getLoyaltyDiscountForCartForSum($wholeCart,
-                $relatedCart->getTotalPriceForLoyalty());
+            $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($relatedCart->getTotalPriceForLoyalty(),
+                $wholeCart);
             $order->getRelatedOrder()->setLoyalityDiscount($loyaltyDiscount);
 
             $this->recomputeChanges($order->getRelatedOrder());
         }
 
         // Recalculate discount for order
-        $loyaltyDiscount = $priceCalculator->getLoyaltyDiscountForCartForSum($wholeCart,
-            $cart->getTotalPriceForLoyalty());
+        $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getTotalPriceForLoyalty(), $wholeCart);
         $order->setLoyalityDiscount($loyaltyDiscount);
-
         $this->recomputeChanges($order);
     }
 
