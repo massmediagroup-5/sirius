@@ -30,7 +30,7 @@
         </td>
         <td class="control-group">{{ size.size.quantity }}</td>
         <td class="editable-cell">
-            {% if size.size.preOrderFlag and admin.canChangeSizes %}
+            {% if admin.canChangeSizes %}
                 <input type="number" name="move_size" min="1" max="{{ size.quantity }}"
                        value="{{ size.quantity }}"/>
                 <i class="fa fa-check-square js_submit_move_size"></i>

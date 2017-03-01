@@ -3,7 +3,6 @@
 namespace AppAdminBundle\Controller;
 
 use AppAdminBundle\DTO\OrderWaybillForm;
-use AppBundle\Exception\ImpossibleMoveToPreOrder;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -128,11 +127,7 @@ class OrderController extends BaseController
     {
         $object = $this->admin->getSubject();
 
-        try {
-            $object = $this->get('order')->changePreOrderFlag($object);
-        } catch (ImpossibleMoveToPreOrder $e) {
-            $this->addFlash('sonata_flash_error', 'flash_impossible_to_change_pre_order_flag');
-        }
+        $object = $this->get('order')->changePreOrderFlag($object);
 
         return $this->redirectTo($object);
     }

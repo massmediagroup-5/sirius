@@ -15,7 +15,6 @@ use AppBundle\Event\CancelOrderEvent;
 use AppBundle\Event\OrderEvent;
 use AppBundle\Exception\CartEmptyException;
 use AppBundle\Exception\BuyerAccessDeniedException;
-use AppBundle\Exception\ImpossibleMoveToPreOrder;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use AppBundle\HistoryItem\HistoryCreatedItem;
 use AppBundle\HistoryItem\OrderHistoryChangedItem;
@@ -201,19 +200,9 @@ class Order
     /**
      * @param Orders $order
      * @return Orders
-     * @throws ImpossibleMoveToPreOrder
      */
     public function changePreOrderFlag(Orders $order)
     {
-        // When is not pre order and order contain not pre-ordered sizes - forbid to change flag
-        if (!$order->getPreOrderFlag()) {
-            foreach ($order->getSizes() as $size) {
-                if (!$size->getSize()->getPreOrderFlag()) {
-                    throw new ImpossibleMoveToPreOrder;
-                }
-            }
-        }
-
         if ($relatedOrder = $order->getRelatedOrder()) {
             $this->mergeSizesToOrder($relatedOrder, $order->getSizes());
             $relatedOrder->setRelatedOrder(null);
