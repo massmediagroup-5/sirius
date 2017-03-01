@@ -56,8 +56,8 @@ class ShareAdmin extends Admin
                 $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/toggle_group_model/{model_id}', [], [], [
                     'expose' => true
                 ])
-            ->add('toggle_group_size',
-                $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/toggle_group_size/{size_id}', [], [], [
+            ->add('sync_group_sizes',
+                $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/sync_group_sizes', [], [], [
                     'expose' => true
                 ])
             ->add('toggle_group_except_model',

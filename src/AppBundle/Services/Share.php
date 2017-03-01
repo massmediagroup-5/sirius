@@ -87,6 +87,25 @@ class Share
 
     /**
      * @param ShareSizesGroup $group
+     * @param array $sizesToAdd
+     * @param array $sizesToRemove
+     */
+    public function syncGroupSizes(ShareSizesGroup $group, array $sizesToAdd, array $sizesToRemove)
+    {
+        foreach ($sizesToAdd as $size) {
+            $size->addShareGroup($group);
+            $this->em->persist($size);
+        }
+        foreach ($sizesToRemove as $size) {
+            $size->removeShareGroup($group);
+            $this->em->persist($size);
+        }
+
+        $this->em->flush();
+    }
+
+    /**
+     * @param ShareSizesGroup $group
      */
     public function updateShareGroupSizes(ShareSizesGroup $group)
     {

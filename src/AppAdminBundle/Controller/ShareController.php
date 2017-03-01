@@ -174,14 +174,22 @@ class ShareController extends BaseController
 
     /**
      * @param ShareSizesGroup $group
-     * @param ProductModelSpecificSize $specificSize
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      * @ParamConverter("group", options={"id" = "sizes_group_id"})
      * @ParamConverter("specificSize", options={"id" = "size_id"})
      */
-    public function toggleGroupSizeAction(ShareSizesGroup $group, ProductModelSpecificSize $specificSize)
+    public function syncGroupSizesAction(ShareSizesGroup $group, Request $request)
     {
-        $this->get('share')->toggleGroupSize($group, $specificSize);
+        $selectedSizes = $this->getDoctrine()
+            ->getRepository('AppBundle:ProductModelSpecificSize')
+            ->findById($request->get('selected'));
+
+        $unselectedSizes = $this->getDoctrine()
+            ->getRepository('AppBundle:ProductModelSpecificSize')
+            ->findById($request->get('unselected'));
+
+        $this->get('share')->syncGroupSizes($group, $selectedSizes, $unselectedSizes);
 
         return $this->renderJson([]);
     }

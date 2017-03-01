@@ -84,6 +84,10 @@ var LoadableContent = (function () {
     return LoadableContent;
 })();
 
+/**
+ * Work with models and sizes
+ * Implement this.$holder and this.sizes in class to use this mixin
+ */
 var modelsListMixin = {
     modelRowClick: function (e) {
         var $this = $(e.target).closest('.js_model_row'),
@@ -95,6 +99,24 @@ var modelsListMixin = {
             $this.addClass('active');
             $sizes.show();
         }
+    },
+    initSaveSelection: function () {
+        this.$holder.find('.js-save-sizes-selecting').on('click', this.saveSelectionClickHandler.bind(this));
+    },
+    saveSelectionClickHandler: function () {
+        var selectedSizesIds = [], unselectedSizesIds = [];
+        this.sizes.forEach(function (size) {
+            if (size.isChecked()) {
+                selectedSizesIds.push(size.getSizeId());
+            } else {
+                unselectedSizesIds.push(size.getSizeId());
+            }
+        }.bind(this));
+        this.request('sync_group_sizes', {}, {
+            sizes_group_id: this.sizesGroupId,
+            selected: selectedSizesIds,
+            unselected: unselectedSizesIds
+        });
     }
 };
 
@@ -142,9 +164,14 @@ var DialogFiltersSelect = (function (superClass) {
         this.$holder.find('.js_model_row').each(function () {
             new DialogSelectableModelItem($(this), self.sizesGroupId);
         });
+
+        this.sizes = [];
         this.$holder.find('.js_size_row').each(function () {
-            new DialogSelectableSizeItem($(this), self.sizesGroupId);
+            self.sizes.push(new DialogSelectableSizeItem($(this), self.sizesGroupId));
         });
+
+        this.initSaveSelection();
+
         this.hideLoading();
     };
 
@@ -171,6 +198,7 @@ var DialogSizesSelect = (function (superClass) {
 
     function DialogSizesSelect($holder) {
         var self = this;
+        this.sizes = [];
         DialogSizesSelect.__super__.constructor.call(this, $holder);
         // Reload content when tab activated
         $('a[href="#' + this.$holder.attr('id') + '"]').on('show.bs.tab', function () {
@@ -202,9 +230,14 @@ var DialogSizesSelect = (function (superClass) {
         this.$holder.find('.js_model_row').each(function () {
             new DialogSelectableModelItem($(this), self.sizesGroupId);
         });
+
+        this.sizes = [];
         this.$holder.find('.js_size_row').each(function () {
-            new DialogSelectableSizeItem($(this), self.sizesGroupId);
+            self.sizes.push(new DialogSelectableSizeItem($(this), self.sizesGroupId));
         });
+
+        this.initSaveSelection();
+
         this.hideLoading();
     };
 
@@ -236,7 +269,6 @@ var DialogSelectableModelItem = (function () {
 
     DialogSelectableModelItem.prototype.modelCheckToggle = function (e) {
         e.stopPropagation();
-        this.request('toggle_group_model', {}, {sizes_group_id: this.sizesGroupId, model_id: this.modelId});
         $(document).trigger('shares.model_toggle_' + this.$content.data('model-id'), [e.currentTarget.checked])
     };
 
@@ -247,32 +279,26 @@ var DialogSelectableModelItem = (function () {
 
 var DialogSelectableSizeItem = (function () {
     function DialogSelectableSizeItem($content, sizesGroupId) {
-        this.preventRequest = false;
         this.$content = $content;
         this.sizesGroupId = sizesGroupId;
-        this.sizeId = this.$content.data('size-id');
-        this.$content.find('.js_check_size').on('ifChanged', this.sizeCheckToggle.bind(this));
         $(document).on('shares.model_toggle_' + this.$content.data('model-id'), this.sizeCheckToggleToListener.bind(this))
     }
 
-    DialogSelectableSizeItem.prototype.sizeCheckToggle = function (e) {
-        if(this.preventRequest) {
-            this.preventRequest = false;
-        } else {
-            this.request('toggle_group_size', {}, {sizes_group_id: this.sizesGroupId, size_id: this.sizeId});
-        }
+    DialogSelectableSizeItem.prototype.isChecked = function () {
+        return this.$content.find('.js_check_size').prop('checked');
+    };
+
+    DialogSelectableSizeItem.prototype.getSizeId = function () {
+        return this.$content.data('size-id');
     };
 
     DialogSelectableSizeItem.prototype.sizeCheckToggleToListener = function (e, flag) {
-        this.preventRequest = true;
         if(flag) {
             this.$content.find('.js_check_size').iCheck('check');
         } else {
             this.$content.find('.js_check_size').iCheck('uncheck');
         }
     };
-
-    mix(DialogSelectableSizeItem, requestMixin);
 
     return DialogSelectableSizeItem;
 })();
