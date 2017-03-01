@@ -17,11 +17,11 @@
             {% if admin.baseRouteName == 'new_orders' %}
                 <input type="number" value="{{ size.quantity }}" name="size_quantity"
                        data-old-quantity="{{ size.quantity }}"/>
-                <i class="fa fa-check-square js_change_size_quantity pointer"></i>
+                <button class="btn btn-xs btn-success js_change_size_quantity">Сохранить</button>
             {% else %}
                 {{ size.quantity }}
             {% endif %}
-
+            <br>
             {% if admin.baseRouteName == 'new_orders' or admin.baseRouteName == 'canceled_orders' %}
                 (не перечислено)
             {% else %}
