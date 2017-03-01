@@ -65,7 +65,8 @@ class ShareAdmin extends Admin
                 [], [], ['expose' => true])
             ->add('toggle_group_except_size',
                 $this->getRouterIdParameter() . '/sizes_group/{sizes_group_id}/toggle_group_except_size/{size_id}', [],
-                [], ['expose' => true]);
+                [], ['expose' => true])
+            ->add('share_products', $this->getRouterIdParameter() . '/share_products', [], [], ['expose' => true]);
     }
 
     /**

@@ -1,0 +1,17 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Фото</th>
+        <th>Артикул</th>
+        <th>Название</th>
+        <th>Цена</th>
+        <th>Наличие</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for model in models %}
+        {% include 'AppAdminBundle:admin/shares/product_item.html.twig' %}
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,25 @@
+<tr class="js_model_row model-row" data-model-id="{{ model.id }}">
+    <td><i></i>{{ model.id }}</td>
+    <td><img src="{{ (model.images.0 is defined ? model.images.0.link : param('no_image'))|imagine_filter('mini') }}" alt=""></td>
+    <td>{{ model.products.article }}</td>
+    <td>{{ model.products.name }} ({{ model.productColors.name }})</td>
+    <td>
+        От {{ prices.getProductModelMinDiscountedPrice(model)|format_price }}
+        до {{ prices.getProductModelMaxDiscountedPrice(model)|format_price }}
+    </td>
+    <td>
+        {% if model.allSizesQuantity %}<span class="label label-success">Да</span>
+        {% else %}<span class="label label-danger">Нет</span>
+        {% endif %}
+    </td>
+</tr>
+{% for size in model.sizes %}
+    <tr class="js_size_row size-row" data-size-id="{{ size.id }}" data-model-id="{{ model.id }}">
+        <td></td>
+        <td></td>
+        <td>{{ model.products.article }}</td>
+        <td>{{ size.size }}</td>
+        <td>{{ prices.getPrice(size)|format_price }}</td>
+        <td></td>
+    </tr>
+{% endfor %}

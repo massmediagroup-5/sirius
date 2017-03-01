@@ -29,62 +29,6 @@ var OrderSizesDialog = (function () {
 })();
 
 /**
- * Abstract class LoadableContent
- */
-var LoadableContent = (function () {
-    function LoadableContent($holder) {
-        this.$holder = $holder;
-        this.lastParams = {};
-        this.initLoading();
-    }
-
-    LoadableContent.prototype.loadContent = function (data) {
-        this.showLoading();
-        if (!data) {
-            data = {};
-        }
-        $.extend(this.lastParams, data);
-    };
-
-    LoadableContent.prototype.showLoading = function () {
-        this.$loading.css('display', 'table');
-    };
-
-    LoadableContent.prototype.hideLoading = function () {
-        this.$loading.hide()
-    };
-
-    LoadableContent.prototype.initLoading = function () {
-        this.$loading = $('<div class="loading-holder">\
-                <div class="loading-cell">\
-                    <div class="spinner">\
-                        <div class="dot1"></div>\
-                        <div class="dot2"></div>\
-                    </div>\
-                </div>\
-            </div>');
-        this.$holder.append(this.$loading);
-        this.$loading.hide();
-    };
-
-    LoadableContent.prototype.contentLinkClick = function (e) {
-        var $this = $(e.target),
-            params = $this.data('params');
-        e.preventDefault();
-
-        if (!params) {
-            params = $.url($this.attr('href')).param();
-        }
-
-        this.loadContent(params);
-    };
-
-    mix(LoadableContent, requestMixin);
-
-    return LoadableContent;
-})();
-
-/**
  * Work with models and sizes
  * Implement this.$holder and this.sizes in class to use this mixin
  */

@@ -93,6 +93,8 @@ services:
         arguments: [~, AppBundle\Entity\Share, AppAdminBundle:Share]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Магазин", label: "Акции"}
+        calls:
+            - [ setTemplate, [show, AppAdminBundle:admin:share_show.html.twig]]
 
     app.admin.categories:
         class: AppAdminBundle\Admin\CategoriesAdmin

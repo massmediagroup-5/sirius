@@ -257,7 +257,7 @@ div[class="form-group"][id$="_images"] {
     z-index: 1030;
 }
 
-.ui-dialog-content {
+.ui-dialog-content, .share-products {
     .spinner {
         margin: 0 auto 0 auto;
     }
@@ -281,9 +281,8 @@ div[class="form-group"][id$="_images"] {
     }
 }
 
-.order-size-popup {
+.order-size-popup, .share-products {
     font-size: 14px;
-    display: none;
     .table {
         td {
             vertical-align: middle;
@@ -329,6 +328,9 @@ div[class="form-group"][id$="_images"] {
     .list-group-item {
         padding: 5px 10px;
     }
+}
+.order-size-popup {
+    display: none;
 }
 
 .ui-dialog.ui-dialog-material {
@@ -451,4 +453,8 @@ input#image_upload_file {
 }
 .pointer {
     cursor: pointer;
+}
+
+.share-products {
+    position: relative;
 }

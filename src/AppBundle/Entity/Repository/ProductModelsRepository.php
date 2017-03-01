@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity\Repository;
 
+use AppBundle\Entity\Share;
 use AppBundle\Entity\ShareSizesGroup;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
@@ -333,6 +334,23 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->getRepository('AppBundle:Share')->addHasGroupCondition($builder, $group, true);
 
         return $builder->getQuery();
+    }
+
+    /**
+     * @param Share $share
+     *
+     * @return array
+     */
+    public function findAllForShare(Share $share)
+    {
+        return $this->createQueryBuilder('model')
+            ->innerJoin('model.sizes', 'sizes')->addselect('sizes')
+            ->innerJoin('sizes.shareGroups', 'shareGroups')
+            ->innerJoin('shareGroups.share', 'shares')
+            ->where('shares.id = :share')
+            ->setParameter('share', $share)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

@@ -5,7 +5,7 @@ namespace AppAdminBundle\Controller;
 
 use AppAdminBundle\Form\Type\SonataShareFiltersType;
 use AppBundle\Entity\ProductModels;
-use AppBundle\Entity\ProductModelSpecificSize;
+use AppBundle\Entity\Share;
 use AppBundle\Entity\ShareSizesGroup;
 use Sonata\AdminBundle\Controller\CRUDController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -192,6 +192,21 @@ class ShareController extends BaseController
         $this->get('share')->syncGroupSizes($group, $selectedSizes, $unselectedSizes);
 
         return $this->renderJson([]);
+    }
+
+    /**
+     * @param Share $share
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function shareProductsAction(Share $share)
+    {
+        $models = $this->getDoctrine()->getRepository('AppBundle:ProductModels')->findAllForShare($share);
+
+        return $this->renderJson([
+            'content' => $this->render('AppAdminBundle:admin/shares/products.html.twig', compact('models'))
+                ->getContent(),
+        ]);
     }
 
     /**
