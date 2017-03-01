@@ -53,8 +53,9 @@ class InvoiceTransformer
         $phpExcelObject->getProperties()->setCreator("mmg")
             ->setTitle("Office 2005 XLSX Test Document");
 
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->setCellValue('B13', 'Товарный чек № ' . $orderObject->getId())
+        $sheet = $phpExcelObject->setActiveSheetIndex(0);
+
+        $sheet->setCellValue('B13', 'Товарный чек № ' . $orderObject->getId())
             ->setCellValue('C7', 'Поставщик')
             ->setCellValue('D7', $this->getProviderName())
             ->setCellValue('C9', 'Получатель')
@@ -71,9 +72,15 @@ class InvoiceTransformer
             ->setCellValue('G16', 'ед.Измерения')
             ->setCellValue('H16', 'Кол-во')
             ->setCellValue('I16', 'Цена')
-            ->setCellValue('J16', 'Скидка')
-            ->setCellValue('K16', 'Цена со скидкой')
-            ->setCellValue('L16', 'Сумма')
+            ->setCellValue('J16', 'Скидка');
+
+        if ($orderObject->isWholesale()) {
+            $sheet->setCellValue('K16', 'Оптовая цена');
+        } else {
+            $phpExcelObject->setCellValue('K16', 'Цена со скидкой');
+        }
+
+        $sheet->setCellValue('L16', 'Сумма')
             ->setCellValue('L' . ($sizesCount + 17), $orderObject->getDiscountedTotalPrice())
             ->setCellValue('I' . ($sizesCount + 18), 'Скидка')
             ->setCellValue('K' . ($sizesCount + 18),
@@ -88,7 +95,7 @@ class InvoiceTransformer
             ->setCellValue('C' . ($sizesCount + 25), 'Отгрузил')
             ->setCellValue('E' . ($sizesCount + 25), 'Подпись');
 
-        if ($orderObject->getUsers() && $orderObject->getUsers()->hasRole('ROLE_WHOLESALER')) {
+        if ($orderObject->isWholesale()) {
             $this->outputWholesalerSizes($phpExcelObject, $orderObject);
         } else {
             $this->outputSizes($phpExcelObject, $orderObject);
@@ -325,7 +332,7 @@ class InvoiceTransformer
                     ->setCellValue("F$i", $model->getProductColors()->getName())
                     ->setCellValue("G$i", 'пач.')
                     ->setCellValue("H$i", $packagesCount)
-                    ->setCellValue("I$i", $cart->getModelPackagePricePerItem($model))
+                    ->setCellValue("I$i", '')
                     ->setCellValue("J$i", '')
                     ->setCellValue("K$i", $cart->getModelDiscountedPackagePricePerItem($model))
                     ->setCellValue("L$i", $cart->getModelDiscountedPackagesPrice($model));
@@ -340,7 +347,7 @@ class InvoiceTransformer
                     ->setCellValue("F$i", $model->getProductColors()->getName())
                     ->setCellValue("G$i", 'шт.')
                     ->setCellValue("H$i", $size['quantity'])
-                    ->setCellValue("I$i", $size['entity']->getTotalPricePerItem())
+                    ->setCellValue("I$i", '')
                     ->setCellValue("J$i", '')
                     ->setCellValue("K$i", $size['entity']->getDiscountedTotalPricePerItem())
                     ->setCellValue("L$i", $size['entity']->getDiscountedTotalPricePerItem() * $size['quantity']);

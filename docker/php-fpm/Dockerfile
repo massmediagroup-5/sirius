@@ -13,7 +13,7 @@ RUN tar -C /usr/local --strip-components 1 -xJf node-v6.9.4-linux-x64.tar.xz
 RUN npm install -g gulp
 
 RUN apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libssl-dev libreadline-dev libgdbm-dev && \
-docker-php-ext-install exif mbstring && \
+docker-php-ext-install exif mbstring zip && \
 docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/  &&  \
 docker-php-ext-install gd
 

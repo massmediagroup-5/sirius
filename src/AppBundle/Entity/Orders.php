@@ -1256,4 +1256,12 @@ class Orders
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isWholesale()
+    {
+        return $this->getUsers() && $this->getUsers()->hasRole('ROLE_WHOLESALER');
+    }
 }
