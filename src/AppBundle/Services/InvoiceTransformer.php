@@ -77,7 +77,7 @@ class InvoiceTransformer
         if ($orderObject->isWholesale()) {
             $sheet->setCellValue('K16', 'Оптовая цена');
         } else {
-            $phpExcelObject->setCellValue('K16', 'Цена со скидкой');
+            $sheet->setCellValue('K16', 'Цена со скидкой');
         }
 
         $sheet->setCellValue('L16', 'Сумма')
