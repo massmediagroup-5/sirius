@@ -136,17 +136,6 @@
                                             <p>E-mail:</p>
                                             <p><strong>{{ order.users.email }}</strong></p>
                                         </div>
-
-                                        <div class="item">
-                                            <p>История:</p>
-                                            <div class="item-history">
-                                                <ul>
-                                                    {% for historyItem in order.history %}
-                                                        {{ widget('orders.historyItem', historyItem)|raw }}
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
