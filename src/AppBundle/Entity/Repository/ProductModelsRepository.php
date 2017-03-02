@@ -209,8 +209,11 @@ class ProductModelsRepository extends \Doctrine\ORM\EntityRepository
         $builder = $this->createQueryBuilder($modelsAlias)
             ->join("$modelsAlias.sizes", $sizesAlias);
 
+        $sizesParams = isset($params['sizes']) ? array_merge($params, $params['sizes']) : $params;
+
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
-            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, $sizesAlias, $params);
+            ->applyAvailableSizesCondition($builder, $category, $characteristicValues, $filters, $sizesAlias,
+                $sizesParams);
 
         return $builder;
     }

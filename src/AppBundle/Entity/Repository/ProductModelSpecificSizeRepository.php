@@ -213,6 +213,31 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param QueryBuilder $builder
+     * @param $filters
+     * @param array $params
+     */
+    public function addFilterCondition(QueryBuilder $builder, $filters = [], $params = [])
+    {
+        $sizesAlias = Arr::get($params, 'sizesAlias', 'sizes');
+        $sizes = Arr::get($filters, 'sizes');
+        $topSizeAlias = Arr::get($params, 'topLevelSizesAlias');
+
+        if ($topSizeAlias && !$sizes) {
+            $builder->andWhere("$sizesAlias.size = $topSizeAlias.id");
+        }
+
+        if ($sizes = Arr::get($filters, 'sizes')) {
+            if ($topSizeAlias) {
+                $builder->andWhere("($sizesAlias.size IN (:sizeIds) OR $sizesAlias.size = $topSizeAlias.id)");
+            } else {
+                $builder->andWhere("$sizesAlias.size IN (:sizeIds)");
+            }
+            $builder->setParameter('sizeIds', $sizes);
+        }
+    }
+
+    /**
      * @param $category
      * @param $characteristicValues
      * @param $filters
@@ -250,10 +275,10 @@ class ProductModelSpecificSizeRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->getRepository('AppBundle:Products')->addFiltersToQuery($builder, $filters, $modelsAlias,
             $productsAlias, $characteristicValuesAlias, $sharesAlias, $sizesAlias);
 
-        $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder, $modelsAlias,
-            $productsAlias);
-        $this->_em->getRepository('AppBundle:ProductModelSpecificSize')->addActiveConditionsToQuery($builder,
-            $sizesAlias);
+        $this->_em->getRepository('AppBundle:Products')->addActiveConditionsToQuery($builder, $modelsAlias, $productsAlias);
+        $this->addActiveConditionsToQuery($builder, $sizesAlias);
+
+        $this->addFilterCondition($builder, $filters, array_merge(['sizesAlias' => $sizesAlias], $params));
 
         $this->_em->getRepository('AppBundle:ProductModelSpecificSize')
             ->addPriceToQuery($builder, $filters, $sizesAlias, $modelsAlias, $productsAlias, $sharesAlias,

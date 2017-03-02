@@ -77,6 +77,10 @@ class Entities
     ) {
         $filters['wholesaler'] = $this->container->get('security.context')->isGranted('ROLE_WHOLESALER');
 
+        if ($sizes = Arr::get($filters, 'sizes')) {
+            $filters['sizes'] = explode(',', $sizes);
+        }
+
         $filtersForFiltersQueries = Arr::only($filters, ['share', 'wholesaler']);
 
         $category = $this->em
@@ -111,6 +115,9 @@ class Entities
         $colors = $this->em->getRepository('AppBundle:ProductColors')
             ->getColorsForFilteredProducts($category, [], $filtersForFiltersQueries);
 
+        $sizes = $this->em->getRepository('AppBundle:ProductModelSizes')
+            ->findForFilter($category, $characteristicsValuesIds, $filters);
+
         $products = $this->container->get('knp_paginator')->paginate(
             $products,
             $currentPage,
@@ -137,7 +144,7 @@ class Entities
 
 
         return compact('category', 'characteristicValues', 'products', 'characteristics', 'price_filter', 'colors',
-            'filters', 'share');
+            'filters', 'share', 'sizes');
     }
 
     /**

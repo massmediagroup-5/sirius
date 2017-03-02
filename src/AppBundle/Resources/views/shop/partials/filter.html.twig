@@ -140,6 +140,34 @@
 
                     <div class="item">
                         <div class="item-name">
+                            <a href="#" {% if filters.selectedSizes(data)|length %} data-active="1" {% endif %}>
+                                Размер <span></span>
+                            </a>
+                        </div>
+                        <div class="item-drop">
+                            <div class="item-drop__i">
+                                <ul class="check-fltr">
+                                    {% for size in data.sizes %}
+                                        <li>
+                                            <label class="filter-check">
+                                                <input type="checkbox" class="checkbox"
+                                                        {% if filters.isSelectedSize(size.0) %} checked {% endif %}
+                                                        {% if size.modelsCount == 0 %} disabled {% endif %}
+                                                        name="sizes"
+                                                       value="{{ size.0.id }}"/>
+                                                <span class="f-check"></span>
+                                                {{ size.0.size }}
+                                                <span>({{ size.modelsCount }})</span>
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="item-name">
                             <a href="#" {% if filters.selectedColors(data)|length %} data-active="1" {% endif %}>ЦВЕТ<span></span></a>
                         </div>
                         <div class="item-drop">

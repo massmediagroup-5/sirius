@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\ProductColors;
+use AppBundle\Entity\ProductModelSizes;
 use Illuminate\Support\Arr;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -66,6 +67,15 @@ class Filters
     }
 
     /**
+     * @param ProductModelSizes $size
+     * @return bool
+     */
+    public function isSelectedSize(ProductModelSizes $size)
+    {
+        return in_array($size->getId(), Arr::get($this->parseFiltersUrl(), 'query.sizes', []));
+    }
+
+    /**
      * @param $filterName
      * @param $value
      * @return bool
@@ -105,6 +115,19 @@ class Filters
             return $this->isSelectedColor($color);
         });
         return $colors;
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function selectedSizes($data)
+    {
+        $data['sizes'];
+        $sizes = array_filter($data['sizes'], function ($sizeArray) {
+            return $this->isSelectedSize($sizeArray[0]);
+        });
+        return $sizes;
     }
 
     /**
