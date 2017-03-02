@@ -692,6 +692,21 @@ class OrdersAdmin extends Admin
     }
 
     /**
+     * @param $name
+     * @param array $parameters
+     * @param bool $absolute
+     *
+     * @return string
+     */
+    public function generateStoreUrl($name, array $parameters = [], $absolute = false)
+    {
+        $arrayRoute = $this->routeGenerator->generateMenuUrl($this, $name, $parameters, $absolute);
+
+        return $this->routeGenerator->generate($arrayRoute['route'], $arrayRoute['routeParameters'],
+            $arrayRoute['routeAbsolute']);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toString($object)

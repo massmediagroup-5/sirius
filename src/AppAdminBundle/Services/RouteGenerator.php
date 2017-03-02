@@ -64,8 +64,6 @@ class RouteGenerator implements RouteGeneratorInterface
      */
     public function generateMenuUrl(AdminInterface $admin, $name, array $parameters = array(), $absolute = false)
     {
-        $admin = $this->getActualAdminClass($admin);
-
         // if the admin is a child we automatically append the parent's id
         if ($admin->isChild() && $admin->hasRequest() && $admin->getRequest()->attributes->has($admin->getParent()->getIdParameter())) {
             // twig template does not accept variable hash key ... so cannot use admin.idparameter ...
@@ -131,8 +129,6 @@ class RouteGenerator implements RouteGeneratorInterface
      */
     private function getCode(AdminInterface $admin, $name)
     {
-        $admin = $this->getActualAdminClass($admin);
-
         $this->loadCache($admin);
 
         if ($admin->isChild()) {
@@ -157,8 +153,6 @@ class RouteGenerator implements RouteGeneratorInterface
      */
     private function loadCache(AdminInterface $admin)
     {
-        $admin = $this->getActualAdminClass($admin);
-
         if ($admin->isChild()) {
             $this->loadCache($admin->getParent());
         } else {
