@@ -110,4 +110,22 @@ class OrdersRepository extends EntityRepository
             ->getQuery();
     }
 
+    /**
+     * @param $user
+     * @param $status
+     *
+     * @return integer
+     */
+    public function countByUserAndStatus($user, $status)
+    {
+        return $this->createQueryBuilder('orders')
+            ->select('COUNT(orders)')
+            ->join('orders.status', 'status')
+            ->where('orders.users = :userId AND status.code = :statusCode')
+            ->setParameter('userId', $user->getId())
+            ->setParameter('statusCode', $status)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 }

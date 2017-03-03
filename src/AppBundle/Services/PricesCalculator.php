@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\LoyaltyProgram;
+use AppBundle\Entity\Orders;
 use AppBundle\Entity\ProductModels;
 use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Entity\Products;
@@ -501,7 +502,7 @@ class PricesCalculator
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        return $user->getOrders()->count();
+        return $this->em->getRepository('AppBundle:Orders')->countByUserAndStatus($user, Orders::STATUS_DONE);
     }
 
     /**
