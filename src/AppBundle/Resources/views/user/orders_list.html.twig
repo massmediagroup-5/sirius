@@ -62,11 +62,7 @@
                                                         <td>
                                                             <p class="title">Сумма</p>
                                                             <div class="price price_new">
-                                                                <p>{{ size.discountedTotalPrice }} грн.
-                                                                    {% if size.discountedTotalPrice != size.totalPrice %}
-                                                                        <strong>{{ size.totalPrice }} грн.</strong>
-                                                                    {% endif %}
-                                                                </p>
+                                                                <p>{{ size.discountedTotalPrice }} грн.</p>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -80,11 +76,11 @@
                                             <table>
                                                 <tr>
                                                     <td>Итого</td>
-                                                    <td>{{ order.totalPrice|format_price }} грн.</td>
+                                                    <td>{{ order.discountedTotalPrice|format_price }} грн.</td>
                                                 </tr>
                                                 <tr class="discount-row">
                                                     <td>Скидка</td>
-                                                    <td>{{ order.fullDiscount|format_price }} грн.</td>
+                                                    <td>{{ order.additionalDiscounts|format_price }} грн.</td>
                                                 </tr>
                                                 {% if order.individualDiscount %}
                                                     <tr class="discount-row">
