@@ -16,6 +16,7 @@ use AppBundle\Entity\SiteParams;
 use AppBundle\Entity\Share;
 use Doctrine\Common\EventSubscriber;
 use AppBundle\Entity\Orders;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
@@ -133,11 +134,16 @@ class EntityEventsSubscriber implements EventSubscriber
             if ($entity instanceof Orders) {
                 $this->container->get('order')->sendStatusInfo($entity);
                 $this->container->get('order')->processOrderChanges($entity);
+                $this->container->get('order')->recalculateOrderPrice($entity);
+                $this->recomputeChanges($em, $entity);
             }
             if ($entity instanceof OrderProductSize) {
                 if ($entity->getOrder()->getId()) {
                     $this->container->get('order')->recalculateOrderDiscounts($entity->getOrder());
                 }
+
+                $this->container->get('order')->recalculateOrderPrice($entity->getOrder());
+                $this->recomputeChanges($em, $entity->getOrder());
             }
             if ($entity instanceof ProductModels) {
                 $this->container->get('product')->processProductModelsChanges($entity);
@@ -165,6 +171,9 @@ class EntityEventsSubscriber implements EventSubscriber
                 if ($entity->getOrder()->getStatus()->getCode() != 'new') {
                     $this->container->get('product')->incrementSizesQuantity($entity, false);
                 }
+
+                $this->container->get('order')->recalculateOrderPrice($entity->getOrder());
+                $this->recomputeChanges($em, $entity->getOrder());
             }
         }
 
@@ -199,5 +208,17 @@ class EntityEventsSubscriber implements EventSubscriber
         if ($entity instanceof SiteParams){
             $this->container->get('cache')->delete('options');
         }
+    }
+
+    /**
+     * @param EntityManager $em
+     *
+     * @param $entity
+     */
+    protected function recomputeChanges(EntityManager $em, $entity)
+    {
+        // Recompute changes
+        $em->getUnitOfWork()->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+        $em->persist($entity);
     }
 }

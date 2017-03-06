@@ -116,10 +116,10 @@ class OrdersRepository extends EntityRepository
      *
      * @return integer
      */
-    public function countByUserAndStatus($user, $status)
+    public function sumIndividualDiscountedTotalPriceByUserAndStatus($user, $status)
     {
         return $this->createQueryBuilder('orders')
-            ->select('COUNT(orders)')
+            ->select('SUM(orders.individualDiscountedTotalPrice)')
             ->join('orders.status', 'status')
             ->where('orders.users = :userId AND status.code = :statusCode')
             ->setParameter('userId', $user->getId())

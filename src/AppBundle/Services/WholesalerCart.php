@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 
+use AppBundle\Entity\Orders;
 use AppBundle\Helper\Arr;
 use AppBundle\Model\CartSize;
 
@@ -120,12 +121,10 @@ class WholesalerCart extends Cart
     }
 
     /**
-     * Return total price for operations with loyalty
-     *
      * @return number
      */
     public function getTotalPriceForLoyalty()
     {
-        return $this->getDiscountedIntermediatePrice();
+        return $this->pricesCalculator->getUserIndividualDiscountedTotalPriceSumByStatus(Orders::STATUS_DONE);
     }
 }

@@ -479,30 +479,18 @@ class PricesCalculator
             if (!$this->hasRole('ROLE_GRAY_LIST')) {
                 $user = $this->container->get('security.context')->getToken()->getUser();
 
-                if ($this->canWholesalerHaveLoyalty()) {
-                    // Use user discount
-                    if ($user->getDiscount()) {
-                        return $sum * $user->getDiscount() * 0.01;
-                    } else {
-                        // Use loyalty discount
-                        return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
-                    }
+                // Use user discount
+                if ($user->getDiscount()) {
+                    return $sum * $user->getDiscount() * 0.01;
+                } else {
+                    // Use loyalty discount
+                    return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
                 }
             }
             return 0;
         }
 
         return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
-    }
-
-    /**
-     * @return bool
-     */
-    public function canWholesalerHaveLoyalty()
-    {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        return $this->em->getRepository('AppBundle:Orders')->countByUserAndStatus($user, Orders::STATUS_DONE);
     }
 
     /**
@@ -611,6 +599,17 @@ class PricesCalculator
             return $availableBonuses < $allowedBonuses ? $availableBonuses : $allowedBonuses;
         }
         return 0;
+    }
+
+    /**
+     * @param string $status
+     *
+     * @return number
+     */
+    public function getUserIndividualDiscountedTotalPriceSumByStatus($status)
+    {
+        return $this->em->getRepository('AppBundle:Orders')
+            ->sumIndividualDiscountedTotalPriceByUserAndStatus($this->user, $status);
     }
 
     /**

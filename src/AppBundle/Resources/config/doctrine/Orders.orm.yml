@@ -101,6 +101,13 @@ AppBundle\Entity\Orders:
             options:
                 default: 0.00
             column: individual_discount
+        individualDiscountedTotalPrice:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 2
+            options:
+                default: 0.00
         loyalityDiscount:
             type: decimal
             nullable: false

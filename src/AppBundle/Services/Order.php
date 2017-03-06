@@ -359,7 +359,7 @@ class Order
     public function removeSize(Orders $order, OrderProductSize $size, $quantity)
     {
         if ($quantity === null || $quantity >= $size->getQuantity()) {
-            $this->em->remove($size);
+            $order->removeSize($size);
         } else {
             $size->setQuantity($size->getQuantity() - $quantity);
             $this->em->persist($size);
@@ -873,6 +873,16 @@ class Order
         $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getTotalPriceForLoyalty(), $wholeCart);
         $order->setLoyalityDiscount($loyaltyDiscount);
         $this->recomputeChanges($order);
+    }
+
+    /**
+     * Recalculate order prices (cache dynamically calculated prices)
+     *
+     * @param Orders $order
+     */
+    public function recalculateOrderPrice(Orders $order)
+    {
+        $order->setIndividualDiscountedTotalPrice();
     }
 
     /**

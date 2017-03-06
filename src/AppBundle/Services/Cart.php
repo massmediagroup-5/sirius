@@ -25,7 +25,7 @@ class Cart
      *
      * @var mixed
      */
-    private $em;
+    protected $em;
 
     /**
      * container
@@ -39,7 +39,7 @@ class Cart
      *
      * @var mixed
      */
-    private $store;
+    protected $store;
 
     /**
      * Items objects list

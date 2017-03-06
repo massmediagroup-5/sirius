@@ -154,6 +154,11 @@ class Orders
     /**
      * @var float
      */
+    private $individualDiscountedTotalPrice = 0;
+
+    /**
+     * @var float
+     */
     private $individualDiscount = 0;
 
     /**
@@ -799,7 +804,19 @@ class Orders
      */
     public function getIndividualDiscountedTotalPrice()
     {
-        return $this->getDiscountedTotalPrice() - $this->getAdditionalDiscounts();
+        return $this->individualDiscountedTotalPrice;
+    }
+
+    /**
+     * Calculate and set individual discounted total price
+     *
+     * @return $this
+     */
+    public function setIndividualDiscountedTotalPrice()
+    {
+        $this->individualDiscountedTotalPrice = $this->getDiscountedTotalPrice() - $this->getAdditionalDiscounts();
+
+        return $this;
     }
 
     /**
@@ -809,7 +826,7 @@ class Orders
      */
     public function getAdditionalDiscounts()
     {
-        return $this->individualDiscount - $this->additionalSolar + $this->getBonuses() + $this->loyalityDiscount
+        return $this->individualDiscount - $this->additionalSolar + $this->bonuses + $this->loyalityDiscount
             + $this->upSellDiscount;
     }
 
