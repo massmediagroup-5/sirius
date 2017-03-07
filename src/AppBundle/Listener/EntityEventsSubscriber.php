@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -172,8 +173,10 @@ class EntityEventsSubscriber implements EventSubscriber
                     $this->container->get('product')->incrementSizesQuantity($entity, false);
                 }
 
-                $this->container->get('order')->recalculateOrderPrice($entity->getOrder());
-                $this->recomputeChanges($em, $entity->getOrder());
+                if ($uow->getEntityState($entity->getOrder()) != UnitOfWork::STATE_REMOVED) {
+                    $this->container->get('order')->recalculateOrderPrice($entity->getOrder());
+                    $this->recomputeChanges($em, $entity->getOrder());
+                }
             }
         }
 
