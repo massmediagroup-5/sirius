@@ -65,6 +65,18 @@ class CategoriesRepository extends BaseRepository
     }
 
     /**
+     * @return array
+     */
+    public function findAllExceptBase()
+    {
+        return $this->createQueryBuilder('categories')
+            ->where('categories.alias <> :alias')
+            ->setParameter('alias', 'all')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
      * getCharacteristics
      *
      * @param mixed $category

@@ -122,7 +122,7 @@ class ShareController extends BaseController
 
         $models = $this->admin->paginateModelsToSelect($request->request->all());
 
-        $categories = $this->getDoctrine()->getRepository('AppBundle:Categories')->findAll();
+        $categories = $this->getDoctrine()->getRepository('AppBundle:Categories')->findAllExceptBase();
 
         $filters = $request->request->all();
 
@@ -148,7 +148,7 @@ class ShareController extends BaseController
 
         $models = $this->admin->paginateModelsToSelect($filters);
 
-        $categories = $this->getDoctrine()->getRepository('AppBundle:Categories')->findAll();
+        $categories = $this->getDoctrine()->getRepository('AppBundle:Categories')->findAllExceptBase();
 
         $filters = $request->request->all();
 
