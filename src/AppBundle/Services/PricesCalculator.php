@@ -496,8 +496,12 @@ class PricesCalculator
     /**
      * @return bool
      */
-    public function isWholesalerMakeOrder()
+    public function canWholesalerMakeOrder()
     {
+        if ($this->em->getRepository('AppBundle:Orders')->countByUserAndStatus($this->user, 'done')) {
+            return true;
+        }
+
         $optionsService = $this->container->get('options');
 
         $cart = $this->container->get('cart');
