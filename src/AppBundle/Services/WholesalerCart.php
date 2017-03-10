@@ -121,6 +121,14 @@ class WholesalerCart extends Cart
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getCurrentTotalPriceForLoyalty()
+    {
+        return $this->getDiscountedIntermediatePrice();
+    }
+
+    /**
      * @return number
      */
     public function getTotalPriceForLoyalty()

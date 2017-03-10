@@ -855,14 +855,14 @@ class Order
     {
         $priceCalculator = new PricesCalculator($this->container, $this->em, $order->getUsers());
 
-        $wholeCart = $this->createArrayCartFromOrder($order);
-        $cart = $this->createArrayCartFromOrder($order, false);
+        $wholeCart = $this->createArrayCartFromOrder($order, $priceCalculator);
+        $cart = $this->createArrayCartFromOrder($order, $priceCalculator, false);
 
         if ($order->getRelatedOrder()) {
-            $relatedCart = $this->createArrayCartFromOrder($order->getRelatedOrder(), false);
+            $relatedCart = $this->createArrayCartFromOrder($order->getRelatedOrder(), $priceCalculator, false);
 
             // Recalculate discount for related order
-            $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($relatedCart->getTotalPriceForLoyalty(),
+            $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($relatedCart->getCurrentTotalPriceForLoyalty(),
                 $wholeCart);
             $order->getRelatedOrder()->setLoyalityDiscount($loyaltyDiscount);
 
@@ -870,7 +870,7 @@ class Order
         }
 
         // Recalculate discount for order
-        $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getTotalPriceForLoyalty(), $wholeCart);
+        $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getCurrentTotalPriceForLoyalty(), $wholeCart);
         $order->setLoyalityDiscount($loyaltyDiscount);
         $this->recomputeChanges($order);
     }
@@ -887,13 +887,18 @@ class Order
 
     /**
      * @param Orders $order
+     * @param PricesCalculator $priceCalculator
      * @param bool $loadRelatedFlag
      *
      * @return Cart|WholesalerCart
      */
-    protected function createArrayCartFromOrder(Orders $order, $loadRelatedFlag = true)
-    {
-        $cart = $this->container->get('cart_factory')->createCartForUser(new ArrayCartStore(), $order->getUsers());
+    protected function createArrayCartFromOrder(
+        Orders $order,
+        PricesCalculator $priceCalculator,
+        $loadRelatedFlag = true
+    ) {
+        $cart = $this->container->get('cart_factory')->createCartForUser(new ArrayCartStore(), $priceCalculator,
+            $order->getUsers());
 
         $sizes = $order->getSizes()->toArray();
 

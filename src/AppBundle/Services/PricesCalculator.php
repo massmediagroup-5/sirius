@@ -477,11 +477,10 @@ class PricesCalculator
     {
         if ($this->hasRole('ROLE_WHOLESALER')) {
             if (!$this->hasRole('ROLE_GRAY_LIST')) {
-                $user = $this->container->get('security.context')->getToken()->getUser();
 
                 // Use user discount
-                if ($user->getDiscount()) {
-                    return $sum * $user->getDiscount() * 0.01;
+                if ($this->user->getDiscount()) {
+                    return $sum * $this->user->getDiscount() * 0.01;
                 } else {
                     // Use loyalty discount
                     return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
@@ -575,8 +574,7 @@ class PricesCalculator
      */
     public function getCurrentUserLoyaltyDiscount()
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $loyaltyProgram = $this->getLoyaltyProgramBySum($user->getTotalSpent());
+        $loyaltyProgram = $this->getLoyaltyProgramBySum($this->user->getTotalSpent());
 
         return $loyaltyProgram ? $loyaltyProgram->getDiscount() : 0;
     }
@@ -596,8 +594,8 @@ class PricesCalculator
     public function getMaxAllowedBonuses()
     {
         $bonusMaxPaidPercent = $this->container->get('options')->getParamValue('bonus_max_paid_percent', 0);
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        if ($user != 'anon.') {
+        $user = $this->user;
+        if ($user->getId()) {
             $allowedBonuses = ceil($this->container->get('cart')->getDiscountedTotalPrice() * $bonusMaxPaidPercent / 100);
             $availableBonuses = ceil($user->getBonuses());
             return $availableBonuses < $allowedBonuses ? $availableBonuses : $allowedBonuses;

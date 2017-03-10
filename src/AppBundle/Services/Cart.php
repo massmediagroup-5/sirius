@@ -60,13 +60,18 @@ class Cart
      * @param EntityManager $em
      * @param ContainerInterface $container
      * @param CartStoreInterface $store
+     * @param PricesCalculator $pricesCalculator
      */
-    public function __construct(EntityManager $em, ContainerInterface $container, CartStoreInterface $store)
-    {
+    public function __construct(
+        EntityManager $em,
+        ContainerInterface $container,
+        CartStoreInterface $store,
+        PricesCalculator $pricesCalculator
+    ) {
         $this->em = $em;
         $this->container = $container;
         $this->store = $store;
-        $this->pricesCalculator = $this->container->get('prices_calculator');
+        $this->pricesCalculator = $pricesCalculator;
         $this->initCartFromStore();
     }
 
@@ -439,6 +444,16 @@ class Cart
         return array_sum(array_map(function (CartSize $size) {
             return $size->getDiscount();
         }, $this->getSizes()));
+    }
+
+    /**
+     * Return price from current cart to calculate loyalty
+     *
+     * @return number
+     */
+    public function getCurrentTotalPriceForLoyalty()
+    {
+        return Arr::sumProperty($this->getSizesWithoutShare(), 'discountedPrice');
     }
 
     /**

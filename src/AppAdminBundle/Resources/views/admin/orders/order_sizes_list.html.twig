@@ -17,7 +17,7 @@
             {% if admin.baseRouteName == 'new_orders' %}
                 <input type="number" value="{{ size.quantity }}" name="size_quantity"
                        data-old-quantity="{{ size.quantity }}"/>
-                <button class="btn btn-xs btn-success js_change_size_quantity">Сохранить</button>
+                <a class="btn btn-xs btn-success js_change_size_quantity">Сохранить</a>
             {% else %}
                 {{ size.quantity }}
             {% endif %}
