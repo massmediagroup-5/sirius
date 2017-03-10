@@ -56,7 +56,7 @@ class WholesalerCart
     public function getSingleSizePositionsCount()
     {
         return array_sum(array_map(function ($model) {
-            return count($this->getSingleSizes($model)) ? 1 : 0;
+            return count($this->getSingleSizes($model));
         }, $this->getModels()));
     }
 
