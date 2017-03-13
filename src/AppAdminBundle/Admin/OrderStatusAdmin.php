@@ -81,6 +81,11 @@ class OrderStatusAdmin extends Admin
                 'label' => 'Текст смс менеджеру',
                 'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s". Для нового заказа подставляется время заказа'
             ))
+            ->add('sendManagerEmail', null, array('label' => 'Отправлять менеджер Email'))
+            ->add('sendManagerEmailText', null, array(
+                'label' => 'Текст Email менеджер',
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
+            ))
             ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
         ;
     }

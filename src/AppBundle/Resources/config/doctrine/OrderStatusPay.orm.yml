@@ -47,6 +47,12 @@ AppBundle\Entity\OrderStatusPay:
             type: string
             length: 255
             nullable: true
+        sendManagerEmail:
+            type: boolean
+        sendManagerEmailText:
+            type: string
+            length: 255
+            nullable: true
         priority:
             type: integer
             nullable: true

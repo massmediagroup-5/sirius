@@ -77,6 +77,16 @@ class OrderStatus
      */
     private $active;
 
+    /**
+     * @var boolean
+     */
+    private $sendManagerEmail;
+
+    /**
+     * @var string
+     */
+    private $sendManagerEmailText;
+
 
     /**
      * Get id
@@ -398,6 +408,46 @@ class OrderStatus
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendManagerEmail()
+    {
+        return $this->sendManagerEmail;
+    }
+
+    /**
+     * @param $sendManagerEmail
+     *
+     * @return $this
+     */
+    public function setSendManagerEmail($sendManagerEmail)
+    {
+        $this->sendManagerEmail = $sendManagerEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSendManagerEmailText()
+    {
+        return $this->sendManagerEmailText;
+    }
+
+    /**
+     * @param $sendManagerEmailText
+     *
+     * @return $this
+     */
+    public function setSendManagerEmailText($sendManagerEmailText)
+    {
+        $this->sendManagerEmailText = $sendManagerEmailText;
+
+        return $this;
     }
 
     /**

@@ -474,6 +474,21 @@ class Order
                             ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
                     }
+
+                    $moderatorEmail = $this->container->get('options')->getParamValue('email');
+                    if ($orderStatus->isSendManagerEmail() && $orderStatus->getSendManagerEmailText() && $moderatorEmail) {
+                        $body = sprintf(
+                            $orderStatus->getSendManagerEmailText(),
+                            $order->getId() ? $order->getId() : date('G:i:s d-m-Y', time()) // %s
+                        );
+                        $message = \Swift_Message::newInstance()
+                            ->setSubject('Order from orders@sirius-sport.com')
+                            ->setFrom('orders@sirius-sport.com')
+                            ->addTo($moderatorEmail)
+                            ->setBody($body)
+                            ->setContentType("text/html");
+                        $this->container->get('mailer')->send($message);
+                    }
                 }
             }
         }
