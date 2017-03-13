@@ -4,6 +4,7 @@ namespace AppAdminBundle\Admin;
 
 use AppBundle\Entity\OrderHistory;
 use AppBundle\Entity\Orders;
+use AppBundle\Entity\ProductModelSpecificSize;
 use AppBundle\Validator\OrderStatusConstraint;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Arr;
@@ -16,11 +17,8 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Validator\ErrorElement;
 
 
-use NovaPoshta\Config;
-use NovaPoshta\ApiModels\InternetDocument;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Class OrdersAdmin
@@ -689,6 +687,18 @@ class OrdersAdmin extends Admin
         return $this->subject->getStatus()->getCode() == 'new'
             && (!$this->subject->getRelatedOrder()
                 || $this->subject->getRelatedOrder()->getStatus()->getCode() == 'new');
+    }
+
+    /**
+     * Always allow move sizes from order. And are only matched condition for pre-order.
+     *
+     * @param ProductModelSpecificSize $size
+     *
+     * @return bool
+     */
+    public function canChangeSpecificSizes(ProductModelSpecificSize $size)
+    {
+        return !$this->subject->getPreOrderFlag() || ($size->getPreOrderFlag() || $size->getQuantity() > 0);
     }
 
     /**
