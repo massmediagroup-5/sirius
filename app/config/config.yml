@@ -207,6 +207,22 @@ sonata_admin:
             - { position: left, type: app.admin.block.import}
     security:
         handler: sonata.admin.security.handler.role
+    assets:
+        javascripts:
+            - bundles/sonataadmin/vendor/jquery/dist/jquery.min.js
+            - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
+            - bundles/appadmin/js/purl.js
+            - bundles/sonatacore/vendor/moment/min/moment.min.js
+            - bundles/sonataadmin/vendor/bootstrap/dist/js/bootstrap.min.js
+            - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+            - bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js
+            - bundles/sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min.js
+            - bundles/sonataadmin/jquery/jquery.form.js
+            - bundles/appadmin/jquery/jquery.confirmExit.js
+            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
+            - bundles/sonataadmin/vendor/select2/select2.min.js
+            - bundles/sonataadmin/App.js
+            - bundles/sonataadmin/Admin.js
 
 sonata_translation:
     locales: ['%locale%']
