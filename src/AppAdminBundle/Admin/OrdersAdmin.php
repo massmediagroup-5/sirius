@@ -726,7 +726,7 @@ class OrdersAdmin extends Admin
             Orders::TYPE_QUICK => 'быстрый',
         ][$object->getType()];
 
-        return "{$object->getId()} ($type)";
+        return "{$object->getIdentifier()} ($type)";
     }
 
     /**
