@@ -31,7 +31,8 @@ class SentOrdersAdmin extends OrdersAdmin
         return function (EntityRepository $er) {
             return $er->createQueryBuilder('s')
                 ->where('s.code IN (:codes)')
-                ->setParameter('codes', ['sent', 'done', 'return', 'refused']);
+                ->setParameter('codes', ['sent', 'done', 'delivered', 'return', 'refused'])
+                ->orderBy('s.priority');
         };
     }
 

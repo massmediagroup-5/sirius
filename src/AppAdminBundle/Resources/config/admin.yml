@@ -47,6 +47,14 @@ services:
         calls:
             - [ setRouteGenerator, ["@admin.route.generator"] ]
 
+    app.admin.delivered_orders:
+        class: AppAdminBundle\Admin\DeliveredOrdersAdmin
+        arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Заказы доставленные в пункт назначения"}
+        calls:
+            - [ setRouteGenerator, ["@admin.route.generator"] ]
+
     app.admin.refused_orders:
         class: AppAdminBundle\Admin\RefusedOrdersAdmin
         arguments: [~, AppBundle\Entity\Orders, AppAdminBundle:Order]
