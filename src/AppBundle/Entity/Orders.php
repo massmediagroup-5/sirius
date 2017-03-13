@@ -1017,10 +1017,28 @@ class Orders
     public function getIdentifier()
     {
         if ($this->preOrderFlag) {
-            return ( $this->relatedOrder ? $this->relatedOrder->id : $this->id ) . '/п';
+            return $this->getMainId() . '/п';
         }
 
-        return $this->id;
+        return $this->getMainId();
+    }
+
+    /**
+     * Get id of first order
+     *
+     * @return string
+     */
+    public function getMainId()
+    {
+        return $this->relatedOrder ? min($this->relatedOrder->id, $this->id) : $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function isMain()
+    {
+        return $this->relatedOrder ? $this->id < $this->relatedOrder->id : true;
     }
 
     public function __clone()

@@ -7,6 +7,8 @@ sirius_db:
     build: ./mysql
     ports:
         - 3307:3306
+    volumes:
+        - /var/lib/mysql
     environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: sirius

@@ -204,20 +204,27 @@ class Order
     public function changePreOrderFlag(Orders $order)
     {
         if ($relatedOrder = $order->getRelatedOrder()) {
-            $this->mergeSizesToOrder($relatedOrder, $order->getSizes());
-            $relatedOrder->setRelatedOrder(null);
-            $order->setRelatedOrder(null);
+            if ($order->isMain()) {
+                $mainOrder = $order;
+                $secondaryOrder = $relatedOrder;
+            } else {
+                $mainOrder = $relatedOrder;
+                $secondaryOrder = $order;
+            }
+            $this->mergeSizesToOrder($mainOrder, $secondaryOrder->getSizes());
+            $secondaryOrder->setRelatedOrder(null);
+            $mainOrder->setRelatedOrder(null);
+            $mainOrder->setPreOrderFlag(!$order->getPreOrderFlag());
 
-            (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($relatedOrder,
-                $this->getUser());
+            (new OrderHistoryMergedWithRelatedItem($this->container))->createHistoryItem($mainOrder, $this->getUser());
 
-            $this->em->persist($relatedOrder);
+            $this->em->persist($mainOrder);
 
-            $this->em->remove($order);
+            $this->em->remove($secondaryOrder);
 
             $this->em->flush();
 
-            return $relatedOrder;
+            return $mainOrder;
         }
 
         $order->setPreOrderFlag(!$order->getPreOrderFlag());
