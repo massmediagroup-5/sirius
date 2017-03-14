@@ -721,10 +721,7 @@ class OrdersAdmin extends Admin
      */
     public function toString($object)
     {
-        $type = [
-            Orders::TYPE_NORMAL => 'обычный',
-            Orders::TYPE_QUICK => 'быстрый',
-        ][$object->getType()];
+        $type = $object->getPreOrderFlag() ? 'предзаказ' : 'обычный';
 
         return "{$object->getIdentifier()} ($type)";
     }
