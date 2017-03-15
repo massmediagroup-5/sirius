@@ -887,6 +887,7 @@ class Order
             $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($relatedCart->getCurrentTotalPriceForLoyalty(),
                 $wholeCart);
             $order->getRelatedOrder()->setLoyalityDiscount($loyaltyDiscount);
+            $order->getRelatedOrder()->setUpSellDiscount($relatedCart->getUpSellShareDiscount());
 
             $this->recomputeChanges($order->getRelatedOrder());
         }
@@ -894,6 +895,7 @@ class Order
         // Recalculate discount for order
         $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getCurrentTotalPriceForLoyalty(), $wholeCart);
         $order->setLoyalityDiscount($loyaltyDiscount);
+        $order->setUpSellDiscount($cart->getUpSellShareDiscount());
         $this->recomputeChanges($order);
     }
 
