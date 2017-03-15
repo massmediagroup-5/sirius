@@ -406,7 +406,9 @@ class PricesCalculator
                     foreach ($cartSizeArr['sizes'] as $cartSize) {
                         if ($cartSize->getQuantity() > 1) {
                             if ($companionDiscount) {
-                                $discount += floor($cartSize->getQuantity() / 2) * $cartSize->getPricePerItem()
+                                # Get first left odd number
+                                $quantityToDiscount = floor($cartSize->getQuantity() / 2) * 2;
+                                $discount += $quantityToDiscount * $cartSize->getPricePerItem()
                                     * $companionDiscount->getDiscount() / 100;
                             }
                         }
