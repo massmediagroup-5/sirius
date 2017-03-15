@@ -17,6 +17,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Validator\ErrorElement;
 
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
@@ -34,9 +35,9 @@ class OrdersAdmin extends Admin
         // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
     ];
 
-    protected $formOptions = array(
-        'validation_groups' => array()
-    );
+    protected $formOptions = [
+        'validation_groups' => []
+    ];
 
     protected $sizesPerPage = 15;
 
@@ -128,15 +129,15 @@ class OrdersAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('type', 'doctrine_orm_choice', array('label' => 'Тип заказа'),
+            ->add('type', 'doctrine_orm_choice', ['label' => 'Тип заказа'],
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         '' => 'Не указанно',
                         (string)Orders::TYPE_NORMAL => 'Обычный',
                         (string)Orders::TYPE_QUICK => 'Быстрый',
-                    )
-                )
+                    ]
+                ]
             )
             ->add('fio', 'doctrine_orm_callback',
                 [
@@ -194,18 +195,36 @@ class OrdersAdmin extends Admin
                         }
                 ]
             )
-            ->add('pay', 'doctrine_orm_choice', array('label' => 'Способ оплаты'),
+            ->add('pay', 'doctrine_orm_choice', ['label' => 'Способ оплаты'],
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         (string)Orders::PAY_TYPE_EMPTY => 'Не выбрано',
                         (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
                         (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
-                    )
-                )
+                    ]
+                ]
             )
-            ->add('createTime', null, ['label' => 'Время оформления'])
-            ->add('updateTime', null, ['label' => 'Время последнего редактирования заказа']);
+            ->add('createTime', 'doctrine_orm_callback', [
+                'label' => 'Время оформления',
+                'callback' => function ($queryBuilder, $alias, $field, $value) {
+                    if ($value['value']) {
+                        $queryBuilder->andWhere("DATE_FORMAT($alias.createTime, '%Y-%m-%d %H:%i') LIKE :dateTime");
+                        $queryBuilder->setParameter('dateTime', "{$value['value']}%");
+                    }
+                },
+                'field_type' => 'text',
+            ])
+            ->add('updateTime', 'doctrine_orm_callback', [
+                'label' => 'Время последнего редактирования заказа',
+                'callback' => function ($queryBuilder, $alias, $field, $value) {
+                    if ($value['value']) {
+                        $queryBuilder->andWhere("DATE_FORMAT($alias.updateTime, '%Y-%m-%d %H:%i') LIKE :updateTime");
+                        $queryBuilder->setParameter('updateTime', "{$value['value']}%");
+                    }
+                },
+                'field_type' => 'text',
+            ]);
     }
 
     /**
@@ -245,6 +264,7 @@ class OrdersAdmin extends Admin
             ->add('cities.name', null, ['label' => 'Город'])
             ->add('stores.name', null, ['label' => 'Адрес склада'])
             ->add('createTime', null, ['label' => 'Время оформления'])
+            ->add('updateTime', null, ['label' => 'Время обновления'])
             ->add('_action', 'actions', [
                 'actions' => [
 //                    'show' => [],
@@ -631,11 +651,11 @@ class OrdersAdmin extends Admin
 //        payStatus
         $errorElement
             ->with('payStatus')
-            ->assertNotNull(array())
+            ->assertNotNull([])
             ->assertNotBlank()
             ->end()
             ->with('status')
-            ->assertNotNull(array())
+            ->assertNotNull([])
             ->assertNotBlank()
             ->end();
     }
