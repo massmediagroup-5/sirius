@@ -698,7 +698,7 @@ class OrdersAdmin extends Admin
      */
     public function canChangeSpecificSizes(ProductModelSpecificSize $size)
     {
-        return !$this->subject->getPreOrderFlag() || ($size->getPreOrderFlag() || $size->getQuantity() > 0);
+        return !$this->subject->getPreOrderFlag() || ($size->getQuantity() > 0);
     }
 
     /**
