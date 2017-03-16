@@ -92,6 +92,7 @@ class ShareAdmin extends Admin
         $listMapper
             ->addIdentifier('id', null, ['label' => 'ID'])
             ->add('name', null, ['label' => 'Имя', 'route' => ['name' => 'edit']])
+            ->add('priority', null, ['label' => 'Приоритет'])
             ->add('createTime', null, ['label' => 'Время создания'])
             ->add('startTime', null, ['label' => 'Время начала'])
             ->add('endTime', null, ['label' => 'Время окончания'])
