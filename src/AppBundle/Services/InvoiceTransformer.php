@@ -82,18 +82,18 @@ class InvoiceTransformer
 
         $sheet->setCellValue('L16', 'Сумма')
             ->setCellValue('L' . ($sizesCount + 17), $orderObject->getDiscountedTotalPrice())
-            ->setCellValue('I' . ($sizesCount + 18), 'Скидка')
-            ->setCellValue('K' . ($sizesCount + 18),
-                $orderObject->getDiscountsPtc() ? $orderObject->getDiscountsPtc() . ' %' : '')
-            ->setCellValue('L' . ($sizesCount + 18), $orderObject->getLoyalityDiscount())
-            ->setCellValue('I' . ($sizesCount + 19), 'Оплачено бонусами')
-            ->setCellValue('L' . ($sizesCount + 19), $orderObject->getBonuses())
-            ->setCellValue('I' . ($sizesCount + 20), 'Сумма к оплате')
-            ->setCellValue('L' . ($sizesCount + 20), $orderObject->getIndividualDiscountedTotalPrice())
-            ->setCellValue('B' . ($sizesCount + 22), 'Всего к оплате:')
-            ->setCellValue('D' . ($sizesCount + 22), $this->container->get('num_to_string')->getString($orderObject->getIndividualDiscountedTotalPrice()))
-            ->setCellValue('C' . ($sizesCount + 25), 'Отгрузил')
-            ->setCellValue('E' . ($sizesCount + 25), 'Подпись');
+            ->setCellValue('I' . ($sizesCount + 18), 'Скидка по акции')
+            ->setCellValue('L' . ($sizesCount + 18), $orderObject->getUpSellDiscount())
+            ->setCellValue('I' . ($sizesCount + 19), 'Скидка по программе лояльности')
+            ->setCellValue('L' . ($sizesCount + 19), $orderObject->getLoyalityDiscount())
+            ->setCellValue('I' . ($sizesCount + 20), 'Оплачено бонусами')
+            ->setCellValue('L' . ($sizesCount + 20), $orderObject->getBonuses())
+            ->setCellValue('I' . ($sizesCount + 21), 'Сумма к оплате')
+            ->setCellValue('L' . ($sizesCount + 21), $orderObject->getIndividualDiscountedTotalPrice())
+            ->setCellValue('B' . ($sizesCount + 23), 'Всего к оплате:')
+            ->setCellValue('D' . ($sizesCount + 23), $this->container->get('num_to_string')->getString($orderObject->getIndividualDiscountedTotalPrice()))
+            ->setCellValue('C' . ($sizesCount + 26), 'Отгрузил')
+            ->setCellValue('E' . ($sizesCount + 26), 'Подпись');
 
         if ($orderObject->isWholesale()) {
             $this->outputWholesalerSizes($phpExcelObject, $orderObject);
@@ -106,7 +106,7 @@ class InvoiceTransformer
         $phpExcelObject->getActiveSheet()->getStyle("B16:L$rowCount")->applyFromArray($this->getBorder());
 
 
-        $phpExcelObject->getActiveSheet()->getStyle('D' . ($sizesCount + 25))->applyFromArray(
+        $phpExcelObject->getActiveSheet()->getStyle('D' . ($sizesCount + 26))->applyFromArray(
             [
                 'borders' => [
                     'bottom' => [
@@ -119,7 +119,7 @@ class InvoiceTransformer
             ]
         );
 
-        $phpExcelObject->getActiveSheet()->getStyle('F' . ($sizesCount + 25) . ':G' . ($sizesCount + 25))->applyFromArray(
+        $phpExcelObject->getActiveSheet()->getStyle('F' . ($sizesCount + 26) . ':G' . ($sizesCount + 26))->applyFromArray(
             [
                 'borders' => [
                     'bottom' => [
@@ -132,7 +132,7 @@ class InvoiceTransformer
             ]
         );
 
-        $phpExcelObject->getActiveSheet()->getStyle('D' . ($sizesCount + 22) . ':G' . ($sizesCount + 22))->applyFromArray(
+        $phpExcelObject->getActiveSheet()->getStyle('D' . ($sizesCount + 23) . ':G' . ($sizesCount + 23))->applyFromArray(
             [
                 'font' => [
                     'italic' => true
@@ -163,7 +163,7 @@ class InvoiceTransformer
             ->applyFromArray($this->getBorder());
         $phpExcelObject
             ->getActiveSheet()
-            ->getStyle('I' . ($sizesCount + 18) . ':L' . ($sizesCount + 20))
+            ->getStyle('I' . ($sizesCount + 18) . ':L' . ($sizesCount + 21))
             ->applyFromArray($this->getBorder());
 
         $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(15);
@@ -172,11 +172,11 @@ class InvoiceTransformer
         $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
         $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $phpExcelObject->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-        $phpExcelObject->getActiveSheet()->getColumnDimension('L')->setWidth(25);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('L')->setWidth(26);
 
         $phpExcelObject
             ->getActiveSheet()
-            ->getStyle('B' . ($sizesCount + 22))
+            ->getStyle('B' . ($sizesCount + 23))
             ->getFont()
             ->applyFromArray(['bold' => true]);
 
@@ -197,13 +197,13 @@ class InvoiceTransformer
             ]
         );
 
-        $phpExcelObject->getActiveSheet()->getStyle('B' . ($sizesCount + 22))->getAlignment()->applyFromArray(
+        $phpExcelObject->getActiveSheet()->getStyle('B' . ($sizesCount + 23))->getAlignment()->applyFromArray(
             [
                 'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER
             ]
         );
 
-        $phpExcelObject->getActiveSheet()->getStyle('I' . ($sizesCount + 18).':I' . ($sizesCount + 20))->applyFromArray(
+        $phpExcelObject->getActiveSheet()->getStyle('I' . ($sizesCount + 18).':I' . ($sizesCount + 21))->applyFromArray(
             [
                 'alignment' => [
                     'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT
@@ -214,14 +214,15 @@ class InvoiceTransformer
             ]
         );
 
-        $phpExcelObject->getActiveSheet()->getDefaultRowDimension()->setRowHeight(20);
+        $phpExcelObject->getActiveSheet()->getDefaultRowDimension()->setRowHeight(21);
 
         $phpExcelObject->getActiveSheet()->getRowDimension('13')->setRowHeight(30);
         $phpExcelObject->getActiveSheet()->mergeCells('B13:L13');
-        $phpExcelObject->getActiveSheet()->mergeCells('I' . ($sizesCount + 18) . ':J' . ($sizesCount + 18));
+        $phpExcelObject->getActiveSheet()->mergeCells('I' . ($sizesCount + 18) . ':K' . ($sizesCount + 18));
         $phpExcelObject->getActiveSheet()->mergeCells('I' . ($sizesCount + 19) . ':K' . ($sizesCount + 19));
         $phpExcelObject->getActiveSheet()->mergeCells('I' . ($sizesCount + 20) . ':K' . ($sizesCount + 20));
-        $phpExcelObject->getActiveSheet()->mergeCells('B' . ($sizesCount + 22) . ':C' . ($sizesCount + 22));
+        $phpExcelObject->getActiveSheet()->mergeCells('I' . ($sizesCount + 21) . ':K' . ($sizesCount + 21));
+        $phpExcelObject->getActiveSheet()->mergeCells('B' . ($sizesCount + 23) . ':C' . ($sizesCount + 23));
         $phpExcelObject->getActiveSheet()->getStyle('B13:L13')->applyFromArray(
             [
                 'font' => [
