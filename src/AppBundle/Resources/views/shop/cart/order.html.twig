@@ -9,7 +9,7 @@
                 <h2 class="page-title">Оформление заказа</h2>
                 <div class="order-info">
                     <div class="col">
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                             {{ include('AppBundle:shop/cart/partials/registered_order.html.twig', { 'form': orderForm }) }}
                         {% else %}
                             <div class="accordion">
@@ -80,7 +80,7 @@
                                         </table>
                                     </div>
                                 {% endif %}
-                                {% if is_granted('IS_AUTHENTICATED_FULLY') and not is_granted('ROLE_WHOLESALER') %}
+                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and not is_granted('ROLE_WHOLESALER') %}
                                     <div class="mid order-bonuses">
                                         {% if is_granted('ROLE_GRAY_LIST') %}
                                             <h2>Вам запрещено использовать бонусы</h2>

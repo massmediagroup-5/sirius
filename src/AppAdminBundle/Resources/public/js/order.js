@@ -248,9 +248,13 @@ var OrderSizes = (function () {
      */
     OrderSizes.prototype.init = function () {
         var self = this;
+
+        this.$discountedPrice = $('#individualDiscountedTotalPrice');
+
+        this.synchronizeTotalPrice();
+
         $('input[name=individualDiscount], input[name=additionalSolar]').on('keyup change', function () {
-            var $discountedPrice = $('#individualDiscountedTotalPrice'),
-                $price = $('#discountedTotalPrice'),
+            var $price = $('#discountedTotalPrice'),
                 $bonuses = $('#bonuses'),
                 price = $price.text() - parseFloat($('input[name=individualDiscount]').val())
                     + parseFloat($('input[name=additionalSolar]').val()) - $bonuses.text();
@@ -258,7 +262,8 @@ var OrderSizes = (function () {
             if (isNaN(price)) {
                 price = $price.text();
             }
-            $discountedPrice.text(price)
+            self.$discountedPrice.text(price);
+            self.synchronizeTotalPrice();
         });
 
         this.$partial.find('[data-size-id]').each(function () {
@@ -273,6 +278,14 @@ var OrderSizes = (function () {
             // Method addNewSizes will run when sizes selected
             this.selectSizeDialog.openAddSizeDialog.bind(this.selectSizeDialog, this.addNewSizes.bind(this))
         );
+    };
+
+    /**
+     * Synchronize sizes partial
+     */
+    OrderSizes.prototype.synchronizeTotalPrice = function () {
+        var $totalAmount = $('.js-total-amount');
+        $totalAmount.val(this.$discountedPrice.text());
     };
 
     /**

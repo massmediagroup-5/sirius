@@ -75,7 +75,7 @@
     {{ parent() }}
     <script>
         var currentCategoryAlias = "{{ data.category.alias }}";
-        var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_FULLY') ? 'true' : 'false' }};
+        var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 'true' : 'false' }};
         {% if app.request.get('_route') == 'filter' %}
             var current_route = 'filter';
         {% endif %}

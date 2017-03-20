@@ -17,7 +17,7 @@ class UserController extends Controller
 
     /**
      * @Route("/user/profile", name="user_profile", options={"expose"=true})
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @Security("is_granted('IS_AUTHENTICATED_REMEMBERED')")
      * @param Request $request
      * @return mixed
      */
@@ -50,7 +50,7 @@ class UserController extends Controller
     {
         $wishList = $this->container->get('wishlist')->paginate($request->get('page', 1), 9, $request->query->all());
 
-        if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->render('AppBundle:user/wish_list.html.twig', compact('wishList'));
         } else {
             return $this->render('AppBundle:user/logged_out_wish_list.html.twig', compact('wishList'));
@@ -96,7 +96,7 @@ class UserController extends Controller
 
     /**
      * @Route("/user/orders", name="user_orders")
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @Security("is_granted('IS_AUTHENTICATED_REMEMBERED')")
      * @return mixed
      */
     public function ordersAction()

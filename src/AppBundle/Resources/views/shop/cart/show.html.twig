@@ -22,7 +22,7 @@
 {% block bottom_assets %}
     {{ parent() }}
     <script>
-        var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_FULLY') ? 'true' : 'false' }};
+        var userIsAuthenticated = {{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 'true' : 'false' }};
     </script>
 
     {% if is_granted('ROLE_WHOLESALER') %}
