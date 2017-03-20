@@ -15,7 +15,7 @@ class DeliveredOrdersAdmin extends OrdersAdmin
 
     protected $baseRoutePattern = '/app/delivered-orders';
 
-    protected $statusName = 'sent';
+    protected $statusName = 'delivered';
 
     /**
      * @inheritdoc
