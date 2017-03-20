@@ -11,7 +11,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Validator\Constraints\Required;
 
 /**
  * Class ProductModelsAdmin
@@ -124,7 +123,6 @@ class ProductModelsAdmin extends Admin
             ->add('decorationColor', 'sonata_type_model_list', ['label' => 'Цвет отделки'])
             ->add('price', 'number', ['label' => 'Цена', 'precision' => 2])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
-            ->add('quantity', null, ['label' => 'Количество'])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('endCount', null, ['label' => 'Количество для "Этот товар скоро заканчится"'])
             ->add('published', null, ['label' => 'Опубликованно'])

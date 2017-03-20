@@ -102,10 +102,6 @@ AppBundle\Entity\ProductModels:
             nullable: false
             columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             column: update_time
-        quantity:
-            type: integer
-            options:
-                default: 0
     oneToMany:
         sizes:
             targetEntity: ProductModelSpecificSize
