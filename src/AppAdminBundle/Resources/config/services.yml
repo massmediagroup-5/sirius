@@ -5,3 +5,8 @@ services:
     admin.route.generator:
         class: AppAdminBundle\Services\RouteGenerator
         arguments: [@router, @sonata.admin.route.cache, @service_container]
+
+    admin.orm.filter.type.datetime:
+        class: AppAdminBundle\Filter\DateTimeNotStrictFilter
+        tags:
+            - { name: "sonata.admin.filter.type", alias: "doctrine_orm_datetime_not_strict"}

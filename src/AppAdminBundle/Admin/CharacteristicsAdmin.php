@@ -53,8 +53,8 @@ class CharacteristicsAdmin extends Admin
                     ]
                 ]
             )
-            ->add('createTime', null, ['label' => 'Дата создания'])
-            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата создания'])
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата последнего изменения'])
         ;
     }
 

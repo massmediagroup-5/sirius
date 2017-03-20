@@ -43,8 +43,8 @@ class CategoriesAdmin extends Admin
             ->add('seoTitle', null, ['label' => 'СЕО заглавие'])
             ->add('seoDescription', null, ['label' => 'СЕО описание'])
             ->add('seoKeywords', null, ['label' => 'СЕО кейворды'])
-            ->add('createTime', null, ['label' => 'Дата создания'])
-            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата создания'])
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата последнего изменения'])
         ;
     }
 

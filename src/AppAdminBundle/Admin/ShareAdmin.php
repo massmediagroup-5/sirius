@@ -77,9 +77,9 @@ class ShareAdmin extends Admin
         $datagridMapper
             ->add('id')
             ->add('name', null, ['label' => 'Имя'])
-            ->add('createTime', null, ['label' => 'Время оформления'])
-            ->add('startTime', null, ['label' => 'Время начала'])
-            ->add('endTime', null, ['label' => 'Время окончания'])
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Время оформления'])
+            ->add('startTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Время начала'])
+            ->add('endTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Время окончания'])
             ->add('priority', null, ['label' => 'Приоритет']);
     }
 

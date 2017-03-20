@@ -28,8 +28,8 @@ class MainBannersAdmin extends Admin
                     ]
                 ]
             )
-            ->add('createTime', null, array('label' => 'Время создания'))
-            ->add('updateTime', null, array('label' => 'Время последнего обновления'))
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', array('label' => 'Время создания'))
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', array('label' => 'Время последнего обновления'))
         ;
     }
 

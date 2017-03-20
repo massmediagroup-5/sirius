@@ -27,6 +27,8 @@ use Symfony\Component\Form\FormEvents;
  */
 class OrdersAdmin extends Admin
 {
+    use DateTimeDatagridFilters;
+
     protected $datagridValues = [
         '_page' => 1,            // display the first page (default = 1)
         '_sort_order' => 'DESC', // reverse order (default = 'ASC')
@@ -205,25 +207,11 @@ class OrdersAdmin extends Admin
                     ]
                 ]
             )
-            ->add('createTime', 'doctrine_orm_callback', [
-                'label' => 'Время оформления',
-                'callback' => function ($queryBuilder, $alias, $field, $value) {
-                    if ($value['value']) {
-                        $queryBuilder->andWhere("DATE_FORMAT($alias.createTime, '%Y-%m-%d %H:%i') LIKE :dateTime");
-                        $queryBuilder->setParameter('dateTime', "{$value['value']}%");
-                    }
-                },
-                'field_type' => 'text',
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', [
+                'label' => 'Время оформления'
             ])
-            ->add('updateTime', 'doctrine_orm_callback', [
-                'label' => 'Время последнего редактирования заказа',
-                'callback' => function ($queryBuilder, $alias, $field, $value) {
-                    if ($value['value']) {
-                        $queryBuilder->andWhere("DATE_FORMAT($alias.updateTime, '%Y-%m-%d %H:%i') LIKE :updateTime");
-                        $queryBuilder->setParameter('updateTime', "{$value['value']}%");
-                    }
-                },
-                'field_type' => 'text',
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', [
+                'label' => 'Время последнего редактирования заказа'
             ]);
     }
 

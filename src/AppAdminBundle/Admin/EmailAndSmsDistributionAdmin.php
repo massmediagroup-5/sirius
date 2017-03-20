@@ -23,8 +23,8 @@ class EmailAndSmsDistributionAdmin extends Admin
             ->add('emailTitle', null, ['label'=>'Название Email'])
             ->add('emailText', null, ['label'=>'Текст Email'])
             ->add('active', null, ['label'=>'Активность(вкл/выкл)'])
-            ->add('createTime', null, ['label'=>'Время создания'])
-            ->add('updateTime', null, ['label'=>'Время последнего обновления'])
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label'=>'Время создания'])
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', ['label'=>'Время последнего обновления'])
         ;
     }
 

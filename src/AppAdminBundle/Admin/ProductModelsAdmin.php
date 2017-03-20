@@ -46,9 +46,25 @@ class ProductModelsAdmin extends Admin
             ->add('price', null, ['label' => 'Цена'])
             ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
             ->add('priority', null, ['label' => 'Приоритет'])
-            ->add('createTime', null, ['label' => 'Дата создания'])
-            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
-            ->add('sizes.quantity', null, ['label' => 'Товар скоро закончится']);
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата создания'])
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата последнего изменения'])
+            ->add('isEndCount', 'doctrine_orm_callback', array(
+                'callback' => function($queryBuilder, $alias, $field, $value) {
+                    if (!$value['value']) {
+                        return;
+                    }
+                    $em = $this->getConfigurationPool()->getContainer()->get('doctrine.orm.entity_manager');
+                    $builder = $em->getRepository('AppBundle:ProductModelSpecificSize')
+                        ->createQueryBuilder('sizes')
+                        ->select('SUM(sizes.quantity)')
+                        ->where("sizes.model = $alias.id");
+
+                    $queryBuilder->andWhere("({$builder->getDQL()}) < $alias.endCount");
+
+                    return true;
+                },
+                'field_type' => 'checkbox'
+            ));
     }
 
     /**

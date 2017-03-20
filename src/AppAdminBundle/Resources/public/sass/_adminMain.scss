@@ -458,3 +458,10 @@ input#image_upload_file {
 .share-products {
     position: relative;
 }
+
+.skin-black {
+    .treeview-menu > li.active > a, .treeview-menu > li > a:hover {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+}

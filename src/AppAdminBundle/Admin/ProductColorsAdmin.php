@@ -18,8 +18,8 @@ class ProductColorsAdmin extends Admin
         $datagridMapper
             ->add('name', null, array('label' => 'Название цвета'))
             ->add('hex', null, array('label' => 'HEX код цвета'))
-            ->add('createTime', null, ['label' => 'Дата создания'])
-            ->add('updateTime', null, ['label' => 'Дата последнего изменения'])
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата создания'])
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата последнего изменения'])
         ;
     }
 

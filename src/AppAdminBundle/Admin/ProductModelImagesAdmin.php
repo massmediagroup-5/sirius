@@ -33,8 +33,8 @@ class ProductModelImagesAdmin extends Admin
         $datagridMapper
             ->add('id')
             ->add('link', null, array('label' => 'Ссылка на оригинал'))
-            ->add('createTime', null, array('label' => 'Дата создания'))
-            ->add('updateTime', null, array('label' => 'Дата последнего изменения'));
+            ->add('createTime', 'doctrine_orm_datetime_not_strict', array('label' => 'Дата создания'))
+            ->add('updateTime', 'doctrine_orm_datetime_not_strict', array('label' => 'Дата последнего изменения'));
     }
 
     /**
