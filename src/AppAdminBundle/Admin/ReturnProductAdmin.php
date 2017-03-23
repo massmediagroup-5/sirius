@@ -2,21 +2,16 @@
 
 namespace AppAdminBundle\Admin;
 
+
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use AppBundle\Entity\History;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\ReturnedSizes;
-use AppBundle\Entity\ReturnHistory;
-use AppBundle\Entity\ReturnProductHistory;
-use AppBundle\Validator\OrderStatusConstraint;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
-use NovaPoshta\ApiModels\InternetDocument;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-//use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Validator\ErrorElement;
@@ -38,11 +33,11 @@ class ReturnProductAdmin extends Admin
      *
      * @var array
      */
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_page' => 1,            // display the first page (default = 1)
         '_sort_order' => 'DESC', // reverse order (default = 'ASC')
         '_sort_by' => 'createdAt'  // name of the ordered field
-    );
+    ];
 
     /**
      * @param DatagridMapper $datagridMapper
@@ -51,27 +46,27 @@ class ReturnProductAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('type', 'doctrine_orm_choice', array('label' => 'Тип заказа'),
+            ->add('type', 'doctrine_orm_choice', ['label' => 'Тип заказа'],
                 'choice',
-                array(
-                    'choices' => array(
-                        ''                           => 'Не указанно',
-                        (string) Orders::TYPE_NORMAL => 'Обычный',
-                        (string) Orders::TYPE_QUICK  => 'Быстрый',
-                    )
-                )
+                [
+                    'choices' => [
+                        '' => 'Не указанно',
+                        (string)Orders::TYPE_NORMAL => 'Обычный',
+                        (string)Orders::TYPE_QUICK => 'Быстрый',
+                    ],
+                ]
             )
-            ->add('order.pay', 'doctrine_orm_choice', array('label' => 'Способ оплаты'),
+            ->add('order.pay', 'doctrine_orm_choice', ['label' => 'Способ оплаты'],
                 'choice',
-                array(
-                    'choices' => array(
-                        ''                                  => 'Не выбрано',
-                        (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
-                        (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
-                    )
-                )
+                [
+                    'choices' => [
+                        '' => 'Не выбрано',
+                        (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
+                        (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
+                    ],
+                ]
             )
-            ->add('createdAt', null, ['label' => 'Время оформления']);
+            ->add('createdAt', 'doctrine_orm_datetime_not_strict', ['label' => 'Время оформления']);
     }
 
     /**
@@ -82,13 +77,13 @@ class ReturnProductAdmin extends Admin
         $listMapper
             ->add('id', null, ['label' => '№ Заявки на возврат'])
             ->addIdentifier('order.type', 'choice', [
-                'label'   => 'Тип заказа',
-                'route'   => ['name' => 'edit'],
+                'label' => 'Тип заказа',
+                'route' => ['name' => 'edit'],
                 'choices' => [
-                    ''                           => 'Не указанно',
-                    (string) Orders::TYPE_NORMAL => 'Обычный',
-                    (string) Orders::TYPE_QUICK  => 'Быстрый',
-                ]
+                    '' => 'Не указанно',
+                    (string)Orders::TYPE_NORMAL => 'Обычный',
+                    (string)Orders::TYPE_QUICK => 'Быстрый',
+                ],
             ])
             ->add('order.id', null, ['label' => '№ Заказа'])
             ->add('order.createTime', null, ['label' => 'Время оформления заказа'])
@@ -97,18 +92,18 @@ class ReturnProductAdmin extends Admin
             ->addIdentifier('user.phone', null, ['label' => 'Телефон', 'route' => ['name' => 'edit']])
             ->addIdentifier('user.email', null, ['label' => 'Email', 'route' => ['name' => 'edit']])
             ->add('order.pay', 'choice', [
-                'label'   => 'Способ оплаты',
+                'label' => 'Способ оплаты',
                 'choices' => [
-                    ''                                  => 'Не выбрано',
-                    (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
-                    (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
-                ]
+                    '' => 'Не выбрано',
+                    (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
+                    (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
+                ],
             ])
             ->add('createdAt', null, ['label' => 'Время оформления'])
             ->add('_action', 'actions', [
                 'actions' => [
                     'edit' => [],
-                ]
+                ],
             ]);
     }
 
@@ -131,81 +126,81 @@ class ReturnProductAdmin extends Admin
                     'property' => 'name',
                     'label' => 'Статус заказа',
                     'read_only' => $this->disableEdit,
-                    'disabled'  => $this->disableEdit,
+                    'disabled' => $this->disableEdit,
                 ]
             )
             ->add('order.payStatus', 'entity',
                 [
-                    'class'       => 'AppBundle:OrderStatusPay',
-                    'property'    => 'name',
-                    'label'       => 'Статус оплаты заказа',
+                    'class' => 'AppBundle:OrderStatusPay',
+                    'property' => 'name',
+                    'label' => 'Статус оплаты заказа',
                     'read_only' => $this->disableEdit,
-                    'disabled'  => $this->disableEdit,
+                    'disabled' => $this->disableEdit,
                 ]
             )
             ->add('order.type', 'choice', [
-                'label'     => 'Тип заказа',
+                'label' => 'Тип заказа',
                 'read_only' => true,
-                'disabled'  => true,
-                'choices'   => [
-                    (string) Orders::TYPE_NORMAL => 'Обычный',
-                    (string) Orders::TYPE_QUICK  => 'Быстрый',
-                ]
+                'disabled' => true,
+                'choices' => [
+                    (string)Orders::TYPE_NORMAL => 'Обычный',
+                    (string)Orders::TYPE_QUICK => 'Быстрый',
+                ],
             ])
             ->add('order.fio', null, [
-                'label'     => 'Ф.И.О.',
+                'label' => 'Ф.И.О.',
                 'read_only' => $this->disableEdit,
-                'disabled'  => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('order.phone', null, [
-                'label'     => 'Телефон',
+                'label' => 'Телефон',
                 'read_only' => $this->disableEdit,
-                'disabled'  => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('order.pay', 'choice', [
-                'label'     => 'Способ оплаты',
+                'label' => 'Способ оплаты',
                 'read_only' => $this->disableEdit,
-                'disabled'  => $this->disableEdit,
-                'choices'   => [
-                    ''                                  => 'Не выбрано',
-                    (string) Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
-                    (string) Orders::PAY_TYPE_COD       => 'Наложеным платежом',
-                ]
+                'disabled' => $this->disableEdit,
+                'choices' => [
+                    '' => 'Не выбрано',
+                    (string)Orders::PAY_TYPE_BANK_CARD => 'На карту банка',
+                    (string)Orders::PAY_TYPE_COD => 'Наложеным платежом',
+                ],
             ])
             ->add('order.carriers', 'entity', [
-                'class'       => 'AppBundle:Carriers',
-                'label'       => 'Служба доставки',
-                'read_only'   => $this->disableEdit,
-                'disabled'    => $this->disableEdit,
+                'class' => 'AppBundle:Carriers',
+                'label' => 'Служба доставки',
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
                 'empty_value' => 'Выберите службу доставки',
             ])
             ->add('order.cities', 'entity', [
-                'class'         => 'AppBundle:Cities',
-                'label'         => 'Город',
-                'read_only'     => $this->disableEdit,
-                'disabled'      => $this->disableEdit,
-                'empty_value'   => 'Выберите город',
+                'class' => 'AppBundle:Cities',
+                'label' => 'Город',
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
+                'empty_value' => 'Выберите город',
             ])
             ->add('order.stores', 'sonata_stores_list', [
-                'class'         => 'AppBundle:Stores',
-                'label'         => 'Склад',
-                'read_only'     => $this->disableEdit,
-                'disabled'      => $this->disableEdit,
+                'class' => 'AppBundle:Stores',
+                'label' => 'Склад',
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('order.customDelivery', null, [
                 'label' => 'Адрес доставки',
-                'read_only'     => $this->disableEdit,
-                'disabled'      => $this->disableEdit,
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('order.comment', null, [
                 'label' => 'Коментарий к заказу',
-                'read_only'     => $this->disableEdit,
-                'disabled'      => $this->disableEdit,
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('order.comment_admin', null, [
                 'label' => 'Коментарий к заказу для администратора',
-                'read_only'     => $this->disableEdit,
-                'disabled'      => $this->disableEdit,
+                'read_only' => $this->disableEdit,
+                'disabled' => $this->disableEdit,
             ])
             ->add('return_description', 'textarea', [
                 'label' => 'Причина возврата товара',
@@ -218,12 +213,12 @@ class ReturnProductAdmin extends Admin
                     'Заявка отклонена' => 'Заявка отклонена',
                     'Заявка отменена' => 'Заявка отменена',
                     'Заявка выполнена' => 'Заявка выполнена',
-                ]
+                ],
             ])
             ->end()
             ->end()
             ->tab('Список заказанных товаров', [
-                'tab_template' => 'AppAdminBundle:admin:return_product_sizes.html.twig'
+                'tab_template' => 'AppAdminBundle:admin:return_product_sizes.html.twig',
             ])
             ->end();
     }
@@ -235,15 +230,16 @@ class ReturnProductAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('createdAt')
-        ;
+            ->add('createdAt');
     }
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('clone', $this->getRouterIdParameter() . '/clone')
-            ->add('cancel_return_product_change', $this->getRouterIdParameter() . '/cancel_return_product_change/{history_id}')
-            ->add('cancel_returned_sizes_change', $this->getRouterIdParameter() . '/cancel_returned_sizes_change/{history_id}');
+        $collection->add('clone', $this->getRouterIdParameter().'/clone')
+            ->add('cancel_return_product_change',
+                $this->getRouterIdParameter().'/cancel_return_product_change/{history_id}')
+            ->add('cancel_returned_sizes_change',
+                $this->getRouterIdParameter().'/cancel_returned_sizes_change/{history_id}');
     }
 
     public function paginateOtherOrders($currentPage = 1, $perPage = 10)
@@ -268,17 +264,16 @@ class ReturnProductAdmin extends Admin
             ->get('doctrine.orm.entity_manager');
 
         foreach ($this->request->request->all() as $key => $value) {
-            if($key == 'return_sizes') {
-                foreach ($value as $return_size){
-                    if(array_key_exists('return', $return_size)) {
+            if ($key == 'return_sizes') {
+                foreach ($value as $return_size) {
+                    if (array_key_exists('return', $return_size)) {
                         $orderProductSize = $em->getReference('AppBundle:OrderProductSize', $return_size['return']);
                         $record = $object->getReturnedSizes()->filter(function ($size) use ($return_size) {
                             return $size->getSize()->getId() == $return_size['return'];
                         })->first();
-                        if($record){
+                        if ($record) {
                             $record->setCount($return_size['count']);
-                        }
-                        else {
+                        } else {
                             $returnedSizes = new ReturnedSizes();
                             $returnedSizes->setCount($return_size['count'])
                                 ->setSize($orderProductSize)
@@ -294,23 +289,23 @@ class ReturnProductAdmin extends Admin
     public function getHistoryItemLabel(History $historyItem)
     {
         $historyManager = $this->getConfigurationPool()->getContainer()->get('history_manager');
-        $history        = $historyManager->createFromHistoryItem($historyItem);
+        $history = $historyManager->createFromHistoryItem($historyItem);
 
         return $history->label();
     }
 
     public function getReturnSizeBySize($size)
     {
-       $returnedSizes = $this->getSubject()->getReturnedSizes()->filter(function ($returnedSize) use ($size) {
-           return $returnedSize->getSize()->getId() == $size;
-       });
+        $returnedSizes = $this->getSubject()->getReturnedSizes()->filter(function ($returnedSize) use ($size) {
+            return $returnedSize->getSize()->getId() == $size;
+        });
 
         return $returnedSizes ? $returnedSizes->first() : false;
     }
 
     public function getReturnSizeBySizeCount($size)
     {
-       $returnedSize = $this->getReturnSizeBySize($size);
+        $returnedSize = $this->getReturnSizeBySize($size);
 
         return $returnedSize ? $returnedSize->getCount() : 0;
     }
@@ -328,9 +323,11 @@ class ReturnProductAdmin extends Admin
             if ($a->getCreateTime() == $b->getCreateTime()) {
                 return 0;
             }
+
             return ($a->getCreateTime() > $b->getCreateTime()) ? -1 : 1;
         });
     }
+
     public function validate(ErrorElement $errorElement, $object)
     {
         foreach ($this->request->request->all() as $key => $value) {
