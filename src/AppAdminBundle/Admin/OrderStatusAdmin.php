@@ -2,11 +2,11 @@
 
 namespace AppAdminBundle\Admin;
 
+
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 
 class OrderStatusAdmin extends Admin
 {
@@ -16,14 +16,24 @@ class OrderStatusAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name', null, array('label' => 'Название статуса'))
-//            ->add('code', null, array('label' => 'Код'))
-            ->add('description', null, array('label' => 'Описание статуса'))
-            ->add('baseFlag', null, array('label' => 'Базовый'))
-            ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('sendClient', null, array('label' => 'Отправлять клиенту смс'))
-            ->add('sendManager', null, array('label' => 'Отправлять менеджеру смс'))
-        ;
+            ->add('name', null, ['label' => 'Название статуса'])
+            ->add('description', null, ['label' => 'Описание статуса'])
+            ->add('baseFlag', null, ['label' => 'Базовый'])
+            ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('sendClient', null, ['label' => 'Отправлять клиенту смс'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ])
+            ->add('sendManager', null, ['label' => 'Отправлять менеджеру смс'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ]);
     }
 
     /**
@@ -32,23 +42,20 @@ class OrderStatusAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('name', null, array('label' => 'Название статуса'))
-//            ->add('code', null, array('label' => 'Код'))
-            ->add('description', null, array('label' => 'Описание статуса'))
-            ->add('baseFlag', null, array('label' => 'Базовый'))
-            ->add('priority', null, array('editable' => true, 'label' => 'Приоритет'))
-            ->add('sendClient', null, array('editable' => true, 'label' => 'Отправлять клиенту смс'))
-            ->add('sendClientEmail', null, array('editable' => true, 'label' => 'Отправлять клиенту Email'))
-            ->add('sendManager', null, array('editable' => true, 'label' => 'Отправлять менеджеру смс'))
-            ->add('active', null, array('editable' => true, 'label' => 'Активность(вкл/выкл)'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
-//                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ))
-        ;
+            ->add('name', null, ['label' => 'Название статуса'])
+            ->add('description', null, ['label' => 'Описание статуса'])
+            ->add('baseFlag', null, ['label' => 'Базовый'])
+            ->add('priority', null, ['editable' => true, 'label' => 'Приоритет'])
+            ->add('sendClient', null, ['editable' => true, 'label' => 'Отправлять клиенту смс'])
+            ->add('sendClientEmail', null, ['editable' => true, 'label' => 'Отправлять клиенту Email'])
+            ->add('sendManager', null, ['editable' => true, 'label' => 'Отправлять менеджеру смс'])
+            ->add('active', null, ['editable' => true, 'label' => 'Активность(вкл/выкл)'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'edit' => [],
+                    'delete' => [],
+                ],
+            ]);
     }
 
     /**
@@ -57,37 +64,33 @@ class OrderStatusAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', null, array('label' => 'Название статуса'))
-//            ->add('code', null, array('label' => 'Код'))
-            ->add('description', null, array('label' => 'Описание статуса'))
-//            ->add('baseFlag', null, array('label' => 'Базовый'))
-            ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('sendClient', null, array('label' => 'Отправлять клиенту смс'))
-            ->add('sendClientText', null, array(
+            ->add('name', null, ['label' => 'Название статуса'])
+            ->add('description', null, ['label' => 'Описание статуса'])
+            ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('sendClient', null, ['label' => 'Отправлять клиенту смс'])
+            ->add('sendClientText', null, [
                 'label' => 'Текст смс клиенту',
-                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
-            ))
-            ->add('sendClientNightText', null, array(
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"',
+            ])
+            ->add('sendClientNightText', null, [
                 'label' => 'Текст смс клиенту(ночь)',
-                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
-            ))
-            ->add('sendClientEmail', null, array('label' => 'Отправлять клиенту Email'))
-            ->add('sendClientEmailText', null, array(
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"',
+            ])
+            ->add('sendClientEmail', null, ['label' => 'Отправлять клиенту Email'])
+            ->add('sendClientEmailText', null, [
                 'label' => 'Текст Email клиенту',
-                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
-            ))
-            ->add('sendManager', null, array('label' => 'Отправлять менеджеру смс'))
-            ->add('sendManagerText', null, array(
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"',
+            ])
+            ->add('sendManager', null, ['label' => 'Отправлять менеджеру смс'])
+            ->add('sendManagerText', null, [
                 'label' => 'Текст смс менеджеру',
-                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s". Для нового заказа подставляется время заказа'
-            ))
-            ->add('sendManagerEmail', null, array('label' => 'Отправлять менеджер Email'))
-            ->add('sendManagerEmailText', null, array(
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s". Для нового заказа подставляется время заказа',
+            ])
+            ->add('sendManagerEmail', null, ['label' => 'Отправлять менеджер Email'])
+            ->add('sendManagerEmailText', null, [
                 'label' => 'Текст Email менеджер',
-                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
-            ))
-            ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
-        ;
+                'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"',
+            ])
+            ->add('active', null, ['label' => 'Активность(вкл/выкл)']);
     }
-
 }
