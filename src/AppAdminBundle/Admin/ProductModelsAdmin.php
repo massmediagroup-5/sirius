@@ -48,8 +48,9 @@ class ProductModelsAdmin extends Admin
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата создания'])
             ->add('updateTime', 'doctrine_orm_datetime_not_strict', ['label' => 'Дата последнего изменения'])
-            ->add('isEndCount', 'doctrine_orm_callback', array(
-                'callback' => function($queryBuilder, $alias, $field, $value) {
+            ->add('isEndCount', 'doctrine_orm_callback', [
+                'label' => 'Товар скоро закончится',
+                'callback' => function ($queryBuilder, $alias, $field, $value) {
                     if (!$value['value']) {
                         return;
                     }
@@ -63,8 +64,8 @@ class ProductModelsAdmin extends Admin
 
                     return true;
                 },
-                'field_type' => 'checkbox'
-            ));
+                'field_type' => 'checkbox',
+            ]);
     }
 
     /**
