@@ -101,12 +101,21 @@ class NovaPoshta
         // Deactivate all cities and warehouses
         $this->em->createQueryBuilder()
             ->update('AppBundle:Cities', 'c')
+            ->where('c.carriers = :carrier')
+            ->setParameter('carrier', Carriers::NP_ID)
             ->set('c.active', '0')
             ->getQuery()
             ->execute();
+
+        $npCitiesBuilder = $this->em->getRepository('AppBundle:Cities')
+            ->createQueryBuilder('c')
+            ->select('c.id')
+            ->where('c.carriers = :carrier');
         $this->em->createQueryBuilder()
             ->update('AppBundle:Stores', 's')
+            ->where("s.cities IN ({$npCitiesBuilder->getDQL()})")
             ->set('s.active', '0')
+            ->setParameter('carrier', Carriers::NP_ID)
             ->getQuery()
             ->execute();
 
