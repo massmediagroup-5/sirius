@@ -19,10 +19,22 @@ class EmailAndSmsDistributionAdmin extends Admin
             ->add('name', null, ['label'=>'Название рассылки'])
             ->add('sendSms', null, ['label'=>'Отправка смс'])
             ->add('smsText', null, ['label'=>'Текст смс'])
-            ->add('sendEmail', null, ['label'=>'Отправлять Email'])
+            ->add('sendEmail', null, ['label'=>'Отправлять Email'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ])
             ->add('emailTitle', null, ['label'=>'Название Email'])
             ->add('emailText', null, ['label'=>'Текст Email'])
-            ->add('active', null, ['label'=>'Активность(вкл/выкл)'])
+            ->add('active', null, ['label'=>'Активность(вкл/выкл)'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ])
             ->add('createTime', 'doctrine_orm_datetime_not_strict', ['label'=>'Время создания'])
             ->add('updateTime', 'doctrine_orm_datetime_not_strict', ['label'=>'Время последнего обновления'])
         ;

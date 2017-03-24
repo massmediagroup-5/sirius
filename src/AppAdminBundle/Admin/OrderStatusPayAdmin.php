@@ -16,14 +16,31 @@ class OrderStatusPayAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name', null, array('label' => 'Название статуса оплаты'))
-            ->add('code', null, array('label' => 'Код'))
-            ->add('description', null, array('label' => 'Описание статуса оплаты'))
-            ->add('baseFlag', null, array('label' => 'Базовый'))
-            ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('sendClient', null, array('label' => 'Отправлять клиенту смс'))
-            ->add('sendManager', null, array('label' => 'Отправлять менеджеру смс'))
-        ;
+            ->add('name', null, ['label' => 'Название статуса оплаты'])
+            ->add('code', null, ['label' => 'Код'])
+            ->add('description', null, ['label' => 'Описание статуса оплаты'])
+            ->add('baseFlag', null, ['label' => 'Базовый'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ])
+            ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('sendClient', null, ['label' => 'Отправлять клиенту смс'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ])
+            ->add('sendManager', null, ['label' => 'Отправлять менеджеру смс'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ]);
     }
 
     /**
@@ -32,21 +49,21 @@ class OrderStatusPayAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('name', null, array('label' => 'Название статуса оплаты'))
-            ->add('code', null, array('label' => 'Код'))
-            ->add('description', null, array('label' => 'Описание статуса оплаты'))
-            ->add('baseFlag', null, array('label' => 'Базовый'))
-            ->add('priority', null, array('editable' => true, 'label' => 'Приоритет'))
-            ->add('sendClient', null, array('editable' => true, 'label' => 'Отправлять клиенту смс'))
-            ->add('sendManager', null, array('editable' => true, 'label' => 'Отправлять менеджеру смс'))
-            ->add('active', null, array('editable' => true, 'label' => 'Активность(вкл/выкл)'))
-            ->add('_action', 'actions', array(
-                'actions' => array(
+            ->add('name', null, ['label' => 'Название статуса оплаты'])
+            ->add('code', null, ['label' => 'Код'])
+            ->add('description', null, ['label' => 'Описание статуса оплаты'])
+            ->add('baseFlag', null, ['label' => 'Базовый'])
+            ->add('priority', null, ['editable' => true, 'label' => 'Приоритет'])
+            ->add('sendClient', null, ['editable' => true, 'label' => 'Отправлять клиенту смс'])
+            ->add('sendManager', null, ['editable' => true, 'label' => 'Отправлять менеджеру смс'])
+            ->add('active', null, ['editable' => true, 'label' => 'Активность(вкл/выкл)'])
+            ->add('_action', 'actions', [
+                'actions' => [
 //                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ))
+                    'edit' => [],
+                    'delete' => [],
+                ]
+            ])
         ;
     }
 
@@ -56,26 +73,26 @@ class OrderStatusPayAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', null, array('label' => 'Название статуса оплаты'))
-            ->add('code', null, array('label' => 'Код'))
-            ->add('description', null, array('label' => 'Описание статуса оплаты'))
+            ->add('name', null, ['label' => 'Название статуса оплаты'])
+            ->add('code', null, ['label' => 'Код'])
+            ->add('description', null, ['label' => 'Описание статуса оплаты'])
 //            ->add('baseFlag', null, array('label' => 'Базовый'))
-            ->add('priority', null, array('label' => 'Приоритет'))
-            ->add('sendClient', null, array('label' => 'Отправлять клиенту смс'))
-            ->add('sendClientText', null, array(
+            ->add('priority', null, ['label' => 'Приоритет'])
+            ->add('sendClient', null, ['label' => 'Отправлять клиенту смс'])
+            ->add('sendClientText', null, [
                 'label' => 'Текст смс клиенту',
                 'help' => 'Для подстановки идентификатора заказа в текст сообщения используйте выражение %s'
-            ))
-            ->add('sendClientNightText', null, array(
+            ])
+            ->add('sendClientNightText', null, [
                 'label' => 'Текст смс клиенту(ночь)',
                 'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s"'
-            ))
-            ->add('sendManager', null, array('label' => 'Отправлять менеджеру смс'))
-            ->add('sendManagerText', null, array(
+            ])
+            ->add('sendManager', null, ['label' => 'Отправлять менеджеру смс'])
+            ->add('sendManagerText', null, [
                 'label' => 'Текст смс менеджеру',
                 'help' => '*Для подстановки идентификатора заказа в текст сообщения используйте выражение "%s". Для нового заказа подставляется время заказа'
-            ))
-            ->add('active', null, array('label' => 'Активность(вкл/выкл)'))
+            ])
+            ->add('active', null, ['label' => 'Активность(вкл/выкл)'])
         ;
     }
 

@@ -18,7 +18,13 @@ class OrderStatusAdmin extends Admin
         $datagridMapper
             ->add('name', null, ['label' => 'Название статуса'])
             ->add('description', null, ['label' => 'Описание статуса'])
-            ->add('baseFlag', null, ['label' => 'Базовый'])
+            ->add('baseFlag', null, ['label' => 'Базовый'], 'sonata_type_translatable_choice', [
+                'translation_domain' => 'SonataAdminBundle',
+                'choices' => [
+                    1 => 'label_type_yes',
+                    2 => 'label_type_no',
+                ],
+            ])
             ->add('priority', null, ['label' => 'Приоритет'])
             ->add('sendClient', null, ['label' => 'Отправлять клиенту смс'], 'sonata_type_translatable_choice', [
                 'translation_domain' => 'SonataAdminBundle',
