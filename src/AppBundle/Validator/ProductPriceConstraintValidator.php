@@ -2,6 +2,7 @@
 
 namespace AppBundle\Validator;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -18,7 +19,9 @@ class ProductPriceConstraintValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$value && !$this->context->getRoot()->getNormData()->getPrice()) {
+        $rootDataObject = $this->context->getRoot()->getNormData();
+        $accessor = PropertyAccess::createPropertyAccessor();
+        if (!$value && !$accessor->getValue($rootDataObject, $constraint->parentPriceField)) {
             $this->context->addViolation($constraint->message);
 
             return false;

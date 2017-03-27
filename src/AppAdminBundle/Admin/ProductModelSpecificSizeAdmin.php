@@ -67,11 +67,14 @@ class ProductModelSpecificSizeAdmin extends Admin
         $formMapper
             ->add('price', null, ['label' => 'Цена',
                 'required' => true,
-                'constraints' => [new ProductPriceConstraint()],
+                'constraints' => [new ProductPriceConstraint(['parentPriceField' => 'price'])],
                 'precision' => 2
             ])
             ->add('oldPrice', null, ['label' => 'Старая цена'])
-            ->add('wholesalePrice', null, ['label' => 'Оптовая цена'])
+            ->add('wholesalePrice', null, [
+                'label' => 'Оптовая цена',
+                'constraints' => [new ProductPriceConstraint(['parentPriceField' => 'wholesalePrice'])],
+            ])
             ->add('quantity', null, ['label' => 'Количество'])
             ->add('preOrderFlag', null, ['label' => 'Предзаказ'])
             ->add('size', 'entity', [
