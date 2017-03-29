@@ -21,6 +21,12 @@ accepted orders: Принятые заказы
 wait orders: Ждущие заказы
 formed orders: Сформированные заказы
 waiting for departure orders: Заказы ожидающие отправки
+delivered orders: Доставленные заказы
+refused orders: Отказы
+order product size: Список заказанных товаров
+order status pay: Статусы оплаты заказов
+return product: Возврат товара
+return orders: Возвращенные заказы
 sent orders: Отправленые заказы
 canceled orders: Отмененые заказы
 done orders: Обратные звонки
@@ -34,6 +40,15 @@ filters: Фильтра
 products: Продукты
 product models: Модели продуктов
 sku products: Продукты SKU
+loyalty program: Программа лояльности
+wholesaler loyalty program: Программа лояльности (для оптовиков)
+social networks: Соц. сети
+unisender: Unisender
+novaposhta: Нова Пошта
+carriers: Службы доставки
+email and sms distribution: Рассылка email и смс
+users wholesalers: Оптовики
+users managers: Менеджеры
 product model images: Изображения продуктов
 characteristics: Характеристики
 characteristic values: Значения характеристик
