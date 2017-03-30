@@ -177,17 +177,20 @@
                     </li>
                 {% endif %}
             {% endfor %}
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-folder"></i>
-                    <span>Импорт</span>
-                    <i class="fa pull-right fa-angle-left"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="{{ url('admin_app_import_index') }}"><i class="fa fa-angle-double-right"></i>
-                            Импорт</a></li>
-                </ul>
-            </li>
+
+            {% if is_granted('ROLE_SONATA_IMPORT') or is_granted('ROLE_SUPER_ADMIN') %}
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-folder"></i>
+                        <span>Импорт</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ url('admin_app_import_index') }}"><i class="fa fa-angle-double-right"></i>
+                                Импорт</a></li>
+                    </ul>
+                </li>
+            {% endif %}
         </ul>
     {% endif %}
 {% endblock side_bar_nav %}

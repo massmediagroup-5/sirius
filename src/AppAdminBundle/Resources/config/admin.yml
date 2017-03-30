@@ -255,7 +255,7 @@ services:
 
     app.admin.block.import:
         class: AppAdminBundle\Block\ImportBlockService
-        arguments: [ "app.admin.block.import:", @templating ]
+        arguments: [ "app.admin.block.import:", @templating, "@security.authorization_checker" ]
         tags:
             - { name: sonata.block }
 

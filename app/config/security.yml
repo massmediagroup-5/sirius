@@ -10,6 +10,7 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_SONATA_ADMIN]
         ROLE_GRAY_LIST: []
         ROLE_BLACK_LIST: []
+        ROLE_SONATA_IMPORT: [ROLE_SONATA_ADMIN]
 
     providers:
         fos_userbundle:
@@ -63,5 +64,6 @@ security:
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
+        - { path: ^/admin/app/import, role: [ROLE_SONATA_IMPORT, ROLE_SUPER_ADMIN] }
         - { path: ^/admin/, role: [ROLE_SONATA_ADMIN, ROLE_SUPER_ADMIN] }
         - { path: ^/js/, role: IS_AUTHENTICATED_ANONYMOUSLY }

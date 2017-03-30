@@ -10,6 +10,7 @@ ROLE_SUPER_ADMIN: Суперадминистратор
 ROLE_SUPER_ADMIN: Суперадминистратор
 ROLE_SONATA_ADMIN: Администратор
 ROLE SONATA ADMIN: Администратор
+ROLE SONATA IMPORT: Импорт
 orders: Заказы
 main slider: Главный слайдер
 slider: Слайдер
