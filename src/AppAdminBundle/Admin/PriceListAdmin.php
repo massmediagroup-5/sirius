@@ -59,8 +59,6 @@ class PriceListAdmin extends Admin
             ->add('model.products.active', null, ['label' => 'Активность', 'editable' => true])
             ->add('model.products.article', null, ['label' => 'Артикул'])
             ->add('model.products.baseCategory.name', null, ['label' => 'Категория'])
-            ->add('model.products.price', 'string', ['label' => 'Цена модели'])
-            ->add('model.products.wholesalePrice', 'string', ['label' => 'Оптовая цена модели'])
             ->add('model.productColors', null, ['label' => 'Цвет'])
             ->add('model.decorationColor.name', null, ['label' => 'Цвет отдели'])
             ->add('model.alias', null, ['label' => 'Алиас'])
