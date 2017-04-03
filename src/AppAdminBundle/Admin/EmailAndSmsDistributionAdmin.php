@@ -88,7 +88,7 @@ class EmailAndSmsDistributionAdmin extends Admin
                             'model_manager' => $this->getModelManager()
                         ],
                         [
-                            'admin_code' => 'sonata.user.admin.user'
+                            'admin_code' => 'app_admin.admin.users_for_distributions'
                         ]
                     )
                 ->end()

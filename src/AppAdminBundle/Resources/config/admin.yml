@@ -329,6 +329,17 @@ services:
             - [ setUserManager, [ @fos_user.user_manager ] ]
             - [ setTranslationDomain, [ %sonata.user.admin.user.translation_domain% ] ]
 
+    app_admin.admin.users_for_distributions:
+        class: AppAdminBundle\Admin\UsersForDistributionsAdmin
+        arguments: [~, %sonata.user.admin.user.entity%, %sonata.user.admin.user.controller%]
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              show_in_dashboard: false
+        calls:
+            - [ setUserManager, [ @fos_user.user_manager ] ]
+            - [ setTranslationDomain, [ %sonata.user.admin.user.translation_domain% ] ]
+
     app_admin.admin.novaposhta:
         class: AppAdminBundle\Admin\NovaposhtaAdmin
         arguments: [~, AppBundle\Entity\Novaposhta, SonataAdminBundle:CRUD]
