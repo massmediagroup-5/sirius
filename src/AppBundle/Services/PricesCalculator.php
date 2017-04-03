@@ -529,7 +529,7 @@ class PricesCalculator
     {
         $discount = $this->getLoyaltyProgramDiscountPrcBySum($sum);
 
-        return ceil($discount * $sumToDiscount * 0.01);
+        return round($discount * $sumToDiscount * 0.01, 2);
     }
 
     /**
@@ -539,7 +539,7 @@ class PricesCalculator
     public function getLoyaltyProgramDiscountBySum($sum)
     {
         if ($loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
-            return ceil($loyaltyProgram->getDiscount() * $sum * 0.01);
+            return round($loyaltyProgram->getDiscount() * $sum * 0.01, 2);
         }
         return 0;
     }
