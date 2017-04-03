@@ -98,8 +98,9 @@ class CreateOrderType extends AbstractType
                 'required' => true,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
-                        ->where('c.active = 1')
-                        ->orderBy('c.name', 'ASC');
+                        ->where('c.active = 1 AND c.carriers = :carrier')
+                        ->orderBy('c.name', 'ASC')
+                        ->setParameter('carrier', Carriers::NP_ID);
                 },
                 'constraints' => $delivery == Carriers::NP_ID ? [new NotBlank] : [],
                 'placeholder' => ''
