@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * EmailAndSmsDistribution
  */
@@ -68,12 +70,18 @@ class EmailAndSmsDistribution
     private $users;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $emailInfos;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->smsInfos = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->smsInfos = new ArrayCollection();
+        $this->emailInfos = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function __toString()
@@ -372,5 +380,38 @@ class EmailAndSmsDistribution
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set emailInfos
+     * @param DistributionEmailInfo $emailInfo
+     *
+     * @return $this
+     */
+    public function addEmailInfo(DistributionEmailInfo $emailInfo)
+    {
+        $this->emailInfos[] = $emailInfo;
+
+        return $this;
+    }
+
+    /**
+     * Remove emailInfo
+     *
+     * @param DistributionEmailInfo $emailInfo
+     */
+    public function removeEmailInfo(DistributionEmailInfo $emailInfo)
+    {
+        $this->emailInfos->removeElement($emailInfo);
+    }
+
+    /**
+     * Get emailInfos
+     *
+     * @return ArrayCollection
+     */
+    public function getEmailInfos()
+    {
+        return $this->emailInfos;
     }
 }

@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-success">
+            <div class="box-header">
+                <h4 class="box-title">{{ form_tab.name }}</h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Дата отправления</th>
+                    </tr>
+                    </thead>
+                    <tbody class="sonata-ba-tbody">
+                    {% for email in admin.subject.emailInfos %}
+                        <tr>
+                            <td class="control-group">{{ email.user.name }}</td>
+                            <td class="control-group">{{ email.user.surname }}</td>
+                            <td class="control-group">{{ email.sentAt.format('Y-m-d H:i:s') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

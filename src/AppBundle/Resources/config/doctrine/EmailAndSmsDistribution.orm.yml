@@ -68,5 +68,9 @@ AppBundle\Entity\EmailAndSmsDistribution:
                 distribution_id:
                     referencedColumnName: id
             orphanRemoval: false
+        emailInfos:
+            targetEntity: DistributionEmailInfo
+            mappedBy: distribution
+            orphanRemoval: true
 
     lifecycleCallbacks: {  }

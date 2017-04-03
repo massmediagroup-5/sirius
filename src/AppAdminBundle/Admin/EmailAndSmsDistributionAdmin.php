@@ -93,8 +93,8 @@ class EmailAndSmsDistributionAdmin extends Admin
                     )
                 ->end()
             ->end()
-            ->tab('Информация по смс',['tab_template'=>'AppAdminBundle:admin:sms_info.html.twig'])
-            ->end()
+            ->tab('Информация по смс',['tab_template'=>'AppAdminBundle:admin:sms_info.html.twig'])->end()
+            ->tab('Информация по Email',['tab_template'=>'AppAdminBundle:admin:email_info.html.twig'])->end()
         ;
     }
 

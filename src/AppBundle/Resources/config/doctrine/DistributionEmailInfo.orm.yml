@@ -1,0 +1,19 @@
+AppBundle\Entity\DistributionEmailInfo:
+    type: entity
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        sentAt:
+            type: datetime
+            nullable: false
+            columnDefinition: TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    manyToOne:
+        distribution:
+            targetEntity: EmailAndSmsDistribution
+            inversedBy: emailInfos
+        user:
+            targetEntity: Users

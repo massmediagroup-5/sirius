@@ -2,6 +2,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\DistributionEmailInfo;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Entity\DistributionSmsInfo;
@@ -77,6 +78,13 @@ class Distribution
                             ->setBody($distribution->getEmailText())
                             ->setContentType("text/html");
                         $this->container->get('mailer')->send($message);
+
+                        $emailInfo = new DistributionEmailInfo();
+                        $emailInfo->setDistribution($distribution);
+                        $emailInfo->setUser($user);
+
+                        $this->em->persist($emailInfo);
+                        $this->em->flush($emailInfo);
                     }
                 }
 
