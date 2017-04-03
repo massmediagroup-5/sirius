@@ -115,7 +115,7 @@ class Distribution
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters_array);
             curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-            curl_setopt($curl, CURLOPT_URL, 'http://api.unisender.com/ru/api/sendSms?format=json');
+            curl_setopt($curl, CURLOPT_URL, 'https://api.unisender.com/ru/api/sendSms?format=json');
             $response = curl_exec($curl);
 
             if ($response) {
