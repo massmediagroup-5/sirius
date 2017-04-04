@@ -92,6 +92,8 @@ class Order
         $order = null;
         if ($cart->getStandardCount()) {
             $order = $this->createOrder($cart->getSizes(), $data, $user, $quickFlag, false);
+
+            $order->setLoyalityDiscount($cart->getLoyaltyDiscountForStandard());
         }
 
         if ($cart->getPreOrderCount()) {
@@ -120,7 +122,6 @@ class Order
             $this->em->persist($user);
         }
 
-        $order->setLoyalityDiscount($cart->getLoyaltyDiscountForStandard());
         $order->setUpSellDiscount($cart->getUpSellShareDiscount());
 
         $this->em->persist($order);

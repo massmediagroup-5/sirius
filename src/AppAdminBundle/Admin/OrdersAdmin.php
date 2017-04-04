@@ -730,8 +730,10 @@ class OrdersAdmin extends Admin
     public function toString($object)
     {
         $type = $object->getPreOrderFlag() ? 'предзаказ' : 'обычный';
+        $user = $object->getUsers();
+        $clientType = $user && $user->hasRole('ROLE_WHOLESALER') ? 'оптовый клиент' : 'розничный клиент';
 
-        return "{$object->getIdentifier()} ($type)";
+        return "{$object->getIdentifier()} ($type - $clientType)";
     }
 
     /**
