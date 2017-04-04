@@ -261,7 +261,8 @@ class CartController extends BaseController
 
             if ($request->isXmlHttpRequest()) {
                 return new JsonResponse([
-                    'redirect' => $this->container->get('router')->generate('cart_order_approve', ['id' => $order])
+                    'redirect' => $this->container->get('router')->generate('cart_order_approve',
+                        ['id' => $order->getId()]),
                 ]);
             }
 
