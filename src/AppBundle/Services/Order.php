@@ -890,6 +890,7 @@ class Order
             $order->getRelatedOrder()->setLoyalityDiscount($loyaltyDiscount);
             $order->getRelatedOrder()->setUpSellDiscount($relatedCart->getUpSellShareDiscount());
 
+            $this->syncOrderFromCart($order->getRelatedOrder(), $relatedCart);
             $this->recomputeChanges($order->getRelatedOrder());
         }
 
@@ -897,6 +898,7 @@ class Order
         $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getCurrentTotalPriceForLoyalty(), $wholeCart);
         $order->setLoyalityDiscount($loyaltyDiscount);
         $order->setUpSellDiscount($cart->getUpSellShareDiscount());
+        $this->syncOrderFromCart($order, $cart);
         $this->recomputeChanges($order);
     }
 
@@ -908,6 +910,25 @@ class Order
     public function recalculateOrderPrice(Orders $order)
     {
         $order->setIndividualDiscountedTotalPrice();
+    }
+
+    /**
+     * Update order sizes prices
+     *
+     * @param Orders $order
+     * @param Cart $cart
+     */
+    protected function syncOrderFromCart(Orders $order, Cart $cart)
+    {
+        foreach ($cart->getSizes() as $cartItem) {
+            /** @var OrderProductSize $cartSize */
+            $cartSize = $order->getSizes()->filter(function (OrderProductSize $cartSize) use ($cartItem) {
+                return $cartSize->getSize()->getId() == $cartItem->getSize()->getId();
+            })->first();
+            $cartSize->setDiscountedTotalPricePerItem($cartItem->getDiscountedPricePerItem());
+            $cartSize->setTotalPricePerItem($cartItem->getPricePerItem());
+            $this->recomputeChanges($cartSize);
+        }
     }
 
     /**
