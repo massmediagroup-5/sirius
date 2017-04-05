@@ -67,9 +67,11 @@
                 <td class="control-group">{{ admin.wholesalerCart.getItemInPackagePrice(size) }}</td>
                 <td class="control-group">{{ admin.wholesalerCart.getItemInPackageDiscountedPrice(size)}}</td>
                 <td class="control-group">
-                    <button class="btn btn-danger btn-xs js_size_remove">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
+                    {% if admin.baseRouteName == 'new_orders' %}
+                        <button class="btn btn-danger btn-xs js_size_remove">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
