@@ -139,7 +139,7 @@ class EntityEventsSubscriber implements EventSubscriber
                 $this->recomputeChanges($em, $entity);
             }
             if ($entity instanceof OrderProductSize) {
-                if ($entity->getOrder()->getId()) {
+                if ($entity->getOrder()) {
                     $this->container->get('order')->recalculateOrderDiscounts($entity->getOrder());
                 }
 
@@ -174,6 +174,7 @@ class EntityEventsSubscriber implements EventSubscriber
                 }
 
                 if ($uow->getEntityState($entity->getOrder()) != UnitOfWork::STATE_REMOVED) {
+                    $this->container->get('order')->recalculateOrderDiscounts($entity->getOrder());
                     $this->container->get('order')->recalculateOrderPrice($entity->getOrder());
                     $this->recomputeChanges($em, $entity->getOrder());
                 }
