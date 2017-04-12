@@ -878,15 +878,13 @@ class Order
     {
         $priceCalculator = new PricesCalculator($this->container, $this->em, $order->getUsers());
 
-        $wholeCart = $this->createArrayCartFromOrder($order, $priceCalculator);
         $cart = $this->createArrayCartFromOrder($order, $priceCalculator, false);
 
         if ($order->getRelatedOrder()) {
             $relatedCart = $this->createArrayCartFromOrder($order->getRelatedOrder(), $priceCalculator, false);
 
             // Recalculate discount for related order
-            $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($relatedCart->getCurrentTotalPriceForLoyalty(),
-                $wholeCart);
+            $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($relatedCart->getCurrentTotalPriceForLoyalty());
             $order->getRelatedOrder()->setLoyalityDiscount($loyaltyDiscount);
             $order->getRelatedOrder()->setUpSellDiscount($relatedCart->getUpSellShareDiscount());
 
@@ -895,7 +893,7 @@ class Order
         }
 
         // Recalculate discount for order
-        $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getCurrentTotalPriceForLoyalty(), $wholeCart);
+        $loyaltyDiscount = $priceCalculator->getLoyaltyDiscount($cart->getCurrentTotalPriceForLoyalty());
         $order->setLoyalityDiscount($loyaltyDiscount);
         $order->setUpSellDiscount($cart->getUpSellShareDiscount());
         $this->syncOrderFromCart($order, $cart);

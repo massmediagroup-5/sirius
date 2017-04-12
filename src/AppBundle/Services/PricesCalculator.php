@@ -472,10 +472,9 @@ class PricesCalculator
      * Subtract loyalty discount from sum when customer is not a wholesaler
      *
      * @param $sum
-     * @param Cart $cart
      * @return number
      */
-    public function getLoyaltyDiscount($sum, Cart $cart)
+    public function getLoyaltyDiscount($sum)
     {
         if ($this->hasRole('ROLE_WHOLESALER')) {
             if (!$this->hasRole('ROLE_GRAY_LIST')) {
@@ -485,13 +484,13 @@ class PricesCalculator
                     return $sum * $this->user->getDiscount() * 0.01;
                 } else {
                     // Use loyalty discount
-                    return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
+                    return $this->getWholesalerLoyaltyProgramDiscountForSum($sum);
                 }
             }
             return 0;
         }
 
-        return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
+        return $this->getLoyaltyProgramDiscountBySum($sum);
     }
 
     /**
@@ -511,34 +510,26 @@ class PricesCalculator
     }
 
     /**
-     * @param Cart $cart
-     * @param $sum
-     * @return mixed
-     */
-    public function getLoyaltyDiscountForCartForSum(Cart $cart, $sum)
-    {
-        return $this->getLoyaltyDiscountBySumForSum($cart->getTotalPriceForLoyalty(), $sum);
-    }
-
-    /**
-     * @param $sum
-     * @param $sumToDiscount
-     * @return float
-     */
-    public function getLoyaltyDiscountBySumForSum($sum, $sumToDiscount)
-    {
-        $discount = $this->getLoyaltyProgramDiscountPrcBySum($sum);
-
-        return round($discount * $sumToDiscount * 0.01, 2);
-    }
-
-    /**
      * @param $sum
      * @return float|int
      */
     public function getLoyaltyProgramDiscountBySum($sum)
     {
         if ($loyaltyProgram = $this->getLoyaltyProgramBySum($sum)) {
+            return round($loyaltyProgram->getDiscount() * $sum * 0.01, 2);
+        }
+        return 0;
+    }
+
+    /**
+     * @param $sum
+     * @return float|int
+     */
+    public function getWholesalerLoyaltyProgramDiscountForSum($sum)
+    {
+        $userSpend = $this->getUserIndividualDiscountedTotalPriceSumByStatus(Orders::STATUS_DONE);
+
+        if ($loyaltyProgram = $this->getLoyaltyProgramBySum($userSpend)) {
             return round($loyaltyProgram->getDiscount() * $sum * 0.01, 2);
         }
         return 0;

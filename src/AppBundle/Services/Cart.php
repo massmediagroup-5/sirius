@@ -376,9 +376,7 @@ class Cart
      */
     public function getLoyaltyDiscount()
     {
-        $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'discountedPrice');
-
-        return $this->pricesCalculator->getLoyaltyDiscount($sum, $this);
+        return $this->pricesCalculator->getLoyaltyDiscount($this->getCurrentTotalPriceForLoyalty());
     }
 
     /**
@@ -388,7 +386,7 @@ class Cart
     {
         $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'preOrderDiscountedPrice');
 
-        return $this->pricesCalculator->getLoyaltyDiscount($sum, $this);
+        return $this->pricesCalculator->getLoyaltyDiscount($sum);
     }
 
     /**
@@ -398,7 +396,7 @@ class Cart
     {
         $sum = Arr::sumProperty($this->getSizesWithoutShare(), 'standardDiscountedPrice');
 
-        return $this->pricesCalculator->getLoyaltyDiscount($sum, $this);
+        return $this->pricesCalculator->getLoyaltyDiscount($sum);
     }
 
     /**
@@ -452,16 +450,6 @@ class Cart
      * @return number
      */
     public function getCurrentTotalPriceForLoyalty()
-    {
-        return Arr::sumProperty($this->getSizesWithoutShare(), 'discountedPrice');
-    }
-
-    /**
-     * Return total price for operations with loyalty
-     *
-     * @return number
-     */
-    public function getTotalPriceForLoyalty()
     {
         return Arr::sumProperty($this->getSizesWithoutShare(), 'discountedPrice');
     }

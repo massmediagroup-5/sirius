@@ -786,7 +786,7 @@ class Orders
      */
     public function getIndividualDiscount()
     {
-        return $this->individualDiscount;
+        return (float)$this->individualDiscount;
     }
 
     /**
@@ -804,7 +804,7 @@ class Orders
      */
     public function getIndividualDiscountedTotalPrice()
     {
-        return $this->individualDiscountedTotalPrice;
+        return (float)$this->individualDiscountedTotalPrice;
     }
 
     /**
@@ -960,7 +960,7 @@ class Orders
      */
     public function getAdditionalSolar()
     {
-        return $this->additionalSolar;
+        return (float)$this->additionalSolar;
     }
 
     /**
@@ -1182,7 +1182,7 @@ class Orders
      */
     public function getLoyalityDiscount()
     {
-        return $this->loyalityDiscount;
+        return (float)$this->loyalityDiscount;
     }
 
     /**
@@ -1249,7 +1249,7 @@ class Orders
      */
     public function getUpSellDiscount()
     {
-        return $this->upSellDiscount;
+        return (float)$this->upSellDiscount;
     }
 
     /**
