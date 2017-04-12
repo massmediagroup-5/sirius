@@ -1,0 +1,2 @@
+
+docker-compose exec sirius_php bundle exec cap $1 deploy
