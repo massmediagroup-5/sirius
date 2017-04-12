@@ -88,7 +88,7 @@ class Share
      *
      * @var string
      */
-    private $discount;
+    private $discount = 0;
 
 
     /**

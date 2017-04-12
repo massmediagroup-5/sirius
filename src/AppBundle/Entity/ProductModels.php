@@ -637,31 +637,6 @@ class ProductModels
     }
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->products ? "{$this->products->getName()} ({$this->productColors->getName()})" : '';
-    }
-
-    /**
-     *
-     */
-    public function __clone()
-    {
-        $this->id = null;
-        $this->images = new ArrayCollection();
-        $sizes = new ArrayCollection();
-        foreach ($this->sizes as $size) {
-            $size = clone $size;
-            $size->setModel($this);
-            $sizes->add($size);
-        }
-        $this->sizes = $sizes;
-        $this->alias .= '-clone-' . uniqid();
-    }
-
-    /**
      * @param ShareSizesGroup $shareGroup
      * @return boolean
      */
@@ -805,5 +780,34 @@ class ProductModels
     public function removeHistory(\AppBundle\Entity\ProductModelsHistory $history)
     {
         $this->history->removeElement($history);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        if ($this->products) {
+            return $this->products->getName().($this->productColors ? " ({$this->productColors->getName()})" : '');
+        }
+
+        return '';
+    }
+
+    /**
+     *
+     */
+    public function __clone()
+    {
+        $this->id = null;
+        $this->images = new ArrayCollection();
+        $sizes = new ArrayCollection();
+        foreach ($this->sizes as $size) {
+            $size = clone $size;
+            $size->setModel($this);
+            $sizes->add($size);
+        }
+        $this->sizes = $sizes;
+        $this->alias .= '-clone-' . uniqid();
     }
 }
