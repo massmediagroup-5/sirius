@@ -207,6 +207,13 @@ class Orders
     private $bonuses = 0;
 
     /**
+     * Bonuses wrote off from user
+     *
+     * @var integer
+     */
+    private $bonusesWroteOff = 0;
+
+    /**
      * @var boolean
      */
     private $bonusesEnrolled = false;
@@ -1034,6 +1041,17 @@ class Orders
     }
 
     /**
+     * @return Orders
+     */
+    public function getMain()
+    {
+        if ($this->relatedOrder) {
+            return $this->relatedOrder->id > $this->id ? $this : $this->relatedOrder;
+        }
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function isMain()
@@ -1041,9 +1059,22 @@ class Orders
         return $this->relatedOrder ? $this->id < $this->relatedOrder->id : true;
     }
 
+    /**
+     * @return string
+     */
+    public function getMaxBonuses()
+    {
+        if ($this->relatedOrder) {
+            return $this->getMain()->getBonusesWroteOff() - $this->relatedOrder->getBonuses();
+        }
+        return $this->bonusesWroteOff;
+    }
+
     public function __clone()
     {
-        $this->id    = null;
+        $this->id = null;
+        $this->bonuses = 0;
+        $this->bonusesWroteOff = 0;
         $this->sizes = new ArrayCollection();
     }
 
@@ -1298,5 +1329,25 @@ class Orders
     public function isWholesale()
     {
         return $this->getUsers() && $this->getUsers()->hasRole('ROLE_WHOLESALER');
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusesWroteOff()
+    {
+        return $this->bonusesWroteOff;
+    }
+
+    /**
+     * @param $bonusesWroteOff
+     *
+     * @return $this
+     */
+    public function setBonusesWroteOff($bonusesWroteOff)
+    {
+        $this->bonusesWroteOff = $bonusesWroteOff;
+
+        return $this;
     }
 }

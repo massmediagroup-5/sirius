@@ -128,6 +128,11 @@ AppBundle\Entity\Orders:
             nullable: false
             options:
                 default: 0
+        bonusesWroteOff:
+            type: integer
+            nullable: false
+            options:
+                default: 0
         bonusesEnrolled:
             type: boolean
             nullable: false

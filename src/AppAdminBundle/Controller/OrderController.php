@@ -176,6 +176,7 @@ class OrderController extends BaseController
             'individualDiscount',
             'additionalSolarDescription',
             'additionalSolar',
+            'bonuses',
         ]);
         $object = $this->admin->getSubject();
 
