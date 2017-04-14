@@ -42,10 +42,10 @@
         <th colspan="2" id="discountedTotalPrice">{{ admin.subject.loyaltyAndUpSellDiscounted }}</th>
     </tr>
     <tr>
-        <td colspan="10" class="text-right">Оплачено бонусами</td>
+        <td colspan="10" class="text-right">Оплачено бонусами (макс. {{ admin.subject.maxBonuses }})</td>
         <th colspan="2">
             <input id="bonuses" type="number" value="{{ admin.subject.bonuses }}" name="bonuses"
-                   class="table-input js_order_update" min="0" max="{{ admin.subject.maxBonuses }}"/>
+                   class="table-input js_order_update" min="0"/>
         </th>
     </tr>
     <tr>

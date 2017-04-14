@@ -572,11 +572,21 @@ class OrdersAdmin extends Admin
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getSubject()
+    {
+        $subject = parent::getSubject();
+
+        return $this->setDefaults($subject);
+    }
+
+    /**
      * @param $object
      */
     protected function setDefaults($object)
     {
-        if (!$object->getAdditionalSolarDescription()) {
+        if ($object && !$object->getAdditionalSolarDescription()) {
             $object->setAdditionalSolarDescription('Доставка');
         }
 

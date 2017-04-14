@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use AppBundle\Helper\Arr;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
 /**
@@ -1145,7 +1146,7 @@ class Orders
      */
     public function setBonuses($bonuses)
     {
-        $this->bonuses = $bonuses;
+        $this->bonuses = (int)$bonuses;
 
         return $this;
     }
@@ -1349,5 +1350,19 @@ class Orders
         $this->bonusesWroteOff = $bonusesWroteOff;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     *
+     * @param ExecutionContextInterface $context
+     */
+    public function validate(ExecutionContextInterface $context)
+    {
+        if ($this->bonuses > $this->getMaxBonuses()) {
+            $context->buildViolation('Bonuses count bigger then allowed')
+                ->atPath('bonuses')
+                ->addViolation();
+        }
     }
 }

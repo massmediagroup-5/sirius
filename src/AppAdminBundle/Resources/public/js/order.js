@@ -10,6 +10,16 @@ requestMixin.successSubmit = function (responce) {
     }
 };
 
+requestMixin.errorSubmit = function (responce) {
+    if (responce.status === 422) {
+        alert(responce.responseJSON.errors.map(function (error) {
+            return error.property_path + ': ' + error.message
+        }).join('\n'));
+    } else {
+        alert(responce.status + ' ' + responce.statusText);
+    }
+};
+
 /**
  * Order size control
  */
@@ -249,23 +259,6 @@ var OrderSizes = (function () {
     OrderSizes.prototype.init = function () {
         var self = this;
 
-        this.$discountedPrice = $('#individualDiscountedTotalPrice');
-
-        this.synchronizeTotalPrice();
-
-        $('input[name=individualDiscount], input[name=additionalSolar], #bonuses').on('keyup change', function () {
-            var $price = $('#discountedTotalPrice'),
-                $bonuses = $('#bonuses'),
-                price = $price.text() - parseFloat($('input[name=individualDiscount]').val())
-                    + parseFloat($('input[name=additionalSolar]').val()) - $bonuses.val();
-            price = parseFloat(price);
-            if (isNaN(price)) {
-                price = $price.text();
-            }
-            self.$discountedPrice.text(Math.round(price * 100) / 100);
-            self.synchronizeTotalPrice();
-        });
-
         this.$partial.find('[data-size-id]').each(function () {
             self.sizes.push(new OrderSize($(this)));
         });
@@ -278,14 +271,6 @@ var OrderSizes = (function () {
             // Method addNewSizes will run when sizes selected
             this.selectSizeDialog.openAddSizeDialog.bind(this.selectSizeDialog, this.addNewSizes.bind(this))
         );
-    };
-
-    /**
-     * Synchronize sizes partial
-     */
-    OrderSizes.prototype.synchronizeTotalPrice = function () {
-        var $totalAmount = $('.js-total-amount');
-        $totalAmount.val(this.$discountedPrice.text());
     };
 
     /**

@@ -185,14 +185,16 @@ class OrderController extends BaseController
         $object = $serializer->denormalize($data, 'AppBundle\\Entity\\Orders', null,
             ['object_to_populate' => $object]);
 
+        $errors = $this->get('validator')->validate($object);
+
+        if ($errors->count()) {
+            return new Response($this->get('jms_serializer')->serialize(compact('errors'), 'json'), 422);
+        }
+
         $this->getDoctrine()->getManager()->persist($object);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->renderJson([
-            'history' => $this->renderView('AppAdminBundle:admin:order_history_items.html.twig', [
-                'admin' => $this->admin
-            ])
-        ]);
+        return $this->renderJson($this->renderPartials());
     }
 
     /**
