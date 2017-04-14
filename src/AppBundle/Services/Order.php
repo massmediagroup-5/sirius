@@ -96,6 +96,7 @@ class Order
             $order->setLoyalityDiscount($cart->getLoyaltyDiscountForStandard());
         }
 
+        $preOrder = null;
         if ($cart->getPreOrderCount()) {
             $preOrder = $this->createOrder($cart->getSizes(), $data, $user, $quickFlag, true);
 
@@ -108,8 +109,6 @@ class Order
             } else {
                 $order = $preOrder;
             }
-
-            $this->em->persist($preOrder);
         }
 
         if ($user) {
@@ -129,6 +128,11 @@ class Order
         $order->setBonusesWroteOff($order->getBonuses());
 
         $this->em->persist($order);
+
+        // Important to persist $preOrder after $order
+        if ($preOrder) {
+            $this->em->persist($preOrder);
+        }
 
         $this->em->flush();
 
