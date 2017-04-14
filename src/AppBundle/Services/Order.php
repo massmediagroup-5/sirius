@@ -124,6 +124,10 @@ class Order
 
         $order->setUpSellDiscount($cart->getUpSellShareDiscount());
 
+        // Bonuses are set to main order only
+        $order->setBonuses(Arr::get($data, 'bonuses', 0));
+        $order->setBonusesWroteOff($order->getBonuses());
+
         $this->em->persist($order);
 
         $this->em->flush();
@@ -645,7 +649,8 @@ class Order
             'cities',
             'stores',
             'individualDiscount',
-            'additionalSolar'
+            'additionalSolar',
+            'bonuses'
         ];
 
         $uow = $this->em->getUnitOfWork();
@@ -707,6 +712,18 @@ class Order
         foreach ($orders as $order) {
             $this->appendBonuses($order);
         }
+    }
+
+    /**
+     * Note: bonuses lefts in order too
+     *
+     * @param Orders $order
+     */
+    public function backBonusesToUser(Orders $order)
+    {
+        $order->getUsers()->incrementBonuses($order->getBonuses());
+
+        $this->em->persist($order->getUsers());
     }
 
     /**
@@ -799,14 +816,12 @@ class Order
             }
             $cities = Arr::get($data, $prefix . 'delivery_city', null);
             $stores = Arr::get($data, $prefix . 'delivery_store', null);
-            $bonuses = Arr::get($data, 'bonuses', 0);
 
             $order->setCities($cities);
             $order->setStores($stores);
             $order->setCarriers(Arr::get($data, 'delivery_type'));
             $order->setCustomDelivery(Arr::get($data, 'customDelivery'));
             $order->setComment(Arr::get($data, 'comment'));
-            $order->setBonuses($bonuses);
             $order->setPay(Arr::get($data, 'pay'));
             $order->setFio(Arr::get($data, 'name') . ' ' . Arr::get($data, 'surname'));
             $order->setType(Orders::TYPE_NORMAL);

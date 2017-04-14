@@ -257,7 +257,7 @@ var OrderSizes = (function () {
             var $price = $('#discountedTotalPrice'),
                 $bonuses = $('#bonuses'),
                 price = $price.text() - parseFloat($('input[name=individualDiscount]').val())
-                    + parseFloat($('input[name=additionalSolar]').val()) - $bonuses.text();
+                    + parseFloat($('input[name=additionalSolar]').val()) - $bonuses.val();
             price = parseFloat(price);
             if (isNaN(price)) {
                 price = $price.text();
