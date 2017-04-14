@@ -253,7 +253,7 @@ var OrderSizes = (function () {
 
         this.synchronizeTotalPrice();
 
-        $('input[name=individualDiscount], input[name=additionalSolar]').on('keyup change', function () {
+        $('input[name=individualDiscount], input[name=additionalSolar], #bonuses').on('keyup change', function () {
             var $price = $('#discountedTotalPrice'),
                 $bonuses = $('#bonuses'),
                 price = $price.text() - parseFloat($('input[name=individualDiscount]').val())
@@ -262,7 +262,7 @@ var OrderSizes = (function () {
             if (isNaN(price)) {
                 price = $price.text();
             }
-            self.$discountedPrice.text(price);
+            self.$discountedPrice.text(Math.round(price * 100) / 100);
             self.synchronizeTotalPrice();
         });
 
