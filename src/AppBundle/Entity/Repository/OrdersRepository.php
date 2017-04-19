@@ -35,12 +35,15 @@ class OrdersRepository extends EntityRepository
 
     /**
      * @param $user
-     * @return int
+     * @param $interval
+     *
+     * @return array
      */
-    public function bonusesInProcess($user)
+    public function bonusesInProcess($user, $interval)
     {
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('sclr_0', 'bonusesInProcess');
+        $rsm->addScalarResult('append_at', 'appendAt');
 
         return $this->_em->createNativeQuery('SELECT 
                 SUM(FLOOR(((SELECT 
@@ -49,13 +52,16 @@ class OrdersRepository extends EntityRepository
                                 order_product_size sizes
                             WHERE
                                 sizes.order_id = orders.id) - orders.individual_discount + orders.additional_solar
-                                 - orders.bonuses - orders.loyality_discount - orders.up_sell_discount) / 100)) sclr_0
+                                 - orders.bonuses - orders.loyality_discount - orders.up_sell_discount) / 100)) sclr_0,
+            DATE(DATE_ADD(orders.done_time, INTERVAL ? DAY)) AS append_at
             FROM orders
             JOIN order_status ON orders.status_id = order_status.id
-            WHERE orders.users_id = ? AND orders.bonuses_enrolled = 0 AND order_status.code = ?;', $rsm)
-            ->setParameter(1, $user->getId())
-            ->setParameter(2, 'done')
-            ->getSingleScalarResult() ?: 0;
+            WHERE orders.users_id = ? AND orders.bonuses_enrolled = 0 AND order_status.code = ?
+            GROUP BY DATE(orders.done_time);', $rsm)
+            ->setParameter(1, $interval)
+            ->setParameter(2, $user->getId())
+            ->setParameter(3, 'done')
+            ->getArrayResult();
     }
 
 

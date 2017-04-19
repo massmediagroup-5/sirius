@@ -15,8 +15,8 @@
                 <p>Состояние на: <strong>{{ 'now'|date('d.m.Y') }}</strong></p>
                 <div class="">
                     <p>{{ 'labels.user_bonuses'|transchoice(app.user.bonuses|round) }}</p>
-                    <p>{{ 'labels.user_bonuses_processed'|transchoice(bonusesInProcess, {'%count%': bonusesInProcess}) }}</p>
-                    {% if not (app.user.bonuses == 0 and bonusesInProcess == 0) %}
+                    <p>{{ 'labels.user_bonuses_processed'|transchoice(allBonusesInProcess, {'%count%': allBonusesInProcess}) }}</p>
+                    {% if not (app.user.bonuses == 0 and allBonusesInProcess == 0) %}
                         <button class="btn btn-primary toggle">Подробнее</button>
                     {% endif %}
                 </div>
@@ -31,7 +31,7 @@
                         <td>Количество</td>
                     </tr>
                     <tr>
-                        <td>{{ deactivateBonusesTime | format_datetime}}</td>
+                        <td>{{ deactivateBonusesTime | format_date }}</td>
                         <td>{{ app.user.bonuses }}</td>
                     </tr>
                     <tr>
@@ -41,10 +41,12 @@
                         <td>Дата активации</td>
                         <td>Количество</td>
                     </tr>
-                    <tr>
-                        <td>{{ bonusesInProcess ? dateActivationLastBonus | format_datetime : '' }}</td>
-                        <td>{{ bonusesInProcess }}</td>
-                    </tr>
+                    {% for bonus in bonusesInProcess %}
+                        <tr>
+                            <td>{{ bonus.appendAt | format_date }}</td>
+                            <td>{{ bonus.bonusesInProcess }}</td>
+                        </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>

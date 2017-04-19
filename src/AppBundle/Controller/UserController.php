@@ -67,10 +67,16 @@ class UserController extends Controller
             return $this->render('AppBundle:user/wholesaler_loyal_info.html.twig');
         }
 
+        $interval = $this->container->getParameter('orders.add_bonuses_days_interval');
+
         $bonusesInProcess = $this->getDoctrine()
             ->getManager()
             ->getRepository('AppBundle:Orders')
-            ->bonusesInProcess($this->getUser());
+            ->bonusesInProcess($this->getUser(), $interval);
+
+        $allBonusesInProcess = array_sum(array_map(function ($bonus) {
+            return $bonus['bonusesInProcess'];
+        }, $bonusesInProcess));
 
         $lastAddedBonus = $this->getDoctrine()
             ->getManager()
@@ -84,13 +90,13 @@ class UserController extends Controller
             // время из параметров на которое действительны бонусы
             $paramDeactivateTime = $this->container->get('options')->getParamValue('deactivateBonusesTime');
             // дата активации самого свежего бонуса
-            $dateActivationLastBonus = clone $lastAddedBonusAt;
-            $dateActivationLastBonus->add(new \DateInterval('P14D'));
 
-            $deactivateBonusesTime = $lastAddedBonusAt->add(new \DateInterval('P' . $paramDeactivateTime . 'D'));
+            $deactivateBonusesTime = $lastAddedBonusAt->add(new \DateInterval('P'.$paramDeactivateTime.'D'));
 
-            return $this->render('AppBundle:user/loyal_info.html.twig', compact('bonusesInProcess', 'deactivateBonusesTime', 'dateActivationLastBonus'));
+            return $this->render('AppBundle:user/loyal_info.html.twig',
+                compact('bonusesInProcess', 'allBonusesInProcess', 'deactivateBonusesTime'));
         }
+
         return $this->render('AppBundle:user/loyal_info.html.twig', ['message' => 'У Вас нет заказов']);
     }
 
