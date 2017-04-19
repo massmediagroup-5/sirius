@@ -78,10 +78,18 @@
                                                     <td>Итого</td>
                                                     <td>{{ order.totalPrice|format_price }} грн.</td>
                                                 </tr>
-                                                <tr class="discount-row">
-                                                    <td>Скидка</td>
-                                                    <td>{{ order.discount|format_price }} грн.</td>
-                                                </tr>
+                                                {% if order.upSellAndShareDiscount %}
+                                                    <tr class="discount-row">
+                                                        <td>Скидка по акции</td>
+                                                        <td>{{ order.upSellAndShareDiscount|format_price }} грн.</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if order.loyalityDiscount %}
+                                                    <tr class="discount-row">
+                                                        <td>Скидка по программе лояльности</td>
+                                                        <td>{{ order.loyalityDiscount|format_price }} грн.</td>
+                                                    </tr>
+                                                {% endif %}
                                                 {% if order.individualDiscount %}
                                                     <tr class="discount-row">
                                                         <td>Индивидуальная скидка</td>

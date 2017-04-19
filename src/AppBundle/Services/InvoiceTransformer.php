@@ -83,7 +83,7 @@ class InvoiceTransformer
         $sheet->setCellValue('L16', 'Сумма')
             ->setCellValue('L' . ($sizesCount + 17), $orderObject->getDiscountedTotalPrice())
             ->setCellValue('I' . ($sizesCount + 18), 'Скидка по акции')
-            ->setCellValue('L' . ($sizesCount + 18), $orderObject->getUpSellDiscount())
+            ->setCellValue('L' . ($sizesCount + 18), $orderObject->getUpSellAndShareDiscount())
             ->setCellValue('I' . ($sizesCount + 19), 'Скидка по программе лояльности')
             ->setCellValue('L' . ($sizesCount + 19), $orderObject->getLoyalityDiscount())
             ->setCellValue('I' . ($sizesCount + 20), 'Оплачено бонусами')

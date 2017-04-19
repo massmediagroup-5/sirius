@@ -756,7 +756,7 @@ class Orders
     /**
      * Get discount
      *
-     * @return string
+     * @return float
      */
     public function getDiscount()
     {
@@ -1277,11 +1277,19 @@ class Orders
     /**
      * Get upSellDiscount
      *
-     * @return string
+     * @return float
      */
     public function getUpSellDiscount()
     {
         return (float)$this->upSellDiscount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getUpSellAndShareDiscount()
+    {
+        return $this->getUpSellDiscount() + $this->getDiscount();
     }
 
     /**
