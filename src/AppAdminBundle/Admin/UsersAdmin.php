@@ -30,8 +30,9 @@ class UsersAdmin extends BaseUserAdmin
             $query->andWhere('o.roles NOT LIKE :role_wholesaler')
                 ->andWhere('o.roles NOT LIKE :role_admin')
                 ->setParameter('role_wholesaler', '%ROLE_WHOLESALER%')
-                ->setParameter('role_admin', '%ROLE_ADMIN%');
+                ->setParameter('role_admin', '%_ADMIN%');
         }
+
         return $query;
     }
 
