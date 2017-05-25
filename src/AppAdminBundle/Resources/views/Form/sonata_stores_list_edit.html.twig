@@ -5,7 +5,7 @@
 
         <script>
             (function ($) {
-                var $storesInput = $('select[id$=stores]'), $citiesInput = $('select[id$=cities]');
+                var $storesInput = $('select[id$=stores], select[id$=warehouse]'), $citiesInput = $('select[id$=city] ,select[id$=cities]');
                 function changeStoreValues() {
                     var city_id = $citiesInput.val();
                     if (city_id) {
@@ -17,12 +17,13 @@
                             dataType: "json",
                             type: "POST",
                             success: function (data) {
+                                var oldVal = $storesInput.val();
                                 $storesInput.select2('data', null);
                                 $storesInput.find('option').remove();
-                                $storesInput.find("option:selected").prop("selected", false);
                                 $.each(data.stores, function (key, value) {
-                                    $storesInput.append(new Option(value.name, value.id));
+                                        $storesInput.append(new Option(value.name, value.id));
                                 });
+                                $storesInput.val(oldVal).trigger('change');
                                 return false;
                             },
                             error: function (message) {
@@ -35,6 +36,7 @@
                         changeStoreValues();
                     }
                 }
+                $(document).ready(changeStoreValues);
                 $citiesInput.on('change', changeStoreValues);
             })(jQuery);
         </script>

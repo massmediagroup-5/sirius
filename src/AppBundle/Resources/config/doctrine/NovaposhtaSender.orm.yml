@@ -1,0 +1,41 @@
+AppBundle\Entity\NovaposhtaSender:
+    type: entity
+    table: novaposhta_sender
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 128
+            options:
+                fixed: false
+            column: name
+    manyToOne:
+        city:
+            targetEntity: Cities
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                city_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        warehouse:
+            targetEntity: Stores
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                warehouse_id:
+                    referencedColumnName: id
+            orphanRemoval: false
