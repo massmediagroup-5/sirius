@@ -70,7 +70,6 @@
                             <td class="form-inline">
                                 <div class="form-group">
                                     <input type="text" name="np_date" id="np_date" class="form-control"/>
-                                    <span class="notice">пример - 09.05.1945</span>
                                 </div>
                             </td>
                         </tr>
@@ -339,6 +338,10 @@
             },
         });
         return false;
+    });
+
+    $(document).ready(function () {
+        $('#np_date').datepicker();
     });
 
     $('.js-waybill-fields input').on('click focus ifChanged', function () {
