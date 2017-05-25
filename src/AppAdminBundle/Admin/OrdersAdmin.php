@@ -395,7 +395,8 @@ class OrdersAdmin extends Admin
                     'tab_template' => 'AppAdminBundle:admin:order_np_waybill.html.twig',
                     'object' => $this->getSubject(),
                     'ttn' => $ttn,
-                    'date' => $date
+                    'date' => $date,
+                    'senders' => $this->getNPSenders()
                 ])
                 ->add('customTtn', null, ['label' => 'ТТН'])
                 ->end()
@@ -813,5 +814,14 @@ class OrdersAdmin extends Admin
                     ->orderBy('s.name', 'ASC');
             }
         ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getNPSenders(){
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        return $em->getRepository('AppBundle:NovaposhtaSender')->findAll();
     }
 }

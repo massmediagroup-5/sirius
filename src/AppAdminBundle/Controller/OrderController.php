@@ -3,6 +3,9 @@
 namespace AppAdminBundle\Controller;
 
 use AppAdminBundle\DTO\OrderWaybillForm;
+use AppBundle\Entity\Cities;
+use AppBundle\Entity\NovaposhtaSender;
+use AppBundle\Entity\Stores;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -252,7 +255,7 @@ class OrderController extends BaseController
         $data->CounterpartyProperty = 'Sender';
         $result = Counterparty::getCounterparties($data);
         $senderInfo = $result->data[0]; // Полная информация о отправителе
-        $citySender = "db5c88ac-391c-11dd-90d9-001a92567626"; // Город отправителя Хмельницький
+
         $counterpartySender = $senderInfo->Ref;
 
         // создаем контрагента получателя если до этого он небыл создан
@@ -280,9 +283,6 @@ class OrderController extends BaseController
 
         $contactPersonSender = $result->data[0]->Ref;
 
-        // Для контрагента отправителя получим склад отправки:
-        $addressSender = $api->getWarehouseRef();
-
         // Создадим адрес для получателя:
         $addressRecipient = $orderObject->getStores()->getRef();
 
@@ -301,12 +301,15 @@ class OrderController extends BaseController
         $result = \NovaPoshta\ApiModels\Common::getCargoTypes();
         $cargoType = $result->data[0]->Ref; // Выбрали: Cargo
 
+        // получаем данные отправителя из бд по имени отправителя из формы
+        $novaposhtaSender = $this->getDoctrine()->getRepository(NovaposhtaSender::class)->findOneByName($form_data['np_sender']);
+
         // Мы выбрали все данные которые нам нужны для создания ЭН. Создаем ЭН:
         // Контрагент отправитель
         $sender = new \NovaPoshta\Models\CounterpartyContact();
-        $sender->setCity($citySender)
+        $sender->setCity($novaposhtaSender->getCity()->getRef())
             ->setRef($counterpartySender)
-            ->setAddress($addressSender)
+            ->setAddress($novaposhtaSender->getWarehouse()->getRef())
             ->setContact($contactPersonSender)
             ->setPhone(preg_replace("/[^0-9]/", '', strip_tags($api->getPhone())));
 
