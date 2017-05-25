@@ -10,6 +10,18 @@
                     <tbody class="sonata-ba-tbody">
                     {% if form_tab.ttn == '' %}
                         <tr>
+                            <td>Отправитель:</td>
+                            <td class="form-inline">
+                                <div class="form-group">
+                                    <select name="np_sender" class="form-control">
+                                        {% for sender in form_tab.senders %}
+                                            <option value="{{ sender.name }}">{{ sender.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Количество мест:</td>
                             <td class="form-inline">
                                 <div class="form-group">

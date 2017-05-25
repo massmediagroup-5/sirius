@@ -346,6 +346,12 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Сервисы", label: "Нова Пошта"}
 
+    app_admin.admin.novaposhta_sender:
+        class: AppAdminBundle\Admin\NovaposhtaSenderAdmin
+        arguments: [~, AppBundle\Entity\NovaposhtaSender, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Новая почта отправитель"}
+
     app_admin.admin.social_networks:
         class: AppAdminBundle\Admin\SocialNetworksAdmin
         arguments: [~, AppBundle\Entity\SocialNetworks, SonataAdminBundle:CRUD]
