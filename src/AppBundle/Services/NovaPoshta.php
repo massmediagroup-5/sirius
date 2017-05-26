@@ -8,16 +8,19 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\AppBundle;
 use AppBundle\Entity\Carriers;
 use AppBundle\Entity\Cities;
+use AppBundle\Entity\NovaposhtaSender;
 use AppBundle\Entity\Stores;
 use Doctrine\ORM\EntityManager;
 use NovaPoshta\ApiModels\Address;
+use NovaPoshta\ApiModels\ContactPerson;
+use NovaPoshta\ApiModels\Counterparty;
 use NovaPoshta\ApiModels\InternetDocument;
 use NovaPoshta\Config;
 use NovaPoshta\MethodParameters\Address_getWarehouses;
 use NovaPoshta\MethodParameters\Address_getCities;
+use NovaPoshta\MethodParameters\MethodParameters;
 use NovaPoshta\Models\DataContainerResponse;
 
 /**
@@ -237,5 +240,48 @@ class NovaPoshta
     public function isNovaPoshtaCarrier(Carriers $carrier)
     {
         return $carrier->getId() == 1;
+    }
+
+    /**
+     * @param NovaposhtaSender $novaposhtaSender
+     * @return DataContainerResponse
+     */
+    public function createContactPerson(NovaposhtaSender $novaposhtaSender){
+
+        $this->initConfig();
+        $sender = $this->getSenderCounterparties();
+        $senderRef = $sender->Ref;
+
+        $contactPerson = new ContactPerson();
+        $contactPerson->setCounterpartyRef($senderRef);
+        $contactPerson->setFirstName($novaposhtaSender->getFirstName());
+        $contactPerson->setLastName($novaposhtaSender->getLastName());
+        $contactPerson->setMiddleName($novaposhtaSender->getMiddleName());
+        $contactPerson->setPhone($novaposhtaSender->getPhone());
+        $contactPerson->setEmail($novaposhtaSender->getEmail());
+        return $contactPerson->save();
+    }
+
+    /**
+     * @param NovaposhtaSender $novaposhtaSender
+     */
+    public function removeContactPerson(NovaposhtaSender $novaposhtaSender){
+
+        $this->initConfig();
+
+        $contactPerson = new ContactPerson();
+        $contactPerson->setRef($novaposhtaSender->getRef());
+        $contactPerson->delete();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getSenderCounterparties(){
+
+        $data = new MethodParameters();
+        $data->CounterpartyProperty = 'Sender';
+        $result = Counterparty::getCounterparties($data);
+        return $result->data[0];
     }
 }

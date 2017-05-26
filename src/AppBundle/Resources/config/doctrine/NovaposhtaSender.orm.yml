@@ -18,6 +18,48 @@ AppBundle\Entity\NovaposhtaSender:
             options:
                 fixed: false
             column: name
+        ref:
+            type: string
+            nullable: true
+            length: 128
+            options:
+                fixed: false
+            column: ref
+        firstName:
+            type: string
+            nullable: false
+            length: 128
+            options:
+                fixed: false
+            column: first_name
+        lastName:
+            type: string
+            nullable: false
+            length: 128
+            options:
+                fixed: false
+            column: last_name
+        middleName:
+            type: string
+            nullable: true
+            length: 128
+            options:
+                fixed: false
+            column: middle_name
+        email:
+            type: string
+            nullable: true
+            length: 128
+            options:
+                fixed: false
+            column: email
+        phone:
+            type: string
+            nullable: false
+            length: 128
+            options:
+                fixed: false
+            column: phone
     manyToOne:
         city:
             targetEntity: Cities
