@@ -6,7 +6,7 @@ sirius_application:
 sirius_db:
     build: ./mysql
     ports:
-        - 3307:3306
+        - 3337:3306
     volumes:
         - /var/lib/mysql
     environment:
@@ -22,7 +22,7 @@ sirius_php:
 sirius_nginx:
     build: ./nginx
     ports:
-        - 8000:80
+        - 8030:80
     links:
         - sirius_php
     volumes_from:
