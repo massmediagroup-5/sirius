@@ -3,9 +3,7 @@
 namespace AppAdminBundle\Controller;
 
 use AppAdminBundle\DTO\OrderWaybillForm;
-use AppBundle\Entity\Cities;
 use AppBundle\Entity\NovaposhtaSender;
-use AppBundle\Entity\Stores;
 use AppBundle\Exception\ImpossibleToAddSizeToOrder;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -281,8 +279,6 @@ class OrderController extends BaseController
         $data->setRef($counterpartySender);
         $result = \NovaPoshta\ApiModels\Counterparty::getCounterpartyContactPersons($data);
 
-        $contactPersonSender = $result->data[0]->Ref;
-
         // Создадим адрес для получателя:
         $addressRecipient = $orderObject->getStores()->getRef();
 
@@ -310,7 +306,7 @@ class OrderController extends BaseController
         $sender->setCity($novaposhtaSender->getCity()->getRef())
             ->setRef($counterpartySender)
             ->setAddress($novaposhtaSender->getWarehouse()->getRef())
-            ->setContact($contactPersonSender)
+            ->setContact($novaposhtaSender->getRef())
             ->setPhone(preg_replace("/[^0-9]/", '', strip_tags($api->getPhone())));
 
         // Контрагент получатель

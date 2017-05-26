@@ -3,6 +3,7 @@
 namespace AppAdminBundle\Admin;
 
 use AppBundle\Entity\Carriers;
+use AppBundle\Entity\NovaposhtaSender;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -19,6 +20,9 @@ class NovaposhtaSenderAdmin extends Admin
         $listMapper
             ->add('id', null, ['label' => '#'])
             ->add('name')
+            ->add('firstName')
+            ->add('lastName')
+            ->add('phone')
             ->add('city')
             ->add('warehouse', null, ['label' => 'Активность(вкл/выкл)', 'editable'=>true])
             ->add('_action', 'actions', array(
@@ -38,6 +42,11 @@ class NovaposhtaSenderAdmin extends Admin
         $formMapper
             ->with("'Нова Пошта' отправитель", ['class' => 'col-md-6'])
             ->add('name', TextType::class, [])
+            ->add('lastName', TextType::class, [])
+            ->add('firstName', TextType::class, [])
+            ->add('middleName', TextType::class, [])
+            ->add('email', TextType::class, [])
+            ->add('phone', TextType::class, [])
             ->add('city', 'entity', [
                 'class' => 'AppBundle:Cities',
                 'required' => true,
@@ -63,5 +72,27 @@ class NovaposhtaSenderAdmin extends Admin
     public function getFormTheme()
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_stores_list_edit.html.twig']);
+    }
+
+    /**
+     * @param NovaposhtaSender $object
+     * @return void
+     */
+    public function prePersist($object)
+    {
+        $novaPoshta = $this->getConfigurationPool()->getContainer()->get('novaposhta');
+        $result = $novaPoshta->createContactPerson($object);
+        $ref = $result->data[0]->Ref;
+        $object->setRef($ref);
+    }
+
+    /**
+     * @param NovaposhtaSender $object
+     * @return void
+     */
+    public function preRemove($object)
+    {
+        $novaPoshta = $this->getConfigurationPool()->getContainer()->get('novaposhta');
+        $novaPoshta->removeContactPerson($object);
     }
 }
