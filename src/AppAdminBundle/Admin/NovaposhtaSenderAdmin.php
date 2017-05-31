@@ -89,13 +89,4 @@ class NovaposhtaSenderAdmin extends Admin
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_stores_list_edit.html.twig']);
     }
 
-//    /**
-//     * @param NovaposhtaSender $object
-//     * @return void
-//     */
-//    public function preRemove($object)
-//    {
-//        $novaPoshta = $this->getConfigurationPool()->getContainer()->get('novaposhta');
-//        $novaPoshta->removeContactPerson($object);
-//    }
 }
