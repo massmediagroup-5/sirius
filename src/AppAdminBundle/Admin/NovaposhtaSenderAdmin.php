@@ -3,12 +3,12 @@
 namespace AppAdminBundle\Admin;
 
 use AppBundle\Entity\Carriers;
-use AppBundle\Entity\NovaposhtaSender;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class NovaposhtaSenderAdmin extends Admin
 {
@@ -41,12 +41,27 @@ class NovaposhtaSenderAdmin extends Admin
     {
         $formMapper
             ->with("'Нова Пошта' отправитель", ['class' => 'col-md-6'])
-            ->add('name', TextType::class, [])
-            ->add('lastName', TextType::class, [])
-            ->add('firstName', TextType::class, [])
+            ->add('name', TextType::class, [
+                'required' => false,
+                'constraints' => [new NotBlank()]
+            ])
+            ->add('lastName', TextType::class, [
+                'required' => false,
+                'constraints' => [new NotBlank()]
+            ])
+            ->add('firstName', TextType::class, [
+                'required' => false,
+                'constraints' => [new NotBlank()]
+            ])
             ->add('middleName', TextType::class, [])
             ->add('email', TextType::class, [])
-            ->add('phone', TextType::class, [])
+            ->add('phone', TextType::class, [
+                'required' => false,
+                'constraints' => [new NotBlank()],
+                'attr' => [
+                    'class' => 'phone-input'
+                ]
+            ])
             ->add('city', 'entity', [
                 'class' => 'AppBundle:Cities',
                 'required' => true,
@@ -72,27 +87,5 @@ class NovaposhtaSenderAdmin extends Admin
     public function getFormTheme()
     {
         return array_merge(parent::getFormTheme(), ['AppAdminBundle:Form:sonata_stores_list_edit.html.twig']);
-    }
-
-    /**
-     * @param NovaposhtaSender $object
-     * @return void
-     */
-    public function prePersist($object)
-    {
-        $novaPoshta = $this->getConfigurationPool()->getContainer()->get('novaposhta');
-        $result = $novaPoshta->createContactPerson($object);
-        $ref = $result->data[0]->Ref;
-        $object->setRef($ref);
-    }
-
-    /**
-     * @param NovaposhtaSender $object
-     * @return void
-     */
-    public function preRemove($object)
-    {
-        $novaPoshta = $this->getConfigurationPool()->getContainer()->get('novaposhta');
-        $novaPoshta->removeContactPerson($object);
     }
 }

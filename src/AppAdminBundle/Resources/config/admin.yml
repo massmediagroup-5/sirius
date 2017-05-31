@@ -348,7 +348,7 @@ services:
 
     app_admin.admin.novaposhta_sender:
         class: AppAdminBundle\Admin\NovaposhtaSenderAdmin
-        arguments: [~, AppBundle\Entity\NovaposhtaSender, SonataAdminBundle:CRUD]
+        arguments: [~, AppBundle\Entity\NovaposhtaSender, AppAdminBundle:NovaPoshtaSender]
         tags:
             - {name: sonata.admin, manager_type: orm, group: "Управление заказами", label: "Новая почта отправитель"}
 
