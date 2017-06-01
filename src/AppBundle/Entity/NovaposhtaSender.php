@@ -40,11 +40,6 @@ class NovaposhtaSender
     /**
      * @var string
      */
-    private $email;
-
-    /**
-     * @var string
-     */
     private $phone;
 
     /**
@@ -177,22 +172,6 @@ class NovaposhtaSender
     public function setMiddleName($middleName)
     {
         $this->middleName = $middleName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
     }
 
     /**
