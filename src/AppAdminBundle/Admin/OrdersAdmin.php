@@ -288,7 +288,7 @@ class OrdersAdmin extends Admin
                 [
                     'class' => 'AppBundle:OrderStatusPay',
                     'property' => 'name',
-                    'label' => 'Сатус оплаты заказа',
+                    'label' => 'Статус оплаты заказа',
                     'empty_value' => 'Выберите статус оплаты'
                 ]
             )
