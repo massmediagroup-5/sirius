@@ -258,7 +258,6 @@ class NovaPoshta
         $contactPerson->setLastName($novaposhtaSender->getLastName());
         $contactPerson->setMiddleName($novaposhtaSender->getMiddleName());
         $contactPerson->setPhone($novaposhtaSender->getPhone());
-        $contactPerson->setEmail($novaposhtaSender->getEmail());
         return $contactPerson->save();
     }
 

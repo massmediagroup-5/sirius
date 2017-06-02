@@ -46,13 +46,6 @@ AppBundle\Entity\NovaposhtaSender:
             options:
                 fixed: false
             column: middle_name
-        email:
-            type: string
-            nullable: true
-            length: 128
-            options:
-                fixed: false
-            column: email
         phone:
             type: string
             nullable: false
