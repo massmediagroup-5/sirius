@@ -39,14 +39,16 @@ class OrderWaybillForm
      * @var string
      * @Assert\NotBlank
      */
-    public $np_delivery_payer;
+    public $np_cost;
 
     /**
      * @var string
-     * @Assert\Expression(
-     *     "this.np_backward_delivery_payer ? this.np_backward_delivery_cost !== '' : true",
-     *     message="Заполните информацию о обратной доставке полностью"
-     * )
+     * @Assert\NotBlank
+     */
+    public $np_delivery_payer;
+
+    /**
+     * @var
      */
     public $np_backward_delivery_cost;
 

@@ -216,6 +216,7 @@ class OrderController extends BaseController
         $waybillForm->np_middlename = $request->get('np_middlename');
         $waybillForm->np_phone = $request->get('np_phone');
         $waybillForm->np_delivery_payer = $request->get('np_delivery_payer');
+        $waybillForm->np_cost = $request->get('np_cost');
         $waybillForm->np_backward_delivery_cost = $request->get('np_backward_delivery_cost');
         $waybillForm->np_backward_delivery_payer = $request->get('np_backward_delivery_payer');
 
@@ -329,7 +330,7 @@ class OrderController extends BaseController
             ->setWeight($form_data['np_weight'])
             ->setSeatsAmount($form_data['np_seats_amount'])
             ->setCost($form_data['np_cost'])
-            ->setDescription('Sirius')
+            ->setDescription($this->get('options')->getParamValue('ttn_info_sending'))
             ->setDateTime($form_data['np_date'])
             ->addOptionsSeat($optionsSeat);
 
