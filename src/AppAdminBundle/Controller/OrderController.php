@@ -557,7 +557,7 @@ class OrderController extends BaseController
      */
     protected function npErrorResponse($response)
     {
-        return $this->renderJson(['errors' => $response['errors']], 422);
+        return $this->renderJson(['errors' => $response->errors], 422);
     }
 
     /**
